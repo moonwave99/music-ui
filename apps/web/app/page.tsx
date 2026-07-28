@@ -1,5 +1,6 @@
 import Image, { type ImageProps } from "next/image";
-import { Button } from "@repo/ui/button";
+import { PianoView } from "@repo/piano-react/PianoView";
+
 import styles from "./page.module.css";
 
 type Props = Omit<ImageProps, "src"> & {
@@ -37,7 +38,6 @@ export default function Home() {
           </li>
           <li>Save and see your changes instantly.</li>
         </ol>
-
         <div className={styles.ctas}>
           <a
             className={styles.primary}
@@ -63,9 +63,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
-        <Button appName="web" className={styles.secondary}>
-          Open alert
-        </Button>
+        <PianoView notes="C E G B D5" />
       </main>
       <footer className={styles.footer}>
         <a

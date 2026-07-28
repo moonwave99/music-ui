@@ -16,6 +16,13 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "//#test": {
+      "outputs": ["coverage/**"]
+    },
+    "//#test:watch": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
