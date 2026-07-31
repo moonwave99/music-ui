@@ -1,8 +1,8 @@
 "use client";
 
-import { usePiano, type UsePainoParams } from "./usePiano";
+import { usePiano, type UsePianoParams } from "./usePiano";
 
-type PianoProps = UsePainoParams & {
+type PianoProps = UsePianoParams & {
   className?: string;
 };
 
