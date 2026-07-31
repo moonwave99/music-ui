@@ -25,10 +25,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Setup Pages
-        id: setup_pages
-        uses: actions/configure-pages@v5
-
       - name: Restore cache
         uses: actions/cache@v4
         with:
@@ -42,8 +38,6 @@ jobs:
 
       - name: Build with Next.js
         run: pnpm run build
-        env:
-          PAGES_BASE_PATH: ${{ steps.setup_pages.outputs.base_path }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
