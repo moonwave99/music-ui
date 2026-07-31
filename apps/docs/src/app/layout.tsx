@@ -3,7 +3,7 @@ import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
-import "../../../../packages/piano/src/styles/piano.css";
+import "../../../../packages/piano/src/styles/index.css";
 import pkg from "../../../../package.json";
 
 export const metadata = {

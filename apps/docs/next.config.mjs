@@ -4,7 +4,7 @@ const withNextra = nextra({});
 
 export default withNextra({
   output: "export",
-  basePath: "/music-ui",
+  basePath: process.env.NODE_ENV === "development" ? "" : "/music-ui",
   turbopack: {
     resolveAlias: {
       "next-mdx-import-source-file": "./src/mdx-components.ts",

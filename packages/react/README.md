@@ -1,55 +1,6 @@
-# Music UI - Piano
+# Music UI - React
 
-Painless piano diagrams.
-
-## Installation
-
-```bash
-pnpm i @music-ui/piano
-```
-
-## Easy usage
-
-```html
-<p>This is a standard <strong>Cm7</strong> voicing:</p>
-<figure data-piano data-notes="C Eb G Bb"></figure>
-```
-
-```js
-import "node_modules/@music-ui/piano/src/styles/index.css";
-import { init } from "@music-ui/piano";
-
-init();
-```
-
-`init` will look for all the `[data-piano]` elements on the page. Alternatively one can call:
-
-```js
-init({
-    elements: '<selector>' | document.querySelectorAll(...)
-});
-```
-
-## Multiple groups hands
-
-```html
-<p>This is a <strong>Cm7</strong> voicing played with both hands:</p>
-<figure data-piano data-octaves="4" data-notes="C4 G4, Eb5 Bb5"></figure>
-```
-
-## Programmatical usage
-
-```html
-<figure id="my-element"></figure>
-```
-
-```js
-import { Piano } from "@music-ui/piano";
-
-const piano = new Piano({ el: "#my-element", octaves: 4 });
-piano.render();
-piano.setNotes(["C", "Eb", "G", "Bb"]);
-```
+A collection of React component wrappers and hooks around the Music UI visualization tools.
 
 ---
 
