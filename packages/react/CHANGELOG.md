@@ -1,5 +1,16 @@
 # @music-ui/react
 
+## 0.3.0
+
+### Minor Changes
+
+- 241153e: Update module configuration
+
+### Patch Changes
+
+- Updated dependencies [241153e]
+  - @music-ui/piano@0.3.0
+
 ## 0.2.0
 
 ### Minor Changes

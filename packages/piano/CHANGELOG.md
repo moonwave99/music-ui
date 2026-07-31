@@ -1,5 +1,11 @@
 # @music-ui/piano
 
+## 0.3.0
+
+### Minor Changes
+
+- 241153e: Update module configuration
+
 ## 0.2.0
 
 ### Minor Changes
