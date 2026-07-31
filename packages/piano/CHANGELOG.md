@@ -1,4 +1,4 @@
-# @repo/piano
+# @music-ui/piano
 
 ## 0.1.0
 

@@ -1,5 +1,5 @@
 {
-  "name": "@repo/piano",
+  "name": "@music-ui/piano",
   "description": "Simple HTML/CSS Piano diagram generator",
   "keywords": [
     "music",
@@ -13,16 +13,18 @@
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**"
+  ],
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "generate:component": "turbo gen react-component",
+    "build": "tsup src/index.ts src/styles/piano.css  --format cjs,esm --dts",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@music-ui/eslint-config": "workspace:*",
+    "@music-ui/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
     "eslint": "^9.39.1",
     "tsup": "^8.5.1",

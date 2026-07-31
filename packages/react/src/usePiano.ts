@@ -1,5 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Piano, type PianoOptions, SetNotesParams } from "@repo/piano/Piano";
+import {
+  Piano,
+  type PianoOptions,
+  SetNotesParams,
+} from "@music-ui/piano/Piano";
 
 export type UsePianoParams = Partial<PianoOptions> & {
   notes?: SetNotesParams;

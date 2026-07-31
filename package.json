@@ -15,12 +15,9 @@
     "test": "vitest run",
     "test:watch": "vitest --watch",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types",
-    "publish-packages": "turbo run build lint test && changeset version && changeset publish"
+    "check-types": "turbo run check-types"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.1",
-    "changeset": "^0.2.6",
     "jsdom": "^30.0.0",
     "prettier": "^3.7.4",
     "turbo": "^2.10.7",

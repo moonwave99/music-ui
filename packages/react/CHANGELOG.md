@@ -1,4 +1,4 @@
-# @repo/react
+# @music-ui/react
 
 ## 0.1.0
 
@@ -9,4 +9,4 @@
 ### Patch Changes
 
 - Updated dependencies [125b9ff]
-  - @repo/piano@0.1.0
+  - @music-ui/piano@0.1.0
