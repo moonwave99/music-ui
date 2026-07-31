@@ -1,5 +1,13 @@
 # docs
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated dependencies [2b45668]
+  - @music-ui/piano@0.2.0
+  - @music-ui/react@0.2.0
+
 ## 0.1.1
 
 ### Patch Changes

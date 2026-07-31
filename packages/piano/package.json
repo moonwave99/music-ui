@@ -6,7 +6,7 @@
     "piano",
     "chords"
   ],
-  "version": "0.1.0",
+  "version": "0.2.0",
   "exports": {
     "./*": "./src/*.ts"
   },
@@ -22,6 +22,7 @@
     "build": "tsup src/index.ts src/styles/piano.css  --format cjs,esm --dts",
     "check-types": "tsc --noEmit"
   },
+  "packageManager": "pnpm@11.18.0",
   "devDependencies": {
     "@music-ui/eslint-config": "workspace:*",
     "@music-ui/typescript-config": "workspace:*",

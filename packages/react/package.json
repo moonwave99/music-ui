@@ -1,7 +1,7 @@
 {
   "name": "@music-ui/react",
   "description": "Music UI React components",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "exports": {
     "./*": [
       "./src/*.tsx",
@@ -20,6 +20,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "check-types": "tsc --noEmit"
   },
+  "packageManager": "pnpm@11.18.0",
   "devDependencies": {
     "@music-ui/eslint-config": "workspace:*",
     "@music-ui/typescript-config": "workspace:*",
