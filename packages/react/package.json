@@ -8,8 +8,13 @@
       "./src/*.ts"
     ]
   },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "lint": "eslint . --max-warnings 0",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit"
   },
@@ -20,11 +25,12 @@
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
+    "tsup": "^8.5.1",
     "typescript": "5.9.2"
   },
   "dependencies": {
+    "@repo/piano": "workspace:*",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@repo/piano": "workspace:*"
+    "react-dom": "^19.2.0"
   }
 }
