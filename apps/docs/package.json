@@ -4,16 +4,18 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "next dev --turbopack --port 3000",
     "build": "next build",
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
-    "@repo/piano-react": "workspace:*",
+    "@repo/piano": "workspace:*",
+    "@repo/react": "workspace:*",
     "next": "16.2.0",
+    "nextra": "^4.6.1",
+    "nextra-theme-docs": "^4.6.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

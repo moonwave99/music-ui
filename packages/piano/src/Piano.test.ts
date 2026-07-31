@@ -1,16 +1,12 @@
+// @vitest-environment jsdom
 import { test, describe, it, expect } from "vitest";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import browserEnv from "browser-env";
-import Piano from "./Piano";
+import { Piano } from "./Piano";
 
 test.beforeEach(() => {
-  browserEnv();
   document.body.innerHTML = '<div id="piano"></div>';
 });
 
 test.afterEach(() => {
-  browserEnv();
   document.body.innerHTML = "";
 });
 
@@ -171,19 +167,16 @@ describe("Piano - setNotes", () => {
   it("Displays the passed notes on separate hands", () => {
     const piano = new Piano();
 
-    piano.render().setNotes({
-      right: ["Eb4", "Bb4"],
-      left: ["C3", "G3"],
-    });
+    piano.render().setNotes("Eb4 Bb4, C3 G3");
 
     const wrapper = document.querySelector("#piano");
 
-    ["left", "right"].forEach((hand) =>
+    ["group-1", "group-2"].forEach((hand) =>
       expect(wrapper?.querySelectorAll(`.${hand}`).length).toBe(2),
     );
 
     expect(
-      [...wrapper!.querySelectorAll(".left")].map((el) => ({
+      [...wrapper!.querySelectorAll(".group-2")].map((el) => ({
         ...(el as HTMLElement).dataset,
       })),
     ).toEqual([
@@ -206,7 +199,7 @@ describe("Piano - setNotes", () => {
     ]);
 
     expect(
-      [...wrapper!.querySelectorAll(".right")].map((el) => ({
+      [...wrapper!.querySelectorAll(".group-1")].map((el) => ({
         ...(el as HTMLElement).dataset,
       })),
     ).toEqual([

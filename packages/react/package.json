@@ -1,14 +1,12 @@
 {
-  "name": "@repo/piano",
-  "description": "Simple HTML/CSS Piano diagram generator",
-  "keywords": [
-    "music",
-    "piano",
-    "chords"
-  ],
+  "name": "@repo/react",
+  "description": "Music UI React components",
   "version": "0.0.1",
   "exports": {
-    "./*": "./src/*.ts"
+    "./*": [
+      "./src/*.tsx",
+      "./src/*.ts"
+    ]
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",
@@ -19,12 +17,14 @@
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "@tonaljs/midi": "^4.10.2",
-    "@tonaljs/note": "^4.12.1",
-    "change-case": "^5.4.4"
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@repo/piano": "workspace:*"
   }
 }

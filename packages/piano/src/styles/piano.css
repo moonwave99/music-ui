@@ -8,16 +8,16 @@
   --piano-black-key-color: rgb(35, 35, 35);
   --piano-white-key-highlight-color: dodgerblue;
   --piano-black-key-highlight-color: dodgerblue;
-  --piano-white-key-left-hand-highlight-color: lightcoral;
-  --piano-black-key-left-hand-highlight-color: lightcoral;
-  --piano-white-key-soprano-highlight-color: dodgerblue;
-  --piano-black-key-soprano-highlight-color: dodgerblue;
-  --piano-white-key-alto-highlight-color: gold;
-  --piano-black-key-alto-highlight-color: gold;
-  --piano-white-key-tenor-highlight-color: lightgreen;
-  --piano-black-key-tenor-highlight-color: lightgreen;
-  --piano-white-key-bass-highlight-color: lightcoral;
-  --piano-black-key-bass-highlight-color: lightcoral;
+  --piano-white-key-group-1-highlight-color: dodgerblue;
+  --piano-black-key-group-1-highlight-color: dodgerblue;
+  --piano-white-key-group-2-highlight-color: lightcoral;
+  --piano-black-key-group-2-highlight-color: lightcoral;
+  --piano-white-key-group-3-highlight-color: gold;
+  --piano-black-key-group-3-highlight-color: gold;
+  --piano-white-key-group-4-highlight-color: lightgreen;
+  --piano-black-key-group-4-highlight-color: lightgreen;
+  --piano-white-key-group-5-highlight-color: lightcoral;
+  --piano-black-key-group-5-highlight-color: lightcoral;
 }
 
 .piano {
@@ -26,80 +26,72 @@
   border: 1px solid var(--piano-border-color);
   display: flex;
   overflow-x: auto;
-}
 
-.piano .key:not(:last-child) {
-  border-right: 1px solid var(--piano-border-color);
-}
+  .key:not(:last-child) {
+    border-right: 1px solid var(--piano-border-color);
+  }
 
-.piano .key.color-white {
-  width: var(--piano-white-key-width);
-  background-color: var(--piano-white-key-color);
-}
+  .key.color-white {
+    width: var(--piano-white-key-width);
+    background-color: var(--piano-white-key-color);
 
-.piano .key.color-black {
-  background-color: var(--piano-black-key-color);
-  height: var(--piano-black-key-height);
-  width: var(--piano-black-key-width);
-  margin: 0 0 0 calc(var(--piano-black-key-width) / -2);
-  z-index: 1;
-  border-bottom: 1px solid var(--piano-border-color);
-  border-left: 1px solid var(--piano-border-color);
-  border-right: 1px solid var(--piano-border-color);
-}
+    &:nth-of-type(12n + 3),
+    &:nth-of-type(12n + 5),
+    &:nth-of-type(12n + 8),
+    &:nth-of-type(12n + 10),
+    &:nth-of-type(12n + 12) {
+      margin: 0 0 0 calc(var(--piano-black-key-width) / -2);
+    }
 
-.piano .key.color-white:nth-of-type(12n + 3),
-.piano .key.color-white:nth-of-type(12n + 5),
-.piano .key.color-white:nth-of-type(12n + 8),
-.piano .key.color-white:nth-of-type(12n + 10),
-.piano .key.color-white:nth-of-type(12n + 12) {
-  margin: 0 0 0 calc(var(--piano-black-key-width) / -2);
-}
+    &.key-on {
+      background-color: var(--piano-white-key-highlight-color);
 
-.piano .key.color-white.key-on {
-  background-color: var(--piano-white-key-highlight-color);
-}
+      &.group-2 {
+        background-color: var(--piano-white-key-group-2-highlight-color);
+      }
 
-.piano .key.color-black.key-on {
-  background-color: var(--piano-black-key-highlight-color);
-}
+      &.group-3 {
+        background-color: var(--piano-white-key-group-3-highlight-color);
+      }
 
-.piano .key.color-white.key-on.left {
-  background-color: var(--piano-white-key-left-hand-highlight-color);
-}
+      &.group-4 {
+        background-color: var(--piano-white-key-group-4-highlight-color);
+      }
 
-.piano .key.color-black.key-on.left {
-  background-color: var(--piano-black-key-left-hand-highlight-color);
-}
+      &.group-5 {
+        background-color: var(--piano-white-key-group-5-highlight-color);
+      }
+    }
+  }
 
-.piano .key.color-white.key-on.soprano {
-  background-color: var(--piano-white-key-soprano-highlight-color);
-}
+  .key.color-black {
+    background-color: var(--piano-black-key-color);
+    height: var(--piano-black-key-height);
+    width: var(--piano-black-key-width);
+    margin: 0 0 0 calc(var(--piano-black-key-width) / -2);
+    z-index: 1;
+    border-bottom: 1px solid var(--piano-border-color);
+    border-left: 1px solid var(--piano-border-color);
+    border-right: 1px solid var(--piano-border-color);
 
-.piano .key.color-black.key-on.soprano {
-  background-color: var(--piano-black-key-soprano-highlight-color);
-}
+    &.key-on {
+      background-color: var(--piano-black-key-highlight-color);
 
-.piano .key.color-white.key-on.alto {
-  background-color: var(--piano-white-key-alto-highlight-color);
-}
+      &.group-2 {
+        background-color: var(--piano-black-key-group-2-highlight-color);
+      }
 
-.piano .key.color-black.key-on.alto {
-  background-color: var(--piano-black-key-alto-highlight-color);
-}
+      &.group-3 {
+        background-color: var(--piano-black-key-group-3-highlight-color);
+      }
 
-.piano .key.color-white.key-on.tenor {
-  background-color: var(--piano-white-key-tenor-highlight-color);
-}
+      &.group-4 {
+        background-color: var(--piano-black-key-group-4-highlight-color);
+      }
 
-.piano .key.color-black.key-on.tenor {
-  background-color: var(--piano-black-key-tenor-highlight-color);
-}
-
-.piano .key.color-white.key-on.bass {
-  background-color: var(--piano-white-key-bass-highlight-color);
-}
-
-.piano .key.color-black.key-on.bass {
-  background-color: var(--piano-black-key-bass-highlight-color);
+      &.group-5 {
+        background-color: var(--piano-black-key-group-5-highlight-color);
+      }
+    }
+  }
 }

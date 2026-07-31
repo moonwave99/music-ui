@@ -1,79 +1,38 @@
 import { get as getNote } from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
+import { CHROMATIC_SCALE } from "./lib";
 
-type ScaleNote = {
+export type ScaleNote = {
   chroma: number;
   color: "black" | "white";
   note: string;
 };
 
-type ScaleNoteWithOctave = ScaleNote & {
+export type ScaleNoteWithOctave = ScaleNote & {
   octave: number;
 };
 
-const CHROMATIC_SCALE: ScaleNote[] = [
-  {
-    chroma: 0,
-    color: "white",
-    note: "C",
-  },
-  {
-    chroma: 1,
-    color: "black",
-    note: "C#",
-  },
-  {
-    chroma: 2,
-    color: "white",
-    note: "D",
-  },
-  {
-    chroma: 3,
-    color: "black",
-    note: "D#",
-  },
-  {
-    chroma: 4,
-    color: "white",
-    note: "E",
-  },
-  {
-    chroma: 5,
-    color: "white",
-    note: "F",
-  },
-  {
-    chroma: 6,
-    color: "black",
-    note: "F#",
-  },
-  {
-    chroma: 7,
-    color: "white",
-    note: "G",
-  },
-  {
-    chroma: 8,
-    color: "black",
-    note: "G#",
-  },
-  {
-    chroma: 9,
-    color: "white",
-    note: "A",
-  },
-  {
-    chroma: 10,
-    color: "black",
-    note: "A#",
-  },
-  {
-    chroma: 11,
-    color: "white",
-    note: "B",
-  },
-] as const;
+export type PianoOptions = {
+  el: string | HTMLElement;
+  startOctave: number;
+  octaves: number;
+  withFinalC: boolean;
+};
+
+export const DEFAULT_PIANO_OPTIONS = {
+  el: "#piano",
+  startOctave: 3,
+  octaves: 2,
+  withFinalC: true,
+} as const;
+
+export type SetNotesParams = string | string[];
+
+type GroupedInput = {
+  group: number;
+  note: string;
+}[];
 
 function parseNote(
   noteString: string,
@@ -99,24 +58,20 @@ function parseNote(
   };
 }
 
-export type Options = {
-  el: string | HTMLElement;
-  startOctave: number;
-  octaves: number;
-  withFinalC: boolean;
-};
+export function parseNoteInput(input: SetNotesParams): GroupedInput {
+  const groups = Array.isArray(input)
+    ? [input]
+    : input
+        .split(",")
+        .filter(Boolean)
+        .map((x) => x.split(" ").filter(Boolean));
+  return groups.flatMap((group, index) =>
+    group.map((note) => ({ note, group: index })),
+  );
+}
 
-export const DEFAULT_PIANO_OPTIONS = {
-  el: "#piano",
-  startOctave: 3,
-  octaves: 2,
-  withFinalC: true,
-};
-
-type SetNotesParams = string[] | Record<string, string[]>;
-
-class Piano {
-  private options: Options;
+export class Piano {
+  private options: PianoOptions;
   private wrapper: HTMLElement | null;
   constructor(options = {}) {
     this.options = Object.assign({}, DEFAULT_PIANO_OPTIONS, options);
@@ -124,14 +79,7 @@ class Piano {
   }
   setNotes(notes: SetNotesParams): Piano {
     this.clearNotes();
-    if (Array.isArray(notes)) {
-      this._setNotes(notes);
-      return this;
-    }
-    for (const [key, value] of Object.entries(notes)) {
-      this._setNotes(value, key);
-    }
-
+    this._setNotes(parseNoteInput(notes));
     return this;
   }
   clearNotes(): Piano {
@@ -195,25 +143,19 @@ class Piano {
     const { startOctave, octaves } = this.options;
     return Math.round((startOctave + octaves) / 2) + 1;
   }
-  private _setNotes(notes: string[], type?: string): void {
+  private _setNotes(notes: GroupedInput): void {
     const middleOctave = this.getMiddleOctave();
     let octave = middleOctave;
-    notes.forEach((n, index) => {
-      if (index > 0 && n.startsWith("C")) {
+    notes.forEach(({ group, note }, index) => {
+      if (index > 0 && note.startsWith("C")) {
         octave++;
       }
-      const parsed = parseNote(n, octave);
-
+      const parsed = parseNote(note, octave);
       const foundKey = this.wrapper?.querySelector(`.key.midi-${parsed.midi}`);
       if (!foundKey) {
         return;
       }
-      foundKey.classList.add("key-on");
-      if (type) {
-        foundKey.classList.add(`${type}`);
-      }
+      foundKey.classList.add("key-on", `group-${group + 1}`);
     });
   }
 }
-
-export default Piano;

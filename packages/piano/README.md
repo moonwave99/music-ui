@@ -1,11 +1,11 @@
-# Music Visual - Piano
+# Music UI - Piano
 
 Painless piano diagrams.
 
 ## Installation
 
 ```bash
-pnpm i @music-visuals/piano
+pnpm i @music-ui/piano
 ```
 
 ## Easy usage
@@ -16,8 +16,8 @@ pnpm i @music-visuals/piano
 ```
 
 ```js
-import "node_modules/@music-visuals/piano/src/styles.piano.css";
-import { init } from "@music-visuals/piano";
+import "node_modules/@music-ui/piano/src/styles.piano.css";
+import { init } from "@music-ui/piano";
 
 init();
 ```
@@ -30,18 +30,11 @@ init({
 });
 ```
 
-## Two hands
+## Multiple groups hands
 
 ```html
 <p>This is a <strong>Cm7</strong> voicing played with both hands:</p>
-<figure data-piano data-octaves="4" data-notes-hands="C4 G4, Eb5 Bb5"></figure>
-```
-
-## SATB
-
-```html
-<p>This is a <strong>Cm7</strong> highlighted in four part harmony fashion:</p>
-<figure data-piano data-octaves="4" data-notes-satb="C4, G4, Eb5, Bb5"></figure>
+<figure data-piano data-octaves="4" data-notes="C4 G4, Eb5 Bb5"></figure>
 ```
 
 ## Programmatical usage
@@ -51,9 +44,9 @@ init({
 ```
 
 ```js
-import { piano } from "@music-visuals/piano";
+import { Piano } from "@music-ui/piano";
 
-const piano = new piano({ el: "#my-element", octaves: 4 });
+const piano = new Piano({ el: "#my-element", octaves: 4 });
 piano.render();
 piano.setNotes(["C", "Eb", "G", "Bb"]);
 ```
