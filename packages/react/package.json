@@ -24,6 +24,11 @@
     "check-types": "tsc --noEmit"
   },
   "packageManager": "pnpm@11.18.0",
+  "dependencies": {
+    "@music-ui/piano": "workspace:*",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
   "devDependencies": {
     "@music-ui/eslint-config": "workspace:*",
     "@music-ui/typescript-config": "workspace:*",
@@ -33,10 +38,5 @@
     "eslint": "^9.39.1",
     "tsup": "^8.5.1",
     "typescript": "5.9.2"
-  },
-  "dependencies": {
-    "@music-ui/piano": "workspace:*",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
   }
 }
