@@ -1,5 +1,5 @@
 "use client";
 
-import { Piano } from "@music-ui/react";
+import { Piano, Abc } from "@music-ui/react";
 
-export { Piano };
+export { Piano, Abc };

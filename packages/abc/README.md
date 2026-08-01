@@ -1,55 +1,16 @@
-# Music UI - Piano
+# Music UI - ABC
 
-Painless piano diagrams.
+Abc notation utilities.
 
 ## Installation
 
 ```bash
-pnpm i @music-ui/piano
+pnpm i @music-ui/abc
 ```
 
 ## Usage
 
-```html
-<p>This is a standard <strong>Cm7</strong> voicing:</p>
-<figure data-piano data-notes="C Eb G Bb"></figure>
-```
-
-```js
-import "@music-ui/piano/styles.css";
-import { init } from "@music-ui/piano";
-
-init();
-```
-
-`init` will look for all the `[data-piano]` elements on the page. Alternatively one can call:
-
-```js
-init({
-    elements: '<selector>' | document.querySelectorAll(...)
-});
-```
-
-## Multiple groups hands
-
-```html
-<p>This is a <strong>Cm7</strong> voicing played with both hands:</p>
-<figure data-piano data-octaves="4" data-notes="C4 G4, Eb5 Bb5"></figure>
-```
-
-## Programmatical usage
-
-```html
-<figure id="my-element"></figure>
-```
-
-```js
-import { Piano } from "@music-ui/piano";
-
-const piano = new Piano({ el: "#my-element", octaves: 4 });
-piano.render();
-piano.setNotes(["C", "Eb", "G", "Bb"]);
-```
+TBD
 
 ---
 

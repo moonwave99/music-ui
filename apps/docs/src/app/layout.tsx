@@ -4,6 +4,8 @@ import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
 import "nextra-theme-docs/style.css";
 import "@music-ui/piano/styles.css";
+import "@music-ui/abc/styles.css";
+import "./index.css";
 import pkg from "../../../../package.json";
 
 export const metadata = {
@@ -13,7 +15,9 @@ export const metadata = {
 
 const navbar = <Navbar logo={<b>Music UI</b>} />;
 const footer = (
-  <Footer>MIT {new Date().getFullYear()} © Diego Caponera.</Footer>
+  <Footer>
+    MIT {new Date().getFullYear()} © {pkg.author.name}.
+  </Footer>
 );
 
 type RootLayoutProps = {

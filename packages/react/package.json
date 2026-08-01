@@ -26,6 +26,7 @@
   "packageManager": "pnpm@11.18.0",
   "dependencies": {
     "@music-ui/piano": "workspace:*",
+    "@music-ui/abc": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
   },

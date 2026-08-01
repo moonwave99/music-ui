@@ -1,0 +1,46 @@
+{
+  "name": "@music-ui/abc",
+  "description": "Abc notation utilities.",
+  "keywords": [
+    "music",
+    "abc"
+  ],
+  "version": "0.5.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": {
+        "import": "./dist/index.d.ts",
+        "require": "./dist/index.d.cts"
+      },
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./styles.css": "./dist/styles/index.css"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "lint": "eslint . --max-warnings 0",
+    "dev": "tsup src/index.ts src/styles/index.css --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts src/styles/index.css --format cjs,esm --dts",
+    "check-types": "tsc --noEmit"
+  },
+  "packageManager": "pnpm@11.18.0",
+  "devDependencies": {
+    "@music-ui/eslint-config": "workspace:*",
+    "@music-ui/typescript-config": "workspace:*",
+    "@types/node": "^22.15.3",
+    "eslint": "^9.39.1",
+    "tsup": "^8.5.1",
+    "typescript": "5.9.2"
+  },
+  "dependencies": {
+    "abcjs": "^6.6.4"
+  }
+}
