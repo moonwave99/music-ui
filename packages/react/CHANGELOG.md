@@ -1,5 +1,17 @@
 # @music-ui/react
 
+## 0.7.0
+
+### Minor Changes
+
+- 091824a: Draft piano playback
+
+### Patch Changes
+
+- Updated dependencies [091824a]
+  - @music-ui/abc@0.7.0
+  - @music-ui/piano@0.7.0
+
 ## 0.6.0
 
 ### Minor Changes

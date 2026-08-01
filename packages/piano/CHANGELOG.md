@@ -1,5 +1,11 @@
 # @music-ui/piano
 
+## 0.7.0
+
+### Minor Changes
+
+- 091824a: Draft piano playback
+
 ## 0.6.0
 
 ### Minor Changes

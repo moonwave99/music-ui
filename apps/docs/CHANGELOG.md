@@ -1,5 +1,14 @@
 # docs
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies [091824a]
+  - @music-ui/abc@0.7.0
+  - @music-ui/piano@0.7.0
+  - @music-ui/react@0.7.0
+
 ## 0.1.6
 
 ### Patch Changes

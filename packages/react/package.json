@@ -1,7 +1,7 @@
 {
   "name": "@music-ui/react",
   "description": "Music UI React components",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
