@@ -1,5 +1,14 @@
 # docs
 
+## 0.1.6
+
+### Patch Changes
+
+- Updated dependencies [778e90c]
+  - @music-ui/abc@0.6.0
+  - @music-ui/piano@0.6.0
+  - @music-ui/react@0.6.0
+
 ## 0.1.5
 
 ### Patch Changes

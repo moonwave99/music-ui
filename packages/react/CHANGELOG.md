@@ -1,5 +1,17 @@
 # @music-ui/react
 
+## 0.6.0
+
+### Minor Changes
+
+- 778e90c: Draft abc package
+
+### Patch Changes
+
+- Updated dependencies [778e90c]
+  - @music-ui/abc@0.6.0
+  - @music-ui/piano@0.6.0
+
 ## 0.5.0
 
 ### Minor Changes
