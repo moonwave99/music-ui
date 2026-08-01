@@ -1,2 +1,2 @@
-export { Piano } from "./Piano";
-export { usePiano } from "./usePiano";
+export * from "./Piano";
+export * from "./usePiano";

@@ -1,8 +1,6 @@
-"use client";
-
 import { usePiano, type UsePianoParams } from "./usePiano";
 
-type PianoProps = UsePianoParams & {
+export type PianoProps = UsePianoParams & {
   className?: string;
 };
 

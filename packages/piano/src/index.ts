@@ -1,4 +1,2 @@
-import { Piano } from "./Piano";
-import { init } from "./init";
-
-export { Piano, init };
+export * from "./Piano";
+export * from "./init";
