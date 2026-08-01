@@ -33,6 +33,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@music-ui/piano':
+        specifier: workspace:*
+        version: link:../../packages/piano
       '@music-ui/react':
         specifier: workspace:*
         version: link:../../packages/react

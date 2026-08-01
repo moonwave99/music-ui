@@ -11,6 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@music-ui/piano": "workspace:*",
     "@music-ui/react": "workspace:*",
     "next": "16.2.0",
     "nextra": "^4.6.1",
