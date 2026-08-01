@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type ReactNode, ReactElement } from "react";
 import { useAbc, type UseAbcParams } from "./useAbc";
 
 export type AbcProps = Omit<UseAbcParams, "content"> & {
@@ -6,7 +6,7 @@ export type AbcProps = Omit<UseAbcParams, "content"> & {
   className?: string;
 };
 
-export function Abc({ className, children, ...params }: AbcProps) {
+export function Abc({ className, children, ...params }: AbcProps): ReactElement {
   const content = getNodeText(children);
   const { staffRef, audioControlsRef } = useAbc({ ...params, content });
   return (

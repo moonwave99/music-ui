@@ -70,6 +70,12 @@ export function parseNoteInput(input: SetNotesParams): GroupedInput {
   );
 }
 
+export function normalizeInput(input: SetNotesParams) {
+  return Array.isArray(input)
+    ? input
+    : input.replaceAll(",", "").split(" ").filter(Boolean);
+}
+
 export class Piano {
   private options: PianoOptions;
   private wrapper: HTMLElement | null;
@@ -94,6 +100,21 @@ export class Piano {
   }
   destroy(): void {
     this.wrapper?.remove();
+  }
+  setActiveNotes(notes: string[]): Piano {
+    this.clearActiveNotes();
+    notes.forEach((note) =>
+      this.wrapper
+        ?.querySelector(`.midi-${toMidi(note)}`)
+        ?.classList.add("active"),
+    );
+    return this;
+  }
+  clearActiveNotes(): Piano {
+    this.wrapper
+      ?.querySelectorAll(".key.active")
+      .forEach((el: Element) => el.classList.remove("active"));
+    return this;
   }
   private baseRender(): void {
     if (this.wrapper) {

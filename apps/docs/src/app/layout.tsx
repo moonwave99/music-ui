@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Footer, Layout, Navbar } from "nextra-theme-docs";
 import { Head } from "nextra/components";
 import { getPageMap } from "nextra/page-map";
+import { ProviderWrapper } from "./ProviderWrapper";
 import "nextra-theme-docs/style.css";
 import "@music-ui/piano/styles.css";
 import "@music-ui/abc/styles.css";
@@ -35,7 +36,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           docsRepositoryBase={`${pkg.homepage}/tree/main/apps/docs`}
           footer={footer}
         >
-          {children}
+          <ProviderWrapper>{children}</ProviderWrapper>
         </Layout>
       </body>
     </html>

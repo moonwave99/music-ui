@@ -40,13 +40,18 @@ export type InitABCParams = {
   hidePlayer?: boolean;
 };
 
+export type InitABC = {
+  cursorControl: CursorControl | null;
+  stop: () => void;
+};
+
 export async function initAbc({
   content = "",
   staffElement,
   audioControlsElement,
   id,
   hidePlayer,
-}: InitABCParams) {
+}: InitABCParams): Promise<InitABC> {
   function clickListener(_: unknown, ___: unknown, classes: string) {
     console.log(classes);
   }
@@ -57,19 +62,18 @@ export async function initAbc({
     add_classes: true,
   }).at(0) as TuneObject;
 
-  if (!visualObj) {
-    return;
-  }
-
-  if (hidePlayer) {
-    return;
-  }
-
   const cursorControl = new CursorControl({
     id,
     el: staffElement,
     onNotesChange: () => {},
   });
+
+  if (hidePlayer) {
+    return {
+      cursorControl: null,
+      stop: () => {},
+    };
+  }
 
   const synthControl = new synth.SynthController();
   synthControl.load(audioControlsElement, cursorControl, {
@@ -83,7 +87,11 @@ export async function initAbc({
   await midiBuffer.init({ visualObj });
   synthControl.setTune(visualObj, true);
 
-  return { cursorControl };
+  function stop() {
+    synthControl.pause();
+  }
+
+  return { cursorControl, stop };
 }
 
 type CursorControlParams = {
