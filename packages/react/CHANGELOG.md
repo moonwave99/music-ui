@@ -1,5 +1,16 @@
 # @music-ui/react
 
+## 0.5.0
+
+### Minor Changes
+
+- e472516: Update export config
+
+### Patch Changes
+
+- Updated dependencies [e472516]
+  - @music-ui/piano@0.5.0
+
 ## 0.4.0
 
 ### Minor Changes
