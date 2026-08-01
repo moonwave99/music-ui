@@ -1,5 +1,11 @@
 # @music-ui/piano
 
+## 0.4.0
+
+### Minor Changes
+
+- 23f86ed: Update bundle configuration
+
 ## 0.3.0
 
 ### Minor Changes

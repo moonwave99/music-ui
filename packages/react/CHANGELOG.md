@@ -1,5 +1,16 @@
 # @music-ui/react
 
+## 0.4.0
+
+### Minor Changes
+
+- 23f86ed: Update bundle configuration
+
+### Patch Changes
+
+- Updated dependencies [23f86ed]
+  - @music-ui/piano@0.4.0
+
 ## 0.3.0
 
 ### Minor Changes

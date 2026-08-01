@@ -1,19 +1,21 @@
 {
   "name": "@music-ui/react",
   "description": "Music UI React components",
-  "version": "0.3.0",
-  "exports": {
-    "./*": [
-      "./src/*.tsx",
-      "./src/*.ts"
-    ]
-  },
-  "type": "module",
+  "version": "0.4.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
+  "exports": {
+    "types": {
+      "import": "./dist/index.d.ts",
+      "require": "./dist/index.d.cts"
+    },
+    "import": "./dist/index.mjs",
+    "require": "./dist/index.js"
+  },
   "files": [
-    "dist/**"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "lint": "eslint . --max-warnings 0",
