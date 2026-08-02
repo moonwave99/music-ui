@@ -222,3 +222,37 @@ describe("Piano - setNotes", () => {
     ]);
   });
 });
+
+describe("Piano - setActiveNotes", () => {
+  it("Marks the passed notes as active", () => {
+    const piano = new Piano();
+    piano.render().setNotes(["C4", "E4", "G4"]).setActiveNotes(["C4", "G4"]);
+
+    const wrapper = document.querySelector("#piano");
+    expect(wrapper?.querySelector(".note-with-octave-C4")?.classList).toContain(
+      "active",
+    );
+    expect(
+      wrapper?.querySelector(".note-with-octave-E4")?.classList,
+    ).not.toContain("active");
+    expect(wrapper?.querySelector(".note-with-octave-G4")?.classList).toContain(
+      "active",
+    );
+  });
+});
+
+describe("Piano - clearActiveNotes", () => {
+  it("Clears all active notes", () => {
+    const piano = new Piano();
+    piano.render().setNotes(["C4", "E4", "G4"]).setActiveNotes(["C4"]);
+
+    const wrapper = document.querySelector("#piano");
+    expect(wrapper?.querySelector(".note-with-octave-C4")?.classList).toContain(
+      "active",
+    );
+    piano.clearActiveNotes();
+    expect(
+      wrapper?.querySelector(".note-with-octave-C4")?.classList,
+    ).not.toContain("active");
+  });
+});
