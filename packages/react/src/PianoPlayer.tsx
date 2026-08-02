@@ -3,9 +3,18 @@ import { Piano, type PianoProps } from "./Piano";
 import { normalizeInput } from "@music-ui/piano";
 import { usePlayer } from "./PlayerProvider";
 
-export type PianoPlayerProps = PianoProps;
+export type PianoPlayerProps = PianoProps & {
+  label?: string;
+  playLabel?: string;
+  arpeggioLabel?: string;
+};
 
-export function PianoPlayer(props: PianoPlayerProps): ReactElement {
+export function PianoPlayer({
+  label = "",
+  playLabel = "Play",
+  arpeggioLabel = "Arpeggio",
+  ...props
+}: PianoPlayerProps): ReactElement {
   const id = useId();
   const { notes, className, ...rest } = props;
   const { play, isPlaying, activeNotes } = usePlayer({
@@ -14,16 +23,17 @@ export function PianoPlayer(props: PianoPlayerProps): ReactElement {
   });
 
   return (
-    <div className={className}>
+    <figure className={className}>
       <Piano activeNotes={activeNotes} notes={notes} {...rest} />
+      <figcaption>{label}</figcaption>
       <div className="actions">
         <button disabled={isPlaying} onClick={() => play()}>
-          Play
+          {playLabel}
         </button>
         <button disabled={isPlaying} onClick={() => play("arpeggio")}>
-          Arpeggio
+          {arpeggioLabel}
         </button>
       </div>
-    </div>
+    </figure>
   );
 }

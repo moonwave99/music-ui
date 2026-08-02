@@ -1,9 +1,26 @@
+.piano {
+  margin-top: 1rem;
+}
+
 .piano-player {
-  display: flex;
-  flex-direction: column;
+  width: max-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
+  grid-template-areas:
+    "a a"
+    "b c";
+  .piano {
+    grid-area: a;
+  }
+  figcaption {
+    grid-area: b;
+    font-size: 0.8rem;
+  }
   .actions {
+    grid-area: c;
     display: flex;
+    justify-content: end;
     gap: 0.5rem;
     line-height: 1.5rem;
     button {
