@@ -1,10 +1,5 @@
-import {
-  synth,
-  renderAbc,
-  type TuneObject,
-  type NoteTimingEvent,
-  MidiPitch,
-} from "abcjs";
+import { midiToNoteName } from "@tonaljs/midi";
+import { synth, renderAbc, type TuneObject, type NoteTimingEvent } from "abcjs";
 
 const DEFAULT_INIT_OPTIONS = {
   elements: "[data-abc]",
@@ -38,6 +33,7 @@ export type InitABCParams = {
   audioControlsElement: HTMLElement;
   id: string;
   hidePlayer?: boolean;
+  onNotesChange?: (notes: string[]) => void;
 };
 
 export type InitABC = {
@@ -51,6 +47,7 @@ export async function initAbc({
   audioControlsElement,
   id,
   hidePlayer,
+  onNotesChange = () => {},
 }: InitABCParams): Promise<InitABC> {
   function clickListener(_: unknown, ___: unknown, classes: string) {
     console.log(classes);
@@ -65,7 +62,7 @@ export async function initAbc({
   const cursorControl = new CursorControl({
     id,
     el: staffElement,
-    onNotesChange: () => {},
+    onNotesChange,
   });
 
   if (hidePlayer) {
@@ -98,7 +95,7 @@ type CursorControlParams = {
   id: string;
   el: HTMLElement;
   beatSubdivisions?: number;
-  onNotesChange: () => void;
+  onNotesChange: (notes: string[]) => void;
 };
 
 type OnPlaybackCallback = (id: string) => void;
@@ -107,7 +104,7 @@ class CursorControl {
   private id: string;
   private el: HTMLElement;
   private beatSubdivisions: number;
-  private onNotesChange: (pitches: MidiPitch[]) => void;
+  private onNotesChange?: (pitches: string[]) => void;
   private _onPlayback: OnPlaybackCallback;
   constructor({
     id,
@@ -139,7 +136,11 @@ class CursorControl {
     }
 
     if (this.onNotesChange) {
-      this.onNotesChange(event.midiPitches || []);
+      this.onNotesChange(
+        event.midiPitches
+          ?.filter((x: unknown) => (x as { cmd: string }).cmd === "note")
+          .map(({ pitch }) => midiToNoteName(pitch)) || [],
+      );
     }
 
     this.el

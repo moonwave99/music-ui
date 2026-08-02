@@ -1,4 +1,4 @@
-export * from "./Abc";
+export * from "./Score";
 export * from "./useAbc";
 
 export * from "./Piano";

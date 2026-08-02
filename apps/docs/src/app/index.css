@@ -4,18 +4,29 @@
   --piano-black-key-width: 1.2rem;
 }
 
+main {
+  container-type: inline-size;
+}
+
 .piano {
   margin-top: 1rem;
+  width: calc(var(--piano-white-key-width) * 22);
+  @container (width < 625px) {
+    width: 100%;
+  }
 }
 
 .piano-player {
-  width: max-content;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
   grid-template-areas:
     "a a"
     "b c";
+  width: min-content;
+  @container (width < 625px) {
+    width: auto;
+  }
   .piano {
     grid-area: a;
   }
@@ -43,5 +54,11 @@
         background-color: rgba(100, 100, 100, 0.7);
       }
     }
+  }
+}
+
+.score {
+  .piano {
+    width: 100%;
   }
 }

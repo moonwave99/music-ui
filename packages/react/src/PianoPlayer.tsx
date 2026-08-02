@@ -7,12 +7,14 @@ export type PianoPlayerProps = PianoProps & {
   label?: string;
   playLabel?: string;
   arpeggioLabel?: string;
+  arpeggioSpeed?: number;
 };
 
 export function PianoPlayer({
   label = "",
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
+  arpeggioSpeed,
   ...props
 }: PianoPlayerProps): ReactElement {
   const id = useId();
@@ -21,16 +23,18 @@ export function PianoPlayer({
     id,
     notes: normalizeInput(String(notes)),
   });
-
   return (
     <figure className={className}>
       <Piano activeNotes={activeNotes} notes={notes} {...rest} />
       <figcaption>{label}</figcaption>
       <div className="actions">
-        <button disabled={isPlaying} onClick={() => play()}>
+        <button disabled={isPlaying} onClick={() => play({ mode: "block" })}>
           {playLabel}
         </button>
-        <button disabled={isPlaying} onClick={() => play("arpeggio")}>
+        <button
+          disabled={isPlaying}
+          onClick={() => play({ mode: "arpeggio", speed: arpeggioSpeed })}
+        >
           {arpeggioLabel}
         </button>
       </div>

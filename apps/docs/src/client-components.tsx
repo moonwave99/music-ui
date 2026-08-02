@@ -3,7 +3,7 @@
 import {
   Piano,
   PianoPlayer as Player,
-  Abc,
+  Score,
   PianoPlayerProps,
 } from "@music-ui/react";
 
@@ -11,4 +11,4 @@ function PianoPlayer(props: PianoPlayerProps) {
   return <Player className="piano-player" {...props} />;
 }
 
-export { Piano, PianoPlayer, Abc };
+export { Piano, PianoPlayer, Score };

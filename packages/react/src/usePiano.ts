@@ -1,11 +1,20 @@
-import { useLayoutEffect, useRef, type RefObject } from "react";
+import {
+  useLayoutEffect,
+  useRef,
+  useImperativeHandle,
+  type Ref,
+  RefObject,
+} from "react";
 import { Piano, type PianoOptions, SetNotesParams } from "@music-ui/piano";
 
 export type UsePianoParams = Partial<PianoOptions> & {
   notes?: SetNotesParams;
   noteLabels?: string | string[];
   activeNotes?: string[];
+  imperativeRef?: Ref<ImperativePiano>;
 };
+
+export type ImperativePiano = { setNotes: (notes: string[]) => void };
 
 export type UsePiano<T extends HTMLElement> = {
   ref: RefObject<T | null>;
@@ -17,9 +26,14 @@ export function usePiano<T extends HTMLElement>({
   activeNotes,
   startOctave = 2,
   octaves = 4,
+  imperativeRef,
 }: UsePianoParams): UsePiano<T> {
   const ref = useRef<T>(null);
   const pianoRef = useRef<Piano>(null);
+
+  useImperativeHandle(imperativeRef, () => ({
+    setNotes: (notes: string[]) => pianoRef.current?.setNotes(notes),
+  }));
 
   useLayoutEffect(() => {
     if (pianoRef.current) {

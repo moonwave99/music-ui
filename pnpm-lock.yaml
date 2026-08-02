@@ -82,6 +82,9 @@ importers:
 
   packages/abc:
     dependencies:
+      '@tonaljs/midi':
+        specifier: ^4.10.2
+        version: 4.10.2
       abcjs:
         specifier: ^6.6.4
         version: 6.6.4

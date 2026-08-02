@@ -35,6 +35,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           pageMap={await getPageMap()}
           docsRepositoryBase={`${pkg.homepage}/tree/main/apps/docs`}
           footer={footer}
+          copyPageButton={false}
         >
           <ProviderWrapper>{children}</ProviderWrapper>
         </Layout>

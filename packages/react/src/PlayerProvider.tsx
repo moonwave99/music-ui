@@ -24,10 +24,8 @@ const PlayerContext: Context<PlayerContextType> =
     setPlayingId: () => {},
   });
 
-type PlaybackMode = "block" | "arpeggio";
-
 export type UsePlayer = {
-  play: (mode?: PlaybackMode) => void;
+  play: (params: PlayParams) => void;
   isPlaying: boolean;
   activeNotes: string[];
 };
@@ -39,6 +37,14 @@ type UsePlayerParams = {
 
 const PLAYBACK_BLOCK_DURATION = 1;
 const PLAYBACK_ARPEGGIO_DURATION = 0.1;
+const DEFAULT_ARPEGGIO_BPM = 120;
+
+type PlaybackMode = "block" | "arpeggio";
+
+type PlayParams = {
+  mode: PlaybackMode;
+  speed?: number;
+};
 
 export function usePlayer({ id, notes }: UsePlayerParams): UsePlayer {
   const playerContext = use(PlayerContext);
@@ -50,8 +56,9 @@ export function usePlayer({ id, notes }: UsePlayerParams): UsePlayer {
 
   const { playingId, setPlayingId } = playerContext;
 
-  function play(mode: PlaybackMode = "block") {
+  function play({ mode = "block", speed = DEFAULT_ARPEGGIO_BPM }: PlayParams) {
     setPlayingId(id);
+
     if (mode === "block") {
       setActiveNotes(notes);
       synth.triggerAttackRelease(notes, PLAYBACK_BLOCK_DURATION);
@@ -61,6 +68,7 @@ export function usePlayer({ id, notes }: UsePlayerParams): UsePlayer {
       }, PLAYBACK_BLOCK_DURATION * 1000);
       return;
     }
+
     const transport = getTransport();
     const sequence = new Sequence((time, note) => {
       setActiveNotes([note]);
@@ -79,6 +87,7 @@ export function usePlayer({ id, notes }: UsePlayerParams): UsePlayer {
     }, notes);
     sequence.loop = 1;
     sequence.start(0);
+    transport.bpm.value = speed;
     transport.start();
   }
 

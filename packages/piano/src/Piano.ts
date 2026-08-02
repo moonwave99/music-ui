@@ -93,10 +93,10 @@ export function normalizeInput(input: SetNotesParams) {
 
 export class Piano {
   private options: PianoOptions;
-  private wrapper: HTMLElement | null;
+  private element: HTMLElement | null;
   constructor(options = {}) {
     this.options = Object.assign({}, DEFAULT_PIANO_OPTIONS, options);
-    this.wrapper = null;
+    this.element = null;
   }
   setNotes(notes: SetNotesParams, noteLabels?: SetNotesParams): Piano {
     this.clearNotes();
@@ -104,7 +104,7 @@ export class Piano {
     return this;
   }
   clearNotes(): Piano {
-    this.wrapper?.querySelectorAll(".key-on").forEach((el: Element) => {
+    this.element?.querySelectorAll(".key-on").forEach((el: Element) => {
       el.classList.remove("key-on");
       el.classList.remove("active");
       el.innerHTML = "";
@@ -116,33 +116,37 @@ export class Piano {
     return this;
   }
   destroy(): void {
-    this.wrapper?.remove();
+    this.element?.remove();
   }
   setActiveNotes(notes: string[]): Piano {
     this.clearActiveNotes();
     notes.forEach((note) =>
-      this.wrapper
+      this.element
         ?.querySelector(`.midi-${toMidi(note)}`)
         ?.classList.add("active"),
     );
     return this;
   }
   clearActiveNotes(): Piano {
-    this.wrapper
+    this.element
       ?.querySelectorAll(".key.active")
       .forEach((el: Element) => el.classList.remove("active"));
     return this;
   }
   private baseRender(): void {
-    if (this.wrapper) {
+    if (this.element) {
       return;
     }
     const { el, withFinalC, startOctave, octaves } = this.options;
 
-    this.wrapper = (
+    this.element = (
       typeof el === "string" ? document.querySelector(el) : el
     ) as HTMLElement;
-    this.wrapper.classList.add("piano");
+    this.element.classList.add("piano");
+
+    const overFlowWrapper = document.createElement("div");
+    overFlowWrapper.classList.add("piano-wrapper");
+    this.element.append(overFlowWrapper);
 
     const createKey = (note: ScaleNoteWithOctave): void => {
       const span = document.createElement("span");
@@ -158,7 +162,7 @@ export class Piano {
         span.classList.add(`${kebabCase(key)}-${value}`);
       });
 
-      this.wrapper?.append(span);
+      overFlowWrapper.append(span);
     };
 
     Array.from({ length: octaves }, (_, octave) =>
@@ -189,7 +193,7 @@ export class Piano {
         octave++;
       }
       const parsed = parseNote(note, octave);
-      const foundKey = this.wrapper?.querySelector(`.key.midi-${parsed.midi}`);
+      const foundKey = this.element?.querySelector(`.key.midi-${parsed.midi}`);
       if (!foundKey) {
         return;
       }

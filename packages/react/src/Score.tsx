@@ -1,18 +1,35 @@
-import { type ReactNode, ReactElement } from "react";
+import { useRef, type ReactNode, ReactElement } from "react";
 import { useAbc, type UseAbcParams } from "./useAbc";
+import { type ImperativePiano } from "./usePiano";
+import { Piano } from "./Piano";
 
-export type AbcProps = Omit<UseAbcParams, "content"> & {
+export type ScoreProps = Omit<UseAbcParams, "content"> & {
   children: ReactNode;
   className?: string;
+  showPiano?: boolean;
 };
 
-export function Abc({ className, children, ...params }: AbcProps): ReactElement {
+export function Score({
+  className = "score",
+  children,
+  showPiano = false,
+  ...params
+}: ScoreProps): ReactElement {
   const content = getNodeText(children);
-  const { staffRef, audioControlsRef } = useAbc({ ...params, content });
+  const pianoRef = useRef<ImperativePiano>(null);
+  const { staffRef, audioControlsRef } = useAbc({
+    ...params,
+    content,
+    onNotesChange: (notes: string[]) => {
+      pianoRef.current?.setNotes(notes);
+    },
+  });
+
   return (
     <div className={className}>
       <div ref={staffRef}></div>
       <div ref={audioControlsRef}></div>
+      {showPiano ? <Piano imperativeRef={pianoRef} /> : null}
     </div>
   );
 }

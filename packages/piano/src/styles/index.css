@@ -28,10 +28,14 @@
 
 .piano {
   height: var(--piano-height);
-  width: fit-content;
   border: 1px solid var(--piano-border-color);
-  display: flex;
   overflow-x: auto;
+
+  .piano-wrapper {
+    height: 100%;
+    width: fit-content;
+    display: flex;
+  }
 
   .key {
     position: relative;

@@ -1,7 +1,10 @@
 import { useLayoutEffect, useRef, RefObject } from "react";
 import { initAbc, type InitABCParams } from "@music-ui/abc";
 
-export type UseAbcParams = Pick<InitABCParams, "id" | "content">;
+export type UseAbcParams = Pick<
+  InitABCParams,
+  "id" | "content" | "onNotesChange"
+>;
 export type UseAbc = {
   staffRef: RefObject<HTMLDivElement>;
   audioControlsRef: RefObject<HTMLDivElement>;
