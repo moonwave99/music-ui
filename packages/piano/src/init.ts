@@ -20,11 +20,11 @@ export function init(options: InitOptions = DEFAULT_INIT_OPTIONS): void {
     const options = parseOptions(element);
     const piano = new Piano({ ...options, el });
     piano.render();
-    const { notes } = element.dataset;
+    const { notes, noteLabels } = element.dataset;
     if (!notes) {
       return;
     }
-    piano.setNotes(notes);
+    piano.setNotes(notes, noteLabels);
   });
 }
 

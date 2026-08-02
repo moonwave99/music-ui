@@ -3,6 +3,7 @@ import { Piano, type PianoOptions, SetNotesParams } from "@music-ui/piano";
 
 export type UsePianoParams = Partial<PianoOptions> & {
   notes?: SetNotesParams;
+  noteLabels?: string | string[];
   activeNotes?: string[];
 };
 
@@ -12,6 +13,7 @@ export type UsePiano<T extends HTMLElement> = {
 
 export function usePiano<T extends HTMLElement>({
   notes,
+  noteLabels,
   activeNotes,
   startOctave = 2,
   octaves = 4,
@@ -33,12 +35,12 @@ export function usePiano<T extends HTMLElement>({
 
   useLayoutEffect(() => {
     if (notes) {
-      pianoRef.current?.setNotes(notes);
+      pianoRef.current?.setNotes(notes, noteLabels);
     }
     return () => {
       pianoRef?.current?.clearNotes();
     };
-  }, [notes]);
+  }, [notes, noteLabels]);
 
   useLayoutEffect(() => {
     if (!activeNotes) {

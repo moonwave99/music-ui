@@ -3,7 +3,12 @@
   --piano-white-key-width: 1.2rem;
   --piano-black-key-width: 0.8rem;
   --piano-black-key-height: 60%;
-  --piano-active-indicator-size: 1.5rem;
+  --piano-white-key-active-indicator-size: calc(
+    var(--piano-white-key-width) / 3 * 2
+  );
+  --piano-black-key-active-indicator-size: calc(var(--piano-black-key-width));
+  --piano-active-indicator-background-color: rgba(255, 255, 255, 0.9);
+  --piano-key-label-font-size: 0.7rem;
   --piano-border-color: rgba(0, 0, 0, 0.4);
   --piano-white-key-color: white;
   --piano-black-key-color: rgb(35, 35, 35);
@@ -30,18 +35,37 @@
 
   .key {
     position: relative;
-
+    font-size: var(--piano-key-label-font-size);
+    line-height: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    z-index: 1;
+    &.color-white.active::after {
+      width: var(--piano-white-key-active-indicator-size);
+      height: var(--piano-white-key-active-indicator-size);
+      bottom: calc(
+        (
+            var(--piano-white-key-width) -
+              var(--piano-white-key-active-indicator-size)
+          ) /
+          2 * 0.7
+      );
+    }
+    &.color-black.active::after {
+      width: var(--piano-black-key-active-indicator-size);
+      height: var(--piano-black-key-active-indicator-size);
+      bottom: calc(var(--piano-black-key-active-indicator-size) * 0.1);
+    }
     &.active::after {
-      content: "•";
-      width: 100%;
-      font-size: calc(var(--piano-active-indicator-size) / 3 * 4);
+      content: "";
+      z-index: 10;
+      border: 1px solid var(--piano-active-indicator-background-color);
+      border-radius: 50%;
       position: absolute;
-      bottom: 0;
-      height: var(--piano-active-indicator-size);
-      line-height: var(--piano-active-indicator-size);
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     &:not(:last-child) {
@@ -86,7 +110,7 @@
       height: var(--piano-black-key-height);
       width: var(--piano-black-key-width);
       margin: 0 0 0 calc(var(--piano-black-key-width) / -2);
-      z-index: 1;
+      z-index: 2;
       border-bottom: 1px solid var(--piano-border-color);
       border-left: 1px solid var(--piano-border-color);
       border-right: 1px solid var(--piano-border-color);

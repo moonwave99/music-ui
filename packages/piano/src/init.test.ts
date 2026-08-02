@@ -73,6 +73,19 @@ describe("init", () => {
     ]);
   });
 
+  it("initializes Piano instances with passed notes and labels", () => {
+    document.body.innerHTML = `
+        <main>
+          <div data-piano data-notes="C3 E3 G3" data-note-labels="1 3 5" data-octaves="3"></div>
+        </main>`;
+
+    init();
+    const wrapper = document.querySelector(".piano");
+    expect(
+      [...wrapper!.querySelectorAll(".key-on")].map((el) => el.innerHTML),
+    ).toEqual(["1", "3", "5"]);
+  });
+
   it("initializes Piano instances with the enharmonic equivalents of the passed notes", () => {
     document.body.innerHTML = `
         <main>

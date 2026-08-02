@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { test, describe, it, expect } from "vitest";
+import { test, describe, it, expect, assert } from "vitest";
 import { Piano } from "./Piano";
 
 test.beforeEach(() => {
@@ -220,6 +220,61 @@ describe("Piano - setNotes", () => {
         octave: "4",
       },
     ]);
+  });
+});
+
+describe("Piano - setNotes with labels", () => {
+  it("Displays the passed notes with label information as string", () => {
+    const piano = new Piano();
+
+    const notes = [
+      ["C3", "1"],
+      ["E3", "3"],
+      ["G3", "5"],
+    ];
+
+    piano
+      .render()
+      .setNotes(
+        notes.map((x) => x[0]).join(" "),
+        notes.map((x) => x[1]).join(" "),
+      );
+
+    const wrapper = document.querySelector("#piano");
+    notes.forEach(([note, label]) => {
+      expect(
+        wrapper?.querySelector(`.note-with-octave-${note}`)?.innerHTML,
+      ).toBe(label);
+    });
+  });
+
+  it("Displays the passed notes with label information as array", () => {
+    const piano = new Piano();
+
+    const notes = [
+      ["C3", "1"],
+      ["E3", "3"],
+      ["G3", "5"],
+    ] as const;
+
+    piano.render().setNotes(
+      notes.map((x) => x[0]).join(" "),
+      notes.map((x) => x[1]),
+    );
+
+    const wrapper = document.querySelector("#piano");
+    notes.forEach(([note, label]) => {
+      expect(
+        wrapper?.querySelector(`.note-with-octave-${note}`)?.innerHTML,
+      ).toBe(label);
+    });
+  });
+
+  it("Throws error if notes and label mismatch", () => {
+    assert.throws(() => {
+      const piano = new Piano();
+      piano.render().setNotes("C3 E3 G3", "1 3");
+    }, "input and noteLabels length do not match");
   });
 });
 

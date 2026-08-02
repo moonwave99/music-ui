@@ -32,6 +32,7 @@ export type SetNotesParams = string | string[];
 type GroupedInput = {
   group: number;
   note: string;
+  label?: string;
 }[];
 
 function parseNote(
@@ -58,16 +59,30 @@ function parseNote(
   };
 }
 
-export function parseNoteInput(input: SetNotesParams): GroupedInput {
+export function parseNoteInput(
+  input: SetNotesParams,
+  noteLabels?: SetNotesParams,
+): GroupedInput {
   const groups = Array.isArray(input)
     ? [input]
     : input
         .split(",")
         .filter(Boolean)
         .map((x) => x.split(" ").filter(Boolean));
-  return groups.flatMap((group, index) =>
+  const output = groups.flatMap((group, index) =>
     group.map((note) => ({ note, group: index })),
   );
+  if (!noteLabels) {
+    return output;
+  }
+  const normalizedNoteLabels = normalizeInput(noteLabels);
+  if (normalizedNoteLabels.length !== output.length) {
+    throw new Error("input and noteLabels length do not match");
+  }
+  return output.map((note, index) => ({
+    ...note,
+    label: normalizedNoteLabels[index],
+  }));
 }
 
 export function normalizeInput(input: SetNotesParams) {
@@ -83,15 +98,17 @@ export class Piano {
     this.options = Object.assign({}, DEFAULT_PIANO_OPTIONS, options);
     this.wrapper = null;
   }
-  setNotes(notes: SetNotesParams): Piano {
+  setNotes(notes: SetNotesParams, noteLabels?: SetNotesParams): Piano {
     this.clearNotes();
-    this._setNotes(parseNoteInput(notes));
+    this._setNotes(parseNoteInput(notes, noteLabels));
     return this;
   }
   clearNotes(): Piano {
-    this.wrapper
-      ?.querySelectorAll(".key-on")
-      .forEach((el: Element) => el.classList.remove("key-on"));
+    this.wrapper?.querySelectorAll(".key-on").forEach((el: Element) => {
+      el.classList.remove("key-on");
+      el.classList.remove("active");
+      el.innerHTML = "";
+    });
     return this;
   }
   render(): Piano {
@@ -167,7 +184,7 @@ export class Piano {
   private _setNotes(notes: GroupedInput): void {
     const middleOctave = this.getMiddleOctave();
     let octave = middleOctave;
-    notes.forEach(({ group, note }, index) => {
+    notes.forEach(({ group, note, label }, index) => {
       if (index > 0 && note.startsWith("C")) {
         octave++;
       }
@@ -177,6 +194,10 @@ export class Piano {
         return;
       }
       foundKey.classList.add("key-on", `group-${group + 1}`);
+      if (!label) {
+        return;
+      }
+      foundKey.innerHTML = label;
     });
   }
 }

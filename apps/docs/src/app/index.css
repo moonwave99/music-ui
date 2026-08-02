@@ -1,3 +1,9 @@
+:root {
+  --piano-height: 6rem;
+  --piano-white-key-width: 1.75rem;
+  --piano-black-key-width: 1.2rem;
+}
+
 .piano {
   margin-top: 1rem;
 }
