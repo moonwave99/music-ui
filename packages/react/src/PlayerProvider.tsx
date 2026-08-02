@@ -82,7 +82,7 @@ export function usePlayer({ id, notes }: UsePlayerParams): UsePlayer {
     transport.start();
   }
 
-  return { play, activeNotes, isPlaying: playingId === id };
+  return { play, activeNotes, isPlaying: !!playingId };
 }
 
 type PlayerProviderProps = {

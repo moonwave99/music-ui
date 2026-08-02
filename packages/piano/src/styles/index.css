@@ -52,7 +52,7 @@
             var(--piano-white-key-width) -
               var(--piano-white-key-active-indicator-size)
           ) /
-          2 * 0.7
+          2 * 0.6
       );
     }
     &.color-black.active::after {
