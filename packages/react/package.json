@@ -18,6 +18,8 @@
     "README.md"
   ],
   "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
     "lint": "eslint . --max-warnings 0",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "build": "tsup src/index.ts --format cjs,esm --dts",
@@ -34,11 +36,18 @@
   "devDependencies": {
     "@music-ui/eslint-config": "workspace:*",
     "@music-ui/typescript-config": "workspace:*",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
+    "jest-environment-jsdom": "^30.4.1",
+    "jsdom": "^30.0.1",
     "tsup": "^8.5.1",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^4.1.10"
   }
 }
