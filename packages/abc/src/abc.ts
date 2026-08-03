@@ -50,12 +50,7 @@ export async function initAbc({
   hidePlayer,
   onNotesChange = () => {},
 }: InitABCParams): Promise<InitABC> {
-  function clickListener(_: unknown, ___: unknown, classes: string) {
-    console.log(classes);
-  }
-
   const visualObj = renderAbc(staffElement, content, {
-    clickListener,
     responsive: "resize",
     add_classes: true,
   }).at(0) as TuneObject;
@@ -65,6 +60,14 @@ export async function initAbc({
     el: staffElement,
     onNotesChange,
   });
+
+  const hideMeter = visualObj.getMeter().value?.at(0)!.den == 1;
+
+  if (hideMeter) {
+    (staffElement.querySelector(
+      ".abcjs-time-signature",
+    ) as HTMLElement)!.style.display = "none";
+  }
 
   if (hidePlayer) {
     return {
