@@ -22,6 +22,7 @@ export async function initAll(options: InitAllOptions = DEFAULT_INIT_OPTIONS) {
         content: element.querySelector(".content")!.textContent,
         staffElement: element.querySelector(".staff")!,
         audioControlsElement: element.querySelector(".audio-controls")!,
+        hidePlayer: Boolean(element.dataset.hidePlayer),
       }),
     ),
   );
