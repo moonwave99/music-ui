@@ -1,5 +1,11 @@
 # @music-ui/abc
 
+## 0.9.0
+
+### Minor Changes
+
+- ea8fc40: Fix export names
+
 ## 0.8.0
 
 ### Minor Changes

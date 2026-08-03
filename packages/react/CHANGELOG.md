@@ -1,5 +1,17 @@
 # @music-ui/react
 
+## 0.9.0
+
+### Minor Changes
+
+- ea8fc40: Fix export names
+
+### Patch Changes
+
+- Updated dependencies [ea8fc40]
+  - @music-ui/abc@0.9.0
+  - @music-ui/piano@0.9.0
+
 ## 0.8.0
 
 ### Minor Changes
