@@ -1,5 +1,11 @@
 # @music-ui/piano
 
+## 0.8.0
+
+### Minor Changes
+
+- d46d4f3: Add piano and score integration
+
 ## 0.7.0
 
 ### Minor Changes

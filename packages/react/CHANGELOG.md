@@ -1,5 +1,17 @@
 # @music-ui/react
 
+## 0.8.0
+
+### Minor Changes
+
+- d46d4f3: Add piano and score integration
+
+### Patch Changes
+
+- Updated dependencies [d46d4f3]
+  - @music-ui/abc@0.8.0
+  - @music-ui/piano@0.8.0
+
 ## 0.7.0
 
 ### Minor Changes
