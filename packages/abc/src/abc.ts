@@ -34,6 +34,7 @@ export type InitABCParams = {
   audioControlsElement: HTMLElement;
   id: string;
   hidePlayer?: boolean;
+  hideMeter?: boolean;
   onNotesChange?: (notes: string[]) => void;
 };
 
@@ -47,7 +48,8 @@ export async function initAbc({
   staffElement,
   audioControlsElement,
   id,
-  hidePlayer,
+  hidePlayer = false,
+  hideMeter = false,
   onNotesChange = () => {},
 }: InitABCParams): Promise<InitABC> {
   const visualObj = renderAbc(staffElement, content, {
@@ -61,9 +63,9 @@ export async function initAbc({
     onNotesChange,
   });
 
-  const hideMeter = visualObj.getMeter().value?.at(0)!.den == 1;
+  const isMeterDenominatorUnary = visualObj.getMeter().value?.at(0)!.den == 1;
 
-  if (hideMeter) {
+  if (hideMeter || isMeterDenominatorUnary) {
     (staffElement.querySelector(
       ".abcjs-time-signature",
     ) as HTMLElement)!.style.display = "none";

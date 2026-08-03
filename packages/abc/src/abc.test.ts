@@ -59,6 +59,40 @@ C E G B
     );
   });
 
+  it("hides the meter if hideMeter is true", async () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc>
+          <div class="content">
+X:4
+M:4/4
+L:1
+CEG
+          </div>
+          <div class="staff"></div>
+          <div class="audio-controls"></div>
+        </div>
+      </main>`;
+
+    const element = document.querySelector("[data-abc]");
+
+    await initAbc({
+      id: "1",
+      staffElement: element?.querySelector(".staff") as HTMLElement,
+      audioControlsElement: element?.querySelector(
+        ".audio-controls",
+      ) as HTMLElement,
+      content: element?.querySelector(".content")?.textContent as string,
+      hideMeter: true,
+    });
+
+    expect(
+      window.getComputedStyle(
+        element?.querySelector(".abcjs-time-signature") as Element,
+      ).display,
+    ).toBe("none");
+  });
+
   it("hides the meter if it's x/1", async () => {
     document.body.innerHTML = `
       <main>

@@ -4,6 +4,7 @@ The `<Score>` component renders ABC notation:
 
 <Score id={1}>
 X:1
+M:4/4
 L:1/4
 C D E F G A B c|
 </Score>
@@ -12,13 +13,23 @@ Without player:
 
 <Score id={2} hidePlayer>
 X:2
+M:4/4
+L:1/4
+C D E F G A B c|
+</Score>
+
+Without meter:
+
+<Score id={3} hideMeter>
+X:2
+M:4/4
 L:1/4
 C D E F G A B c|
 </Score>
 
 With piano below too!
 
-<Score id={3} showPiano>
+<Score id={4} showPiano>
 X:3
 T:You Are My Sunshine
 C:Traditional
