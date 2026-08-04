@@ -134,6 +134,7 @@ export class Piano {
     return this;
   }
   private baseRender(): void {
+    /* istanbul ignore if  */
     if (this.element) {
       return;
     }

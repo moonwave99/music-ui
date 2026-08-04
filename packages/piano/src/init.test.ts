@@ -23,6 +23,22 @@ describe("init", () => {
     ).toBe("B");
   });
 
+  it("initializes Piano instances on user selection", () => {
+    document.body.innerHTML = `
+        <main>
+            <div data-custom></div>
+            <div data-custom
+                data-octaves="1"
+                data-with-final-C="false"></div>
+        </main>`;
+
+    const elements = document.querySelectorAll("[data-custom]");
+
+    init({ elements });
+    const pianos = document.querySelectorAll(".piano");
+    expect(pianos.length).toBe(2);
+  });
+
   it("initializes Piano instances with passed notes", () => {
     document.body.innerHTML = `
         <main>

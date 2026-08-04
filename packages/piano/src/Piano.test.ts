@@ -221,6 +221,36 @@ describe("Piano - setNotes", () => {
       },
     ]);
   });
+
+  it("Ignores non existing notes", () => {
+    const piano = new Piano();
+
+    piano.render().setNotes(["C4", "E4", "C9"]);
+
+    const wrapper = document.querySelector("#piano");
+    expect(
+      [...wrapper!.querySelectorAll(".key-on")].map((el) => ({
+        ...(el as HTMLElement).dataset,
+      })),
+    ).toEqual([
+      {
+        chroma: "0",
+        color: "white",
+        midi: "60",
+        note: "C",
+        noteWithOctave: "C4",
+        octave: "4",
+      },
+      {
+        chroma: "4",
+        color: "white",
+        midi: "64",
+        note: "E",
+        noteWithOctave: "E4",
+        octave: "4",
+      },
+    ]);
+  });
 });
 
 describe("Piano - setNotes with labels", () => {
@@ -296,6 +326,22 @@ describe("Piano - setActiveNotes", () => {
   });
 });
 
+describe("Piano - clearNotes", () => {
+  it("Removes all note indications", () => {
+    const piano = new Piano();
+
+    piano
+      .render()
+      .setNotes(["C4", "E4", "G4"])
+      .setActiveNotes(["C4"])
+      .clearNotes();
+
+    const wrapper = document.querySelector("#piano");
+    expect(wrapper?.querySelectorAll(".key-on").length).toBe(0);
+    expect(wrapper?.querySelectorAll(".active").length).toBe(0);
+  });
+});
+
 describe("Piano - clearActiveNotes", () => {
   it("Clears all active notes", () => {
     const piano = new Piano();
@@ -309,5 +355,17 @@ describe("Piano - clearActiveNotes", () => {
     expect(
       wrapper?.querySelector(".note-with-octave-C4")?.classList,
     ).not.toContain("active");
+  });
+});
+
+describe("Piano - destroy", () => {
+  it("Removes the element from the dom", () => {
+    const piano = new Piano();
+
+    piano.render();
+
+    piano.destroy();
+    const wrapper = document.querySelector("#piano");
+    expect(wrapper).toBeFalsy();
   });
 });

@@ -1,5 +1,5 @@
-import { midiToNoteName } from "@tonaljs/midi";
-import { synth, renderAbc, type TuneObject, type NoteTimingEvent } from "abcjs";
+import { synth, renderAbc, type TuneObject } from "abcjs";
+import { CursorControl } from "./CursorControl";
 
 const DEFAULT_INIT_OPTIONS = {
   elements: "[data-abc]",
@@ -36,11 +36,14 @@ export type InitABCParams = {
   hidePlayer?: boolean;
   hideMeter?: boolean;
   onNotesChange?: (notes: string[]) => void;
+  onPlaybackFinished?: () => void;
 };
 
 export type InitABC = {
   cursorControl: CursorControl | null;
   stop: () => void;
+  play: () => void;
+  restart: () => void;
 };
 
 export async function initAbc({
@@ -51,16 +54,20 @@ export async function initAbc({
   hidePlayer = false,
   hideMeter = false,
   onNotesChange = () => {},
+  onPlaybackFinished = () => {},
 }: InitABCParams): Promise<InitABC> {
   const visualObj = renderAbc(staffElement, content, {
     responsive: "resize",
     add_classes: true,
+    paddingleft: 0,
+    paddingright: 0,
   }).at(0) as TuneObject;
 
   const cursorControl = new CursorControl({
     id,
     el: staffElement,
     onNotesChange,
+    onPlaybackFinished,
   });
 
   const isMeterDenominatorUnary = visualObj.getMeter().value?.at(0)!.den == 1;
@@ -75,127 +82,34 @@ export async function initAbc({
     return {
       cursorControl: null,
       stop: () => {},
+      play: () => {},
+      restart: () => {},
     };
   }
 
   const synthControl = new synth.SynthController();
+
+  // NOTE: in order to use the CursorControl, SynthController needs to render the audio controls.
+  // Hide the .abcjs-inline-audio element via CSS, then use the exported methods in your own controls.
   synthControl.load(audioControlsElement, cursorControl, {
-    displayLoop: true,
-    displayRestart: true,
-    displayPlay: true,
-    displayProgress: true,
-    displayWarp: true,
+    displayPlay: false,
+    displayProgress: false,
   });
   const midiBuffer = new synth.CreateSynth();
   await midiBuffer.init({ visualObj });
-  synthControl.setTune(visualObj, true);
+  synthControl.setTune(visualObj, false);
 
   function stop() {
     synthControl.pause();
   }
 
-  return { cursorControl, stop };
-}
-
-type CursorControlParams = {
-  id: string;
-  el: HTMLElement;
-  beatSubdivisions?: number;
-  onNotesChange: (notes: string[]) => void;
-};
-
-type OnPlaybackCallback = (id: string) => void;
-
-class CursorControl {
-  private id: string;
-  private el: HTMLElement;
-  private beatSubdivisions: number;
-  private onNotesChange?: (pitches: string[]) => void;
-  private _onPlayback: OnPlaybackCallback;
-  constructor({
-    id,
-    el,
-    beatSubdivisions = 2,
-    onNotesChange,
-  }: CursorControlParams) {
-    this.id = id;
-    this.el = el;
-    this.beatSubdivisions = beatSubdivisions;
-    this.onNotesChange = onNotesChange;
-    this._onPlayback = () => {};
+  function play() {
+    synthControl.play();
   }
-  onPlayback(callback: OnPlaybackCallback) {
-    this._onPlayback = callback;
-  }
-  onStart() {
-    if (!this.el.querySelector("svg .abcjs-cursor")) {
-      this._createCursor();
-    }
-    if (!this._onPlayback) {
-      return;
-    }
-    this._onPlayback(this.id);
-  }
-  onEvent(event: NoteTimingEvent) {
-    if (event.measureStart && event.left === null) {
-      return;
-    }
 
-    if (this.onNotesChange) {
-      this.onNotesChange(
-        event.midiPitches
-          ?.filter((x: unknown) => (x as { cmd: string }).cmd === "note")
-          .map(({ pitch }) => midiToNoteName(pitch)) || [],
-      );
-    }
-
-    this.el
-      .querySelectorAll("svg .highlight")
-      .forEach((x) => x.classList.remove("highlight"));
-
-    if (event.elements) {
-      event.elements.forEach((x: HTMLElement[]) =>
-        x.forEach((y) => y.classList.add("highlight")),
-      );
-    }
-
-    const cursor = this.el.querySelector("svg .abcjs-cursor");
-    const { left, top, height } = event;
-    if (!cursor || !left || !top || !height) {
-      return;
-    }
-
-    cursor.setAttribute("x1", `${left - 2}`);
-    cursor.setAttribute("x2", `${left - 2}`);
-    cursor.setAttribute("y1", `${top}`);
-    cursor.setAttribute("y2", `${top + height}`);
+  function restart() {
+    synthControl.restart();
   }
-  onFinished() {
-    if (this.onNotesChange) {
-      this.onNotesChange([]);
-    }
-    this.el
-      .querySelectorAll("svg .highlight")
-      .forEach((x) => x.classList.remove("highlight"));
-    const cursor = this.el.querySelector("svg .abcjs-cursor");
-    if (!cursor) {
-      return;
-    }
-    cursor.setAttribute("x1", "0");
-    cursor.setAttribute("x2", "0");
-    cursor.setAttribute("y1", "0");
-    cursor.setAttribute("y2", "0");
-  }
-  _createCursor() {
-    const cursor = document.createElementNS(
-      "http://www.w3.org/2000/svg",
-      "line",
-    );
-    cursor.setAttribute("class", "abcjs-cursor");
-    cursor.setAttributeNS(null, "x1", "0");
-    cursor.setAttributeNS(null, "y1", "0");
-    cursor.setAttributeNS(null, "x2", "0");
-    cursor.setAttributeNS(null, "y2", "0");
-    this.el.querySelector("svg")!.appendChild(cursor);
-  }
+
+  return { cursorControl, stop, play, restart };
 }

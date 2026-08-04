@@ -1,3 +1,5 @@
+"use client";
+
 import { useRef, type ReactNode, ReactElement } from "react";
 import { useAbc, type UseAbcParams } from "./useAbc";
 import { type ImperativePiano } from "./usePiano";
@@ -7,17 +9,21 @@ export type ScoreProps = Omit<UseAbcParams, "content"> & {
   children: ReactNode;
   className?: string;
   showPiano?: boolean;
+  playbackButtonLabel?: string;
+  restartButtonLabel?: string;
 };
 
 export function Score({
   className = "score",
   children,
   showPiano = false,
+  playbackButtonLabel = "Toggle Playback",
+  restartButtonLabel = "Restart",
   ...params
 }: ScoreProps): ReactElement {
   const content = getNodeText(children);
   const pianoRef = useRef<ImperativePiano>(null);
-  const { staffRef, audioControlsRef } = useAbc({
+  const { staffRef, audioControlsRef, togglePlayback, restart } = useAbc({
     ...params,
     content,
     onNotesChange: (notes: string[]) => {
@@ -27,8 +33,24 @@ export function Score({
 
   return (
     <div className={className}>
-      <div ref={staffRef}></div>
-      <div ref={audioControlsRef}></div>
+      <div className="score-staff" ref={staffRef}></div>
+      <div className="score-audio-controls">
+        <button
+          className="score-button score-toggle-playback-button"
+          onClick={togglePlayback}
+          aria-label={playbackButtonLabel}
+        >
+          {playbackButtonLabel}
+        </button>
+        <button
+          className="score-button score-restart-button"
+          onClick={restart}
+          aria-label={restartButtonLabel}
+        >
+          {restartButtonLabel}
+        </button>
+        <div className="abcjs-inline-audio" ref={audioControlsRef}></div>
+      </div>
       {showPiano ? <Piano imperativeRef={pianoRef} /> : null}
     </div>
   );
