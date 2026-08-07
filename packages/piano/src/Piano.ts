@@ -2,6 +2,7 @@ import { get as getNote } from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
 import { CHROMATIC_SCALE } from "./lib";
+import { type NoteInput } from "@music-ui/core";
 
 export type ScaleNote = {
   chroma: number;
@@ -26,8 +27,6 @@ export const DEFAULT_PIANO_OPTIONS = {
   octaves: 2,
   withFinalC: true,
 } as const;
-
-export type SetNotesParams = string | string[];
 
 type GroupedInput = {
   group: number;
@@ -60,8 +59,8 @@ function parseNote(
 }
 
 export function parseNoteInput(
-  input: SetNotesParams,
-  noteLabels?: SetNotesParams,
+  input: NoteInput,
+  noteLabels?: NoteInput,
 ): GroupedInput {
   const groups = Array.isArray(input)
     ? [input]
@@ -85,11 +84,19 @@ export function parseNoteInput(
   }));
 }
 
-export function normalizeInput(input: SetNotesParams) {
+export function normalizeInput(input: NoteInput) {
   return Array.isArray(input)
     ? input
     : input.replaceAll(",", "").split(" ").filter(Boolean);
 }
+
+const cssClasses = {
+  piano: "piano",
+  pianoWrapper: "piano-wrapper",
+  key: "key",
+  keyPlayed: "key-played",
+  keyOn: "key-on",
+} as const;
 
 export class Piano {
   private options: PianoOptions;
@@ -98,17 +105,19 @@ export class Piano {
     this.options = Object.assign({}, DEFAULT_PIANO_OPTIONS, options);
     this.element = null;
   }
-  setNotes(notes: SetNotesParams, noteLabels?: SetNotesParams): Piano {
+  setNotes(notes: NoteInput, noteLabels?: NoteInput): Piano {
     this.clearNotes();
     this._setNotes(parseNoteInput(notes, noteLabels));
     return this;
   }
   clearNotes(): Piano {
-    this.element?.querySelectorAll(".key-on").forEach((el: Element) => {
-      el.classList.remove("key-on");
-      el.classList.remove("active");
-      el.innerHTML = "";
-    });
+    this.element
+      ?.querySelectorAll(`.${cssClasses.keyOn}`)
+      .forEach((el: Element) => {
+        el.classList.remove(cssClasses.keyOn);
+        el.classList.remove(cssClasses.keyPlayed);
+        el.innerHTML = "";
+      });
     return this;
   }
   render(): Piano {
@@ -118,19 +127,19 @@ export class Piano {
   destroy(): void {
     this.element?.remove();
   }
-  setActiveNotes(notes: string[]): Piano {
-    this.clearActiveNotes();
+  setPlayedNotes(notes: string[]): Piano {
+    this.clearPlayedNotes();
     notes.forEach((note) =>
       this.element
         ?.querySelector(`.midi-${toMidi(note)}`)
-        ?.classList.add("active"),
+        ?.classList.add(cssClasses.keyPlayed),
     );
     return this;
   }
-  clearActiveNotes(): Piano {
+  clearPlayedNotes(): Piano {
     this.element
-      ?.querySelectorAll(".key.active")
-      .forEach((el: Element) => el.classList.remove("active"));
+      ?.querySelectorAll(`.${cssClasses.keyPlayed}`)
+      .forEach((el: Element) => el.classList.remove(cssClasses.keyPlayed));
     return this;
   }
   private baseRender(): void {
@@ -143,15 +152,15 @@ export class Piano {
     this.element = (
       typeof el === "string" ? document.querySelector(el) : el
     ) as HTMLElement;
-    this.element.classList.add("piano");
+    this.element.classList.add(cssClasses.piano);
 
     const overFlowWrapper = document.createElement("div");
-    overFlowWrapper.classList.add("piano-wrapper");
+    overFlowWrapper.classList.add(cssClasses.pianoWrapper);
     this.element.append(overFlowWrapper);
 
     const createKey = (note: ScaleNoteWithOctave): void => {
       const span = document.createElement("span");
-      span.classList.add("key");
+      span.classList.add(cssClasses.key);
       const noteWithOctave = `${note.note}${note.octave}`;
 
       Object.entries({
@@ -194,7 +203,7 @@ export class Piano {
         octave++;
       }
       const parsed = parseNote(note, octave);
-      const foundKey = this.element?.querySelector(`.key.midi-${parsed.midi}`);
+      const foundKey = this.element?.querySelector(`.midi-${parsed.midi}`);
       if (!foundKey) {
         return;
       }

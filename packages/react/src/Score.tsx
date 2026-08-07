@@ -1,11 +1,14 @@
 "use client";
 
-import { useRef, type ReactNode, ReactElement } from "react";
-import { useAbc, type UseAbcParams } from "./useAbc";
-import { type ImperativePiano } from "./usePiano";
+import { type ReactNode, ReactElement } from "react";
+import { useAbc } from "./useAbc";
+import { usePlayer } from "./PlayerProvider";
 import { Piano } from "./Piano";
+import { getAbcScore } from "@music-ui/core";
 
-export type ScoreProps = Omit<UseAbcParams, "content"> & {
+export type ScoreProps = {
+  id: string;
+  hidePlayer?: boolean;
   children: ReactNode;
   className?: string;
   showPiano?: boolean;
@@ -19,39 +22,54 @@ export function Score({
   showPiano = false,
   playbackButtonLabel = "Toggle Playback",
   restartButtonLabel = "Restart",
+  hidePlayer = false,
   ...params
 }: ScoreProps): ReactElement {
   const content = getNodeText(children);
-  const pianoRef = useRef<ImperativePiano>(null);
-  const { staffRef, audioControlsRef, togglePlayback, restart } = useAbc({
-    ...params,
-    content,
-    onNotesChange: (notes: string[]) => {
-      pianoRef.current?.setNotes(notes);
-    },
-  });
+  const { play, pause, stop, resume, playedNotes, playerStatus } = usePlayer(
+    params.id,
+  );
+  const { staffRef } = useAbc({ ...params, content });
+
+  const score = getAbcScore(params.id, content);
+
+  function togglePlayback() {
+    if (playerStatus === "stopped") {
+      play(score);
+      return;
+    }
+    if (playerStatus === "playing") {
+      pause();
+      return;
+    }
+    if (playerStatus === "paused") {
+      resume();
+      return;
+    }
+  }
 
   return (
     <div className={className}>
       <div className="score-staff" ref={staffRef}></div>
-      <div className="score-audio-controls">
-        <button
-          className="score-button score-toggle-playback-button"
-          onClick={togglePlayback}
-          aria-label={playbackButtonLabel}
-        >
-          {playbackButtonLabel}
-        </button>
-        <button
-          className="score-button score-restart-button"
-          onClick={restart}
-          aria-label={restartButtonLabel}
-        >
-          {restartButtonLabel}
-        </button>
-        <div className="abcjs-inline-audio" ref={audioControlsRef}></div>
-      </div>
-      {showPiano ? <Piano imperativeRef={pianoRef} /> : null}
+      {!hidePlayer ? (
+        <div className="score-audio-controls">
+          <button
+            className="score-button score-toggle-playback-button"
+            onClick={togglePlayback}
+            aria-label={playbackButtonLabel}
+          >
+            {playbackButtonLabel}
+          </button>
+          <button
+            className="score-button score-restart-button"
+            onClick={stop}
+            aria-label={restartButtonLabel}
+          >
+            {restartButtonLabel}
+          </button>
+        </div>
+      ) : null}
+      {showPiano ? <Piano notes={playedNotes} /> : null}
     </div>
   );
 }

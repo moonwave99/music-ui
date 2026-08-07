@@ -5,12 +5,13 @@ import {
   type Ref,
   RefObject,
 } from "react";
-import { Piano, type PianoOptions, SetNotesParams } from "@music-ui/piano";
+import { Piano, type PianoOptions } from "@music-ui/piano";
+import type { NoteInput } from "@music-ui/core";
 
 export type UsePianoParams = Partial<PianoOptions> & {
-  notes?: SetNotesParams;
-  noteLabels?: string | string[];
-  activeNotes?: string[];
+  notes?: NoteInput;
+  noteLabels?: NoteInput;
+  playedNotes?: string[];
   imperativeRef?: Ref<ImperativePiano>;
 };
 
@@ -23,7 +24,7 @@ export type UsePiano<T extends HTMLElement> = {
 export function usePiano<T extends HTMLElement>({
   notes,
   noteLabels,
-  activeNotes,
+  playedNotes,
   startOctave = 2,
   octaves = 4,
   imperativeRef,
@@ -57,14 +58,14 @@ export function usePiano<T extends HTMLElement>({
   }, [notes, noteLabels]);
 
   useLayoutEffect(() => {
-    if (!activeNotes) {
+    if (!playedNotes) {
       return;
     }
-    pianoRef.current?.setActiveNotes(activeNotes);
+    pianoRef.current?.setPlayedNotes(playedNotes);
     return () => {
-      pianoRef.current?.clearActiveNotes();
+      pianoRef.current?.clearPlayedNotes();
     };
-  }, [activeNotes]);
+  }, [playedNotes]);
 
   return { ref };
 }

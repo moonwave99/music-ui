@@ -3,11 +3,11 @@
   --piano-white-key-width: 1.2rem;
   --piano-black-key-width: 0.8rem;
   --piano-black-key-height: 60%;
-  --piano-white-key-active-indicator-size: calc(
+  --piano-white-key-played-indicator-size: calc(
     var(--piano-white-key-width) / 3 * 2
   );
-  --piano-black-key-active-indicator-size: calc(var(--piano-black-key-width));
-  --piano-active-indicator-background-color: rgba(255, 255, 255, 0.9);
+  --piano-black-key-played-indicator-size: calc(var(--piano-black-key-width));
+  --piano-played-indicator-background-color: rgba(255, 255, 255, 0.9);
   --piano-key-label-font-size: 0.7rem;
   --piano-border-color: rgba(0, 0, 0, 0.4);
   --piano-white-key-color: white;
@@ -48,26 +48,26 @@
     justify-content: end;
     align-items: center;
     z-index: 1;
-    &.color-white.active::after {
-      width: var(--piano-white-key-active-indicator-size);
-      height: var(--piano-white-key-active-indicator-size);
+    &.color-white.key-played::after {
+      width: var(--piano-white-key-played-indicator-size);
+      height: var(--piano-white-key-played-indicator-size);
       bottom: calc(
         (
             var(--piano-white-key-width) -
-              var(--piano-white-key-active-indicator-size)
+              var(--piano-white-key-played-indicator-size)
           ) /
           2 * 0.6
       );
     }
-    &.color-black.active::after {
-      width: var(--piano-black-key-active-indicator-size);
-      height: var(--piano-black-key-active-indicator-size);
-      bottom: calc(var(--piano-black-key-active-indicator-size) * 0.1);
+    &.color-black.key-played::after {
+      width: var(--piano-black-key-played-indicator-size);
+      height: var(--piano-black-key-played-indicator-size);
+      bottom: calc(var(--piano-black-key-played-indicator-size) * 0.1);
     }
-    &.active::after {
+    &.key-played::after {
       content: "";
       z-index: 10;
-      border: 1px solid var(--piano-active-indicator-background-color);
+      border: 1px solid var(--piano-played-indicator-background-color);
       border-radius: 50%;
       position: absolute;
     }

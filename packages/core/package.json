@@ -1,10 +1,8 @@
 {
-  "name": "@music-ui/piano",
-  "description": "Simple HTML/CSS Piano diagram generator",
+  "name": "@music-ui/core",
+  "description": "Music UI shared utilities",
   "keywords": [
-    "music",
-    "piano",
-    "chords"
+    "music"
   ],
   "version": "0.9.0",
   "type": "module",
@@ -19,8 +17,7 @@
       },
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    },
-    "./styles.css": "./dist/styles/index.css"
+    }
   },
   "files": [
     "dist",
@@ -30,16 +27,17 @@
     "test": "vitest run",
     "test:watch": "vitest --watch",
     "lint": "eslint . --max-warnings 0",
-    "dev": "tsup src/index.ts src/styles/index.css --format cjs,esm --dts --watch",
-    "build": "tsup src/index.ts src/styles/index.css --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
     "check-types": "tsc --noEmit"
   },
   "packageManager": "pnpm@11.18.0",
   "devDependencies": {
     "@music-ui/eslint-config": "workspace:*",
     "@music-ui/typescript-config": "workspace:*",
+    "@types/events": "^3.0.3",
+    "@types/md5": "^2.3.6",
     "@types/node": "^22.15.3",
-    "@vitest/coverage-istanbul": "4.1.10",
     "eslint": "^9.39.1",
     "jsdom": "^30.0.1",
     "tsup": "^8.5.1",
@@ -47,9 +45,11 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@music-ui/core": "workspace:*",
-    "@tonaljs/midi": "^4.10.2",
-    "@tonaljs/note": "^4.12.1",
-    "change-case": "^5.4.4"
+    "@tonaljs/abc-notation": "^4.9.1",
+    "@tonejs/midi": "^2.0.28",
+    "abcjs": "^6.6.4",
+    "events": "^3.3.0",
+    "md5": "^2.3.0",
+    "tone": "^15.1.22"
   }
 }

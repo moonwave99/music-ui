@@ -7,91 +7,141 @@ import {
   type ReactNode,
   type Dispatch,
   type SetStateAction,
+  useCallback,
 } from "react";
 
-import { PolySynth, Sequence, getTransport } from "tone";
+import {
+  Player,
+  type Score,
+  PlayerCallback,
+  PlayerEvents,
+} from "@music-ui/core";
 
-let synth: PolySynth;
+let _player: Player;
+
+function getPlayer(): Player {
+  if (!_player) {
+    _player = new Player();
+  }
+  return _player;
+}
 
 type PlayerContextType = {
-  playingId: string | null;
-  setPlayingId: Dispatch<SetStateAction<string | null>>;
+  currentScore: Score | null;
+  setCurrentScore: Dispatch<SetStateAction<Score | null>>;
 };
 
 const PlayerContext: Context<PlayerContextType> =
   createContext<PlayerContextType>({
-    playingId: null,
-    setPlayingId: () => {},
+    currentScore: null,
+    setCurrentScore: () => {},
   });
 
 export type UsePlayer = {
-  play: (params: PlayParams) => void;
-  isPlaying: boolean;
-  activeNotes: string[];
+  play: (score: Score) => void;
+  pause: () => void;
+  resume: () => void;
+  stop: () => void;
+  playerStatus: PlayerStatus;
+  playedNotes: string[];
 };
 
-type UsePlayerParams = {
-  id: string;
-  notes: string[];
-};
+export type PlayerStatus = "playing" | "paused" | "stopped";
 
-const PLAYBACK_BLOCK_DURATION = 1;
-const PLAYBACK_ARPEGGIO_DURATION = 0.1;
-const DEFAULT_ARPEGGIO_BPM = 120;
-
-type PlaybackMode = "block" | "arpeggio";
-
-type PlayParams = {
-  mode: PlaybackMode;
-  speed?: number;
-};
-
-export function usePlayer({ id, notes }: UsePlayerParams): UsePlayer {
+export function usePlayer(id: string): UsePlayer {
   const playerContext = use(PlayerContext);
-  const [activeNotes, setActiveNotes] = useState<string[]>([]);
+  const [playedNotes, setPlayedNotes] = useState<string[]>([]);
+  const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("stopped");
 
   if (!playerContext) {
-    throw new Error("useCurrentUser has to be used within <PlayerProvider>");
+    throw new Error("usePlayer has to be used within <PlayerProvider>");
   }
 
-  const { playingId, setPlayingId } = playerContext;
+  const { currentScore, setCurrentScore } = playerContext;
+  const player = getPlayer();
 
-  function play({ mode = "block", speed = DEFAULT_ARPEGGIO_BPM }: PlayParams) {
-    setPlayingId(id);
+  useEffect(() => {
+    const handlers: Record<PlayerEvents, PlayerCallback> = {
+      pause: ({ activeId }) => {
+        if (id !== activeId) {
+          return;
+        }
+        setPlayerStatus("paused");
+      },
+      stop: ({ activeId }) => {
+        if (id !== activeId) {
+          return;
+        }
+        setPlayerStatus("stopped");
+      },
+      playing: ({ playedNotes, activeId }) => {
+        if (id !== activeId) {
+          setPlayerStatus("stopped");
+          return;
+        }
+        setPlayerStatus("playing");
+        setPlayedNotes(playedNotes);
+      },
+      finished: () => {
+        setPlayerStatus("stopped");
+        setPlayedNotes([]);
+      },
+    } as const;
 
-    if (mode === "block") {
-      setActiveNotes(notes);
-      synth.triggerAttackRelease(notes, PLAYBACK_BLOCK_DURATION);
-      setTimeout(() => {
-        setActiveNotes([]);
-        setPlayingId(null);
-      }, PLAYBACK_BLOCK_DURATION * 1000);
+    const cancelHandlers = [] as (() => void)[];
+
+    (Object.keys(handlers) as PlayerEvents[]).forEach((key: PlayerEvents) => {
+      cancelHandlers.push(player.on(key, handlers[key]));
+    });
+
+    return () => {
+      cancelHandlers.forEach((cancel) => cancel());
+    };
+  }, [player, id]);
+
+  function play(score: Score) {
+    if (!score) {
       return;
     }
-
-    const transport = getTransport();
-    const sequence = new Sequence((time, note) => {
-      setActiveNotes([note]);
-      synth.triggerAttackRelease(note, PLAYBACK_ARPEGGIO_DURATION, time);
-      if (note === notes.at(-1)) {
-        setTimeout(
-          () => {
-            setActiveNotes([]);
-            setPlayingId(null);
-            transport.stop();
-            sequence.clear();
-          },
-          PLAYBACK_ARPEGGIO_DURATION * 1000 * notes.length,
-        );
-      }
-    }, notes);
-    sequence.loop = 1;
-    sequence.start(0);
-    transport.bpm.value = speed;
-    transport.start();
+    if (currentScore?.hash !== score.hash) {
+      player.setScore(score);
+      setCurrentScore(score);
+    }
+    player.play();
   }
 
-  return { play, activeNotes, isPlaying: !!playingId };
+  function resume() {
+    player.play();
+  }
+
+  function pause() {
+    player.pause();
+  }
+
+  function stop() {
+    player.stop();
+  }
+
+  return { play, pause, resume, stop, playedNotes, playerStatus };
+}
+
+export function useStopPlayback() {
+  const { setCurrentScore } = use(PlayerContext);
+
+  if (!setCurrentScore) {
+    throw new Error("usePlayer has to be used within <PlayerProvider>");
+  }
+
+  const player = getPlayer();
+  const stop = useCallback(() => {
+    player.setScore(null);
+    player.stop();
+    setCurrentScore(null);
+  }, [player, setCurrentScore]);
+
+  return {
+    stop,
+  };
 }
 
 type PlayerProviderProps = {
@@ -99,17 +149,10 @@ type PlayerProviderProps = {
 };
 
 export function PlayerProvider({ children }: PlayerProviderProps) {
-  const [playingId, setPlayingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (synth) {
-      return;
-    }
-    synth = new PolySynth().toDestination();
-  }, []);
+  const [currentScore, setCurrentScore] = useState<Score | null>(null);
 
   return (
-    <PlayerContext value={{ playingId, setPlayingId }}>
+    <PlayerContext value={{ currentScore, setCurrentScore }}>
       {children}
     </PlayerContext>
   );

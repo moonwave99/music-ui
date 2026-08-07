@@ -20,15 +20,15 @@ describe("Piano", () => {
     );
   });
 
-  it("sets the active notes", async () => {
+  it("sets the played notes", async () => {
     const notes = ["C4", "E4", "G4"];
-    const activeNotes = ["C4", "E4"];
+    const playedNotes = ["C4", "E4"];
     const { container } = render(
-      <Piano notes={notes} activeNotes={activeNotes} />,
+      <Piano notes={notes} playedNotes={playedNotes} />,
     );
-    activeNotes.forEach((note) =>
+    playedNotes.forEach((note) =>
       expect(container.querySelector(`.note-with-octave-${note}`)).toHaveClass(
-        "active",
+        "key-played",
       ),
     );
   });

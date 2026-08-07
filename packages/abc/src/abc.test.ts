@@ -1,32 +1,10 @@
 // @vitest-environment jsdom
-import { vi, describe, it, expect } from "vitest";
-
-// @ts-expect-error the class mock is sufficient even if ts complains
-vi.mock(import("abcjs"), async (importOriginal) => {
-  const original = await importOriginal();
-  return {
-    ...original.default,
-    synth: {
-      ...original.default.synth,
-      SynthController: vi.fn(
-        class {
-          load = vi.fn();
-          setTune = vi.fn();
-        },
-      ),
-      CreateSynth: vi.fn(
-        class {
-          init = vi.fn();
-        },
-      ),
-    },
-  };
-});
+import { describe, it, expect } from "vitest";
 
 import { initAll, initAbc } from "./abc";
 
 describe("initAbc", () => {
-  it("initializes Abc instances on the selected element", async () => {
+  it("initializes Abc instances on the selected element", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc>
@@ -36,18 +14,14 @@ T:Test Song
 C E G B        
           </div>
           <div class="staff"></div>
-          <div class="audio-controls"></div>
         </div>
       </main>`;
 
     const element = document.querySelector("[data-abc]");
 
-    await initAbc({
+    initAbc({
       id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
-      audioControlsElement: element?.querySelector(
-        ".audio-controls",
-      ) as HTMLElement,
       content: element?.querySelector(".content")?.textContent as string,
     });
 
@@ -59,7 +33,7 @@ C E G B
     );
   });
 
-  it("hides the meter if hideMeter is true", async () => {
+  it("hides the meter if hideMeter is true", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc>
@@ -70,18 +44,14 @@ L:1
 CEG
           </div>
           <div class="staff"></div>
-          <div class="audio-controls"></div>
         </div>
       </main>`;
 
     const element = document.querySelector("[data-abc]");
 
-    await initAbc({
+    initAbc({
       id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
-      audioControlsElement: element?.querySelector(
-        ".audio-controls",
-      ) as HTMLElement,
       content: element?.querySelector(".content")?.textContent as string,
       hideMeter: true,
     });
@@ -93,7 +63,7 @@ CEG
     ).toBe("none");
   });
 
-  it("hides the meter if it's x/1", async () => {
+  it("hides the meter if it's x/1", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc>
@@ -110,12 +80,9 @@ CEG
 
     const element = document.querySelector("[data-abc]");
 
-    await initAbc({
+    initAbc({
       id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
-      audioControlsElement: element?.querySelector(
-        ".audio-controls",
-      ) as HTMLElement,
       content: element?.querySelector(".content")?.textContent as string,
     });
 
@@ -128,7 +95,7 @@ CEG
 });
 
 describe("initAll", () => {
-  it("initializes Abc instances on all affected elements", async () => {
+  it("initializes Abc instances on all affected elements", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc>
@@ -138,7 +105,6 @@ T:Test Song 1
 C E G B        
           </div>
           <div class="staff"></div>
-          <div class="audio-controls"></div>
         </div>
         <div data-abc>
           <div class="content">
@@ -147,11 +113,10 @@ T:Test Song 2
 C E G B        
           </div>
           <div class="staff"></div>
-          <div class="audio-controls"></div>
         </div>
       </main>`;
 
-    await initAll();
+    initAll();
 
     const elements = document.querySelectorAll("[data-abc]");
     expect(elements.length).toBe(2);

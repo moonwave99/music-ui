@@ -3,6 +3,7 @@ packages:
   - "packages/*"
 allowBuilds:
   esbuild: true
+  midi-player-js: true
   sharp: true
 overrides:
   nextra>zod: 4.3.6

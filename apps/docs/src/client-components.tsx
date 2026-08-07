@@ -1,5 +1,7 @@
 "use client";
 
+import { useId } from "react";
+
 import {
   Piano,
   PianoPlayer as Player,
@@ -8,7 +10,9 @@ import {
 } from "@music-ui/react";
 
 function PianoPlayer(props: PianoPlayerProps) {
-  return <Player className="piano-player" {...props} />;
+  const { id: propsId, ...rest } = props;
+  const id = useId();
+  return <Player className="piano-player" id={propsId || id} {...rest} />;
 }
 
 export { Piano, PianoPlayer, Score };

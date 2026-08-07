@@ -1,9 +1,7 @@
-.abcjs-css-warning {
-  display: none;
-}
-
 .score {
-  width: max(600px, 100%);
+  .abcjs-css-warning {
+    display: none;
+  }
   .score-audio-controls {
     display: flex;
     align-items: center;

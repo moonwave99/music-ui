@@ -308,20 +308,20 @@ describe("Piano - setNotes with labels", () => {
   });
 });
 
-describe("Piano - setActiveNotes", () => {
-  it("Marks the passed notes as active", () => {
+describe("Piano - setPlayedNotes", () => {
+  it("Marks the passed notes as played", () => {
     const piano = new Piano();
-    piano.render().setNotes(["C4", "E4", "G4"]).setActiveNotes(["C4", "G4"]);
+    piano.render().setNotes(["C4", "E4", "G4"]).setPlayedNotes(["C4", "G4"]);
 
     const wrapper = document.querySelector("#piano");
     expect(wrapper?.querySelector(".note-with-octave-C4")?.classList).toContain(
-      "active",
+      "key-played",
     );
     expect(
       wrapper?.querySelector(".note-with-octave-E4")?.classList,
-    ).not.toContain("active");
+    ).not.toContain("key-played");
     expect(wrapper?.querySelector(".note-with-octave-G4")?.classList).toContain(
-      "active",
+      "key-played",
     );
   });
 });
@@ -333,28 +333,28 @@ describe("Piano - clearNotes", () => {
     piano
       .render()
       .setNotes(["C4", "E4", "G4"])
-      .setActiveNotes(["C4"])
+      .setPlayedNotes(["C4"])
       .clearNotes();
 
     const wrapper = document.querySelector("#piano");
     expect(wrapper?.querySelectorAll(".key-on").length).toBe(0);
-    expect(wrapper?.querySelectorAll(".active").length).toBe(0);
+    expect(wrapper?.querySelectorAll(".key-played").length).toBe(0);
   });
 });
 
-describe("Piano - clearActiveNotes", () => {
-  it("Clears all active notes", () => {
+describe("Piano - clearPlayedNotes", () => {
+  it("Clears all played notes", () => {
     const piano = new Piano();
-    piano.render().setNotes(["C4", "E4", "G4"]).setActiveNotes(["C4"]);
+    piano.render().setNotes(["C4", "E4", "G4"]).setPlayedNotes(["C4"]);
 
     const wrapper = document.querySelector("#piano");
     expect(wrapper?.querySelector(".note-with-octave-C4")?.classList).toContain(
-      "active",
+      "key-played",
     );
-    piano.clearActiveNotes();
+    piano.clearPlayedNotes();
     expect(
       wrapper?.querySelector(".note-with-octave-C4")?.classList,
-    ).not.toContain("active");
+    ).not.toContain("key-played");
   });
 });
 
