@@ -12,8 +12,6 @@
   --piano-border-color: rgba(0, 0, 0, 0.4);
   --piano-white-key-color: white;
   --piano-black-key-color: rgb(35, 35, 35);
-  --piano-white-key-highlight-color: dodgerblue;
-  --piano-black-key-highlight-color: dodgerblue;
   --piano-white-key-group-1-highlight-color: dodgerblue;
   --piano-black-key-group-1-highlight-color: dodgerblue;
   --piano-white-key-group-2-highlight-color: lightcoral;
@@ -89,7 +87,7 @@
       }
 
       &.key-on {
-        background-color: var(--piano-white-key-highlight-color);
+        background-color: var(--piano-white-key-group-1-highlight-color);
 
         &.group-2 {
           background-color: var(--piano-white-key-group-2-highlight-color);
@@ -120,7 +118,7 @@
       border-right: 1px solid var(--piano-border-color);
 
       &.key-on {
-        background-color: var(--piano-black-key-highlight-color);
+        background-color: var(--piano-black-key-group-1-highlight-color);
 
         &.group-2 {
           background-color: var(--piano-black-key-group-2-highlight-color);

@@ -3,7 +3,7 @@
 import { type ReactNode, ReactElement } from "react";
 import { useAbc } from "./useAbc";
 import { usePlayer } from "./PlayerProvider";
-import { Piano } from "./Piano";
+import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore } from "@music-ui/core";
 
 export type ScoreProps = {
@@ -11,7 +11,9 @@ export type ScoreProps = {
   hidePlayer?: boolean;
   children: ReactNode;
   className?: string;
-  showPiano?: boolean;
+  pianoOptions?: PianoProps & {
+    show?: boolean;
+  };
   playButtonLabel?: string;
   stopButtonLabel?: string;
   pauseButtonLabel?: string;
@@ -20,7 +22,7 @@ export type ScoreProps = {
 export function Score({
   className = "score",
   children,
-  showPiano = false,
+  pianoOptions = { show: false },
   playButtonLabel = "Play",
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
@@ -65,7 +67,9 @@ export function Score({
           </button>
         </div>
       ) : null}
-      {showPiano ? <Piano notes={playedNotes} /> : null}
+      {pianoOptions.show ? (
+        <Piano notes={playedNotes} {...pianoOptions} />
+      ) : null}
     </div>
   );
 }

@@ -11,11 +11,11 @@ import type { NoteInput } from "@music-ui/core";
 export type UsePianoParams = Partial<PianoOptions> & {
   notes?: NoteInput;
   noteLabels?: NoteInput;
-  playedNotes?: string[];
+  playedNotes?: NoteInput;
   imperativeRef?: Ref<ImperativePiano>;
 };
 
-export type ImperativePiano = { setNotes: (notes: string[]) => void };
+export type ImperativePiano = Pick<Piano, "setNotes" | "clearNotes">;
 
 export type UsePiano<T extends HTMLElement> = {
   ref: RefObject<T | null>;
@@ -25,15 +25,15 @@ export function usePiano<T extends HTMLElement>({
   notes,
   noteLabels,
   playedNotes,
-  startOctave = 2,
-  octaves = 4,
   imperativeRef,
+  ...rest
 }: UsePianoParams): UsePiano<T> {
   const ref = useRef<T>(null);
   const pianoRef = useRef<Piano>(null);
 
   useImperativeHandle(imperativeRef, () => ({
-    setNotes: (notes: string[]) => pianoRef.current?.setNotes(notes),
+    setNotes: (notes) => pianoRef.current!.setNotes(notes),
+    clearNotes: () => pianoRef.current!.clearNotes(),
   }));
 
   useLayoutEffect(() => {
@@ -42,11 +42,10 @@ export function usePiano<T extends HTMLElement>({
     }
     pianoRef.current = new Piano({
       el: ref.current,
-      octaves,
-      startOctave,
+      ...rest,
     });
     pianoRef.current.render();
-  }, [octaves, startOctave]);
+  }, [rest]);
 
   useLayoutEffect(() => {
     if (notes) {

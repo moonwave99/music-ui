@@ -21,74 +21,11 @@ export type PianoOptions = {
   withFinalC: boolean;
 };
 
-export const DEFAULT_PIANO_OPTIONS = {
-  el: "#piano",
-  startOctave: 3,
-  octaves: 2,
-  withFinalC: true,
-} as const;
-
 type GroupedInput = {
   group: number;
   note: string;
   label?: string;
 }[];
-
-function parseNote(
-  noteString: string,
-  defaultOctave: number,
-): {
-  chroma: number;
-  note: string;
-  octave: number;
-  midi: number;
-} {
-  let octave = defaultOctave;
-  const maybeOctave = noteString.slice(-1);
-  if (Number.isInteger(+maybeOctave)) {
-    octave = +maybeOctave;
-    noteString = noteString.slice(0, -1);
-  }
-  const { chroma, pc: note, oct, midi } = getNote(`${noteString}${octave}`);
-  return {
-    chroma,
-    note,
-    octave: oct || 0,
-    midi: midi || 0,
-  };
-}
-
-export function parseNoteInput(
-  input: NoteInput,
-  noteLabels?: NoteInput,
-): GroupedInput {
-  const groups = Array.isArray(input)
-    ? [input]
-    : input
-        .split(",")
-        .filter(Boolean)
-        .map((x) => x.split(" ").filter(Boolean));
-  const output = groups.flatMap((group, index) =>
-    group.map((note) => ({ note, group: index })),
-  );
-  if (!noteLabels) {
-    return output;
-  }
-  const normalizedNoteLabels = normalizeInput(noteLabels);
-  if (normalizedNoteLabels.length !== output.length) {
-    throw new Error("input and noteLabels length do not match");
-  }
-  return output.map((note, index) => ({
-    ...note,
-    label: normalizedNoteLabels[index],
-  }));
-}
-
-export function normalizeInput(input: NoteInput) {
-  return Array.isArray(input)
-    ? input
-    : input.replaceAll(",", "").split(" ").filter(Boolean);
-}
 
 const cssClasses = {
   piano: "piano",
@@ -96,6 +33,13 @@ const cssClasses = {
   key: "key",
   keyPlayed: "key-played",
   keyOn: "key-on",
+} as const;
+
+export const DEFAULT_PIANO_OPTIONS = {
+  el: "#piano",
+  startOctave: 3,
+  octaves: 2,
+  withFinalC: true,
 } as const;
 
 export class Piano {
@@ -127,9 +71,9 @@ export class Piano {
   destroy(): void {
     this.element?.remove();
   }
-  setPlayedNotes(notes: string[]): Piano {
+  setPlayedNotes(notes: NoteInput): Piano {
     this.clearPlayedNotes();
-    notes.forEach((note) =>
+    normalizeInput(notes).forEach((note) =>
       this.element
         ?.querySelector(`.midi-${toMidi(note)}`)
         ?.classList.add(cssClasses.keyPlayed),
@@ -214,4 +158,60 @@ export class Piano {
       foundKey.innerHTML = label;
     });
   }
+}
+
+function parseNote(
+  noteString: string,
+  defaultOctave: number,
+): {
+  chroma: number;
+  note: string;
+  octave: number;
+  midi: number;
+} {
+  let octave = defaultOctave;
+  const maybeOctave = noteString.slice(-1);
+  if (Number.isInteger(+maybeOctave)) {
+    octave = +maybeOctave;
+    noteString = noteString.slice(0, -1);
+  }
+  const { chroma, pc: note, oct, midi } = getNote(`${noteString}${octave}`);
+  return {
+    chroma,
+    note,
+    octave: oct || 0,
+    midi: midi || 0,
+  };
+}
+
+export function parseNoteInput(
+  input: NoteInput,
+  noteLabels?: NoteInput,
+): GroupedInput {
+  const groups = Array.isArray(input)
+    ? [input]
+    : input
+        .split(",")
+        .filter(Boolean)
+        .map((x) => x.split(" ").filter(Boolean));
+  const output = groups.flatMap((group, index) =>
+    group.map((note) => ({ note, group: index })),
+  );
+  if (!noteLabels) {
+    return output;
+  }
+  const normalizedNoteLabels = normalizeInput(noteLabels);
+  if (normalizedNoteLabels.length !== output.length) {
+    throw new Error("input and noteLabels length do not match");
+  }
+  return output.map((note, index) => ({
+    ...note,
+    label: normalizedNoteLabels[index],
+  }));
+}
+
+export function normalizeInput(input: NoteInput) {
+  return Array.isArray(input)
+    ? input
+    : input.replaceAll(",", "").split(" ").filter(Boolean);
 }
