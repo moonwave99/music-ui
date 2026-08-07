@@ -27,12 +27,14 @@ function getPlayer(): Player {
 }
 
 type PlayerContextType = {
+  player: Player | null;
   currentScore: Score | null;
   setCurrentScore: Dispatch<SetStateAction<Score | null>>;
 };
 
 const PlayerContext: Context<PlayerContextType> =
   createContext<PlayerContextType>({
+    player: null,
     currentScore: null,
     setCurrentScore: () => {},
   });
@@ -57,8 +59,7 @@ export function usePlayer(id: string): UsePlayer {
     throw new Error("usePlayer has to be used within <PlayerProvider>");
   }
 
-  const { currentScore, setCurrentScore } = playerContext;
-  const player = getPlayer();
+  const { currentScore, setCurrentScore, player } = playerContext;
 
   useEffect(() => {
     const handlers: Record<PlayerEvents, PlayerCallback> = {
@@ -90,9 +91,11 @@ export function usePlayer(id: string): UsePlayer {
 
     const cancelHandlers = [] as (() => void)[];
 
-    (Object.keys(handlers) as PlayerEvents[]).forEach((key: PlayerEvents) => {
-      cancelHandlers.push(player.on(key, handlers[key]));
-    });
+    if (player) {
+      (Object.keys(handlers) as PlayerEvents[]).forEach((key: PlayerEvents) => {
+        cancelHandlers.push(player.on(key, handlers[key]));
+      });
+    }
 
     return () => {
       cancelHandlers.forEach((cancel) => cancel());
@@ -104,38 +107,37 @@ export function usePlayer(id: string): UsePlayer {
       return;
     }
     if (currentScore?.hash !== score.hash) {
-      player.setScore(score);
+      player?.setScore(score);
       setCurrentScore(score);
     }
-    player.play();
+    player?.play();
   }
 
   function resume() {
-    player.play();
+    player?.play();
   }
 
   function pause() {
-    player.pause();
+    player?.pause();
   }
 
   function stop() {
-    player.stop();
+    player?.stop();
   }
 
   return { play, pause, resume, stop, playedNotes, playerStatus };
 }
 
 export function useStopPlayback() {
-  const { setCurrentScore } = use(PlayerContext);
+  const { setCurrentScore, player } = use(PlayerContext);
 
   if (!setCurrentScore) {
     throw new Error("usePlayer has to be used within <PlayerProvider>");
   }
 
-  const player = getPlayer();
   const stop = useCallback(() => {
-    player.setScore(null);
-    player.stop();
+    player?.setScore(null);
+    player?.stop();
     setCurrentScore(null);
   }, [player, setCurrentScore]);
 
@@ -150,9 +152,14 @@ type PlayerProviderProps = {
 
 export function PlayerProvider({ children }: PlayerProviderProps) {
   const [currentScore, setCurrentScore] = useState<Score | null>(null);
+  const [player, setPlayer] = useState<Player | null>(null);
+
+  useEffect(() => {
+    setPlayer(getPlayer());
+  }, []);
 
   return (
-    <PlayerContext value={{ currentScore, setCurrentScore }}>
+    <PlayerContext value={{ player, currentScore, setCurrentScore }}>
       {children}
     </PlayerContext>
   );
