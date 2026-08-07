@@ -33,6 +33,25 @@ C E G B
     );
   });
 
+  it("initializes an empty staff if no content if present", () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc>
+          <div class="staff"></div>
+        </div>
+      </main>`;
+
+    const element = document.querySelector("[data-abc]");
+
+    initAbc({
+      id: "1",
+      staffElement: element?.querySelector(".staff") as HTMLElement,
+    });
+
+    expect(element).toBeTruthy();
+    expect(element!.querySelector(".abcjs-container")).not.toBeNull();
+  });
+
   it("hides the meter if hideMeter is true", () => {
     document.body.innerHTML = `
       <main>
@@ -117,6 +136,39 @@ C E G B
       </main>`;
 
     initAll();
+
+    const elements = document.querySelectorAll("[data-abc]");
+    expect(elements.length).toBe(2);
+    elements.forEach((element, index) => {
+      expect(element.querySelector(".abcjs-container")).not.toBeNull();
+      expect(element.querySelector(".abcjs-title")?.textContent).toBe(
+        `Test Song ${index + 1}`,
+      );
+    });
+  });
+
+  it("initializes Abc instances on all passed elements", () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc>
+          <div class="content">
+X:1
+T:Test Song 1
+C E G B        
+          </div>
+          <div class="staff"></div>
+        </div>
+        <div data-abc>
+          <div class="content">
+X:1
+T:Test Song 2
+C E G B        
+          </div>
+          <div class="staff"></div>
+        </div>
+      </main>`;
+
+    initAll({ elements: document.querySelectorAll("[data-abc]") });
 
     const elements = document.querySelectorAll("[data-abc]");
     expect(elements.length).toBe(2);

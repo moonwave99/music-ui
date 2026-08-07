@@ -15,6 +15,7 @@ export function PianoPlayer({
   label = "",
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
+  arpeggioSpeed = 120,
   ...props
 }: PianoPlayerProps): ReactElement {
   const { notes = [], className, ...rest } = props;
@@ -39,6 +40,7 @@ export function PianoPlayer({
                 id: props.id,
                 input: notes,
                 playbackMode: "arpeggio",
+                bpm: arpeggioSpeed,
               }),
             )
           }

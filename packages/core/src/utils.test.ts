@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { getPianoScore } from "./utils";
+import { getAbcScore, getPianoScore, toAbcNotation } from "./utils";
+
+describe("toAbcNotation", () => {
+  it("converts the input from scientific to abc notation", () => {
+    expect(toAbcNotation(["C3", "E3", "G3"])).toBe("C, E, G,");
+    expect(toAbcNotation("C3 E3 G3")).toBe("C, E, G,");
+  });
+});
 
 describe("getPianoScore", () => {
   it("returns the score for the given notes - block", () => {
@@ -7,15 +14,21 @@ describe("getPianoScore", () => {
     const score = getPianoScore({ id: "1", input, playbackMode: "block" });
     expect(score).toEqual({
       id: "1",
-      hash: "bc0c2820adcbc54960b4e01d0378e803",
-      content: "[C, E, G, B,]",
+      hash: "0c660285cc9eeb9c6ff4b43e1814343f",
+      bpm: 120,
+      content: `
+Q:120
+[C, E, G, B,]6`,
     });
 
     const scoreWithDefaultPlaybackMode = getPianoScore({ id: "1", input });
     expect(scoreWithDefaultPlaybackMode).toEqual({
       id: "1",
-      hash: "bc0c2820adcbc54960b4e01d0378e803",
-      content: "[C, E, G, B,]",
+      hash: "0c660285cc9eeb9c6ff4b43e1814343f",
+      bpm: 120,
+      content: `
+Q:120
+[C, E, G, B,]6`,
     });
   });
 
@@ -25,7 +38,24 @@ describe("getPianoScore", () => {
     expect(score).toEqual({
       id: "1",
       hash: "8849aede79e4bb94720cbf414ce36f67",
-      content: "C, E, G, B,",
+      bpm: 120,
+      content: `
+Q:120
+C, E, G, B,`,
+    });
+  });
+});
+
+describe("getAbcScore", () => {
+  it("returns the score for the given content", () => {
+    const abcScore = getAbcScore({ id: "1", content: "C E G" });
+    expect(abcScore).toEqual({
+      id: "1",
+      bpm: 120,
+      content: `
+Q:120
+C E G`,
+      hash: "9f2fd30bba4472d786cecd2dbfd0cfe6",
     });
   });
 });

@@ -59,8 +59,7 @@ export function usePlayer(id: string): UsePlayer {
     throw new Error("usePlayer has to be used within <PlayerProvider>");
   }
 
-  const { currentScore, setCurrentScore, player } = playerContext;
-
+  const { player, currentScore, setCurrentScore } = playerContext;
   useEffect(() => {
     const handlers: Record<PlayerEvents, PlayerCallback> = {
       pause: ({ activeId }) => {
@@ -155,7 +154,11 @@ export function PlayerProvider({ children }: PlayerProviderProps) {
   const [player, setPlayer] = useState<Player | null>(null);
 
   useEffect(() => {
-    setPlayer(getPlayer());
+    const player = getPlayer();
+    setPlayer(player);
+    return () => {
+      player.destroy();
+    };
   }, []);
 
   return (

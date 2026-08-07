@@ -12,16 +12,18 @@ export type ScoreProps = {
   children: ReactNode;
   className?: string;
   showPiano?: boolean;
-  playbackButtonLabel?: string;
-  restartButtonLabel?: string;
+  playButtonLabel?: string;
+  stopButtonLabel?: string;
+  pauseButtonLabel?: string;
 };
 
 export function Score({
   className = "score",
   children,
   showPiano = false,
-  playbackButtonLabel = "Toggle Playback",
-  restartButtonLabel = "Restart",
+  playButtonLabel = "Play",
+  pauseButtonLabel = "Pause",
+  stopButtonLabel = "Stop",
   hidePlayer = false,
   ...params
 }: ScoreProps): ReactElement {
@@ -30,23 +32,7 @@ export function Score({
     params.id,
   );
   const { staffRef } = useAbc({ ...params, content });
-
-  const score = getAbcScore(params.id, content);
-
-  function togglePlayback() {
-    if (playerStatus === "stopped") {
-      play(score);
-      return;
-    }
-    if (playerStatus === "playing") {
-      pause();
-      return;
-    }
-    if (playerStatus === "paused") {
-      resume();
-      return;
-    }
-  }
+  const score = getAbcScore({ ...params, content });
 
   return (
     <div className={className}>
@@ -54,18 +40,28 @@ export function Score({
       {!hidePlayer ? (
         <div className="score-audio-controls">
           <button
-            className="score-button score-toggle-playback-button"
-            onClick={togglePlayback}
-            aria-label={playbackButtonLabel}
+            className="score-button score-play-button"
+            onClick={() => (playerStatus === "paused" ? resume() : play(score))}
+            aria-label={playButtonLabel}
+            disabled={playerStatus === "playing"}
           >
-            {playbackButtonLabel}
+            {playButtonLabel}
           </button>
           <button
-            className="score-button score-restart-button"
-            onClick={stop}
-            aria-label={restartButtonLabel}
+            className="score-button score-pause-button"
+            onClick={pause}
+            aria-label={pauseButtonLabel}
+            disabled={playerStatus !== "playing"}
           >
-            {restartButtonLabel}
+            {pauseButtonLabel}
+          </button>
+          <button
+            className="score-button score-stop-button"
+            onClick={stop}
+            aria-label={stopButtonLabel}
+            disabled={playerStatus === "stopped"}
+          >
+            {stopButtonLabel}
           </button>
         </div>
       ) : null}
