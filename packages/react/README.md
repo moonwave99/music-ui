@@ -2,6 +2,10 @@
 
 A collection of React component wrappers and hooks around the Music UI visualization tools.
 
+## Installation and usage
+
+[See documentation](https://moonwave99.github.io/music-ui/react)
+
 ---
 
 ## MIT License

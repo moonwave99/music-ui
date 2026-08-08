@@ -1,6 +1,6 @@
 {
   "name": "@music-ui/abc",
-  "description": "Abc notation utilities.",
+  "description": "Abc notation rendering utilities.",
   "keywords": [
     "music",
     "abc"

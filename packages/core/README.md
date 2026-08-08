@@ -1,16 +1,10 @@
-# Music UI - ABC
+# Music UI - Core
 
-Abc notation utilities.
+Utilities shared by `@music-ui` packages.
 
-## Installation
+## Installation and usage
 
-```bash
-pnpm i @music-ui/abc
-```
-
-## Usage
-
-TBD
+[See documentation](https://moonwave99.github.io/music-ui/core)
 
 ---
 

@@ -1,16 +1,10 @@
 # Music UI - ABC
 
-Abc notation utilities.
+Abc notation rendering utilities.
 
-## Installation
+## Installation and usage
 
-```bash
-pnpm i @music-ui/abc
-```
-
-## Usage
-
-TBD
+[See documentation](https://moonwave99.github.io/music-ui/javascript/abc)
 
 ---
 

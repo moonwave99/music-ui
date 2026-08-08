@@ -1,6 +1,6 @@
 {
   "name": "@music-ui/react",
-  "description": "Music UI React components",
+  "description": "A collection of React component wrappers and hooks around the Music UI visualization tools.",
   "version": "0.9.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

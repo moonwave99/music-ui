@@ -1,6 +1,6 @@
 {
   "name": "@music-ui/core",
-  "description": "Music UI shared utilities",
+  "description": "Utilities shared by @music-ui packages",
   "keywords": [
     "music"
   ],
