@@ -1,6 +1,10 @@
 # Music UI
 
-A collection of music visualization tools for the web
+A collection of music visualization tools for the web.
+
+## Installation and usage
+
+[See documentation](https://moonwave99.github.io/music-ui)
 
 ---
 
