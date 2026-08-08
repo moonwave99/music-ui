@@ -33,7 +33,7 @@ export function Score({
   const { play, pause, stop, resume, playedNotes, playerStatus } = usePlayer(
     params.id,
   );
-  const { staffRef } = useAbc({ ...params, content });
+  const { staffRef } = useAbc<HTMLDivElement>({ ...params, content });
   const score = getAbcScore({ ...params, content });
 
   return (

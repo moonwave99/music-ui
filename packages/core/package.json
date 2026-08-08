@@ -48,7 +48,7 @@
   "dependencies": {
     "@tonaljs/abc-notation": "^4.9.1",
     "@tonejs/midi": "^2.0.28",
-    "abcjs": "^6.6.4",
+    "abcjs": "^6.7.0",
     "events": "^3.3.0",
     "md5": "^2.3.0",
     "tone": "^15.1.22"

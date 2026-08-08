@@ -5,6 +5,8 @@ allowBuilds:
   esbuild: true
   midi-player-js: true
   sharp: true
+minimumReleaseAgeExclude:
+  - abcjs@6.7.0
 overrides:
   nextra>zod: 4.3.6
   nextra-theme-docs>zod: 4.3.6

@@ -20,7 +20,6 @@ C E G B
     const element = document.querySelector("[data-abc]");
 
     initAbc({
-      id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
       content: element?.querySelector(".content")?.textContent as string,
     });
@@ -44,7 +43,6 @@ C E G B
     const element = document.querySelector("[data-abc]");
 
     initAbc({
-      id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
     });
 
@@ -69,7 +67,6 @@ CEG
     const element = document.querySelector("[data-abc]");
 
     initAbc({
-      id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
       content: element?.querySelector(".content")?.textContent as string,
       hideMeter: true,
@@ -100,7 +97,6 @@ CEG
     const element = document.querySelector("[data-abc]");
 
     initAbc({
-      id: "1",
       staffElement: element?.querySelector(".staff") as HTMLElement,
       content: element?.querySelector(".content")?.textContent as string,
     });

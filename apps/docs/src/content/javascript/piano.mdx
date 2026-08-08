@@ -1,24 +1,26 @@
 ---
-title: Javascript
+title: Piano
 ---
 
-# Piano Component (Javascript)
+# Piano (JavaScript)
 
 The `Piano` components renders a piano keyboard inside a DOM element.
 
 ## Basic usage
 
-Given the following markup:
+With this markup:
 
 ```html
 <div id="my-element"></div>
 ```
 
-Do as follows:
+- import the `Piano` class;
+- import the CSS styles;
+- create a new `Piano` instance, referencing the desired HTML element;
+- call `render()` on the instance.
 
 ```ts
 import { Piano } from "@music-ui/piano";
-// don't forget to import the CSS file too!
 import "@music-ui/piano/styles.css";
 
 const piano = new Piano({ el: "#my-element" });
@@ -44,7 +46,7 @@ The `Piano` constructor accepts the following options:
 
 You can highlight specific notes with `Piano.setNotes`:
 
-```ts
+```ts {3}
 const piano = new Piano({ el: "#my-element" });
 piano.render();
 piano.setNotes("C4 E4 G4");
@@ -64,7 +66,7 @@ And a C major chord is highlighted:
 
 If you want to split hands or outline specific voices, separate the groups via a comma:
 
-```ts
+```ts {6}
 const piano = new Piano({
   el: "#my-element",
   octaves: 4,
@@ -77,31 +79,11 @@ Et voilà:
 
 <Piano notes="C3 C4, E4 G4 C5" octaves={3} />
 
-<Callout type="info">
-The highlight colors are defined in the following CSS variables:
-
-```css
---piano-white-key-group-1-highlight-color: dodgerblue;
---piano-black-key-group-1-highlight-color: dodgerblue;
---piano-white-key-group-2-highlight-color: lightcoral;
---piano-black-key-group-2-highlight-color: lightcoral;
---piano-white-key-group-3-highlight-color: gold;
---piano-black-key-group-3-highlight-color: gold;
---piano-white-key-group-4-highlight-color: lightgreen;
---piano-black-key-group-4-highlight-color: lightgreen;
---piano-white-key-group-5-highlight-color: lightcoral;
---piano-black-key-group-5-highlight-color: lightcoral;
-```
-
-You can override them in your own styles.
-
-</Callout>
-
 ### Display note note labels
 
 You can pass the labels to be displayed in the highlighted keys as a second parameter to `Piano.setNotes()`:
 
-```ts
+```ts {3}
 const piano = new Piano({ el: "#my-element" });
 piano.render();
 piano.setNotes("F3 A3 C4 E4", "1 3 5 7");
@@ -117,7 +99,7 @@ piano.setNotes("F3 A3 C4 E4", "1 3 5 7");
 
 Use `piano.clearNotes()`:
 
-```ts
+```ts {5}
 const piano = new Piano({ el: "#my-element" });
 piano.render();
 piano.setNotes("C4 E4 G4");
@@ -127,9 +109,9 @@ piano.clearNotes();
 
 ## Setting additional note state
 
-Useful for playback scenarios when state changes over time but you still want to highlight the same set of notes:
+Use `piano.setPlayedNotes()` for playback scenarios when state changes over time but you still want to highlight the same set of notes:
 
-```ts
+```ts {7}
 const piano = new Piano({
   el: "#my-element",
   octaves: 3,
@@ -147,7 +129,7 @@ See:
 
 Use `piano.clearPlayedNotes()`:
 
-```ts
+```ts {6}
 const piano = new Piano({ el: "#my-element" });
 piano.render();
 piano.setNotes("C4 E4 G4");
@@ -155,3 +137,78 @@ piano.setPlayedNotes("C4 G4");
 // later on
 piano.clearPlayedNotes();
 ```
+
+## Initializing multiple elements
+
+You can initialize multiple piano elements at once. You can store initial configuration in data attributes:
+
+```html
+<div data-piano data-notes="C4 E4 G4"></div>
+<div
+  data-piano
+  data-notes="F3 Ab3 C4"
+  data-octaves="2"
+  data-with-final-C="false"
+></div>
+```
+
+And then use `init` function:
+
+```ts
+import { init } from "@music-ui/piano";
+
+init();
+```
+
+<Piano notes="C4 E4 G4" />
+<Piano notes="F3 Ab3 C4" octaves={2} withFinalC={false} />
+
+### Custom selection
+
+By default `init` looks for all `[data-piano]` elements. You can pass an `elements` option:
+
+```html
+<div data-notes="C4 E4 G4" class="my-piano"></div>
+<div data-notes="F3 Ab3 C4" class="my-piano"></div>
+```
+
+```ts
+import { init } from "@music-ui/piano";
+
+init({ elements: ".my-piano" });
+```
+
+<Piano notes="C4 E4 G4" />
+<Piano notes="F3 Ab3 C4" />
+
+## Appearance customization
+
+All the sizes and colors are configurable via CSS variables. These are the defaults:
+
+```css
+--piano-height: 4rem;
+--piano-white-key-width: 1.2rem;
+--piano-black-key-width: 0.8rem;
+--piano-black-key-height: 60%;
+--piano-white-key-played-indicator-size: calc(
+  var(--piano-white-key-width) / 3 * 2
+);
+--piano-black-key-played-indicator-size: calc(var(--piano-black-key-width));
+--piano-played-indicator-background-color: rgba(255, 255, 255, 0.9);
+--piano-key-label-font-size: 0.7rem;
+--piano-border-color: rgba(0, 0, 0, 0.4);
+--piano-white-key-color: white;
+--piano-black-key-color: rgb(35, 35, 35);
+--piano-white-key-group-1-highlight-color: dodgerblue;
+--piano-black-key-group-1-highlight-color: dodgerblue;
+--piano-white-key-group-2-highlight-color: lightcoral;
+--piano-black-key-group-2-highlight-color: lightcoral;
+--piano-white-key-group-3-highlight-color: gold;
+--piano-black-key-group-3-highlight-color: gold;
+--piano-white-key-group-4-highlight-color: lightgreen;
+--piano-black-key-group-4-highlight-color: lightgreen;
+--piano-white-key-group-5-highlight-color: lightcoral;
+--piano-black-key-group-5-highlight-color: lightcoral;
+```
+
+You can override them in your style files.

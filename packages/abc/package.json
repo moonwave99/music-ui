@@ -47,6 +47,6 @@
   },
   "dependencies": {
     "@tonaljs/midi": "^4.10.2",
-    "abcjs": "^6.6.4"
+    "abcjs": "^6.7.0"
   }
 }

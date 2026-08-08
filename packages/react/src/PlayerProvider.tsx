@@ -73,6 +73,7 @@ export function usePlayer(id: string): UsePlayer {
           return;
         }
         setPlayerStatus("stopped");
+        setPlayedNotes([]);
       },
       playing: ({ playedNotes, activeId }) => {
         if (id !== activeId) {
