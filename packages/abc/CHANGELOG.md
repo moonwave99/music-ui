@@ -1,5 +1,11 @@
 # @music-ui/abc
 
+## 0.10.0
+
+### Minor Changes
+
+- c6e2d96: Introduce separate playback backend
+
 ## 0.9.0
 
 ### Minor Changes

@@ -1,5 +1,18 @@
 # @music-ui/react
 
+## 0.10.0
+
+### Minor Changes
+
+- c6e2d96: Introduce separate playback backend
+
+### Patch Changes
+
+- Updated dependencies [c6e2d96]
+  - @music-ui/abc@0.10.0
+  - @music-ui/core@0.10.0
+  - @music-ui/piano@0.10.0
+
 ## 0.9.0
 
 ### Minor Changes
