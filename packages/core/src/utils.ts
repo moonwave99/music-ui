@@ -1,40 +1,70 @@
 import md5 from "md5";
 import { scientificToAbcNotation } from "@tonaljs/abc-notation";
+import {
+  parseAbc,
+  frontMatterToAbcInfo,
+  type ParseAbcOptions,
+} from "./abcParser";
 
 export type Score = {
   id: string;
-  hash: string;
   content: string;
-  bpm: number;
+  hash: string;
+  info: ScoreInfo;
+};
+
+export type ScoreInfo = {
+  title?: string;
+  composer?: string;
+  meter?: string;
+  unitNoteLength?: string;
+  key?: string;
+  bpm?: number;
 };
 
 export type NoteInput = string | string[];
 
-export type PlaybackMode = "block" | "arpeggio";
-
-export type GetScoreParams = {
-  content: string;
+type GetAbcScoreParams = Pick<Score, "id"> & {
+  input: string;
+  options?: ParseAbcOptions;
 };
 
-type GetAbcScoreParams = Pick<Score, "id" | "content"> & { bpm?: number };
-
-export function getAbcScore({ bpm = 120, ...rest }: GetAbcScoreParams) {
-  return withTempo(withHash({ bpm, ...rest }));
-}
-
-export function withHash(score: Omit<Score, "hash">): Score {
+export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
+  const { info, content } = parseAbc(input, options);
   return {
-    ...score,
-    hash: getScoreHash(score.content),
+    id,
+    info,
+    content,
+    hash: getScoreHash(content),
   };
 }
 
-export function withTempo(score: Score): Score {
+export type PlaybackMode = "block" | "arpeggio";
+
+type GetPianoScoreParams = {
+  id: string;
+  bpm?: number;
+  input: NoteInput;
+  playbackMode?: PlaybackMode;
+};
+
+export function getPianoScore({
+  id,
+  input,
+  playbackMode = "block",
+  bpm = 120,
+}: GetPianoScoreParams) {
+  const info = { bpm };
+  const content = [
+    frontMatterToAbcInfo(info),
+    withPlaybackMode(input, playbackMode),
+  ].join("\n");
+
   return {
-    ...score,
-    content: `
-Q:${score.bpm}
-${score.content}`,
+    id,
+    content,
+    info,
+    hash: getScoreHash(content),
   };
 }
 
@@ -51,26 +81,4 @@ export function withPlaybackMode(input: NoteInput, playbackMode: PlaybackMode) {
 
 export function getScoreHash(score: string) {
   return md5(score);
-}
-
-type GetPianoScoreParams = {
-  id: string;
-  bpm?: number;
-  input: NoteInput;
-  playbackMode?: PlaybackMode;
-};
-
-export function getPianoScore({
-  id,
-  bpm = 120,
-  input,
-  playbackMode = "block",
-}: GetPianoScoreParams) {
-  return withTempo(
-    withHash({
-      id,
-      bpm,
-      content: withPlaybackMode(input, playbackMode),
-    }),
-  );
 }

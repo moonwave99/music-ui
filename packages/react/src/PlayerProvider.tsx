@@ -15,6 +15,7 @@ import {
   type Score,
   PlayerCallback,
   PlayerEvents,
+  PlayerPosition,
 } from "@music-ui/core";
 
 let _player: Player;
@@ -44,8 +45,10 @@ export type UsePlayer = {
   pause: () => void;
   resume: () => void;
   stop: () => void;
+  seekTo: (position: PlayerPosition) => void;
   playerStatus: PlayerStatus;
   playedNotes: string[];
+  position: PlayerPosition;
 };
 
 export type PlayerStatus = "playing" | "paused" | "stopped";
@@ -53,6 +56,7 @@ export type PlayerStatus = "playing" | "paused" | "stopped";
 export function usePlayer(id: string): UsePlayer {
   const playerContext = use(PlayerContext);
   const [playedNotes, setPlayedNotes] = useState<string[]>([]);
+  const [position, setPosition] = useState<PlayerPosition>("0:0:0");
   const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("stopped");
 
   if (!playerContext) {
@@ -72,18 +76,22 @@ export function usePlayer(id: string): UsePlayer {
         if (id !== activeId) {
           return;
         }
+        setPosition("0:0:0");
         setPlayerStatus("stopped");
         setPlayedNotes([]);
       },
-      playing: ({ playedNotes, activeId }) => {
+      playing: ({ playedNotes, activeId, position }) => {
         if (id !== activeId) {
+          setPosition("0:0:0");
           setPlayerStatus("stopped");
           return;
         }
+        setPosition(position);
         setPlayerStatus("playing");
         setPlayedNotes(playedNotes);
       },
       finished: () => {
+        setPosition("0:0:0");
         setPlayerStatus("stopped");
         setPlayedNotes([]);
       },
@@ -125,7 +133,20 @@ export function usePlayer(id: string): UsePlayer {
     player?.stop();
   }
 
-  return { play, pause, resume, stop, playedNotes, playerStatus };
+  function seekTo(position: PlayerPosition) {
+    player?.seekTo(position);
+  }
+
+  return {
+    play,
+    pause,
+    resume,
+    stop,
+    seekTo,
+    playedNotes,
+    playerStatus,
+    position,
+  };
 }
 
 export function useStopPlayback() {

@@ -46,6 +46,7 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
+    "@music-ui/core": "workspace:*",
     "@tonaljs/midi": "^4.10.2",
     "abcjs": "^6.7.0"
   }

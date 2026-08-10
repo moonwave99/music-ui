@@ -4,6 +4,8 @@ import { synth } from "abcjs";
 import { type Score } from "./utils";
 import { EventEmitter } from "events";
 
+export type PlayerPosition = Tone.Unit.BarsBeatsSixteenths;
+
 type PlaybackInfo = {
   time: number;
   duration: number;
@@ -29,6 +31,7 @@ const DEFAULT_PARAMS = {
 export type PlayerCallback = (params: {
   playedNotes: string[];
   activeId: string;
+  position: PlayerPosition;
 }) => void;
 
 export type PlayerEvents = "playing" | "finished" | "pause" | "stop";
@@ -87,6 +90,9 @@ export class Player {
     this.stop();
     this.part?.clear();
     this.score = score;
+    if (score.info.bpm) {
+      this.transport.bpm.value = score.info.bpm;
+    }
 
     const scoreData = this.scoreManager.getScoreContent(
       score,
@@ -94,18 +100,19 @@ export class Player {
     );
 
     this.part = new Tone.Part((time: number, chord: PlaybackInfo) => {
+      const position = this.transport.position;
       this.sampler.triggerAttackRelease(
         chord.notes,
         chord.duration,
         time,
         chord.velocity,
       );
-
       this.draw.schedule(
         () =>
           this.eventEmitter.emit("playing", {
             playedNotes: chord.notes,
             activeId: score.id,
+            position,
           }),
         time,
       );
@@ -114,6 +121,7 @@ export class Player {
           this.eventEmitter.emit("finished", {
             playedNotes: [],
             activeId: score.id,
+            position,
           });
           this.playbackProgress = 0;
           this.stop();
@@ -142,6 +150,10 @@ export class Player {
     this.transport.stop();
     this.draw.cancel(0);
     return this;
+  }
+
+  seekTo(position: PlayerPosition) {
+    this.transport.position = position;
   }
 }
 

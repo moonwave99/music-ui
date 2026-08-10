@@ -4,6 +4,6 @@
     "outDir": "dist",
     "strictNullChecks": true
   },
-  "include": ["src"],
+  "include": ["src", "../core/src/parser.test.ts", "../core/src/parser.ts"],
   "exclude": ["node_modules", "dist"]
 }

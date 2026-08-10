@@ -76,6 +76,9 @@ importers:
 
   packages/abc:
     dependencies:
+      '@music-ui/core':
+        specifier: workspace:*
+        version: link:../core
       '@tonaljs/midi':
         specifier: ^4.10.2
         version: 4.10.2
@@ -125,6 +128,9 @@ importers:
       events:
         specifier: ^3.3.0
         version: 3.3.0
+      js-yaml:
+        specifier: ^5.2.3
+        version: 5.2.3
       md5:
         specifier: ^2.3.0
         version: 2.3.0
@@ -3233,6 +3239,10 @@ packages:
 
   js-yaml@4.3.0:
     resolution: {integrity: sha512-1td788aAnnZ5qs7V2QIRl1owjtYpbKt749Y3xauqQgwIIGF/xXWz1wMTEBx5O3LK3lXLVuqXPdPxj2BoFHaW9Q==}
+    hasBin: true
+
+  js-yaml@5.2.3:
+    resolution: {integrity: sha512-n+mUVyUX5bVv7G/G2zyIHOhdxfuU1dY2NOFzTQUWiMUbFss8b57NFlgCCaggU78wSw5KVS9cllzeLyzyR+n5nw==}
     hasBin: true
 
   jsdom@26.1.0:
@@ -8021,6 +8031,10 @@ snapshots:
       esprima: 4.0.1
 
   js-yaml@4.3.0:
+    dependencies:
+      argparse: 2.0.1
+
+  js-yaml@5.2.3:
     dependencies:
       argparse: 2.0.1
 

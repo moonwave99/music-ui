@@ -1,7 +1,7 @@
 "use client";
 
-import { type ReactNode, ReactElement } from "react";
-import { useAbc } from "./useAbc";
+import { useLayoutEffect, type ReactNode, ReactElement } from "react";
+import { useAbc, type OnAbcClickParams } from "./useAbc";
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore } from "@music-ui/core";
@@ -9,6 +9,7 @@ import { getAbcScore } from "@music-ui/core";
 export type ScoreProps = {
   id: string;
   hidePlayer?: boolean;
+  hideTempo?: boolean;
   children: ReactNode;
   className?: string;
   pianoOptions?: PianoProps & {
@@ -27,14 +28,32 @@ export function Score({
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
   hidePlayer = false,
+  hideTempo = false,
   ...params
 }: ScoreProps): ReactElement {
-  const content = getNodeText(children);
-  const { play, pause, stop, resume, playedNotes, playerStatus } = usePlayer(
-    params.id,
-  );
-  const { staffRef } = useAbc<HTMLDivElement>({ ...params, content });
-  const score = getAbcScore({ ...params, content });
+  const input = getNodeText(children);
+  const {
+    play,
+    pause,
+    stop,
+    resume,
+    seekTo,
+    playedNotes,
+    playerStatus,
+    position,
+  } = usePlayer(params.id);
+  const score = getAbcScore({ ...params, input, options: { hideTempo } });
+  const { staffRef, abcRef } = useAbc<HTMLDivElement>({
+    ...params,
+    content: score.content,
+    onClick: ({ measure }: OnAbcClickParams) => {
+      seekTo(`${measure}:0:0`);
+    },
+  });
+
+  useLayoutEffect(() => {
+    abcRef.current?.updatePosition(position);
+  }, [position, abcRef]);
 
   return (
     <div className={className}>
