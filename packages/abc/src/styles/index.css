@@ -1,3 +1,7 @@
+:root {
+  --abc-selection-color: dodgerblue;
+}
+
 .score {
   .abcjs-css-warning {
     display: none;
@@ -19,5 +23,11 @@
         background-color: rgba(100, 100, 100, 0.7);
       }
     }
+  }
+  .abcjs-current-note {
+    fill: var(--abc-selection-color);
+  }
+  .abcjs-cursor {
+    stroke-width: 2;
   }
 }

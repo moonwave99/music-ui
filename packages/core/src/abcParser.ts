@@ -45,6 +45,7 @@ export function parseAbc(
   if (!frontMatter) {
     return {
       info: extendWithDefaultInfo(parseAbcInfo(input)),
+      // #TODO: insert defaults in abc info when not present, e.g. Q:{bpm}
       content: input.trim(),
     };
   }

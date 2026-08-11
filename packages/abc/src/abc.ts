@@ -1,21 +1,32 @@
-import { renderAbc, type AbcVisualParams, TuneObject } from "abcjs";
+import {
+  renderAbc,
+  type AbcVisualParams,
+  TuneObject,
+  ClickListenerAnalysis,
+} from "abcjs";
 import type { PlayerPosition } from "@music-ui/core";
+
+const cursorBleed = 7.5;
+const cursorOffset = -2.5;
 
 const DEFAULT_ABC_VISUAL_PARAMS = {
   responsive: "resize",
   add_classes: true,
   paddingleft: 0,
   paddingright: 0,
+  selectionColor: "dodgerblue",
 } as const;
 
 const cssClasses = {
   content: "content",
   staff: "staff",
   timeSignature: "abcjs-time-signature",
+  cursor: "abcjs-cursor",
+  currentNote: "abcjs-current-note",
 } as const;
 
 export type OnAbcClickParams = {
-  measure: number;
+  position: PlayerPosition;
 };
 
 export type InitABCParams = {
@@ -47,32 +58,38 @@ export function initAbc({
     clickListener,
   }).at(0) as TuneObject;
 
-  function clickListener(_: unknown, __: unknown, classes: string) {
+  const svgElement = staffElement.querySelector<SVGElement>("svg")!;
+
+  function clickListener(
+    _: unknown,
+    __: unknown,
+    ___: unknown,
+    x: ClickListenerAnalysis,
+  ) {
     if (!onClick) {
       return;
     }
-    const measure = Number(
-      classes
-        .split(" ")
-        .find((x) => x.match(/abcjs-mm(\d+)/))
-        ?.replace("abcjs-mm", ""),
-    );
-    onClick({ measure });
+    const currentNote = x.selectableElement as unknown as SVGGElement;
+    updateCursor({ svgElement, cursor, currentNote });
+    onClick({ position: getNotePosition(currentNote) });
   }
 
   const isMeterDenominatorUnary = visualObj.getMeter().value?.at(0)!.den == 1;
 
   if (hideMeter || isMeterDenominatorUnary) {
-    (staffElement.querySelector(
+    const timeSignature = staffElement.querySelector<HTMLElement>(
       `.${cssClasses.timeSignature}`,
-    ) as HTMLElement)!.style.display = "none";
+    );
+    if (timeSignature) {
+      timeSignature.style.display = "none";
+    }
   }
 
   let cursor: SVGLineElement;
 
   if (showCursor) {
     cursor = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    cursor.classList.add("abcjs-cursor");
+    cursor.classList.add(cssClasses.cursor);
     staffElement.querySelector("svg")?.append(cursor);
   }
 
@@ -80,11 +97,24 @@ export function initAbc({
     if (!showCursor) {
       return;
     }
-    const [bar, beat] = position.split(":");
-    const firstNoteOfBar = staffElement.querySelector(
-      `svg .abcjs-note.abcjs-mm${bar}`,
+    const [bar] = position.split(":");
+    const barNotes = svgElement.querySelectorAll<SVGGElement>(
+      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
     );
-    // firstNoteOfBar?.setAttribute("fill", "red");
+
+    const currentNote = getCurrentNote(barNotes, position);
+    if (!currentNote) {
+      return;
+    }
+    svgElement
+      .querySelectorAll(`.${cssClasses.currentNote}`)
+      .forEach((element) => element.classList.remove(cssClasses.currentNote));
+    currentNote.classList.add(cssClasses.currentNote);
+    updateCursor({
+      currentNote,
+      svgElement,
+      cursor,
+    });
   }
 
   return { updatePosition };
@@ -112,4 +142,109 @@ export function initAll(options: InitAllOptions = DEFAULT_INIT_OPTIONS) {
       staffElement: element.querySelector(`.${cssClasses.staff}`)!,
     });
   });
+}
+
+function getCurrentNote(
+  barNotes: NodeListOf<SVGGElement>,
+  position: PlayerPosition,
+) {
+  const [, beat, sixteenths] = position.split(":").map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const elementsWithDurations = [];
+
+  let relativePosition = 0;
+
+  for (const element of barNotes) {
+    const duration = getNoteDuration(element);
+    elementsWithDurations.push({
+      position: relativePosition * 4,
+      element,
+    });
+    relativePosition += duration;
+  }
+
+  for (const { element, position } of elementsWithDurations) {
+    if (position >= beat + Math.floor(sixteenths) / 4) {
+      return element;
+    }
+  }
+
+  return null;
+}
+
+type UpdateCursorParams = {
+  svgElement: SVGElement;
+  currentNote: SVGGElement;
+  cursor: SVGLineElement;
+};
+
+function updateCursor({ svgElement, currentNote, cursor }: UpdateCursorParams) {
+  const lineNumber = getValueFromNote(currentNote, "abcjs-l");
+
+  const line = svgElement.querySelector<SVGGElement>(
+    `.abcjs-staff.abcjs-l${lineNumber}`,
+  );
+  const noteBox = currentNote.querySelector<SVGGElement>("path")?.getBBox();
+
+  const lineBox = line?.getBBox();
+  if (noteBox && lineBox) {
+    cursor.setAttribute("x1", String(noteBox.x! + cursorOffset));
+    cursor.setAttribute("x2", String(noteBox.x! + cursorOffset));
+    cursor.setAttribute("y1", String(lineBox.y! - cursorBleed));
+    cursor.setAttribute(
+      "y2",
+      String(lineBox.y! + lineBox.height! + cursorBleed),
+    );
+  }
+}
+
+function getNotePosition(element: SVGGElement): PlayerPosition {
+  const bar = getValueFromNote(element, "abcjs-mm");
+
+  const barNotes = element.parentElement!.querySelectorAll<SVGGElement>(
+    `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
+  );
+
+  const barPosition = Array.from(barNotes).indexOf(element);
+  const beatWithRest =
+    Array.from(barNotes)
+      .slice(0, barPosition)
+      .reduce((memo, element) => memo + getNoteDuration(element), 0) * 4;
+
+  const rest = beatWithRest % 1;
+  const beat = beatWithRest - rest;
+  const sixteenths = rest * 4;
+
+  const position = `${bar}:${beat}:${sixteenths}` as PlayerPosition;
+  return position;
+}
+
+function getValueFromNote(element: SVGGElement, classPrefix: string) {
+  return Number(
+    element.classList
+      .toString()
+      .split(" ")
+      .find((x) => x.startsWith(classPrefix))
+      ?.replace(classPrefix, ""),
+  );
+}
+
+function getNoteDuration(element: SVGGElement) {
+  const durationValue = element
+    .getAttribute("class")
+    ?.split(" ")
+    .map((x) => x.match(/abcjs-d(.*)/))
+    .filter(Boolean)
+    .at(0)
+    ?.at(1);
+
+  const duration = Number(
+    durationValue?.includes("-")
+      ? durationValue.replace("-", ".")
+      : durationValue,
+  );
+  return duration;
 }

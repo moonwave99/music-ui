@@ -135,7 +135,7 @@ export class Player {
     if (!this.part) {
       return;
     }
-    this.part.start(0);
+    this.part.start(this.transport.position);
     this.transport.start();
     return this;
   }
@@ -189,8 +189,9 @@ function parseMidiData(data: MidiJSON, timeTolerance: number) {
         Math.abs(c.time - note.time) < timeTolerance &&
         Math.abs(c.duration - note.duration) < timeTolerance,
     );
-    if (existing) existing.notes.push(note.name);
-    else
+    if (existing) {
+      existing.notes.push(note.name);
+    } else
       chords.push({
         time: note.time,
         duration: note.duration,

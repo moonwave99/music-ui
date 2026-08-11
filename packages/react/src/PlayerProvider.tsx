@@ -3,11 +3,11 @@ import {
   use,
   useState,
   useEffect,
+  useCallback,
   type Context,
   type ReactNode,
   type Dispatch,
   type SetStateAction,
-  useCallback,
 } from "react";
 
 import {
@@ -110,32 +110,29 @@ export function usePlayer(id: string): UsePlayer {
     };
   }, [player, id]);
 
-  function play(score: Score) {
-    if (!score) {
-      return;
-    }
-    if (currentScore?.hash !== score.hash) {
-      player?.setScore(score);
-      setCurrentScore(score);
-    }
-    player?.play();
-  }
+  const play = useCallback(
+    (score: Score) => {
+      if (!score) {
+        return;
+      }
+      if (currentScore?.hash !== score.hash) {
+        player?.setScore(score);
+        setCurrentScore(score);
+      }
+      player?.play();
+    },
+    [currentScore?.hash, player, setCurrentScore],
+  );
 
-  function resume() {
-    player?.play();
-  }
-
-  function pause() {
-    player?.pause();
-  }
-
-  function stop() {
-    player?.stop();
-  }
-
-  function seekTo(position: PlayerPosition) {
-    player?.seekTo(position);
-  }
+  const resume = useCallback(() => player?.play(), [player]);
+  const pause = useCallback(() => player?.pause(), [player]);
+  const stop = useCallback(() => player?.stop(), [player]);
+  const seekTo = useCallback(
+    (position: PlayerPosition) => {
+      player?.seekTo(position);
+    },
+    [player],
+  );
 
   return {
     play,

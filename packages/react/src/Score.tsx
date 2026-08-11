@@ -1,7 +1,12 @@
 "use client";
 
-import { useLayoutEffect, type ReactNode, ReactElement } from "react";
-import { useAbc, type OnAbcClickParams } from "./useAbc";
+import {
+  useLayoutEffect,
+  type ReactNode,
+  ReactElement,
+  useCallback,
+} from "react";
+import { OnAbcClickParams, useAbc } from "./useAbc";
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore } from "@music-ui/core";
@@ -32,6 +37,8 @@ export function Score({
   ...params
 }: ScoreProps): ReactElement {
   const input = getNodeText(children);
+  const score = getAbcScore({ ...params, input, options: { hideTempo } });
+
   const {
     play,
     pause,
@@ -42,13 +49,16 @@ export function Score({
     playerStatus,
     position,
   } = usePlayer(params.id);
-  const score = getAbcScore({ ...params, input, options: { hideTempo } });
+
+  const onClick = useCallback(
+    ({ position }: OnAbcClickParams) => seekTo(position),
+    [seekTo],
+  );
+
   const { staffRef, abcRef } = useAbc<HTMLDivElement>({
     ...params,
     content: score.content,
-    onClick: ({ measure }: OnAbcClickParams) => {
-      seekTo(`${measure}:0:0`);
-    },
+    onClick,
   });
 
   useLayoutEffect(() => {

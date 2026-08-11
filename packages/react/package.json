@@ -27,12 +27,13 @@
   },
   "packageManager": "pnpm@11.18.0",
   "dependencies": {
-    "@music-ui/core": "workspace:*",
     "@music-ui/abc": "workspace:*",
+    "@music-ui/core": "workspace:*",
     "@music-ui/piano": "workspace:*",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "tone": "^15.1.22"
+    "tone": "^15.1.22",
+    "use-deep-compare": "^1.3.0"
   },
   "devDependencies": {
     "@music-ui/eslint-config": "workspace:*",
