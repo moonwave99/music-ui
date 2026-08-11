@@ -16,8 +16,7 @@ describe("getPianoScore", () => {
       id: "1",
       hash: "e5cb2e9bddf789d759392e77e28da51d",
       info: { bpm: 120 },
-      content: `Q:120
-[C, E, G, B,]6`,
+      content: "Q:120\n[C, E, G, B,]6",
     });
 
     const scoreWithDefaultPlaybackMode = getPianoScore({ id: "1", input });
@@ -25,8 +24,7 @@ describe("getPianoScore", () => {
       id: "1",
       hash: "e5cb2e9bddf789d759392e77e28da51d",
       info: { bpm: 120 },
-      content: `Q:120
-[C, E, G, B,]6`,
+      content: "Q:120\n[C, E, G, B,]6",
     });
   });
 
@@ -48,9 +46,16 @@ describe("getAbcScore", () => {
     const abcScore = getAbcScore({ id: "1", input: "C E G" });
     expect(abcScore).toEqual({
       id: "1",
-      info: { bpm: 120 },
-      content: "C E G",
-      hash: "9f2fd30bba4472d786cecd2dbfd0cfe6",
+      info: {
+        title: "",
+        composer: "",
+        key: "C",
+        meter: "4/4",
+        unitNoteLength: "1/4",
+        bpm: 120,
+      },
+      content: "T:\nC:\nK:C\nM:4/4\nL:1/4\nQ:120\nC E G",
+      hash: "69e0a4a35c98433d7bcc4f065acd0ff8",
     });
   });
 });

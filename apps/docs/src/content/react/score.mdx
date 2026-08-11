@@ -28,7 +28,7 @@ The `<Score>` component renders ABC notation as music score on screen.
 
 TBD
 
-<Score id={1}>
+<Score id={1} hideTempo>
 M:4/4
 L:1/8
 CDEF GABc|
@@ -36,29 +36,27 @@ CDEF GABc|
 
 Without player:
 
-<Score id={2} hidePlayer>
+<Score id={2} hidePlayer hideTempo>
 M:4/4
-L:1/4
+L:1/8
 C D E F G A B c|
 </Score>
 
 Without meter:
 
-<Score id={3} hideMeter>
-C D E F G A B c|
+<Score id={3} hideMeter hideTempo>
+C D E F| G A B c|
 </Score>
 
 With piano below too!
 
 <Score id={4} pianoOptions={{ show: true, octaves: 3 }} hideTempo>
-+++
-title: You Are My Sunshine
-composer: Traditional
-meter: 4/4
-unitNoteLength: 1/4
-key: C
-bpm: 180
-+++
+T: You Are My Sunshine
+C: Traditional
+M: 4/4
+L: 1/4
+K: C
+Q: 180
 z G, C D|E2 E2-| E E D E| C2 C2-|
 w:You are my sun-shine,_ my on-ly sun-shine.
 C C D E|F2 A2-| A A G F|E4-|

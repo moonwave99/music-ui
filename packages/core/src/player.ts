@@ -131,6 +131,7 @@ export class Player {
     return this;
   }
   async play() {
+    // #TODO fix seek before first playback bug
     await Tone.start();
     if (!this.part) {
       return;

@@ -1,10 +1,6 @@
 import md5 from "md5";
 import { scientificToAbcNotation } from "@tonaljs/abc-notation";
-import {
-  parseAbc,
-  frontMatterToAbcInfo,
-  type ParseAbcOptions,
-} from "./abcParser";
+import { parseAbc, getAbcInfo, type ParseAbcOptions } from "./abcParser";
 
 export type Score = {
   id: string;
@@ -54,16 +50,15 @@ export function getPianoScore({
   playbackMode = "block",
   bpm = 120,
 }: GetPianoScoreParams) {
-  const info = { bpm };
   const content = [
-    frontMatterToAbcInfo(info),
+    getAbcInfo({ Q: bpm }),
     withPlaybackMode(input, playbackMode),
   ].join("\n");
 
   return {
     id,
     content,
-    info,
+    info: { bpm },
     hash: getScoreHash(content),
   };
 }

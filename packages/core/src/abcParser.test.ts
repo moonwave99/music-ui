@@ -20,46 +20,13 @@ G A B | G A B
         meter: "3/4",
         unitNoteLength: "1/2",
         key: "G",
-        bpm: 99,
+        bpm: "99",
       },
       content: `T:Title
 C:Artist
+K:G
 M:3/4
 L:1/2
-K:G
-Q:99
-G A B | G A B`,
-    });
-  });
-
-  it("parses the input as an abc tune with frontmatter info", () => {
-    const input = `
-+++
-title: Title
-composer: Artist
-meter: 3/4
-unitNoteLength: 1/2
-key: G
-bpm: 99
-+++
-
-G A B | G A B
-    `;
-    const output = parseAbc(input);
-    expect(output).toEqual({
-      info: {
-        title: "Title",
-        composer: "Artist",
-        meter: "3/4",
-        unitNoteLength: "1/2",
-        key: "G",
-        bpm: 99,
-      },
-      content: `T:Title
-C:Artist
-M:3/4
-L:1/2
-K:G
 Q:99
 G A B | G A B`,
     });
