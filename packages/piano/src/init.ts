@@ -1,51 +1,47 @@
-import { Piano, DEFAULT_PIANO_OPTIONS, type PianoOptions } from "./Piano";
+import { Piano } from "./Piano";
+import { querySelector, querySelectorAll } from "@music-ui/core";
+import { parseOptions } from "./lib";
 
 const DEFAULT_INIT_OPTIONS = {
+  element: "#piano",
+};
+
+type InitOptions<T extends HTMLElement> = {
+  element: string | T;
+};
+
+export function init<T extends HTMLElement>(
+  initOptions: InitOptions<T> = DEFAULT_INIT_OPTIONS,
+) {
+  initOptions = Object.assign({}, DEFAULT_INIT_OPTIONS, initOptions);
+  const element = querySelector(initOptions.element);
+  if (!element) {
+    throw new Error(`${initOptions.element} not found)`);
+  }
+  const options = parseOptions(element);
+  const piano = new Piano({ ...options, element });
+  piano.render();
+
+  const { notes, noteLabels } = element.dataset;
+  if (notes) {
+    piano.setNotes(notes, noteLabels);
+  }
+  return piano;
+}
+
+const DEFAULT_INIT_ALL_OPTIONS = {
   elements: "[data-piano]",
 };
 
-type InitOptions = {
-  elements: string | NodeList;
+type InitAllOptions<T extends HTMLElement> = {
+  elements: string | NodeListOf<T>;
 };
 
-export function init(options: InitOptions = DEFAULT_INIT_OPTIONS): void {
-  options = Object.assign({}, DEFAULT_INIT_OPTIONS, options);
-  const elements =
-    typeof options.elements === "string"
-      ? document.querySelectorAll(options.elements)
-      : options.elements;
-
-  elements.forEach((el) => {
-    const element = el as HTMLElement;
-    const options = parseOptions(element);
-    const piano = new Piano({ ...options, el });
-    piano.render();
-    const { notes, noteLabels } = element.dataset;
-    if (!notes) {
-      return;
-    }
-    piano.setNotes(notes, noteLabels);
-  });
-}
-
-function parseOptions(el: HTMLElement): PianoOptions {
-  const options = {} as Record<string, string | number | boolean>;
-
-  Object.entries(DEFAULT_PIANO_OPTIONS).forEach(([key, sample]) => {
-    const value = el.dataset[key];
-    switch (typeof sample) {
-      case "number":
-        if (value) {
-          options[key] = +value;
-        }
-        break;
-      case "boolean":
-        if (value) {
-          options[key] = value !== "false";
-        }
-        break;
-    }
-  });
-
-  return options as PianoOptions;
+export function initAll<T extends HTMLElement>(
+  initOptions: InitAllOptions<T> = DEFAULT_INIT_ALL_OPTIONS,
+): Piano[] {
+  initOptions = Object.assign({}, DEFAULT_INIT_ALL_OPTIONS, initOptions);
+  return Array.from(querySelectorAll(initOptions.elements)).map((element) =>
+    init({ element }),
+  );
 }

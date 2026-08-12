@@ -1,9 +1,9 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
 
-import { initAll, initAbc } from "./abc";
+import { initAll, init } from "./init";
 
-describe("initAbc", () => {
+describe("init", () => {
   it("initializes Abc instances on the selected element", () => {
     document.body.innerHTML = `
       <main>
@@ -19,10 +19,7 @@ C E G B
 
     const element = document.querySelector("[data-abc]");
 
-    initAbc({
-      staffElement: element?.querySelector(".staff") as HTMLElement,
-      content: element?.querySelector(".content")?.textContent as string,
-    });
+    init();
 
     expect(element).toBeTruthy();
 
@@ -42,9 +39,7 @@ C E G B
 
     const element = document.querySelector("[data-abc]");
 
-    initAbc({
-      staffElement: element?.querySelector(".staff") as HTMLElement,
-    });
+    init();
 
     expect(element).toBeTruthy();
     expect(element!.querySelector(".abcjs-container")).not.toBeNull();
@@ -66,11 +61,7 @@ CEG
 
     const element = document.querySelector("[data-abc]");
 
-    initAbc({
-      staffElement: element?.querySelector(".staff") as HTMLElement,
-      content: element?.querySelector(".content")?.textContent as string,
-      hideMeter: true,
-    });
+    init({ hideMeter: true });
 
     expect(
       window.getComputedStyle(
@@ -96,10 +87,7 @@ CEG
 
     const element = document.querySelector("[data-abc]");
 
-    initAbc({
-      staffElement: element?.querySelector(".staff") as HTMLElement,
-      content: element?.querySelector(".content")?.textContent as string,
-    });
+    init();
 
     expect(
       window.getComputedStyle(
@@ -164,7 +152,7 @@ C E G B
         </div>
       </main>`;
 
-    initAll({ elements: document.querySelectorAll("[data-abc]") });
+    initAll({ elements: document.querySelectorAll<HTMLElement>("[data-abc]") });
 
     const elements = document.querySelectorAll("[data-abc]");
     expect(elements.length).toBe(2);

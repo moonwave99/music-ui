@@ -2,7 +2,7 @@ import { get as getNote } from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
 import { CHROMATIC_SCALE } from "./lib";
-import { type NoteInput } from "@music-ui/core";
+import { querySelector, type NoteInput } from "@music-ui/core";
 
 export type ScaleNote = {
   chroma: number;
@@ -15,7 +15,7 @@ export type ScaleNoteWithOctave = ScaleNote & {
 };
 
 export type PianoOptions = {
-  el: string | HTMLElement;
+  element: string | HTMLElement;
   startOctave: number;
   octaves: number;
   withFinalC: boolean;
@@ -36,7 +36,7 @@ const cssClasses = {
 } as const;
 
 export const DEFAULT_PIANO_OPTIONS = {
-  el: "#piano",
+  element: "#piano",
   startOctave: 3,
   octaves: 2,
   withFinalC: true,
@@ -91,11 +91,11 @@ export class Piano {
     if (this.element) {
       return;
     }
-    const { el, withFinalC, startOctave, octaves } = this.options;
-
-    this.element = (
-      typeof el === "string" ? document.querySelector(el) : el
-    ) as HTMLElement;
+    const { element, withFinalC, startOctave, octaves } = this.options;
+    this.element = querySelector<HTMLElement>(element);
+    if (!this.element) {
+      throw new Error(`${element} not found)`);
+    }
     this.element.classList.add(cssClasses.piano);
 
     const overFlowWrapper = document.createElement("div");

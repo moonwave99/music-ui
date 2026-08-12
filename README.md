@@ -8,8 +8,6 @@ A collection of music visualization tools for the web.
 
 ## Roadmap
 
-- define a common initializer interface (i.e. `initPiano` / `initAbc`);
-- move `initAbc` to `Score` class;
 - improve interaction coverage (e.g. `updateCursor`);
 - test `Player` playback interaction.
 - support multiple voices cursor.

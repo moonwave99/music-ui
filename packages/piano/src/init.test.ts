@@ -1,8 +1,40 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
-import { init } from "./init";
+import { init, initAll } from "./init";
 
 describe("init", () => {
+  it("initializes a Piano instance with default options", () => {
+    document.body.innerHTML = `
+        <main>
+            <div id="piano" data-notes="C3 E3 G3" data-note-labels="1 3 5"></div>
+        </main>`;
+
+    init();
+
+    const piano = document.querySelector(".piano");
+    expect(piano!.querySelectorAll(".key").length).toBe(12 + 12 + 1);
+    expect(
+      [...piano!.querySelectorAll(".key-on")].map((el) => el.innerHTML),
+    ).toEqual(["1", "3", "5"]);
+  });
+
+  it("initializes a Piano instance with passed options", () => {
+    document.body.innerHTML = `
+        <main>
+            <div id="my-element" data-notes="C3 E3 G3" data-note-labels="1 3 5"></div>
+        </main>`;
+
+    init({ element: "#my-element" });
+
+    const piano = document.querySelector(".piano");
+    expect(piano!.querySelectorAll(".key").length).toBe(12 + 12 + 1);
+    expect(
+      [...piano!.querySelectorAll(".key-on")].map((el) => el.innerHTML),
+    ).toEqual(["1", "3", "5"]);
+  });
+});
+
+describe("initAll", () => {
   it("initializes Piano instances on all affected elements", () => {
     document.body.innerHTML = `
         <main>
@@ -12,7 +44,7 @@ describe("init", () => {
                 data-with-final-C="false"></div>
         </main>`;
 
-    init();
+    initAll();
 
     const pianos = document.querySelectorAll(".piano");
 
@@ -32,9 +64,9 @@ describe("init", () => {
                 data-with-final-C="false"></div>
         </main>`;
 
-    const elements = document.querySelectorAll("[data-custom]");
+    const elements = document.querySelectorAll<HTMLElement>("[data-custom]");
 
-    init({ elements });
+    initAll({ elements });
     const pianos = document.querySelectorAll(".piano");
     expect(pianos.length).toBe(2);
   });
@@ -45,13 +77,13 @@ describe("init", () => {
           <div data-piano data-notes="Fb Gb Abb Cb" data-octaves="3"></div>
         </main>`;
 
-    init();
+    initAll();
 
     const wrapper = document.querySelector(".piano");
 
     expect(
-      [...wrapper!.querySelectorAll(".key-on")].map((el) => ({
-        ...(el as HTMLElement).dataset,
+      [...wrapper!.querySelectorAll<HTMLElement>(".key-on")].map((el) => ({
+        ...el.dataset,
       })),
     ).toEqual([
       {
@@ -95,7 +127,7 @@ describe("init", () => {
           <div data-piano data-notes="C3 E3 G3" data-note-labels="1 3 5" data-octaves="3"></div>
         </main>`;
 
-    init();
+    initAll();
     const wrapper = document.querySelector(".piano");
     expect(
       [...wrapper!.querySelectorAll(".key-on")].map((el) => el.innerHTML),
@@ -108,13 +140,13 @@ describe("init", () => {
           <div data-piano data-notes="C3 G3 Eb4 Bb4" data-octaves="3"></div>
         </main>`;
 
-    init();
+    initAll();
 
     const wrapper = document.querySelector(".piano");
 
     expect(
-      [...wrapper!.querySelectorAll(".key-on")].map((el) => ({
-        ...(el as HTMLElement).dataset,
+      [...wrapper!.querySelectorAll<HTMLElement>(".key-on")].map((el) => ({
+        ...el.dataset,
       })),
     ).toEqual([
       {
@@ -158,13 +190,13 @@ describe("init", () => {
           <div data-piano data-notes="C3 G3, Eb4 Bb4" data-octaves="3"></div>
         </main>`;
 
-    init();
+    initAll();
 
     const wrapper = document.querySelector(".piano");
 
     expect(
-      [...wrapper!.querySelectorAll(".group-1")].map((el) => ({
-        ...(el as HTMLElement).dataset,
+      [...wrapper!.querySelectorAll<HTMLElement>(".group-1")].map((el) => ({
+        ...el.dataset,
       })),
     ).toEqual([
       {
@@ -186,8 +218,8 @@ describe("init", () => {
     ]);
 
     expect(
-      [...wrapper!.querySelectorAll(".group-2")].map((el) => ({
-        ...(el as HTMLElement).dataset,
+      [...wrapper!.querySelectorAll<HTMLElement>(".group-2")].map((el) => ({
+        ...el.dataset,
       })),
     ).toEqual([
       {

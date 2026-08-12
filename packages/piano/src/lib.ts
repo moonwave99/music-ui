@@ -1,4 +1,4 @@
-import type { ScaleNote } from "./Piano";
+import { DEFAULT_PIANO_OPTIONS, type ScaleNote, PianoOptions } from "./Piano";
 
 export const CHROMATIC_SCALE: ScaleNote[] = [
   {
@@ -62,3 +62,23 @@ export const CHROMATIC_SCALE: ScaleNote[] = [
     note: "B",
   },
 ] as const;
+
+export function parseOptions(el: HTMLElement): PianoOptions {
+  const options = {} as Record<string, string | number | boolean>;
+  Object.entries(DEFAULT_PIANO_OPTIONS).forEach(([key, sample]) => {
+    const value = el.dataset[key];
+    switch (typeof sample) {
+      case "number":
+        if (value) {
+          options[key] = +value;
+        }
+        break;
+      case "boolean":
+        if (value) {
+          options[key] = value !== "false";
+        }
+        break;
+    }
+  });
+  return options as PianoOptions;
+}

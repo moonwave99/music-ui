@@ -77,3 +77,19 @@ export function withPlaybackMode(input: NoteInput, playbackMode: PlaybackMode) {
 export function getScoreHash(id: string, score: string) {
   return md5(`${id}${score}`);
 }
+
+export function querySelectorAll<T extends HTMLElement>(
+  elementsOrSelector: NodeListOf<T> | string,
+): NodeListOf<T> {
+  return typeof elementsOrSelector === "string"
+    ? document.querySelectorAll<T>(elementsOrSelector)
+    : elementsOrSelector;
+}
+
+export function querySelector<T extends HTMLElement>(
+  elementOrSelector: T | string,
+): T | null {
+  return typeof elementOrSelector === "string"
+    ? document.querySelector<T>(elementOrSelector)
+    : elementOrSelector;
+}

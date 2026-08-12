@@ -7,7 +7,7 @@ import {
   useCallback,
   useId,
 } from "react";
-import { OnAbcClickParams, useAbc } from "./useAbc";
+import { OnABCClickParams, useAbc } from "./useAbc";
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore } from "@music-ui/core";
@@ -59,11 +59,11 @@ export function Score({
   } = usePlayer(id);
 
   const onClick = useCallback(
-    ({ position }: OnAbcClickParams) => seekTo(position),
+    ({ position }: OnABCClickParams) => seekTo(position),
     [seekTo],
   );
 
-  const { staffRef, abcRef } = useAbc<HTMLDivElement>({
+  const { ref, abcRef } = useAbc<HTMLDivElement>({
     ...params,
     content: score.content,
     onClick,
@@ -75,7 +75,7 @@ export function Score({
 
   return (
     <div className={className}>
-      <div className="score-staff" ref={staffRef}></div>
+      <div className="score-staff" ref={ref}></div>
       {!hidePlayer ? (
         <div className="score-audio-controls">
           <button

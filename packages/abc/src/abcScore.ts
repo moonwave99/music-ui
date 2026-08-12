@@ -1,0 +1,165 @@
+import {
+  renderAbc,
+  type AbcVisualParams,
+  TuneObject,
+  ClickListenerAnalysis,
+} from "abcjs";
+import { type PlayerPosition } from "@music-ui/core";
+import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
+
+const cursorBleed = 7.5;
+const cursorOffset = -2.5;
+
+const DEFAULT_ABC_VISUAL_PARAMS = {
+  responsive: "resize",
+  add_classes: true,
+  paddingleft: 0,
+  paddingright: 0,
+  selectionColor: "dodgerblue",
+} as const;
+
+export const cssClasses = {
+  content: "content",
+  staff: "staff",
+  timeSignature: "abcjs-time-signature",
+  cursor: "abcjs-cursor",
+  currentNote: "abcjs-current-note",
+} as const;
+
+export type ABCScoreParams = {
+  content?: string;
+  element: HTMLElement;
+  showPlayer?: boolean;
+  showCursor?: boolean;
+  hideMeter?: boolean;
+  hideTempo?: boolean;
+  abcOptions?: AbcVisualParams;
+  onClick?: (params: OnABCClickParams) => void;
+};
+
+export type OnABCClickParams = {
+  position: PlayerPosition;
+};
+
+export class ABCScore {
+  private content: string;
+  private element: HTMLElement;
+  private showCursor: boolean;
+  private hideMeter: boolean;
+  private abcOptions: AbcVisualParams;
+  private onClick: ((params: OnABCClickParams) => void) | undefined;
+  private tune: TuneObject | null;
+  private cursor: SVGLineElement | null;
+  constructor({
+    content = "",
+    element,
+    showCursor = true,
+    hideMeter = false,
+    abcOptions = {},
+    onClick,
+  }: ABCScoreParams) {
+    if (!element) {
+      throw new Error(`${element} not found`);
+    }
+    this.content = content;
+    this.element = element;
+    this.showCursor = showCursor;
+    this.hideMeter = hideMeter;
+    this.abcOptions = abcOptions;
+    this.onClick = onClick;
+    this.tune = null;
+    this.cursor = null;
+  }
+  getSVGElement() {
+    return this.element!.querySelector("svg");
+  }
+  render() {
+    if (this.tune) {
+      return this;
+    }
+    const clickListener = (
+      _: unknown,
+      __: unknown,
+      ___: unknown,
+      x: ClickListenerAnalysis,
+    ) => {
+      if (!this.onClick) {
+        return;
+      }
+      const currentNote = x.selectableElement as unknown as SVGGElement;
+      this.updateCursor(currentNote);
+      this.onClick({ position: getNotePosition(currentNote) });
+    };
+
+    this.tune = renderAbc(this.element!, this.content, {
+      ...DEFAULT_ABC_VISUAL_PARAMS,
+      ...this.abcOptions,
+      clickListener,
+    }).at(0) as TuneObject;
+
+    if (this.showCursor) {
+      this.cursor = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "line",
+      );
+      this.cursor.classList.add(cssClasses.cursor);
+      this.getSVGElement()?.append(this.cursor);
+    }
+
+    const isMeterDenominatorUnary = this.tune.getMeter().value?.at(0)!.den == 1;
+
+    if (this.hideMeter || isMeterDenominatorUnary) {
+      const timeSignature = this.element!.querySelector<HTMLElement>(
+        `.${cssClasses.timeSignature}`,
+      );
+      if (timeSignature) {
+        timeSignature.style.display = "none";
+      }
+    }
+
+    return this;
+  }
+  updateCursor(currentNote: SVGGElement) {
+    if (!this.tune) {
+      return this;
+    }
+    const lineNumber = getValueFromNote(currentNote, "abcjs-l");
+    const line = this.getSVGElement()?.querySelector<SVGGElement>(
+      `.abcjs-staff.abcjs-l${lineNumber}`,
+    );
+    const noteBox = currentNote.querySelector<SVGGElement>("path")?.getBBox();
+
+    const lineBox = line?.getBBox();
+    if (noteBox && lineBox) {
+      this.cursor?.setAttribute("x1", String(noteBox.x! + cursorOffset));
+      this.cursor?.setAttribute("x2", String(noteBox.x! + cursorOffset));
+      this.cursor?.setAttribute("y1", String(lineBox.y! - cursorBleed));
+      this.cursor?.setAttribute(
+        "y2",
+        String(lineBox.y! + lineBox.height! + cursorBleed),
+      );
+    }
+    return this;
+  }
+  updatePosition(position: PlayerPosition) {
+    if (!this.showCursor || !this.tune) {
+      return this;
+    }
+    const svgElement = this.getSVGElement()!;
+    const [bar] = position.split(":");
+    const barNotes = svgElement!.querySelectorAll<SVGGElement>(
+      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
+    );
+
+    const currentNote = getCurrentNote(barNotes, position);
+    if (!currentNote) {
+      return;
+    }
+    svgElement
+      .querySelectorAll(`.${cssClasses.currentNote}`)
+      .forEach((element) => element.classList.remove(cssClasses.currentNote));
+    currentNote.classList.add(cssClasses.currentNote);
+    this.updateCursor(currentNote);
+    return this;
+  }
+}

@@ -1,25 +1,25 @@
 import { useRef, RefObject } from "react";
 import { useDeepCompareLayoutEffect } from "use-deep-compare";
-import { initAbc, type InitABCParams, InitAbc } from "@music-ui/abc";
-export { type OnAbcClickParams } from "@music-ui/abc";
+import { ABCScore, type ABCScoreParams } from "@music-ui/abc";
+export { type OnABCClickParams } from "@music-ui/abc";
 
-export type UseAbcParams = Pick<InitABCParams, "content" | "onClick">;
+export type UseAbcParams = Pick<ABCScoreParams, "content" | "onClick">;
 
 export type UseAbc<T extends HTMLElement> = {
-  staffRef: RefObject<T | null>;
-  abcRef: RefObject<InitAbc | null>;
+  ref: RefObject<T | null>;
+  abcRef: RefObject<ABCScore | null>;
 };
 
 export function useAbc<T extends HTMLElement>(params: UseAbcParams): UseAbc<T> {
-  const staffRef = useRef<T>(null);
-  const abcRef = useRef<InitAbc>(null);
+  const ref = useRef<T>(null);
+  const abcRef = useRef<ABCScore>(null);
 
   useDeepCompareLayoutEffect(() => {
-    abcRef.current = initAbc({
-      staffElement: staffRef.current as T,
+    abcRef.current = new ABCScore({
+      element: ref.current!,
       ...params,
-    });
+    }).render();
   }, [params]);
 
-  return { staffRef, abcRef };
+  return { ref, abcRef };
 }
