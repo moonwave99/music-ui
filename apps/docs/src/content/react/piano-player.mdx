@@ -17,7 +17,7 @@ The `<PianoPlayer>` component adds playback functionality to the `<Piano>` compo
 The following code renders a piano with the passed notes and the playback buttons:
 
 <Callout type="warning">
-Since the player backend is shared, you have to wrap your app into a `<PlayerProvider>`.
+Wrap your app in a `<PlayerProvider>` if you want to use playback features.
 </Callout>
 
 ```tsx
@@ -26,13 +26,17 @@ import "@music-ui/piano/styles.css";
 
 function App() {
   return (
-    <main>
-      <PlayerProvider>
-        <PianoPlayer notes="C4 E4 G4 B4" noteLabels="1 3 5 7" />
-      </PlayerProvider>
-    </main>
+    <PlayerProvider>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <PianoPlayer notes="C4 E4 G4 B4" noteLabels="1 3 5 7" octaves={4} />
+      </main>
+    </PlayerProvider>
   );
 }
 ```
 
-<PianoPlayer notes="C4 E4 G4 B4" octaves={4} noteLabels="1 3 5 7" />
+<PianoPlayer notes="C4 E4 G4 B4" noteLabels="1 3 5 7" octaves={4} />
+
+<PianoPlayer notes="F4 A4 C5 E5" noteLabels="1 3 5 7" octaves={4} />

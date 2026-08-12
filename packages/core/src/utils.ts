@@ -31,7 +31,7 @@ export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
     id,
     info,
     content,
-    hash: getScoreHash(content),
+    hash: getScoreHash(id, content),
   };
 }
 
@@ -59,7 +59,7 @@ export function getPianoScore({
     id,
     content,
     info: { bpm },
-    hash: getScoreHash(content),
+    hash: getScoreHash(id, content),
   };
 }
 
@@ -74,6 +74,6 @@ export function withPlaybackMode(input: NoteInput, playbackMode: PlaybackMode) {
   return playbackMode === "block" ? `[${output}]6` : output;
 }
 
-export function getScoreHash(score: string) {
-  return md5(score);
+export function getScoreHash(id: string, score: string) {
+  return md5(`${id}${score}`);
 }

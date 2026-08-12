@@ -6,6 +6,16 @@ A collection of music visualization tools for the web.
 
 [See documentation](https://moonwave99.github.io/music-ui)
 
+## Roadmap
+
+- define a common initializer interface (i.e. `initPiano` / `initAbc`);
+- move `initAbc` to `Score` class;
+- improve interaction coverage (e.g. `updateCursor`);
+- test `Player` playback interaction.
+- support multiple voices cursor.
+
+### piano
+
 ---
 
 ## MIT License

@@ -5,6 +5,7 @@ import {
   type ReactNode,
   ReactElement,
   useCallback,
+  useId,
 } from "react";
 import { OnAbcClickParams, useAbc } from "./useAbc";
 import { usePlayer } from "./PlayerProvider";
@@ -12,7 +13,7 @@ import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore } from "@music-ui/core";
 
 export type ScoreProps = {
-  id: string;
+  id?: string;
   hidePlayer?: boolean;
   hideTempo?: boolean;
   children: ReactNode;
@@ -36,8 +37,15 @@ export function Score({
   hideTempo = false,
   ...params
 }: ScoreProps): ReactElement {
+  const componentId = useId();
+  const id = params.id || componentId;
   const input = getNodeText(children);
-  const score = getAbcScore({ ...params, input, options: { hideTempo } });
+  const score = getAbcScore({
+    ...params,
+    input,
+    id,
+    options: { hideTempo },
+  });
 
   const {
     play,
@@ -48,7 +56,7 @@ export function Score({
     playedNotes,
     playerStatus,
     position,
-  } = usePlayer(params.id);
+  } = usePlayer(id);
 
   const onClick = useCallback(
     ({ position }: OnAbcClickParams) => seekTo(position),

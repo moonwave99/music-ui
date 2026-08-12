@@ -26,9 +26,33 @@ The `<Score>` component renders ABC notation as music score on screen.
 
 ## Basic usage
 
-TBD
+The following code renders a score with the passed notes and the playback buttons:
 
-<Score id={1} hideTempo>
+<Callout type="warning">
+Wrap your app in a `<PlayerProvider>` if you want to use playback features.
+</Callout>
+
+```tsx
+import { Score, PlayerProvider } from "@music-ui/react";
+
+function App() {
+  return (
+    <PlayerProvider>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <Score>
+M:4/4
+L:1/8
+CDEF GABc|
+        </Score>
+      </main>
+    </PlayerProvider>
+  );
+}
+```
+
+<Score hideTempo>
 M:4/4
 L:1/8
 CDEF GABc|
@@ -36,7 +60,7 @@ CDEF GABc|
 
 Without player:
 
-<Score id={2} hidePlayer hideTempo>
+<Score hidePlayer hideTempo>
 M:4/4
 L:1/8
 C D E F G A B c|
@@ -44,13 +68,13 @@ C D E F G A B c|
 
 Without meter:
 
-<Score id={3} hideMeter hideTempo>
+<Score hideMeter hideTempo>
 C D E F| G A B c|
 </Score>
 
 With piano below too!
 
-<Score id={4} pianoOptions={{ show: true, octaves: 3 }} hideTempo>
+<Score pianoOptions={{ show: true, octaves: 3 }} hideTempo>
 T: You Are My Sunshine
 C: Traditional
 M: 4/4

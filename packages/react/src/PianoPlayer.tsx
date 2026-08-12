@@ -1,4 +1,4 @@
-import { type ReactElement } from "react";
+import { useId, type ReactElement } from "react";
 import { Piano, type PianoProps } from "./Piano";
 import { usePlayer } from "./PlayerProvider";
 import { getPianoScore } from "@music-ui/core";
@@ -16,10 +16,13 @@ export function PianoPlayer({
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
   arpeggioSpeed = 120,
+  className = "piano-player",
   ...props
 }: PianoPlayerProps): ReactElement {
-  const { notes = [], className, ...rest } = props;
-  const { play, playerStatus, playedNotes } = usePlayer(props.id);
+  const componentId = useId();
+  const id = props.id || componentId;
+  const { notes = [], ...rest } = props;
+  const { play, playerStatus, playedNotes } = usePlayer(id);
 
   return (
     <figure className={className}>
@@ -28,7 +31,7 @@ export function PianoPlayer({
       <div className="actions">
         <button
           disabled={playerStatus === "playing"}
-          onClick={() => play(getPianoScore({ id: props.id, input: notes }))}
+          onClick={() => play(getPianoScore({ id, input: notes }))}
         >
           {playLabel}
         </button>
@@ -37,7 +40,7 @@ export function PianoPlayer({
           onClick={() =>
             play(
               getPianoScore({
-                id: props.id,
+                id,
                 input: notes,
                 playbackMode: "arpeggio",
                 bpm: arpeggioSpeed,

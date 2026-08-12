@@ -132,6 +132,7 @@ export class Player {
   }
   async play() {
     // #TODO fix seek before first playback bug
+    // hint: playbackProgress should be a PlayerPosition and not just an integer
     await Tone.start();
     if (!this.part) {
       return;
