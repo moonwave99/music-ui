@@ -2,8 +2,6 @@
 title: abc notation
 ---
 
-import { Tabs } from 'nextra/components'
-
 # Render ABC notation
 
 [ABC notation](https://abcnotation.com/) is a form of music notation that is easily parsable and editable by both people and machines.  
@@ -11,23 +9,7 @@ This library uses [abc.js](https://github.com/paulrosen/abcjs) to render ABC not
 
 ## Installation
 
-<Tabs items={['pnpm', 'npm', 'yarn']}>
-  <Tabs.Tab>
-  ```
-  pnpm install @music-ui/abc
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```
-  npm install @music-ui/abc
-  ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  ```
-  yarn add @music-ui/abc
-  ```
-  </Tabs.Tab>
-</Tabs>
+<Installation packageName="@music-ui/abc" />
 
 ## Basic usage
 
@@ -39,11 +21,7 @@ You are free to organize your markup as desired, yet the following structure is 
 
 ```html
 <div class="score">
-  <div class="content">
-M:4/4
-L:1/4
-C D E F G A B c|
-  </div>
+  <div class="content">M:4/4 L:1/4 C D E F G A B c|</div>
   <div class="staff"></div>
 </div>
 ```
@@ -53,23 +31,19 @@ C D E F G A B c|
 You can then render the content:
 
 ```ts
-import { initAbc } from '@music-ui/abc';
+import { initAbc } from "@music-ui/abc";
 
-const element = document.querySelector('.score');
+const element = document.querySelector(".score");
 
 initAbc({
-  content: element.querySelector('.content').textContent,
-  staffElement: element.querySelector('.staff'),
+  content: element.querySelector(".content").textContent,
+  staffElement: element.querySelector(".staff"),
 });
 ```
 
 Output:
 
-<Score hidePlayer>
-M:4/4
-L:1/4
-C D E F G A B c|
-</Score>
+<Score hidePlayer>M:4/4 L:1/4 C D E F G A B c|</Score>
 
 ## ABC rendering options
 
