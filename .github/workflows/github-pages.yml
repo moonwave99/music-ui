@@ -36,9 +36,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
 
-      - name: Generate documentation
-        run: pnpm typedoc
-
       - name: Build with Next.js
         run: pnpm build
 
