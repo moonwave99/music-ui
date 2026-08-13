@@ -1,146 +1,84 @@
 # Piano
 
-The `Piano` components renders a piano keyboard inside a DOM element.
+The `Piano` component renders a piano keyboard inside a DOM element.
 
 ## Installation
 
 <Installation packageName="@music-ui/piano" />
 
-## Basic usage
+## Basic usage - `init` function
 
-With this markup:
+By default, the `init` function looks selects a `#piano` element:
+
+```html
+<div id="piano"></div>
+```
+
+Setup code:
+
+```ts
+import { init } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+init();
+```
+
+Output:
+
+<Piano />
+
+You can select a different element:
 
 ```html
 <div id="my-element"></div>
 ```
 
-- import the `Piano` class;
-- import the CSS styles;
-- create a new `Piano` instance, referencing the desired HTML element;
-- call `render()` on the instance.
+Setup code:
 
 ```ts
-import { Piano } from "@music-ui/piano";
+import { init } from "@music-ui/piano";
 import "@music-ui/piano/styles.css";
 
-const piano = new Piano({ el: "#my-element" });
-piano.render();
+// you can pass a selector string
+init({ element: "#my-element" });
+
+// or you can pass any HTMLElement
+const element = document.getElementById("my-element");
+init({ element });
 ```
 
-And you'll get:
+### Dataset options
 
-<Piano />
+The `init` function reads the parameters passed in the `data-*` attributes:
 
-## Options
-
-The `Piano` constructor accepts the following options:
-
-| Property      | Type                      | Default  | Description                                   |
-| ------------- | ------------------------- | -------- | --------------------------------------------- |
-| `el`          | `string` \| `HTMLElement` | `#piano` | The container element or a valid CSS selector |
-| `octaves`     | `number`                  | 2        | The amount of rendered octaves                |
-| `startOctave` | `number`                  | 3        | The first octave being rendered               |
-| `withFinalC`  | `boolean`                 | true     | Renders a final C key after the last octave   |
-
-## Note highlight
-
-You can highlight specific notes with `Piano.setNotes`:
-
-```ts {3}
-const piano = new Piano({ el: "#my-element" });
-piano.render();
-piano.setNotes("C4 E4 G4");
+```html
+<div id="piano" data-octaves="4" data-with-final-c="false"></div>
 ```
 
-And a C major chord is highlighted:
+Setup code:
 
-<Piano notes="C4 E4 G4" />
+```ts
+import { init } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
 
-<Callout type="warning">
-  Always append the desired octave after the note in order to avoid ambiguity,
-  e.g. `C4` for middle C. This is especially relevant for any chord that crosses
-  the octave line, e.g. `A3 C#4 E4 G4`.
-</Callout>
-
-### Highlight different groups
-
-If you want to split hands or outline specific voices, separate the groups via a comma:
-
-```ts {6}
-const piano = new Piano({
-  el: "#my-element",
-  octaves: 4,
-});
-piano.render();
-piano.setNotes("C3 C4, E4 G4 C5");
+init();
 ```
 
-Et voilà:
+Output:
 
-<Piano notes="C3 C4, E4 G4 C5" octaves={3} />
+<Piano octaves={3} withFinalC={false} />
 
-### Display note note labels
+The following data attributes are supported:
 
-You can pass the labels to be displayed in the highlighted keys as a second parameter to `Piano.setNotes()`:
+| Attribute           | Type      | Maps to `Piano` option | Description                                 |
+| ------------------- | --------- | ---------------------- | ------------------------------------------- |
+| `data-octaves`      | `number`  | `octaves`              | The amount of rendered octaves              |
+| `data-start-octave` | `number`  | `startOctave`          | The first octave being rendered             |
+| `data-with-final-c` | `boolean` | `withFinalC`           | Renders a final C key after the last octave |
 
-```ts {3}
-const piano = new Piano({ el: "#my-element" });
-piano.render();
-piano.setNotes("F3 A3 C4 E4", "1 3 5 7");
-```
+## Initializing multiple elements - `initAll`
 
-<Piano notes="F3 A3 C4 E4" noteLabels="1 3 5 7" />
-
-<Callout type="warning">
-  The `noteLabels` and `notes` length should match.
-</Callout>
-
-### Clearing note highlight
-
-Use `piano.clearNotes()`:
-
-```ts {5}
-const piano = new Piano({ el: "#my-element" });
-piano.render();
-piano.setNotes("C4 E4 G4");
-// later on
-piano.clearNotes();
-```
-
-## Setting additional note state
-
-Use `piano.setPlayedNotes()` for playback scenarios when state changes over time but you still want to highlight the same set of notes:
-
-```ts {7}
-const piano = new Piano({
-  el: "#my-element",
-  octaves: 3,
-});
-piano.render();
-piano.setNotes("C4 E4 G4");
-piano.setPlayedNotes("C4 G4");
-```
-
-See:
-
-<Piano notes="C4 E4 G4" playedNotes="C4 G4" />
-
-### Clearing played notes
-
-Use `piano.clearPlayedNotes()`:
-
-```ts {6}
-const piano = new Piano({ el: "#my-element" });
-piano.render();
-piano.setNotes("C4 E4 G4");
-piano.setPlayedNotes("C4 G4");
-// later on
-piano.clearPlayedNotes();
-```
-
-## Initializing multiple elements
-
-You can initialize multiple piano elements at once. You can store initial configuration in data attributes:
+You can initialize multiple piano elements at once with the `initAll` function. By default, it will query the document for all the `[data-piano]` elements:
 
 ```html
 <div data-piano data-notes="C4 E4 G4"></div>
@@ -155,9 +93,9 @@ You can initialize multiple piano elements at once. You can store initial config
 And then use `init` function:
 
 ```ts
-import { init } from "@music-ui/piano";
+import { initAll } from "@music-ui/piano";
 
-init();
+initAll();
 ```
 
 <Piano notes="C4 E4 G4" />
@@ -165,7 +103,7 @@ init();
 
 ### Custom selection
 
-By default `init` looks for all `[data-piano]` elements. You can pass an `elements` option:
+You can provide a different selection via the `elements` option:
 
 ```html
 <div data-notes="C4 E4 G4" class="my-piano"></div>
@@ -173,9 +111,9 @@ By default `init` looks for all `[data-piano]` elements. You can pass an `elemen
 ```
 
 ```ts
-import { init } from "@music-ui/piano";
+import { initAll } from "@music-ui/piano";
 
-init({ elements: ".my-piano" });
+initAll({ elements: ".my-piano" });
 ```
 
 <Piano notes="C4 E4 G4" />
@@ -212,3 +150,114 @@ All the sizes and colors are configurable via CSS variables. These are the defau
 ```
 
 You can override them in your style files.
+
+## `Piano` class
+
+If you need more control over the component lifecycle, you can use the underlying `Piano` class.
+
+## Constructor
+
+The `Piano` constructor accepts the following parameters:
+
+| Property      | Type                      | Default  | Description                                   |
+| ------------- | ------------------------- | -------- | --------------------------------------------- |
+| `element`     | `string` \| `HTMLElement` | `#piano` | The container element or a valid CSS selector |
+| `octaves`     | `number`                  | 2        | The amount of rendered octaves                |
+| `startOctave` | `number`                  | 3        | The first octave being rendered               |
+| `withFinalC`  | `boolean`                 | true     | Renders a final C key after the last octave   |
+
+## Note highlight
+
+You can highlight specific notes with `Piano.setNotes`:
+
+```ts {3}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("C4 E4 G4");
+```
+
+And a C major chord is highlighted:
+
+<Piano notes="C4 E4 G4" />
+
+<Callout type="warning">
+  Always append the desired octave after the note in order to avoid ambiguity,
+  e.g. `C4` for middle C. This is especially relevant for any chord that crosses
+  the octave line, e.g. `A3 C#4 E4 G4`.
+</Callout>
+
+### Highlight different groups
+
+If you want to split hands or outline specific voices, separate the groups via a comma:
+
+```ts {6}
+const piano = new Piano({
+  element: "#my-element",
+  octaves: 4,
+});
+piano.render();
+piano.setNotes("C3 C4, E4 G4 C5");
+```
+
+Et voilà:
+
+<Piano notes="C3 C4, E4 G4 C5" octaves={3} />
+
+### Display note note labels
+
+You can pass the labels to be displayed in the highlighted keys as a second parameter to `Piano.setNotes()`:
+
+```ts {3}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("F3 A3 C4 E4", "1 3 5 7");
+```
+
+<Piano notes="F3 A3 C4 E4" noteLabels="1 3 5 7" />
+
+<Callout type="warning">
+  The `noteLabels` and `notes` length should match.
+</Callout>
+
+### Clearing note highlight
+
+Use `piano.clearNotes()`:
+
+```ts {5}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("C4 E4 G4");
+// later on
+piano.clearNotes();
+```
+
+## Setting additional note state
+
+Use `piano.setPlayedNotes()` for playback scenarios when state changes over time but you still want to highlight the same set of notes:
+
+```ts {7}
+const piano = new Piano({
+  element: "#my-element",
+  octaves: 3,
+});
+piano.render();
+piano.setNotes("C4 E4 G4");
+piano.setPlayedNotes("C4 G4");
+```
+
+See:
+
+<Piano notes="C4 E4 G4" playedNotes="C4 G4" />
+
+### Clearing played notes
+
+Use `piano.clearPlayedNotes()`:
+
+```ts {6}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("C4 E4 G4");
+piano.setPlayedNotes("C4 G4");
+// later on
+piano.clearPlayedNotes();
+```

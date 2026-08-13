@@ -26,6 +26,10 @@
       "dependsOn": ["^test"],
       "cache": false,
       "persistent": true
+    },
+    "//#typedoc": {
+      "dependsOn": [],
+      "outputs": ["apps/docs/public/api/**"]
     }
   }
 }

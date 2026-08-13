@@ -17,11 +17,15 @@ You are free to organize your markup as desired, yet the following structure is 
 
 - a wrapper element holding both the abc notation and the visual element (e.g. `.score`);
 - the container of the abc notation (e.g. `.score .content`);
-- the element where the score is rendered (e.g. `.score .staff`).
+- the element where the music notation is rendered (e.g. `.score .staff`).
 
 ```html
 <div class="score">
-  <div class="content">M:4/4 L:1/4 C D E F G A B c|</div>
+  <div class="content">
+M:4/4
+L:1/4
+C D E F G A B c|
+  </div>
   <div class="staff"></div>
 </div>
 ```
@@ -31,13 +35,13 @@ You are free to organize your markup as desired, yet the following structure is 
 You can then render the content:
 
 ```ts
-import { initAbc } from "@music-ui/abc";
+import { init } from "@music-ui/abc";
 
-const element = document.querySelector(".score");
+const scoreElement = document.querySelector(".score");
 
-initAbc({
+init({
   content: element.querySelector(".content").textContent,
-  staffElement: element.querySelector(".staff"),
+  element: element.querySelector(".staff"),
 });
 ```
 

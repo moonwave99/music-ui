@@ -1,0 +1,23 @@
+{
+  "entryPoints": [
+    "packages/core",
+    "packages/abc",
+    "packages/piano",
+    "packages/react"
+  ],
+  "entryPointStrategy": "packages",
+  "plugin": ["typedoc-plugin-missing-exports"],
+  "out": "apps/docs/public/api/",
+  "externalSymbolLinkMappings": {
+    "@types/react": {
+      "React.StaticLifecycle.getDerivedStateFromProps": "#",
+      "React.createContext": "#",
+      "React.forwardRef": "#",
+      "React.memo": "#",
+      "React.createRef": "#",
+      "React.useRef": "#",
+      "React.useContext": "#",
+      "React.ComponentType": "#"
+    }
+  }
+}
