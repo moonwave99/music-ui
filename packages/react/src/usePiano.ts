@@ -41,7 +41,7 @@ export function usePiano<T extends HTMLElement>({
       return;
     }
     pianoRef.current = new Piano({
-      element: ref.current,
+      element: ref.current!,
       ...rest,
     });
     pianoRef.current.render();

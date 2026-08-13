@@ -1,4 +1,10 @@
-import { DEFAULT_PIANO_OPTIONS, type ScaleNote, PianoOptions } from "./Piano";
+import type { NoteInput } from "@music-ui/core";
+import {
+  DEFAULT_PIANO_OPTIONS,
+  type ScaleNote,
+  PianoOptions,
+  GroupedInput,
+} from "./Piano";
 
 export const CHROMATIC_SCALE: ScaleNote[] = [
   {
@@ -81,4 +87,36 @@ export function parseOptions(el: HTMLElement): PianoOptions {
     }
   });
   return options as PianoOptions;
+}
+
+export function parseNoteInput(
+  input: NoteInput,
+  noteLabels?: NoteInput,
+): GroupedInput {
+  const groups = Array.isArray(input)
+    ? [input]
+    : input
+        .split(",")
+        .filter(Boolean)
+        .map((x) => x.split(" ").filter(Boolean));
+  const output = groups.flatMap((group, index) =>
+    group.map((note) => ({ note, group: index })),
+  );
+  if (!noteLabels) {
+    return output;
+  }
+  const normalizedNoteLabels = normalizeInput(noteLabels);
+  if (normalizedNoteLabels.length !== output.length) {
+    throw new Error("input and noteLabels length do not match");
+  }
+  return output.map((note, index) => ({
+    ...note,
+    label: normalizedNoteLabels[index],
+  }));
+}
+
+export function normalizeInput(input: NoteInput) {
+  return Array.isArray(input)
+    ? input
+    : input.replaceAll(",", "").split(" ").filter(Boolean);
 }

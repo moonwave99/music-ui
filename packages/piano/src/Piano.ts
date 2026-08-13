@@ -1,8 +1,8 @@
 import { get as getNote } from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
-import { CHROMATIC_SCALE } from "./lib";
 import { querySelector, type NoteInput } from "@music-ui/core";
+import { CHROMATIC_SCALE, normalizeInput, parseNoteInput } from "./lib";
 
 export type ScaleNote = {
   chroma: number;
@@ -21,7 +21,7 @@ export type PianoOptions = {
   withFinalC: boolean;
 };
 
-type GroupedInput = {
+export type GroupedInput = {
   group: number;
   note: string;
   label?: string;
@@ -40,20 +40,34 @@ export const DEFAULT_PIANO_OPTIONS = {
   startOctave: 3,
   octaves: 2,
   withFinalC: true,
-} as const;
+} as PianoOptions;
 
 export class Piano {
   private options: PianoOptions;
   private element: HTMLElement | null;
-  constructor(options = {}) {
+  /**
+   * Creates a `Piano` instance.
+   *
+   * @param options the rendering options
+   */
+  constructor(options: Partial<PianoOptions> = {}) {
     this.options = Object.assign({}, DEFAULT_PIANO_OPTIONS, options);
     this.element = null;
   }
+  /**
+   * Highlights the passed notes. Sets the corresponding note labels if passed.
+   *
+   * @param notes the notes to be displayed
+   * @param noteLabels the corresponding note labels
+   */
   setNotes(notes: NoteInput, noteLabels?: NoteInput): Piano {
     this.clearNotes();
     this._setNotes(parseNoteInput(notes, noteLabels));
     return this;
   }
+  /**
+   * Clears all highlighted notes.
+   */
   clearNotes(): Piano {
     this.element
       ?.querySelectorAll(`.${cssClasses.keyOn}`)
@@ -64,13 +78,25 @@ export class Piano {
       });
     return this;
   }
+  /**
+   * Renders the UI inside the current element.
+   */
   render(): Piano {
     this.baseRender();
     return this;
   }
+  /**
+   * Removes the current element from the DOM.
+   */
   destroy(): void {
     this.element?.remove();
   }
+
+  /**
+   * Sets the passed notes as played.
+   *
+   * @param notes the notes to be played
+   */
   setPlayedNotes(notes: NoteInput): Piano {
     this.clearPlayedNotes();
     normalizeInput(notes).forEach((note) =>
@@ -80,6 +106,9 @@ export class Piano {
     );
     return this;
   }
+  /**
+   * Clears all played notes.
+   */
   clearPlayedNotes(): Piano {
     this.element
       ?.querySelectorAll(`.${cssClasses.keyPlayed}`)
@@ -182,36 +211,4 @@ function parseNote(
     octave: oct || 0,
     midi: midi || 0,
   };
-}
-
-export function parseNoteInput(
-  input: NoteInput,
-  noteLabels?: NoteInput,
-): GroupedInput {
-  const groups = Array.isArray(input)
-    ? [input]
-    : input
-        .split(",")
-        .filter(Boolean)
-        .map((x) => x.split(" ").filter(Boolean));
-  const output = groups.flatMap((group, index) =>
-    group.map((note) => ({ note, group: index })),
-  );
-  if (!noteLabels) {
-    return output;
-  }
-  const normalizedNoteLabels = normalizeInput(noteLabels);
-  if (normalizedNoteLabels.length !== output.length) {
-    throw new Error("input and noteLabels length do not match");
-  }
-  return output.map((note, index) => ({
-    ...note,
-    label: normalizedNoteLabels[index],
-  }));
-}
-
-export function normalizeInput(input: NoteInput) {
-  return Array.isArray(input)
-    ? input
-    : input.replaceAll(",", "").split(" ").filter(Boolean);
 }
