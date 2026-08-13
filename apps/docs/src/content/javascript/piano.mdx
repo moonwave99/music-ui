@@ -6,7 +6,7 @@ The `Piano` component renders a piano keyboard inside a DOM element.
 
 <Installation packageName="@music-ui/piano" />
 
-## Basic usage - `init` function
+## Basic usage
 
 By default, the `init` function looks selects a `#piano` element:
 
@@ -76,7 +76,7 @@ The following data attributes are supported:
 | `data-start-octave` | `number`  | `startOctave`          | The first octave being rendered             |
 | `data-with-final-c` | `boolean` | `withFinalC`           | Renders a final C key after the last octave |
 
-## Initializing multiple elements - `initAll`
+## Initializing multiple elements
 
 You can initialize multiple piano elements at once with the `initAll` function. By default, it will query the document for all the `[data-piano]` elements:
 
@@ -155,7 +155,7 @@ You can override them in your style files.
 
 If you need more control over the component lifecycle, you can use the underlying `Piano` class.
 
-## Constructor
+### Constructor
 
 The `Piano` constructor accepts the following parameters:
 
@@ -166,7 +166,7 @@ The `Piano` constructor accepts the following parameters:
 | `startOctave` | `number`                  | 3        | The first octave being rendered               |
 | `withFinalC`  | `boolean`                 | true     | Renders a final C key after the last octave   |
 
-## Note highlight
+### Note highlight
 
 You can highlight specific notes with `Piano.setNotes`:
 
@@ -203,7 +203,7 @@ Et voilà:
 
 <Piano notes="C3 C4, E4 G4 C5" octaves={3} />
 
-### Display note note labels
+### Display note labels
 
 You can pass the labels to be displayed in the highlighted keys as a second parameter to `Piano.setNotes()`:
 
@@ -231,7 +231,7 @@ piano.setNotes("C4 E4 G4");
 piano.clearNotes();
 ```
 
-## Setting additional note state
+### Setting additional note state
 
 Use `piano.setPlayedNotes()` for playback scenarios when state changes over time but you still want to highlight the same set of notes:
 
