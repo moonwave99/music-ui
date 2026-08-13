@@ -14,7 +14,7 @@ export const metadata = {
   // For more information on metadata API, see: https://nextjs.org/docs/app/building-your-application/optimizing/metadata
 };
 
-const navbar = <Navbar logo={<b>Music UI</b>} />;
+const navbar = <Navbar logo={<b>Music UI</b>} projectLink={pkg.homepage} />;
 const footer = (
   <Footer>
     MIT {new Date().getFullYear()} © {pkg.author.name}.
