@@ -39,3 +39,6 @@ yarn-error.log*
 
 # TypeDoc
 apps/docs/public/api
+
+## PageFind
+apps/docs/public/_pagefind

@@ -1,6 +1,6 @@
 export default {
   api: {
-    title: "API",
+    title: "Complete API Reference",
     type: "page",
     href: "/api",
   },
