@@ -4,7 +4,7 @@ import {
   cssClasses,
   DEFAULT_ABC_SCORE_OPTIONS,
   type ABCScoreParams,
-} from "./ABCScore";
+} from "./abcScore";
 
 const DEFAULT_SELECTOR = "[data-abc-score]";
 

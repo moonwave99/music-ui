@@ -1,2 +1,2 @@
-export * from "./ABCScore";
+export * from "./abcScore";
 export * from "./init";
