@@ -67,7 +67,7 @@ export class Piano {
   /**
    * Creates a `Piano` instance.
    *
-   * @param options the rendering options
+   * @param options The rendering options
    */
   constructor(options: Partial<PianoOptions> = {}) {
     this.options = { ...DEFAULT_PIANO_OPTIONS, ...options };
@@ -83,8 +83,8 @@ export class Piano {
   /**
    * Highlights the passed notes. Sets the corresponding note labels if passed.
    *
-   * @param notes the notes to be displayed
-   * @param noteLabels the corresponding note labels
+   * @param notes The notes to be displayed
+   * @param noteLabels The corresponding note labels
    */
   setNotes(notes: NoteInput, noteLabels?: NoteInput): Piano {
     this.clearNotes();
@@ -121,7 +121,7 @@ export class Piano {
   /**
    * Sets the passed notes as played.
    *
-   * @param notes the notes to be played
+   * @param notes The notes to be played
    */
   setPlayedNotes(notes: NoteInput): Piano {
     this.clearPlayedNotes();

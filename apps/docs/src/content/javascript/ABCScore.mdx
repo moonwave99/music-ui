@@ -1,0 +1,164 @@
+# ABCScore
+
+[ABC notation](https://abcnotation.com/) is a form of music notation that is easily parsable and editable by both people and machines.  
+This library uses [abc.js](https://github.com/paulrosen/abcjs) to render ABC notation as music scores on screen.
+
+## Installation
+
+<Installation packageName="@music-ui/abc" />
+
+## Basic usage
+
+By default, the `initABCScore` function looks selects all the `[data-abc-score]` elements, and expects them to have the following children:
+
+- an **element containing the abc notation**, with the `.content` class;
+- an **element where the music notation will be rendered**, with the `.staff` class.
+
+For more granularity you can use the [`ABCScore` class](#the-abcscore-class), but you'll have to initialize the player function yourself.
+
+```html
+<div data-abc-score>
+  <div class="content">
+L:1/8
+CDEF GABc|
+  </div>
+  <div class="staff"></div>
+</div>
+```
+
+<Callout type="info">
+Don't forget to hide the notation element via CSS! `[data-abc-score] .content { display: none; }`
+</Callout>
+
+You can then render the content:
+
+```ts
+import { initABCScore } from "@music-ui/abc";
+import "@music-ui/abc/styles.css";
+
+initABCScore();
+```
+
+Output:
+
+<ABCScore>
+L:1/8
+CDEF GABc|
+</ABCScore>
+
+You can pass a custom selector or collection of elements. In this example we'll select all `.score` elements:
+
+```html
+<div class="score">
+  <div class="content">
+L:1/8
+CDEF GABc|
+  </div>
+  <div class="staff"></div>
+</div>
+<div class="score">
+  <div class="content">
+L:1/8
+K:G
+GABc defg|
+  </div>
+  <div class="staff"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { initABCScore } from "@music-ui/abc";
+import "@music-ui/abc/styles.css";
+
+initABCScore('.score');
+```
+
+Output:
+
+<ABCScore>
+L:1/8
+CDEF GABc|
+</ABCScore>
+
+<ABCScore>
+L:1/8
+K:G
+GABc defg|
+</ABCScore>
+
+<Callout type="info">
+  Check [the complete `initABCScore` API
+  reference](/api/functions/_music-ui_abc.initABCScore.html) for more details.
+</Callout>
+
+### Dataset options
+
+The `init` function reads the parameters passed in the `data-*` attributes of the **wrapper element**:
+
+```html
+<div
+  data-abc-score
+  data-show-player="false"
+  data-show-tempo="false"
+  data-show-meter="false"
+>
+  <div class="content">
+L:1/8
+CDEF GABc|    
+  </div>
+  <div class="staff"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { init } from "@music-ui/abc";
+import "@music-ui/abc/styles.css";
+
+init();
+```
+
+Output:
+
+<ABCScore showPlayer={false} showTempo={false} showMeter={false}>
+L:1/8
+CDEF GABc|
+</ABCScore>
+
+The following data attributes are supported:
+
+| Attribute          | Type      |  Description                   |
+| ------------------ | --------- | ------------------------------ |
+| `data-show-tempo`  | `boolean` | Shows or hides the score tempo |
+| `data-show-meter`  | `boolean` | Shows or hides the score meter |
+| `data-show-player` | `boolean` | Shows or hides the player      |
+
+## The `ABCSCore` class
+
+If you need more control over the component lifecycle, you can use the underlying `ABCSCore` class.
+
+<Callout type="info">
+  Check [the complete `ABCScore` API reference](/api/classes/_music-ui_abc.ABCScore.html)
+  for more details.
+</Callout>
+
+### Constructor
+
+The `ABCSCore` constructor accepts the following parameters:
+
+| Property     | Type                      | Default            | Description                                   |
+| ------------ | ------------------------- | ------------------ | --------------------------------------------- |
+| `element`    | `string` \| `HTMLElement` | `[data-abc-score]` | The container element or a valid CSS selector |
+| `content`    | `string`                  | ""                 | The abc notation that will be rendered        |
+| `showCursor` | `boolean`                 | true               | Shows or hides the position cursor            |
+| `showTempo`  | `boolean`                 | true               | Shows or hides the score tempo                |
+| `showMeter`  | `boolean`                 | true               | Shows or hides the score meter                |
+
+### Updating the score position
+
+You can pass the new position to `ABCScore.updatePosition` to update the cursor and highlight the corresponding note.
+
+TBD

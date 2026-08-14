@@ -14,17 +14,17 @@ describe("getPianoScore", () => {
     const score = getPianoScore({ id: "1", input, playbackMode: "block" });
     expect(score).toEqual({
       id: "1",
-      hash: "c633504f4d811966c73468a621a2b721",
+      hash: "45da33dd1f4ee3b97bd1706c80aaba32",
       info: { bpm: 120 },
-      content: "Q:120\n[C, E, G, B,]6",
+      content: "%%printtempo 0\nQ:120\n[C, E, G, B,]6",
     });
 
     const scoreWithDefaultPlaybackMode = getPianoScore({ id: "1", input });
     expect(scoreWithDefaultPlaybackMode).toEqual({
       id: "1",
-      hash: "c633504f4d811966c73468a621a2b721",
+      hash: "45da33dd1f4ee3b97bd1706c80aaba32",
       info: { bpm: 120 },
-      content: "Q:120\n[C, E, G, B,]6",
+      content: "%%printtempo 0\nQ:120\n[C, E, G, B,]6",
     });
   });
 
@@ -33,10 +33,9 @@ describe("getPianoScore", () => {
     const score = getPianoScore({ id: "1", input, playbackMode: "arpeggio" });
     expect(score).toEqual({
       id: "1",
-      hash: "6fbcfe4273a8afe760667fb483bf31ac",
+      hash: "2df5ea19f579b803d9efd1f62db18d9b",
       info: { bpm: 120 },
-      content: `Q:120
-C, E, G, B,`,
+      content: "%%printtempo 0\nQ:120\nC, E, G, B,",
     });
   });
 });

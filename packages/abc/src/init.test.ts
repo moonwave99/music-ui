@@ -45,10 +45,10 @@ C E G B
     expect(element!.querySelector(".abcjs-container")).not.toBeNull();
   });
 
-  it("hides the meter if hideMeter is true", () => {
+  it("hides the meter if showMeter is false", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc-score data-hide-meter>
+        <div data-abc-score data-show-meter="false">
           <div class="content">
 X:4
 M:4/4

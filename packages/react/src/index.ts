@@ -1,5 +1,5 @@
-export * from "./Score";
-export * from "./useAbc";
+export * from "./ABCScore";
+export * from "./useABCScore";
 
 export * from "./Piano";
 export * from "./usePiano";

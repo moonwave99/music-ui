@@ -1,6 +1,6 @@
-# Score
+# ABCScore
 
-The `<Score>` component renders ABC notation as music score on screen.
+The `<ABCScore>` component renders ABC notation as music score on screen.
 
 ## Installation
 
@@ -23,39 +23,41 @@ function App() {
       <main>
         <h1>My App</h1>
         {/* rest of your app */}
-        <Score>M:4/4 L:1/8 CDEF GABc|</Score>
+        <ABCScore>
+M:4/4
+L:1/8
+CDEF GABc|
+        </ABCScore>
       </main>
     </PlayerProvider>
   );
 }
 ```
 
-<Score hideTempo>
-M:4/4
+<ABCScore showTempo={false}>
 L:1/8
 CDEF GABc|
-</Score>
+</ABCScore>
 
 Without player:
 
-<Score hidePlayer hideTempo>
-M:4/4
+<ABCScore showPlayer={false} showTempo={false}>
 L:1/8
-C D E F G A B c|
-</Score>
+CDEF GABc|
+</ABCScore>
 
 Without meter:
 
-<Score hideMeter hideTempo>
-C D E F| G A B c|
-</Score>
+<ABCScore showMeter={false} showTempo={false}>
+L:1/8
+CDEF GABc|
+</ABCScore>
 
 With piano below too!
 
-<Score pianoOptions={{ show: true, octaves: 3 }} hideTempo>
+<ABCScore pianoOptions={{ show: true, octaves: 3 }} showTempo={false}>
 T: You Are My Sunshine
 C: Traditional
-M: 4/4
 L: 1/4
 K: C
 Q: 180
@@ -67,4 +69,4 @@ E C D E|F2 A2-| A A G F|E2 C2-|
 w:_You'll ne-ver know, dear,_ how much I love you,
 C z C D| E3 F| D D2 E|C4|
 w:_Please don't take my sun-shine a-way.
-</Score>
+</ABCScore>

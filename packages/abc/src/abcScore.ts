@@ -11,10 +11,9 @@ const cursorBleed = 7.5;
 const cursorOffset = -2.5;
 
 export const DEFAULT_ABC_SCORE_OPTIONS = {
-  showPlayer: true,
   showCursor: true,
-  hideMeter: false,
-  hideTempo: true,
+  showMeter: true,
+  showTempo: true,
 } as const;
 
 const DEFAULT_ABC_VISUAL_PARAMS = {
@@ -36,10 +35,9 @@ export const cssClasses = {
 export type ABCScoreParams = {
   content?: string;
   element: HTMLElement;
-  showPlayer?: boolean;
   showCursor?: boolean;
-  hideMeter?: boolean;
-  hideTempo?: boolean;
+  showMeter?: boolean;
+  showTempo?: boolean;
   abcOptions?: AbcVisualParams;
   onClick?: (params: OnABCClickParams) => void;
 };
@@ -52,16 +50,17 @@ export class ABCScore {
   private content: string;
   private element: HTMLElement;
   private showCursor: boolean;
-  private hideMeter: boolean;
+  private showMeter: boolean;
   private abcOptions: AbcVisualParams;
   private onClick: ((params: OnABCClickParams) => void) | undefined;
   private tune: TuneObject | null;
   private cursor: SVGLineElement | null;
+  private rendered: boolean;
   constructor({
     content = "",
     element,
     showCursor = true,
-    hideMeter = false,
+    showMeter = true,
     abcOptions = {},
     onClick,
   }: ABCScoreParams) {
@@ -71,18 +70,74 @@ export class ABCScore {
     this.content = content;
     this.element = element;
     this.showCursor = showCursor;
-    this.hideMeter = hideMeter;
+    this.showMeter = showMeter;
     this.abcOptions = abcOptions;
     this.onClick = onClick;
     this.tune = null;
     this.cursor = null;
+    this.rendered = false;
   }
   getSVGElement() {
     return this.element!.querySelector("svg");
   }
-  render() {
-    if (this.tune) {
+  /**
+   * Renders the UI inside the current element.
+   */
+  render(): ABCScore {
+    this.baseRender();
+    return this;
+  }
+  /**
+   * Updates the score position (moving the cursor and highlighting the corresponding note).
+   * @param position The new score position
+   */
+  updatePosition(position: PlayerPosition): ABCScore {
+    if (!this.showCursor || !this.rendered) {
       return this;
+    }
+    const svgElement = this.getSVGElement()!;
+    const [bar] = position.split(":");
+    const barNotes = svgElement!.querySelectorAll<SVGGElement>(
+      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
+    );
+
+    const currentNote = getCurrentNote(barNotes, position);
+    if (!currentNote) {
+      return this;
+    }
+    svgElement
+      .querySelectorAll(`.${cssClasses.currentNote}`)
+      .forEach((element) => element.classList.remove(cssClasses.currentNote));
+    currentNote.classList.add(cssClasses.currentNote);
+    this.updateCursor(currentNote);
+    return this;
+  }
+  private updateCursor(currentNote: SVGGElement): ABCScore {
+    if (!this.rendered) {
+      return this;
+    }
+    const lineNumber = getValueFromNote(currentNote, "abcjs-l");
+    const line = this.getSVGElement()?.querySelector<SVGGElement>(
+      `.abcjs-staff.abcjs-l${lineNumber}`,
+    );
+    const noteBox = currentNote.querySelector<SVGGElement>("path")?.getBBox();
+
+    const lineBox = line?.getBBox();
+    if (noteBox && lineBox) {
+      this.cursor?.setAttribute("x1", String(noteBox.x! + cursorOffset));
+      this.cursor?.setAttribute("x2", String(noteBox.x! + cursorOffset));
+      this.cursor?.setAttribute("y1", String(lineBox.y! - cursorBleed));
+      this.cursor?.setAttribute(
+        "y2",
+        String(lineBox.y! + lineBox.height! + cursorBleed),
+      );
+    }
+    return this;
+  }
+  private baseRender() {
+    /* istanbul ignore if  */
+    if (this.rendered) {
+      return;
     }
     const clickListener = (
       _: unknown,
@@ -115,7 +170,7 @@ export class ABCScore {
 
     const isMeterDenominatorUnary = this.tune.getMeter().value?.at(0)!.den == 1;
 
-    if (this.hideMeter || isMeterDenominatorUnary) {
+    if (!this.showMeter || isMeterDenominatorUnary) {
       const timeSignature = this.element!.querySelector<HTMLElement>(
         `.${cssClasses.timeSignature}`,
       );
@@ -123,50 +178,6 @@ export class ABCScore {
         timeSignature.style.display = "none";
       }
     }
-
-    return this;
-  }
-  updateCursor(currentNote: SVGGElement) {
-    if (!this.tune) {
-      return this;
-    }
-    const lineNumber = getValueFromNote(currentNote, "abcjs-l");
-    const line = this.getSVGElement()?.querySelector<SVGGElement>(
-      `.abcjs-staff.abcjs-l${lineNumber}`,
-    );
-    const noteBox = currentNote.querySelector<SVGGElement>("path")?.getBBox();
-
-    const lineBox = line?.getBBox();
-    if (noteBox && lineBox) {
-      this.cursor?.setAttribute("x1", String(noteBox.x! + cursorOffset));
-      this.cursor?.setAttribute("x2", String(noteBox.x! + cursorOffset));
-      this.cursor?.setAttribute("y1", String(lineBox.y! - cursorBleed));
-      this.cursor?.setAttribute(
-        "y2",
-        String(lineBox.y! + lineBox.height! + cursorBleed),
-      );
-    }
-    return this;
-  }
-  updatePosition(position: PlayerPosition) {
-    if (!this.showCursor || !this.tune) {
-      return this;
-    }
-    const svgElement = this.getSVGElement()!;
-    const [bar] = position.split(":");
-    const barNotes = svgElement!.querySelectorAll<SVGGElement>(
-      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
-    );
-
-    const currentNote = getCurrentNote(barNotes, position);
-    if (!currentNote) {
-      return;
-    }
-    svgElement
-      .querySelectorAll(`.${cssClasses.currentNote}`)
-      .forEach((element) => element.classList.remove(cssClasses.currentNote));
-    currentNote.classList.add(cssClasses.currentNote);
-    this.updateCursor(currentNote);
-    return this;
+    this.rendered = true;
   }
 }

@@ -25,12 +25,12 @@ const DEFAULT_ABC_INFO: Record<AbcInfoFields, unknown> = {
 };
 
 export type ParseAbcOptions = {
-  hideTempo?: boolean;
+  showTempo?: boolean;
 };
 
 export function parseAbc(
   input: string,
-  options: ParseAbcOptions = { hideTempo: false },
+  options: ParseAbcOptions = { showTempo: true },
 ): Pick<Score, "info" | "content"> {
   const infoFields = Object.keys(abcInfoToScoreInfoMap);
   const [info, content] = input
@@ -63,10 +63,10 @@ export function parseAbc(
 
 export function getAbcInfo(
   info: Partial<Record<AbcInfoFields, unknown>>,
-  { hideTempo }: ParseAbcOptions = {},
+  { showTempo }: ParseAbcOptions = {},
 ) {
   const output = Object.entries(info).reduce((memo, [key, value]) => {
-    if (hideTempo && key === "Q") {
+    if (!showTempo && key === "Q") {
       return [...memo, abcDirectives.hideTempo, `${key}:${value}`];
     }
     return [...memo, `${key}:${value}`];

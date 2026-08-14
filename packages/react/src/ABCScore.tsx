@@ -1,5 +1,3 @@
-"use client";
-
 import {
   useLayoutEffect,
   type ReactNode,
@@ -7,36 +5,39 @@ import {
   useCallback,
   useId,
 } from "react";
-import { OnABCClickParams, useAbc } from "./useAbc";
+import {
+  OnABCClickParams,
+  useABCScore,
+  type UseABCScoreParams,
+} from "./useABCScore";
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore } from "@music-ui/core";
 
-export type ScoreProps = {
+export type ABCScoreProps = UseABCScoreParams & {
   id?: string;
-  hidePlayer?: boolean;
-  hideTempo?: boolean;
   children: ReactNode;
   className?: string;
   pianoOptions?: PianoProps & {
     show?: boolean;
   };
+  showPlayer?: boolean;
   playButtonLabel?: string;
   stopButtonLabel?: string;
   pauseButtonLabel?: string;
 };
 
-export function Score({
+export function ABCScore({
   className = "score",
   children,
   pianoOptions = { show: false },
   playButtonLabel = "Play",
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
-  hidePlayer = false,
-  hideTempo = false,
+  showPlayer = true,
+  showTempo = true,
   ...params
-}: ScoreProps): ReactElement {
+}: ABCScoreProps): ReactElement {
   const componentId = useId();
   const id = params.id || componentId;
   const input = getNodeText(children);
@@ -44,7 +45,7 @@ export function Score({
     ...params,
     input,
     id,
-    options: { hideTempo },
+    options: { showTempo },
   });
 
   const {
@@ -63,8 +64,9 @@ export function Score({
     [seekTo],
   );
 
-  const { ref, abcRef } = useAbc<HTMLDivElement>({
+  const { ref, abcRef } = useABCScore<HTMLDivElement>({
     ...params,
+    showTempo,
     content: score.content,
     onClick,
   });
@@ -76,7 +78,7 @@ export function Score({
   return (
     <div className={className}>
       <div className="score-staff" ref={ref}></div>
-      {!hidePlayer ? (
+      {showPlayer ? (
         <div className="score-audio-controls">
           <button
             className="score-button score-play-button"

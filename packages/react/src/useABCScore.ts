@@ -3,14 +3,16 @@ import { useDeepCompareLayoutEffect } from "use-deep-compare";
 import { ABCScore, type ABCScoreParams } from "@music-ui/abc";
 export { type OnABCClickParams } from "@music-ui/abc";
 
-export type UseAbcParams = Pick<ABCScoreParams, "content" | "onClick">;
+export type UseABCScoreParams = Omit<ABCScoreParams, "element">;
 
-export type UseAbc<T extends HTMLElement> = {
+export type UseABCScore<T extends HTMLElement> = {
   ref: RefObject<T | null>;
   abcRef: RefObject<ABCScore | null>;
 };
 
-export function useAbc<T extends HTMLElement>(params: UseAbcParams): UseAbc<T> {
+export function useABCScore<T extends HTMLElement>(
+  params: UseABCScoreParams,
+): UseABCScore<T> {
   const ref = useRef<T>(null);
   const abcRef = useRef<ABCScore>(null);
 
