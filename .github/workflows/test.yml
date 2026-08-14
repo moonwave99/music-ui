@@ -15,7 +15,8 @@ jobs:
   run:
     name: Node ${{ matrix.node }} / ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
-
+    env:
+      DO_NOT_TRACK: 1
     strategy:
       fail-fast: false
       matrix:
