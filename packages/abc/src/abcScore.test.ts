@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { test, describe, it, expect, assert } from "vitest";
-import { ABCScore } from "./abcScore";
+import { ABCScore } from "./ABCScore";
 
 test.beforeEach(() => {
   document.body.innerHTML = `
