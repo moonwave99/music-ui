@@ -9,7 +9,6 @@ describe("initABCScore - single element", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song
 C E G B        
           </div>
@@ -50,7 +49,6 @@ C E G B
       <main>
         <div data-abc-score data-show-meter="false">
           <div class="content">
-X:4
 M:4/4
 L:1
 CEG
@@ -75,7 +73,6 @@ CEG
       <main>
         <div data-abc-score>
           <div class="content">
-X:4
 M:1/1
 L:1
 CEG
@@ -103,7 +100,6 @@ describe("initABCScore - multiple elements", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song 1
 C E G B        
           </div>
@@ -111,7 +107,6 @@ C E G B
         </div>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song 2
 C E G B        
           </div>
@@ -136,7 +131,6 @@ C E G B
       <main>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song 1
 C E G B        
           </div>
@@ -144,7 +138,6 @@ C E G B
         </div>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song 2
 C E G B        
           </div>
@@ -171,7 +164,6 @@ describe("initABCScore - abcOptions", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song 1
 C E G B        
           </div>
@@ -179,7 +171,6 @@ C E G B
         </div>
         <div data-abc-score>
           <div class="content">
-X:1
 T:Test Song 2
 C E G B        
           </div>
