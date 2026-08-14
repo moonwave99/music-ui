@@ -94,7 +94,7 @@ GABc defg|
 
 ### Dataset options
 
-The `init` function reads the parameters passed in the `data-*` attributes of the **wrapper element**:
+The `initABCScore` function reads the parameters passed in the **data attributes** of the _wrapper element_:
 
 ```html
 <div
@@ -114,7 +114,7 @@ CDEF GABc|
 Setup code:
 
 ```ts
-import { init } from "@music-ui/abc";
+import { initABCScore } from "@music-ui/abc";
 import "@music-ui/abc/styles.css";
 
 initABCScore();
@@ -155,7 +155,7 @@ CDEF GABc|
 Setup code:
 
 ```ts
-import { init } from "@music-ui/abc";
+import { initABCScore } from "@music-ui/abc";
 import "@music-ui/abc/styles.css";
 
 initABCScore("[data-abc-score]", { foregroundColor: "orange" });
