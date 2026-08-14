@@ -11,6 +11,8 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Build Site
     runs-on: ubuntu-latest
+    env:
+      DO_NOT_TRACK: 1
     steps:
       - uses: actions/checkout@v4
         with:

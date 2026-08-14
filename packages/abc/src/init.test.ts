@@ -3,7 +3,7 @@ import { describe, it, expect } from "vitest";
 
 import { initABCScore } from "./init";
 
-describe("initABCScore", () => {
+describe("initABCScore - single element", () => {
   it("initializes Abc instances on the selected element", () => {
     document.body.innerHTML = `
       <main>
@@ -97,7 +97,7 @@ CEG
   });
 });
 
-describe("initAll", () => {
+describe("initABCScore - multiple elements", () => {
   it("initializes Abc instances on all affected elements", () => {
     document.body.innerHTML = `
       <main>
@@ -161,6 +161,43 @@ C E G B
       expect(element.querySelector(".abcjs-title")?.textContent).toBe(
         `Test Song ${index + 1}`,
       );
+    });
+  });
+});
+
+describe("initABCScore - abcOptions", () => {
+  it("initializes Abc instances on all affected elements", () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score>
+          <div class="content">
+X:1
+T:Test Song 1
+C E G B        
+          </div>
+          <div class="staff"></div>
+        </div>
+        <div data-abc-score>
+          <div class="content">
+X:1
+T:Test Song 2
+C E G B        
+          </div>
+          <div class="staff"></div>
+        </div>
+      </main>`;
+
+    initABCScore("[data-abc-score]", { paddingleft: 30 });
+
+    const elements = document.querySelectorAll("[data-abc-score]");
+
+    elements.forEach((element) => {
+      expect(
+        element
+          .querySelector(".abcjs-staff path")
+          ?.getAttribute("d")
+          ?.startsWith("M 30"),
+      ).toBe(true);
     });
   });
 });

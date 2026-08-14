@@ -41,10 +41,7 @@ initABCScore();
 
 Output:
 
-<ABCScore>
-L:1/8
-CDEF GABc|
-</ABCScore>
+<ABCScore>L:1/8 CDEF GABc|</ABCScore>
 
 You can pass a custom selector or collection of elements. In this example we'll select all `.score` elements:
 
@@ -72,7 +69,7 @@ Setup code:
 import { initABCScore } from "@music-ui/abc";
 import "@music-ui/abc/styles.css";
 
-initABCScore('.score');
+initABCScore(".score");
 ```
 
 Output:
@@ -83,8 +80,7 @@ CDEF GABc|
 </ABCScore>
 
 <ABCScore>
-L:1/8
-K:G
+L:1/8 K:G
 GABc defg|
 </ABCScore>
 
@@ -106,7 +102,7 @@ The `init` function reads the parameters passed in the `data-*` attributes of th
 >
   <div class="content">
 L:1/8
-CDEF GABc|    
+CDEF GABc|
   </div>
   <div class="staff"></div>
 </div>
@@ -118,7 +114,7 @@ Setup code:
 import { init } from "@music-ui/abc";
 import "@music-ui/abc/styles.css";
 
-init();
+initABCScore();
 ```
 
 Output:
@@ -130,19 +126,62 @@ CDEF GABc|
 
 The following data attributes are supported:
 
-| Attribute          | Type      |  Description                   |
+| Attribute          | Type      | Description                    |
 | ------------------ | --------- | ------------------------------ |
 | `data-show-tempo`  | `boolean` | Shows or hides the score tempo |
 | `data-show-meter`  | `boolean` | Shows or hides the score meter |
 | `data-show-player` | `boolean` | Shows or hides the player      |
+
+### Passing `abc.js` options to `initABCScore`
+
+The `initABCScore` functions accept a second parameter that is forwarded to the `abc.js` renderer. You can see the available options [on the library documentation](https://docs.abcjs.net/visual/render-abc-options).
+
+```html
+<div
+  data-abc-score
+  data-show-tempo="false"
+  data-show-player="false">
+  <div class="content">
+L:1/8
+CDEF GABc|
+</div>
+  <div class="staff"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { init } from "@music-ui/abc";
+import "@music-ui/abc/styles.css";
+
+initABCScore("[data-abc-score]", { foregroundColor: "orange" });
+```
+
+Output:
+
+<ABCScore
+  showTempo={false}
+  showPlayer={false}
+  abcOptions={{ foregroundColor: "orange" }}>
+L:1/8
+CDEF GABc|
+</ABCScore>
+
+<Callout type="warning">
+  The passed options will be shared across all selected elements. <br /> If you
+  need more control, you can call `initABCScore` multiple times with different
+  selections and parameters or create your own widget with the various
+  `music-ui` classes.
+</Callout>
 
 ## The `ABCSCore` class
 
 If you need more control over the component lifecycle, you can use the underlying `ABCSCore` class.
 
 <Callout type="info">
-  Check [the complete `ABCScore` API reference](/api/classes/_music-ui_abc.ABCScore.html)
-  for more details.
+  Check [the complete `ABCScore` API
+  reference](/api/classes/_music-ui_abc.ABCScore.html) for more details.
 </Callout>
 
 ### Constructor
@@ -156,6 +195,48 @@ The `ABCSCore` constructor accepts the following parameters:
 | `showCursor` | `boolean`                 | true               | Shows or hides the position cursor            |
 | `showTempo`  | `boolean`                 | true               | Shows or hides the score tempo                |
 | `showMeter`  | `boolean`                 | true               | Shows or hides the score meter                |
+
+You can use it like:
+
+```html
+<div data-abc-score>
+  <div class="content">
+L:1/8
+CDEF GABc|
+</div>
+  <div class="staff"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { ABCScore } from "@music-ui/abc";
+import "@music-ui/abc/styles.css";
+
+const wrapper = document.querySelector("[data-abc-score]");
+
+const score = new ABCScore({
+  element: wrapper.querySelector(".staff"),
+  content: wrapper.querySelector(".content").textContent.trim(),
+  showTempo: false,
+  showPlayer: false,
+  abcOptions: {
+    foregroundColor: "orange"
+  }
+});
+
+// don't forget to render the score!
+score.render();
+```
+
+<ABCScore
+  showTempo={false}
+  showPlayer={false}
+  abcOptions={{ foregroundColor: "orange" }}>
+L:1/8
+CDEF GABc|
+</ABCScore>
 
 ### Updating the score position
 

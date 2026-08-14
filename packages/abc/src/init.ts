@@ -10,17 +10,18 @@ const DEFAULT_SELECTOR = "[data-abc-score]";
 
 export function initABCScore<T extends HTMLElement>(
   elementOrSelector: ElementOrSelector<T> = DEFAULT_SELECTOR,
+  abcOptions?: ABCScoreParams["abcOptions"],
 ) {
-  return ensureSelection(elementOrSelector).map((element) => {
-    // #TODO: parse options from data attributes
-    return new ABCScore({
+  return ensureSelection(elementOrSelector).map((element) =>
+    new ABCScore({
       content: element
         .querySelector(`.${cssClasses.content}`)
         ?.textContent.trim(),
       element: element.querySelector(`.${cssClasses.staff}`)!,
+      abcOptions,
       ...parseOptions(element),
-    }).render();
-  });
+    }).render(),
+  );
 }
 
 type ABCDisplayParams = Omit<

@@ -1,8 +1,8 @@
 import {
   renderAbc,
-  type AbcVisualParams,
   TuneObject,
   ClickListenerAnalysis,
+  type AbcVisualParams,
 } from "abcjs";
 import { type PlayerPosition } from "@music-ui/core";
 import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
@@ -22,7 +22,7 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
   paddingleft: 0,
   paddingright: 0,
   selectionColor: "dodgerblue",
-} as const;
+} as Partial<AbcVisualParams>;
 
 export const cssClasses = {
   content: "content",
@@ -153,7 +153,7 @@ export class ABCScore {
       this.onClick({ position: getNotePosition(currentNote) });
     };
 
-    this.tune = renderAbc(this.element!, this.content, {
+    this.tune = renderAbc(this.element, this.content, {
       ...DEFAULT_ABC_VISUAL_PARAMS,
       ...this.abcOptions,
       clickListener,
