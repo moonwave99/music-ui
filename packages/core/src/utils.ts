@@ -78,18 +78,17 @@ export function getScoreHash(id: string, score: string) {
   return md5(`${id}${score}`);
 }
 
-export function querySelectorAll<T extends HTMLElement>(
-  elementsOrSelector: NodeListOf<T> | string,
-): NodeListOf<T> {
-  return typeof elementsOrSelector === "string"
-    ? document.querySelectorAll<T>(elementsOrSelector)
-    : elementsOrSelector;
-}
+export type ElementOrSelector<T extends HTMLElement> =
+  NodeListOf<T> | T | string;
 
-export function querySelector<T extends HTMLElement>(
-  elementOrSelector: T | string,
-): T | null {
-  return typeof elementOrSelector === "string"
-    ? document.querySelector<T>(elementOrSelector)
-    : elementOrSelector;
+export function ensureSelection<T extends HTMLElement>(
+  elementOrSelector: ElementOrSelector<T>,
+): T[] {
+  if (typeof elementOrSelector === "string") {
+    return Array.from(document.querySelectorAll<T>(elementOrSelector));
+  }
+  if ((elementOrSelector as NodeListOf<T>).length) {
+    return Array.from(elementOrSelector as NodeListOf<T>);
+  }
+  return [elementOrSelector as T];
 }

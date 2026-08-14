@@ -1,21 +1,39 @@
 import { get as getNote } from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
-import { querySelector, type NoteInput } from "@music-ui/core";
+import {
+  ensureSelection,
+  type NoteInput,
+  ElementOrSelector,
+} from "@music-ui/core";
 import { CHROMATIC_SCALE, normalizeInput, parseNoteInput } from "./lib";
 
+/**
+ * @property chroma The scientific notation value of the pitch class (e.g. 0-11)
+ * @property color The key color
+ * @property note The pitch class of the note
+ */
 export type ScaleNote = {
   chroma: number;
   color: "black" | "white";
   note: string;
 };
 
+/**
+ * @property octave The octave of the note
+ */
 export type ScaleNoteWithOctave = ScaleNote & {
   octave: number;
 };
 
+/**
+ * @property element The Element where the piano will be rendered
+ * @property startOctave The first rendered octave (e.g. 2 will start from C2)
+ * @property octaves The amount of rendered octaves
+ * @property withFinalC Will render a final C key after the last octave
+ */
 export type PianoOptions = {
-  element: string | HTMLElement;
+  element: ElementOrSelector<HTMLElement>;
   startOctave: number;
   octaves: number;
   withFinalC: boolean;
@@ -44,15 +62,23 @@ export const DEFAULT_PIANO_OPTIONS = {
 
 export class Piano {
   private options: PianoOptions;
-  private element: HTMLElement | null;
+  private element: HTMLElement;
+  private rendered: boolean;
   /**
    * Creates a `Piano` instance.
    *
    * @param options the rendering options
    */
   constructor(options: Partial<PianoOptions> = {}) {
-    this.options = Object.assign({}, DEFAULT_PIANO_OPTIONS, options);
-    this.element = null;
+    this.options = { ...DEFAULT_PIANO_OPTIONS, ...options };
+    const element = ensureSelection(
+      this.options.element as ElementOrSelector<HTMLElement>,
+    ).at(0);
+    if (!element) {
+      throw new Error(`Element ${this.options.element} not found)`);
+    }
+    this.element = element;
+    this.rendered = false;
   }
   /**
    * Highlights the passed notes. Sets the corresponding note labels if passed.
@@ -117,14 +143,10 @@ export class Piano {
   }
   private baseRender(): void {
     /* istanbul ignore if  */
-    if (this.element) {
+    if (this.rendered) {
       return;
     }
-    const { element, withFinalC, startOctave, octaves } = this.options;
-    this.element = querySelector<HTMLElement>(element);
-    if (!this.element) {
-      throw new Error(`${element} not found)`);
-    }
+    const { withFinalC, startOctave, octaves } = this.options;
     this.element.classList.add(cssClasses.piano);
 
     const overFlowWrapper = document.createElement("div");
@@ -163,6 +185,8 @@ export class Piano {
         octave: startOctave + octaves,
       });
     }
+
+    this.rendered = true;
   }
   private getMiddleOctave(): number {
     const { startOctave, octaves } = this.options;

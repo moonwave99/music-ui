@@ -1,10 +1,37 @@
 import type { NoteInput } from "@music-ui/core";
-import {
-  DEFAULT_PIANO_OPTIONS,
-  type ScaleNote,
-  PianoOptions,
-  GroupedInput,
-} from "./Piano";
+import { type ScaleNote, GroupedInput } from "./Piano";
+
+export function parseNoteInput(
+  input: NoteInput,
+  noteLabels?: NoteInput,
+): GroupedInput {
+  const groups = Array.isArray(input)
+    ? [input]
+    : input
+        .split(",")
+        .filter(Boolean)
+        .map((x) => x.split(" ").filter(Boolean));
+  const output = groups.flatMap((group, index) =>
+    group.map((note) => ({ note, group: index })),
+  );
+  if (!noteLabels) {
+    return output;
+  }
+  const normalizedNoteLabels = normalizeInput(noteLabels);
+  if (normalizedNoteLabels.length !== output.length) {
+    throw new Error("input and noteLabels length do not match");
+  }
+  return output.map((note, index) => ({
+    ...note,
+    label: normalizedNoteLabels[index],
+  }));
+}
+
+export function normalizeInput(input: NoteInput) {
+  return Array.isArray(input)
+    ? input
+    : input.replaceAll(",", "").split(" ").filter(Boolean);
+}
 
 export const CHROMATIC_SCALE: ScaleNote[] = [
   {
@@ -68,55 +95,3 @@ export const CHROMATIC_SCALE: ScaleNote[] = [
     note: "B",
   },
 ] as const;
-
-export function parseOptions(el: HTMLElement): PianoOptions {
-  const options = {} as Record<string, string | number | boolean>;
-  Object.entries(DEFAULT_PIANO_OPTIONS).forEach(([key, sample]) => {
-    const value = el.dataset[key];
-    switch (typeof sample) {
-      case "number":
-        if (value) {
-          options[key] = +value;
-        }
-        break;
-      case "boolean":
-        if (value) {
-          options[key] = value !== "false";
-        }
-        break;
-    }
-  });
-  return options as PianoOptions;
-}
-
-export function parseNoteInput(
-  input: NoteInput,
-  noteLabels?: NoteInput,
-): GroupedInput {
-  const groups = Array.isArray(input)
-    ? [input]
-    : input
-        .split(",")
-        .filter(Boolean)
-        .map((x) => x.split(" ").filter(Boolean));
-  const output = groups.flatMap((group, index) =>
-    group.map((note) => ({ note, group: index })),
-  );
-  if (!noteLabels) {
-    return output;
-  }
-  const normalizedNoteLabels = normalizeInput(noteLabels);
-  if (normalizedNoteLabels.length !== output.length) {
-    throw new Error("input and noteLabels length do not match");
-  }
-  return output.map((note, index) => ({
-    ...note,
-    label: normalizedNoteLabels[index],
-  }));
-}
-
-export function normalizeInput(input: NoteInput) {
-  return Array.isArray(input)
-    ? input
-    : input.replaceAll(",", "").split(" ").filter(Boolean);
-}

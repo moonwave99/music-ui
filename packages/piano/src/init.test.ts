@@ -1,15 +1,15 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
-import { init, initAll } from "./init";
+import { initPiano } from "./init";
 
-describe("init", () => {
+describe("initPiano", () => {
   it("initializes a Piano instance with default options", () => {
     document.body.innerHTML = `
         <main>
-            <div id="piano" data-notes="C3 E3 G3" data-note-labels="1 3 5"></div>
+            <div data-piano data-notes="C3 E3 G3" data-note-labels="1 3 5"></div>
         </main>`;
 
-    init();
+    initPiano();
 
     const piano = document.querySelector(".piano");
     expect(piano!.querySelectorAll(".key").length).toBe(12 + 12 + 1);
@@ -24,7 +24,7 @@ describe("init", () => {
             <div id="my-element" data-notes="C3 E3 G3" data-note-labels="1 3 5"></div>
         </main>`;
 
-    init({ element: "#my-element" });
+    initPiano("#my-element");
 
     const piano = document.querySelector(".piano");
     expect(piano!.querySelectorAll(".key").length).toBe(12 + 12 + 1);
@@ -32,19 +32,17 @@ describe("init", () => {
       [...piano!.querySelectorAll(".key-on")].map((el) => el.innerHTML),
     ).toEqual(["1", "3", "5"]);
   });
-});
 
-describe("initAll", () => {
   it("initializes Piano instances on all affected elements", () => {
     document.body.innerHTML = `
         <main>
             <div data-piano></div>
             <div data-piano
                 data-octaves="1"
-                data-with-final-C="false"></div>
+                data-with-final-c="false"></div>
         </main>`;
 
-    initAll();
+    initPiano();
 
     const pianos = document.querySelectorAll(".piano");
 
@@ -66,7 +64,7 @@ describe("initAll", () => {
 
     const elements = document.querySelectorAll<HTMLElement>("[data-custom]");
 
-    initAll({ elements });
+    initPiano(elements);
     const pianos = document.querySelectorAll(".piano");
     expect(pianos.length).toBe(2);
   });
@@ -77,7 +75,7 @@ describe("initAll", () => {
           <div data-piano data-notes="Fb Gb Abb Cb" data-octaves="3"></div>
         </main>`;
 
-    initAll();
+    initPiano();
 
     const wrapper = document.querySelector(".piano");
 
@@ -127,7 +125,7 @@ describe("initAll", () => {
           <div data-piano data-notes="C3 E3 G3" data-note-labels="1 3 5" data-octaves="3"></div>
         </main>`;
 
-    initAll();
+    initPiano();
     const wrapper = document.querySelector(".piano");
     expect(
       [...wrapper!.querySelectorAll(".key-on")].map((el) => el.innerHTML),
@@ -140,7 +138,7 @@ describe("initAll", () => {
           <div data-piano data-notes="C3 G3 Eb4 Bb4" data-octaves="3"></div>
         </main>`;
 
-    initAll();
+    initPiano();
 
     const wrapper = document.querySelector(".piano");
 
@@ -190,7 +188,7 @@ describe("initAll", () => {
           <div data-piano data-notes="C3 G3, Eb4 Bb4" data-octaves="3"></div>
         </main>`;
 
-    initAll();
+    initPiano();
 
     const wrapper = document.querySelector(".piano");
 

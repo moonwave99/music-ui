@@ -1,13 +1,13 @@
 // @vitest-environment jsdom
 import { describe, it, expect } from "vitest";
 
-import { initAll, init } from "./init";
+import { initABCScore } from "./init";
 
-describe("init", () => {
+describe("initABCScore", () => {
   it("initializes Abc instances on the selected element", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc>
+        <div data-abc-score>
           <div class="content">
 X:1
 T:Test Song
@@ -17,9 +17,9 @@ C E G B
         </div>
       </main>`;
 
-    const element = document.querySelector("[data-abc]");
+    const element = document.querySelector("[data-abc-score]");
 
-    init();
+    initABCScore();
 
     expect(element).toBeTruthy();
 
@@ -32,14 +32,14 @@ C E G B
   it("initializes an empty staff if no content if present", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc>
+        <div data-abc-score>
           <div class="staff"></div>
         </div>
       </main>`;
 
-    const element = document.querySelector("[data-abc]");
+    const element = document.querySelector("[data-abc-score]");
 
-    init();
+    initABCScore();
 
     expect(element).toBeTruthy();
     expect(element!.querySelector(".abcjs-container")).not.toBeNull();
@@ -48,7 +48,7 @@ C E G B
   it("hides the meter if hideMeter is true", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc>
+        <div data-abc-score data-hide-meter>
           <div class="content">
 X:4
 M:4/4
@@ -59,9 +59,9 @@ CEG
         </div>
       </main>`;
 
-    const element = document.querySelector("[data-abc]");
+    const element = document.querySelector("[data-abc-score]");
 
-    init({ hideMeter: true });
+    initABCScore();
 
     expect(
       window.getComputedStyle(
@@ -73,7 +73,7 @@ CEG
   it("hides the meter if it's x/1", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc>
+        <div data-abc-score>
           <div class="content">
 X:4
 M:1/1
@@ -85,9 +85,9 @@ CEG
         </div>
       </main>`;
 
-    const element = document.querySelector("[data-abc]");
+    const element = document.querySelector("[data-abc-score]");
 
-    init();
+    initABCScore();
 
     expect(
       window.getComputedStyle(
@@ -101,7 +101,7 @@ describe("initAll", () => {
   it("initializes Abc instances on all affected elements", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc>
+        <div data-abc-score>
           <div class="content">
 X:1
 T:Test Song 1
@@ -109,7 +109,7 @@ C E G B
           </div>
           <div class="staff"></div>
         </div>
-        <div data-abc>
+        <div data-abc-score>
           <div class="content">
 X:1
 T:Test Song 2
@@ -119,9 +119,9 @@ C E G B
         </div>
       </main>`;
 
-    initAll();
+    initABCScore();
 
-    const elements = document.querySelectorAll("[data-abc]");
+    const elements = document.querySelectorAll("[data-abc-score]");
     expect(elements.length).toBe(2);
     elements.forEach((element, index) => {
       expect(element.querySelector(".abcjs-container")).not.toBeNull();
@@ -134,7 +134,7 @@ C E G B
   it("initializes Abc instances on all passed elements", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc>
+        <div data-abc-score>
           <div class="content">
 X:1
 T:Test Song 1
@@ -142,7 +142,7 @@ C E G B
           </div>
           <div class="staff"></div>
         </div>
-        <div data-abc>
+        <div data-abc-score>
           <div class="content">
 X:1
 T:Test Song 2
@@ -152,9 +152,9 @@ C E G B
         </div>
       </main>`;
 
-    initAll({ elements: document.querySelectorAll<HTMLElement>("[data-abc]") });
+    initABCScore(document.querySelectorAll<HTMLElement>("[data-abc-score]"));
 
-    const elements = document.querySelectorAll("[data-abc]");
+    const elements = document.querySelectorAll("[data-abc-score]");
     expect(elements.length).toBe(2);
     elements.forEach((element, index) => {
       expect(element.querySelector(".abcjs-container")).not.toBeNull();

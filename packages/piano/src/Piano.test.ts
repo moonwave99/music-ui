@@ -39,6 +39,12 @@ describe("Piano - constructor", () => {
       5 + 5 + 5,
     );
   });
+
+  it("Throws error if selected element is not found", () => {
+    assert.throws(() => {
+      new Piano({ element: "#does-not-exist" });
+    }, "Element #does-not-exist not found");
+  });
 });
 
 describe("Piano - setNotes", () => {

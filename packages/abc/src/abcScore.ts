@@ -10,6 +10,13 @@ import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
 const cursorBleed = 7.5;
 const cursorOffset = -2.5;
 
+export const DEFAULT_ABC_SCORE_OPTIONS = {
+  showPlayer: true,
+  showCursor: true,
+  hideMeter: false,
+  hideTempo: true,
+} as const;
+
 const DEFAULT_ABC_VISUAL_PARAMS = {
   responsive: "resize",
   add_classes: true,
@@ -59,7 +66,7 @@ export class ABCScore {
     onClick,
   }: ABCScoreParams) {
     if (!element) {
-      throw new Error(`${element} not found`);
+      throw new Error("Element not found");
     }
     this.content = content;
     this.element = element;

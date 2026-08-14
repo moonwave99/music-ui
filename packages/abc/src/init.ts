@@ -1,41 +1,49 @@
-import { querySelector, querySelectorAll } from "@music-ui/core";
-import { ABCScore, cssClasses, type ABCScoreParams } from "./abcScore";
+import { ensureSelection, type ElementOrSelector } from "@music-ui/core";
+import {
+  ABCScore,
+  cssClasses,
+  DEFAULT_ABC_SCORE_OPTIONS,
+  type ABCScoreParams,
+} from "./abcScore";
 
-const DEFAULT_INIT_OPTIONS = {
-  element: "[data-abc]",
-} as const;
+const DEFAULT_SELECTOR = "[data-abc-score]";
 
-type InitOptions = Omit<ABCScoreParams, "element"> & {
-  element?: string | HTMLElement;
-};
-
-export function init(initOptions: InitOptions = DEFAULT_INIT_OPTIONS) {
-  initOptions = Object.assign({}, DEFAULT_INIT_OPTIONS, initOptions);
-  const element = querySelector(initOptions.element!);
-  if (!element) {
-    throw new Error(`${initOptions.element} not found)`);
-  }
-  return new ABCScore({
-    content: element
-      .querySelector(`.${cssClasses.content}`)
-      ?.textContent.trim(),
-    ...initOptions,
-    element: element.querySelector(`.${cssClasses.staff}`)!,
-  }).render();
+export function initABCScore<T extends HTMLElement>(
+  elementOrSelector: ElementOrSelector<T> = DEFAULT_SELECTOR,
+) {
+  return ensureSelection(elementOrSelector).map((element) => {
+    // #TODO: parse options from data attributes
+    return new ABCScore({
+      content: element
+        .querySelector(`.${cssClasses.content}`)
+        ?.textContent.trim(),
+      element: element.querySelector(`.${cssClasses.staff}`)!,
+      ...parseOptions(element),
+    }).render();
+  });
 }
 
-const DEFAULT_INIT_ALL_OPTIONS = {
-  elements: "[data-abc]",
-} as const;
+type ABCDisplayParams = Omit<
+  ABCScoreParams,
+  "content" | "element" | "onClick" | "abcOptions"
+>;
 
-type InitAllOptions<T extends HTMLElement> = {
-  elements: string | NodeListOf<T>;
-};
-
-export function initAll<T extends HTMLElement>(
-  initOptions: InitAllOptions<T> = DEFAULT_INIT_ALL_OPTIONS,
-) {
-  return Array.from(querySelectorAll<HTMLElement>(initOptions.elements)).map(
-    (element) => init({ element }),
-  );
+function parseOptions(el: HTMLElement): ABCDisplayParams {
+  const options = {} as Record<string, string | number | boolean>;
+  Object.entries(DEFAULT_ABC_SCORE_OPTIONS).forEach(([key, sample]) => {
+    const value = el.dataset[key];
+    switch (typeof sample) {
+      case "number":
+        if (value) {
+          options[key] = +value;
+        }
+        break;
+      case "boolean":
+        if (typeof value !== "undefined") {
+          options[key] = value !== "false";
+        }
+        break;
+    }
+  });
+  return options as ABCDisplayParams;
 }

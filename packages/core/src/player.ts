@@ -49,7 +49,7 @@ export class Player {
   private scoreManager: ScoreManager;
   private eventEmitter: EventEmitter;
   constructor(params?: PlayerParams) {
-    this.params = Object.assign(DEFAULT_PARAMS, params);
+    this.params = { ...DEFAULT_PARAMS, ...params };
     this.sampler = createSampler(this.params);
     this.transport = Tone.getTransport();
     this.draw = Tone.getDraw();
