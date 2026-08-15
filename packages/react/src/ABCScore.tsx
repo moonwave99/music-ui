@@ -21,6 +21,7 @@ export type ABCScoreProps = UseABCScoreParams & {
   pianoOptions?: PianoProps & {
     show?: boolean;
   };
+  showTempo?: boolean;
   showPlayer?: boolean;
   playButtonLabel?: string;
   stopButtonLabel?: string;
@@ -66,7 +67,6 @@ export function ABCScore({
 
   const { ref, abcRef } = useABCScore<HTMLDivElement>({
     ...params,
-    showTempo,
     content: score.content,
     onClick,
   });

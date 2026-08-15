@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
-import { test, describe, it, expect, assert } from "vitest";
+import { vi, test, describe, it, expect, assert } from "vitest";
+import userEvent from "@testing-library/user-event";
 import { ABCScore } from "./abcScore";
 
 test.beforeEach(() => {
@@ -21,7 +22,66 @@ test.afterEach(() => {
 });
 
 describe("ABCScore - constructor", () => {
+  it("Does not render until render() is called", () => {
+    const wrapper = document.querySelector(".score")!;
+    new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")?.textContent.trim(),
+    });
+    expect(wrapper.querySelector(".abcjs-container")).toBeNull();
+  });
+  it("Throws error if selected element is not found", () => {
+    assert.throws(() => {
+      const element = document.querySelector<HTMLElement>("#does-not-exist")!;
+      new ABCScore({ element });
+    }, "Element not found");
+  });
+});
+
+describe("ABCScore - render", () => {
   it("Renders with default options", () => {
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")?.textContent.trim(),
+    });
+    score.render();
+    expect(wrapper.querySelector(".abcjs-container")).not.toBeNull();
+    expect(wrapper.querySelector(".abcjs-cursor")).not.toBeNull();
+    expect(wrapper.querySelector(".abcjs-time-signature")).not.toBeNull();
+    expect(wrapper.querySelector(".abcjs-title")?.textContent).toBe(
+      `Test Song`,
+    );
+  });
+
+  it("Does not display the score meter when showMeter is false", () => {
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")?.textContent.trim(),
+      showMeter: false,
+    });
+    score.render();
+
+    expect(
+      wrapper.querySelector<HTMLElement>(".abcjs-time-signature")?.style
+        .display,
+    ).toBe("none");
+  });
+
+  it("Does not display the cursor when showCursor is false", () => {
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")?.textContent.trim(),
+      showCursor: false,
+    });
+    score.render();
+
+    expect(wrapper.querySelector(".abcjs-cursor")).toBeNull();
+  });
+
+  it("Is idempotent", () => {
     const wrapper = document.querySelector(".score")!;
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
@@ -32,13 +92,8 @@ describe("ABCScore - constructor", () => {
     expect(wrapper.querySelector(".abcjs-title")?.textContent).toBe(
       `Test Song`,
     );
-  });
-
-  it("Throws error if selected element is not found", () => {
-    assert.throws(() => {
-      const element = document.querySelector<HTMLElement>("#does-not-exist")!;
-      new ABCScore({ element });
-    }, "Element not found");
+    score.render();
+    expect(wrapper.querySelectorAll(".abcjs-container").length).toBe(1);
   });
 });
 
@@ -64,5 +119,21 @@ describe("ABCScore - updateCursor", () => {
       wrapper.querySelector<HTMLElement>(".abcjs-current-note path")?.dataset
         .name,
     ).toBe("E");
+  });
+});
+
+describe("ABCScore - onClick handler", () => {
+  it("Gets called with the position of the clicked note", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")?.textContent.trim(),
+      onClick,
+    });
+    score.render();
+    await user.click(wrapper.querySelector(".abcjs-n2")!);
+    expect(onClick).toHaveBeenCalledWith({ position: "0:2:0" });
   });
 });

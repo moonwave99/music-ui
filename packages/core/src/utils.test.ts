@@ -1,9 +1,11 @@
+// @vitest-environment jsdom
 import { describe, it, expect, test } from "vitest";
 import {
   getAbcScore,
   getPianoScore,
   toAbcNotation,
   ensureSelection,
+  extractElementOptions,
 } from "./utils";
 
 describe("toAbcNotation", () => {
@@ -95,5 +97,34 @@ describe("ensureSelection", () => {
     expect(Array.isArray(selection)).toBe(true);
     expect(selection.length).toBe(1);
     expect(selection[0]?.textContent).toBe("a");
+  });
+});
+
+describe("extractElementOptions", () => {
+  test.afterEach(() => {
+    document.body.innerHTML = "";
+  });
+  it("extracts the options from the element dataset", () => {
+    document.body.innerHTML = `
+      <div
+        data-a="abc"
+        data-b=""
+        data-c="123"
+        data-d
+        data-e="false"
+        data-f="true"
+        data-g></div>
+    `;
+    const options = extractElementOptions(document.querySelector("div")!, {
+      a: "",
+      b: "",
+      c: 0,
+      d: 0,
+      e: true,
+      f: true,
+      g: true,
+      h: true,
+    });
+    expect(options).toEqual({ a: "abc", c: 123, e: false, f: true, g: true });
   });
 });

@@ -37,6 +37,7 @@ export function usePiano<T extends HTMLElement>({
   }));
 
   useLayoutEffect(() => {
+    /* istanbul ignore if  */
     if (pianoRef.current) {
       return;
     }

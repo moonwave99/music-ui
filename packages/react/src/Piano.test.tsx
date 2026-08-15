@@ -1,5 +1,8 @@
-import { render } from "@testing-library/react";
+import { useRef } from "react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { Piano } from "./Piano";
+import type { ImperativePiano } from "./usePiano";
 
 describe("Piano", () => {
   it("renders correctly", async () => {
@@ -45,4 +48,37 @@ describe("Piano", () => {
       ).toHaveTextContent(noteLabels[index] as string),
     );
   });
+
+  it("updates the notes via the imperative handle", async () => {
+    const user = userEvent.setup();
+
+    const notes = ["C3", "G3", "C4", "G4"];
+    const { container } = render(<ImperativeWrapper notes={notes} />);
+    await user.click(screen.getByRole("button", { name: "Set notes" }));
+
+    notes.forEach((note) =>
+      expect(container.querySelector(`.note-with-octave-${note}`)).toHaveClass(
+        "key-on",
+      ),
+    );
+
+    await user.click(screen.getByRole("button", { name: "Clear notes" }));
+
+    notes.forEach((note) =>
+      expect(
+        container.querySelector(`.note-with-octave-${note}`),
+      ).not.toHaveClass("key-on"),
+    );
+  });
 });
+
+function ImperativeWrapper({ notes }: { notes: string[] }) {
+  const ref = useRef<ImperativePiano>(null);
+  return (
+    <>
+      <Piano imperativeRef={ref} />
+      <button onClick={() => ref.current?.setNotes(notes)}>Set notes</button>
+      <button onClick={() => ref.current?.clearNotes()}>Clear notes</button>
+    </>
+  );
+}

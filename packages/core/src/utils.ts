@@ -92,3 +92,29 @@ export function ensureSelection<T extends HTMLElement>(
   }
   return [elementOrSelector as T];
 }
+
+export function extractElementOptions<
+  T extends Record<string, string | number | boolean>,
+>(el: HTMLElement, baseOptions: T): T {
+  const options = {} as Record<string, string | number | boolean>;
+  Object.entries(baseOptions).forEach(([key, sample]) => {
+    const value = el.dataset[key];
+    switch (typeof sample) {
+      case "string":
+        if (value) {
+          options[key] = value;
+        }
+        break;
+      case "number":
+        if (value) {
+          options[key] = +value;
+        }
+        break;
+      case "boolean":
+        if (typeof value !== "undefined") {
+          options[key] = value !== "false";
+        }
+    }
+  });
+  return options as T;
+}

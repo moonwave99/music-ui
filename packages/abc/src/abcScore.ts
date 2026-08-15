@@ -13,7 +13,6 @@ const cursorOffset = -2.5;
 export const DEFAULT_ABC_SCORE_OPTIONS = {
   showCursor: true,
   showMeter: true,
-  showTempo: true,
 } as const;
 
 const DEFAULT_ABC_VISUAL_PARAMS = {
@@ -37,7 +36,6 @@ export type ABCScoreParams = {
   element: HTMLElement;
   showCursor?: boolean;
   showMeter?: boolean;
-  showTempo?: boolean;
   abcOptions?: AbcVisualParams;
   onClick?: (params: OnABCClickParams) => void;
 };
@@ -100,7 +98,6 @@ export class ABCScore {
     const barNotes = svgElement!.querySelectorAll<SVGGElement>(
       `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
     );
-
     const currentNote = getCurrentNote(barNotes, position);
     if (!currentNote) {
       return this;
@@ -113,6 +110,7 @@ export class ABCScore {
     return this;
   }
   private updateCursor(currentNote: SVGGElement): ABCScore {
+    /* istanbul ignore if  */
     if (!this.rendered) {
       return this;
     }
@@ -145,6 +143,7 @@ export class ABCScore {
       ___: unknown,
       x: ClickListenerAnalysis,
     ) => {
+      /* istanbul ignore if  */
       if (!this.onClick) {
         return;
       }
