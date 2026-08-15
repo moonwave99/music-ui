@@ -20,6 +20,8 @@ export type ScaleNote = {
 };
 
 /**
+ * Extends the ScaleNote type with the octave number.
+ *
  * @property octave The octave of the note
  */
 export type ScaleNoteWithOctave = ScaleNote & {
@@ -27,6 +29,8 @@ export type ScaleNoteWithOctave = ScaleNote & {
 };
 
 /**
+ * The options expected by the Piano constructor.
+ *
  * @property element The Element where the piano will be rendered
  * @property startOctave The first rendered octave (e.g. 2 will start from C2)
  * @property octaves The amount of rendered octaves
@@ -39,6 +43,13 @@ export type PianoOptions = {
   withFinalC: boolean;
 };
 
+/**
+ * GroupedInput allows to give different CSS classes to different note groups (e.g. left hand vs. right hand, or various voices).
+ *
+ * @property group The group id
+ * @property note The note name
+ * @property label The note label
+ */
 export type GroupedInput = {
   group: number;
   note: string;

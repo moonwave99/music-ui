@@ -7,14 +7,33 @@ import {
 import { type PlayerPosition } from "@music-ui/core";
 import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
 
+/**
+ * The cursor staff height overflow.
+ * Affects both sides (i.e. {cursorBleed}px above and {cursorBleed}px below).
+ */
 const cursorBleed = 7.5;
+
+/**
+ * The horizontal distance between the cursor and the current note.
+ */
 const cursorOffset = -2.5;
 
+/**
+ * @property {boolean} showCursor The default cursor display
+ * @property {boolean} showMeter The default meter display
+ */
 export const DEFAULT_ABC_SCORE_OPTIONS = {
   showCursor: true,
   showMeter: true,
 } as const;
 
+/**
+ * @property {string} responsive The default responsive behavior
+ * @property {boolean} add_classes The default abc.js class rendering
+ * @property {number} paddingleft The default left score padding
+ * @property {number} paddingright The default right score padding
+ * @property {string} selectionColor The default selection color
+ */
 const DEFAULT_ABC_VISUAL_PARAMS = {
   responsive: "resize",
   add_classes: true,
@@ -23,6 +42,13 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
   selectionColor: "dodgerblue",
 } as Partial<AbcVisualParams>;
 
+/**
+ * @property {string} content The abc notation element class
+ * @property {string} staff The rendered notation element class
+ * @property {string} timeSignature The time signature element class
+ * @property {string} cursor The cursor element class
+ * @property {string} currentNote The current note element class
+ */
 export const cssClasses = {
   content: "content",
   staff: "staff",
@@ -31,6 +57,14 @@ export const cssClasses = {
   currentNote: "abcjs-current-note",
 } as const;
 
+/**
+ * @property content The abc notation content
+ * @property element The element where the score will be rendered
+ * @property showCursor Display the cursor or not
+ * @property showMeter Display the meter or not
+ * @property abcOptions The options passed to the abcjs renderer
+ * @property onClick The function called when clicking on a note
+ */
 export type ABCScoreParams = {
   content?: string;
   element: HTMLElement;
@@ -40,6 +74,9 @@ export type ABCScoreParams = {
   onClick?: (params: OnABCClickParams) => void;
 };
 
+/**
+ * @property position The current position of the score
+ */
 export type OnABCClickParams = {
   position: PlayerPosition;
 };
