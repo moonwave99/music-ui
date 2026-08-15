@@ -46,11 +46,11 @@ export type GroupedInput = {
 }[];
 
 /**
- * @property piano The outer wrapper class
- * @property pianoWrapper The inner wrapper class (needed to handle overflow)
- * @property key The piano key class
- * @property keyPlayed The played key class
- * @property keyOn The selected key class
+ * @property {string} piano The outer wrapper class
+ * @property {string} pianoWrapper The inner wrapper class (needed to handle overflow)
+ * @property {string} key The piano key class
+ * @property {string} keyPlayed The played key class
+ * @property {string} keyOn The selected key class
  */
 const cssClasses = {
   piano: "piano",
@@ -61,10 +61,10 @@ const cssClasses = {
 } as const;
 
 /**
- * @property element The default selector
- * @property startOctave The default start octave
- * @property octaves The default octave count
- * @property withFinalC The default final C display
+ * @property {string} element The default selector
+ * @property {number} startOctave The default start octave
+ * @property {number} octaves The default octave count
+ * @property {boolean} withFinalC The default final C display
  */
 export const DEFAULT_PIANO_OPTIONS = {
   element: "#piano",

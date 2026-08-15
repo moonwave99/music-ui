@@ -7,6 +7,7 @@ import { DEFAULT_PIANO_OPTIONS, Piano, type PianoOptions } from "./Piano";
 
 const DEFAULT_SELECTOR = "[data-piano]";
 
+// #TODO: add player in vanilla version
 export function initPiano<T extends HTMLElement>(
   elementOrSelector: ElementOrSelector<T> = DEFAULT_SELECTOR,
 ) {

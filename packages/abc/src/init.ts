@@ -12,6 +12,7 @@ import {
 
 const DEFAULT_SELECTOR = "[data-abc-score]";
 
+// #TODO: add player in vanilla version
 export function initABCScore<T extends HTMLElement>(
   elementOrSelector: ElementOrSelector<T> = DEFAULT_SELECTOR,
   abcOptions?: ABCScoreParams["abcOptions"],

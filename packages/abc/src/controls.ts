@@ -4,10 +4,15 @@ type InitControlsParams = {
   id: string;
   input: string;
   element: HTMLElement;
+  player: Player;
 };
 
-export async function initControls({ id, input, element }: InitControlsParams) {
-  const player = new Player();
+export async function initControls({
+  id,
+  input,
+  element,
+  player,
+}: InitControlsParams) {
   const score = getAbcScore({ id, input });
   const { play, pause, stop } = createControls(element, {
     play: () => {
