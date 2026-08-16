@@ -1,19 +1,19 @@
 import * as Tone from "tone";
-import { Midi, type MidiJSON } from "@tonejs/midi";
-import { synth } from "abcjs";
-import { type Score } from "./utils";
 import { EventEmitter } from "events";
+import { type Score } from "./utils";
+import { createSampler } from "./lib";
+import { ScoreManager } from "./scoreManager";
 
 export type PlayerPosition = Tone.Unit.BarsBeatsSixteenths;
 
-type PlaybackInfo = {
+export type PlaybackInfo = {
   time: number;
   duration: number;
   notes: string[];
   velocity: number;
 };
 
-type PlayerParams = {
+export type PlayerParams = {
   instrument: string;
   baseUrl: string;
   timeTolerance: number;
@@ -26,7 +26,7 @@ const DEFAULT_PARAMS = {
   instrument: "acoustic_grand_piano",
   baseUrl:
     "https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@master/FluidR3_GM",
-} as const;
+} as PlayerParams;
 
 export type PlayerCallback = (params: {
   playedNotes: string[];
@@ -34,9 +34,9 @@ export type PlayerCallback = (params: {
   position: PlayerPosition;
 }) => void;
 
-export type PlayerEvents = "playing" | "finished" | "pause" | "stop";
+export type PlayerEvents = "stop" | "pause" | "progress" | "finished";
 
-const playerEvents = ["start", "stop", "pause"] as const;
+const transportEvents = ["start", "stop", "pause"] as const;
 
 export class Player {
   private sampler: Tone.Sampler;
@@ -58,15 +58,14 @@ export class Player {
     this.playbackProgress = 0;
     this.scoreManager = new ScoreManager();
     this.eventEmitter = new EventEmitter();
-    playerEvents.forEach((eventName) =>
+    transportEvents.forEach((eventName) =>
       this.transport.on(eventName, () =>
         this.eventEmitter.emit(eventName, { activeId: this.score?.id }),
       ),
     );
   }
   destroy() {
-    this.scoreManager.clearCache();
-    playerEvents.forEach((eventName) => this.transport.off(eventName));
+    transportEvents.forEach((eventName) => this.transport.off(eventName));
     this.eventEmitter.removeAllListeners();
     this.draw.cancel(0);
     this.transport.cancel(0);
@@ -109,7 +108,7 @@ export class Player {
       );
       this.draw.schedule(
         () =>
-          this.eventEmitter.emit("playing", {
+          this.eventEmitter.emit("progress", {
             playedNotes: chord.notes,
             activeId: score.id,
             position,
@@ -156,72 +155,5 @@ export class Player {
 
   seekTo(position: PlayerPosition) {
     this.transport.position = position;
-  }
-}
-
-type CreateSamplerParams = Pick<
-  PlayerParams,
-  "instrument" | "baseUrl" | "reverbDuration"
->;
-
-function createSampler({
-  instrument,
-  baseUrl,
-  reverbDuration,
-}: CreateSamplerParams) {
-  const sampler = new Tone.Sampler({
-    urls: Array.from({ length: 6 }, (_, i) => `C${i + 2}`).reduce(
-      (memo, key) => ({ ...memo, [key]: `${key}.mp3` }),
-      {},
-    ),
-    baseUrl: `${baseUrl}/${instrument}-mp3/`,
-  }).toDestination();
-  const reverb = new Tone.Reverb(reverbDuration).toDestination();
-  sampler.connect(reverb);
-  return sampler;
-}
-
-function parseMidiData(data: MidiJSON, timeTolerance: number) {
-  const { notes } = data.tracks.at(0)!;
-  const chords: PlaybackInfo[] = [];
-
-  for (const note of notes) {
-    const existing = chords.find(
-      (c) =>
-        Math.abs(c.time - note.time) < timeTolerance &&
-        Math.abs(c.duration - note.duration) < timeTolerance,
-    );
-    if (existing) {
-      existing.notes.push(note.name);
-    } else
-      chords.push({
-        time: note.time,
-        duration: note.duration,
-        notes: [note.name],
-        velocity: note.velocity,
-      });
-  }
-  return chords;
-}
-
-class ScoreManager {
-  private cache: Record<string, PlaybackInfo[]>;
-  constructor() {
-    this.cache = {};
-  }
-  getScoreContent(score: Score, timeTolerance: number): PlaybackInfo[] {
-    if (this.cache[score.hash]) {
-      return this.cache[score.hash] as PlaybackInfo[];
-    }
-    const rawMidi = synth
-      .getMidiFile(score.content, { midiOutputType: "binary" })
-      .at(0);
-    const midi = new Midi(rawMidi);
-    const scoreData = parseMidiData(midi.toJSON(), timeTolerance);
-    this.cache[score.hash] = scoreData;
-    return scoreData;
-  }
-  clearCache() {
-    this.cache = {};
   }
 }

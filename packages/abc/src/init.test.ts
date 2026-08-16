@@ -1,10 +1,20 @@
 // @vitest-environment jsdom
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
+import { initABCScore, initABCScoreWithPlayer } from "./init";
 
-import { initABCScore } from "./init";
+// #TODO: spy on button calls
+vi.mock(import("@music-ui/core"), async (importOriginal) => {
+  const originalModule = await importOriginal();
+  return {
+    ...originalModule,
+    Player: vi.fn(),
+  };
+});
+
+import { Player } from "@music-ui/core";
 
 describe("initABCScore - single element", () => {
-  it("initializes Abc instances on the selected element", () => {
+  it("renders an abc score on the selected element", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc-score>
@@ -28,7 +38,7 @@ C E G B
     );
   });
 
-  it("initializes an empty staff if no content if present", () => {
+  it("renders an empty score if no content if present", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc-score>
@@ -95,7 +105,7 @@ CEG
 });
 
 describe("initABCScore - multiple elements", () => {
-  it("initializes Abc instances on all affected elements", () => {
+  it("renders an abc score on all elements - by selector", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc-score>
@@ -126,7 +136,7 @@ C E G B
     });
   });
 
-  it("initializes Abc instances on all passed elements", () => {
+  it("renders an abc score on all elements - by NodeList", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc-score>
@@ -159,7 +169,7 @@ C E G B
 });
 
 describe("initABCScore - abcOptions", () => {
-  it("initializes Abc instances on all affected elements", () => {
+  it("renders an abc score on all elements with the passed abcOptions", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc-score>
@@ -190,5 +200,40 @@ C E G B
           ?.startsWith("M 30"),
       ).toBe(true);
     });
+  });
+});
+
+describe("initABCScoreWithPlayer", () => {
+  it("renders an abc score with player on all elements", () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score>
+          <div class="content">
+T:Test Song
+C E G B        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>
+      </main>`;
+
+    const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
+    const player = new Player();
+
+    initABCScoreWithPlayer({
+      selection: element,
+      player,
+    });
+
+    expect(element.querySelectorAll(".control-button").length).toBe(3);
+    expect(
+      element.querySelector<HTMLButtonElement>(".play-button")?.disabled,
+    ).toBeFalsy();
+    expect(
+      element.querySelector<HTMLButtonElement>(".pause-button")?.disabled,
+    ).toBeTruthy();
+    expect(
+      element.querySelector<HTMLButtonElement>(".stop-button")?.disabled,
+    ).toBeTruthy();
   });
 });

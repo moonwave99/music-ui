@@ -47,9 +47,6 @@ function createControls(
     stop: () => void;
   },
 ) {
-  const controls = document.createElement("div");
-  controls.classList.add("controls");
-
   const buttons = {} as Record<string, HTMLButtonElement>;
 
   Object.entries(handlers).forEach(([name, handler]) => {
@@ -57,12 +54,10 @@ function createControls(
     button.classList.add("control-button", `${name}-button`);
     button.addEventListener("click", handler);
     button.textContent = name;
-    controls.append(button);
+    element.append(button);
     button.disabled = name !== "play";
     buttons[name] = button;
   });
-
-  element.append(controls);
 
   return buttons as {
     play: HTMLButtonElement;

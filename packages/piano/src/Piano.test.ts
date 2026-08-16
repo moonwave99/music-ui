@@ -11,7 +11,7 @@ test.afterEach(() => {
 });
 
 describe("Piano - constructor", () => {
-  it("Renders with default options", () => {
+  it("Creates a new piano with default options and renders it on screen", () => {
     const piano = new Piano();
     piano.render();
     const wrapper = document.querySelector("#piano");
@@ -22,7 +22,7 @@ describe("Piano - constructor", () => {
     expect(wrapper!.querySelectorAll(".key.color-black").length).toBe(5 + 5);
   });
 
-  it("Renders with options", () => {
+  it("Creates a new piano with passed options and renders it on screen", () => {
     const piano = new Piano({
       octaves: 3,
       withFinalC: false,

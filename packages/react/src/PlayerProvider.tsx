@@ -80,7 +80,7 @@ export function usePlayer(id: string): UsePlayer {
         setPlayerStatus("stopped");
         setPlayedNotes([]);
       },
-      playing: ({ playedNotes, activeId, position }) => {
+      progress: ({ playedNotes, activeId, position }) => {
         if (id !== activeId) {
           setPosition("0:0:0");
           setPlayerStatus("stopped");
