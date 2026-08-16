@@ -48,7 +48,12 @@ export class Player {
   private playbackProgress: number;
   private scoreManager: ScoreManager;
   private eventEmitter: EventEmitter;
-  constructor(params?: PlayerParams) {
+  /**
+   * Creates a `Player` instance.
+   *
+   * @param params The accepted params
+   */
+  constructor(params: Partial<PlayerParams> = {}) {
     this.params = { ...DEFAULT_PARAMS, ...params };
     this.sampler = createSampler(this.params);
     this.transport = Tone.getTransport();
@@ -89,10 +94,42 @@ export class Player {
     this.stop();
     this.part?.clear();
     this.score = score;
-    if (score.info.bpm) {
-      this.transport.bpm.value = score.info.bpm;
+    if (this.score.info.bpm) {
+      this.transport.bpm.value = this.score.info.bpm;
     }
+    this.createPart();
+    return this;
+  }
+  async play() {
+    // #TODO fix seek before first playback bug
+    // hint: playbackProgress should be a PlayerPosition and not just an integer
+    await Tone.start();
+    if (!this.part) {
+      return;
+    }
+    this.part.start(this.transport.position);
+    this.transport.start();
+    return this;
+  }
+  pause() {
+    this.transport.pause();
+    return this;
+  }
+  stop() {
+    this.playbackProgress = 0;
+    this.transport.stop();
+    this.draw.cancel(0);
+    return this;
+  }
+  seekTo(position: PlayerPosition) {
+    this.transport.position = position;
+  }
 
+  private createPart() {
+    if (!this.score) {
+      return;
+    }
+    const score = this.score;
     const scoreData = this.scoreManager.getScoreContent(
       score,
       this.params.timeTolerance,
@@ -127,33 +164,5 @@ export class Player {
         }, time + 0.5);
       }
     }, scoreData);
-    return this;
-  }
-  async play() {
-    // #TODO fix seek before first playback bug
-    // hint: playbackProgress should be a PlayerPosition and not just an integer
-    await Tone.start();
-    if (!this.part) {
-      return;
-    }
-    this.part.start(this.transport.position);
-    this.transport.start();
-    return this;
-  }
-
-  pause() {
-    this.transport.pause();
-    return this;
-  }
-
-  stop() {
-    this.playbackProgress = 0;
-    this.transport.stop();
-    this.draw.cancel(0);
-    return this;
-  }
-
-  seekTo(position: PlayerPosition) {
-    this.transport.position = position;
   }
 }

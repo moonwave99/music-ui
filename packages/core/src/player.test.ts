@@ -111,11 +111,9 @@ describe("Player - events", () => {
     });
     player.setScore(score);
 
-    player.play();
+    await player.play();
     player.pause();
     player.stop();
-
-    await wait();
 
     expect(onProgress).toHaveBeenCalledWith({
       activeId: "1",
@@ -140,9 +138,7 @@ describe("Player - seek", () => {
     });
     player.setScore(score);
     player.seekTo("0:1:0");
-    player.play();
-
-    await wait();
+    await player.play();
 
     expect(onProgress).toHaveBeenCalledWith({
       activeId: "1",
@@ -151,5 +147,3 @@ describe("Player - seek", () => {
     });
   });
 });
-
-const wait = (ms = 50) => new Promise((r) => setTimeout(r, ms));
