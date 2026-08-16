@@ -1,13 +1,10 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from "vitest";
 import { PlayerPosition, type PlaybackInfo } from "./player";
-import { type ToneEventCallback } from "tone";
-import { type TransportClass } from "tone/build/esm/core/clock/Transport";
-import type { DrawClass } from "tone/build/esm/core/util/Draw";
-import type { Sampler } from "tone";
+import { type ToneEventCallback, Sampler } from "tone";
 
 //@ts-expect-error Hard to mock the whole thing without having vi.mock to complain
-vi.mock(import("Tone"), async (importOriginal) => {
+vi.mock(import("tone"), async (importOriginal) => {
   const originalModule = await importOriginal();
   return {
     ...originalModule,
@@ -27,11 +24,10 @@ vi.mock(import("Tone"), async (importOriginal) => {
       }
       clear() {}
     },
-    getDraw: () =>
-      ({
-        cancel: vi.fn(),
-        schedule: (fn: () => void) => fn(),
-      }) as unknown as DrawClass,
+    getDraw: () => ({
+      cancel: vi.fn(),
+      schedule: (fn: () => void) => fn(),
+    }),
     getTransport: () =>
       new (class {
         private handlers: Record<string, () => void>;
@@ -68,7 +64,7 @@ vi.mock(import("Tone"), async (importOriginal) => {
           }
           handler();
         }
-      })() as unknown as TransportClass,
+      })(),
   };
 });
 
