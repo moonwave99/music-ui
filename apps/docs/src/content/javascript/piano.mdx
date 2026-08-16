@@ -114,33 +114,9 @@ The following data attributes are supported:
 
 ## Appearance customization
 
-All the sizes and colors are configurable via CSS variables. These are the defaults:
+All the sizes and colors are configurable via CSS variables.
 
-```css
---piano-height: 4rem;
---piano-white-key-width: 1.2rem;
---piano-black-key-width: 0.8rem;
---piano-black-key-height: 60%;
---piano-white-key-played-indicator-size: calc(
-  var(--piano-white-key-width) / 3 * 2
-);
---piano-black-key-played-indicator-size: calc(var(--piano-black-key-width));
---piano-played-indicator-background-color: rgba(255, 255, 255, 0.9);
---piano-key-label-font-size: 0.7rem;
---piano-border-color: rgba(0, 0, 0, 0.4);
---piano-white-key-color: white;
---piano-black-key-color: rgb(35, 35, 35);
---piano-white-key-group-1-highlight-color: dodgerblue;
---piano-black-key-group-1-highlight-color: dodgerblue;
---piano-white-key-group-2-highlight-color: lightcoral;
---piano-black-key-group-2-highlight-color: lightcoral;
---piano-white-key-group-3-highlight-color: gold;
---piano-black-key-group-3-highlight-color: gold;
---piano-white-key-group-4-highlight-color: lightgreen;
---piano-black-key-group-4-highlight-color: lightgreen;
---piano-white-key-group-5-highlight-color: lightcoral;
---piano-black-key-group-5-highlight-color: lightcoral;
-```
+The defaults are found [in the imported CSS file](https://github.com/moonwave99/music-ui/blob/main/packages/piano/src/styles/index.css).
 
 You can override them in your style files.
 

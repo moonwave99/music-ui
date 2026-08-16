@@ -48,6 +48,7 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
  * @property {string} timeSignature The time signature element class
  * @property {string} cursor The cursor element class
  * @property {string} currentNote The current note element class
+ * @property {string} selectedNote The selected note element class
  */
 export const cssClasses = {
   content: "content",
@@ -55,6 +56,7 @@ export const cssClasses = {
   timeSignature: "abcjs-time-signature",
   cursor: "abcjs-cursor",
   currentNote: "abcjs-current-note",
+  selectedNote: "abcjs-note_selected",
 } as const;
 
 /**
@@ -130,20 +132,42 @@ export class ABCScore {
     if (!this.showCursor || !this.rendered) {
       return this;
     }
+    [0, 1].forEach((voice) => this.updateVoicePosition(position, voice));
+    return this;
+  }
+  private updateVoicePosition(position: PlayerPosition, voice: number) {
     const svgElement = this.getSVGElement()!;
     const [bar] = position.split(":");
     const barNotes = svgElement!.querySelectorAll<SVGGElement>(
-      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
+      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}.abcjs-v${voice}`,
     );
+    if (!barNotes.length) {
+      return;
+    }
     const currentNote = getCurrentNote(barNotes, position);
     if (!currentNote) {
-      return this;
+      return;
     }
     svgElement
-      .querySelectorAll(`.${cssClasses.currentNote}`)
+      .querySelectorAll(`.abcjs-v${voice}.${cssClasses.currentNote}`)
       .forEach((element) => element.classList.remove(cssClasses.currentNote));
     currentNote.classList.add(cssClasses.currentNote);
     this.updateCursor(currentNote);
+  }
+  /**
+   * Clears current note selection
+   */
+  clearSelection(): ABCScore {
+    /* istanbul ignore if  */
+    if (!this.rendered) {
+      return this;
+    }
+    this.getSVGElement()!
+      .querySelectorAll<SVGGElement>(`.${cssClasses.selectedNote}`)
+      .forEach((el) => {
+        el.classList.remove(cssClasses.selectedNote);
+        el.setAttribute("fill", "currentColor");
+      });
     return this;
   }
   private updateCursor(currentNote: SVGGElement): ABCScore {

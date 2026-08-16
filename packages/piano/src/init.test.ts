@@ -198,29 +198,6 @@ describe("initPiano", () => {
       })),
     ).toEqual([
       {
-        chroma: "0",
-        color: "white",
-        midi: "48",
-        note: "C",
-        noteWithOctave: "C3",
-        octave: "3",
-      },
-      {
-        chroma: "7",
-        color: "white",
-        midi: "55",
-        note: "G",
-        noteWithOctave: "G3",
-        octave: "3",
-      },
-    ]);
-
-    expect(
-      [...wrapper!.querySelectorAll<HTMLElement>(".group-2")].map((el) => ({
-        ...el.dataset,
-      })),
-    ).toEqual([
-      {
         chroma: "3",
         color: "black",
         midi: "63",
@@ -235,6 +212,29 @@ describe("initPiano", () => {
         note: "A#",
         noteWithOctave: "A#4",
         octave: "4",
+      },
+    ]);
+
+    expect(
+      [...wrapper!.querySelectorAll<HTMLElement>(".group-2")].map((el) => ({
+        ...el.dataset,
+      })),
+    ).toEqual([
+      {
+        chroma: "0",
+        color: "white",
+        midi: "48",
+        note: "C",
+        noteWithOctave: "C3",
+        octave: "3",
+      },
+      {
+        chroma: "7",
+        color: "white",
+        midi: "55",
+        note: "G",
+        noteWithOctave: "G3",
+        octave: "3",
       },
     ]);
   });

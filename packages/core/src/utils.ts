@@ -118,3 +118,10 @@ export function extractElementOptions<
   });
   return options as T;
 }
+
+export function joinVoices(voices: string[][]) {
+  return voices
+    .map((notes) => notes.join(" "))
+    .toReversed()
+    .join(",");
+}

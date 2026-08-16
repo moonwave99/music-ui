@@ -12,7 +12,7 @@ import {
 } from "./useABCScore";
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
-import { getAbcScore } from "@music-ui/core";
+import { getAbcScore, joinVoices } from "@music-ui/core";
 
 export type ABCScoreProps = UseABCScoreParams & {
   id?: string;
@@ -58,7 +58,7 @@ export function ABCScore({
     playedNotes,
     playerStatus,
     position,
-  } = usePlayer(id);
+  } = usePlayer({ id, onStop: () => abcRef.current?.clearSelection() });
 
   const onClick = useCallback(
     ({ position }: OnABCClickParams) => seekTo(position),
@@ -107,14 +107,14 @@ export function ABCScore({
         </div>
       ) : null}
       {pianoOptions.show ? (
-        <Piano notes={playedNotes} {...pianoOptions} />
+        <Piano notes={joinVoices(playedNotes)} {...pianoOptions} />
       ) : null}
     </div>
   );
 }
 
 function getNodeText(node: ReactNode): string {
-  if (node === null) {
+  if (!node) {
     return "";
   }
   switch (typeof node) {

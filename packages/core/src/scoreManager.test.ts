@@ -10,28 +10,7 @@ describe("ScoreManager - getScoreContent", () => {
     });
     const scoreManager = new ScoreManager();
     const playbackInfo = scoreManager.getScoreContent(score, 0.02);
-    expect(playbackInfo).toMatchObject([
-      {
-        time: 0,
-        duration: 0.5,
-        notes: ["C4"],
-      },
-      {
-        time: 0.5,
-        duration: 0.5,
-        notes: ["D4"],
-      },
-      {
-        time: 1,
-        duration: 0.5,
-        notes: ["E4"],
-      },
-      {
-        time: 1.5,
-        duration: 0.5,
-        notes: ["F4"],
-      },
-    ]);
+    expect(playbackInfo).toMatchSnapshot();
   });
 
   it("Gets the playback info of the passed score - with chords", () => {
@@ -41,17 +20,6 @@ describe("ScoreManager - getScoreContent", () => {
     });
     const scoreManager = new ScoreManager();
     const playbackInfo = scoreManager.getScoreContent(score, 0.02);
-    expect(playbackInfo).toMatchObject([
-      {
-        time: 0,
-        duration: 0.5,
-        notes: ["C4", "E4", "G4"],
-      },
-      {
-        time: 0.5,
-        duration: 0.5,
-        notes: ["D4", "F4", "A4"],
-      },
-    ]);
+    expect(playbackInfo).toMatchSnapshot();
   });
 });

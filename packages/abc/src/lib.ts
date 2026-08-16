@@ -18,12 +18,14 @@ export function getCurrentNote(
     elementsWithDurations.push({
       position: relativePosition * 4,
       element,
+      duration,
     });
     relativePosition += duration;
   }
 
-  for (const { element, position } of elementsWithDurations) {
-    if (position >= beat + Math.floor(sixteenths) / 4) {
+  // #TODO handle sixteenths properly
+  for (const { element, position, duration } of elementsWithDurations) {
+    if (position + duration * 4 > beat + sixteenths / 4) {
       return element;
     }
   }

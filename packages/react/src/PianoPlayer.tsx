@@ -1,7 +1,7 @@
 import { useId, type ReactElement } from "react";
 import { Piano, type PianoProps } from "./Piano";
 import { usePlayer } from "./PlayerProvider";
-import { getPianoScore } from "@music-ui/core";
+import { getPianoScore, joinVoices } from "@music-ui/core";
 
 export type PianoPlayerProps = PianoProps & {
   id: string;
@@ -22,11 +22,11 @@ export function PianoPlayer({
   const componentId = useId();
   const id = props.id || componentId;
   const { notes = [], ...rest } = props;
-  const { play, playerStatus, playedNotes } = usePlayer(id);
+  const { play, playerStatus, playedNotes } = usePlayer({ id });
 
   return (
     <figure className={className}>
-      <Piano playedNotes={playedNotes} notes={notes} {...rest} />
+      <Piano playedNotes={joinVoices(playedNotes)} notes={notes} {...rest} />
       <figcaption>{label}</figcaption>
       <div className="actions">
         <button

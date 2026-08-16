@@ -3,13 +3,17 @@ import { EventEmitter } from "events";
 import { type Score } from "./utils";
 import { createSampler } from "./lib";
 import { ScoreManager } from "./scoreManager";
+import { type NoteJSON } from "@tonejs/midi/dist/Note";
+import { END_NOTE } from "./lib";
 
 export type PlayerPosition = Tone.Unit.BarsBeatsSixteenths;
+
+export type PlaybackNote = NoteJSON;
 
 export type PlaybackInfo = {
   time: number;
   duration: number;
-  notes: string[];
+  notes: PlaybackNote[];
   velocity: number;
 };
 
@@ -32,6 +36,7 @@ export type PlayerCallback = (params: {
   playedNotes: string[];
   activeId: string;
   position: PlayerPosition;
+  voice: number;
 }) => void;
 
 export type PlayerEvents = "stop" | "pause" | "progress" | "finished";
@@ -40,12 +45,11 @@ const transportEvents = ["start", "stop", "pause"] as const;
 
 export class Player {
   private sampler: Tone.Sampler;
-  private part: Tone.Part | null;
+  private parts: Tone.Part[];
   private transport: ReturnType<typeof Tone.getTransport>;
   private draw: ReturnType<typeof Tone.getDraw>;
   private params: PlayerParams;
   private score: Score | null;
-  private playbackProgress: number;
   private scoreManager: ScoreManager;
   private eventEmitter: EventEmitter;
   /**
@@ -58,9 +62,8 @@ export class Player {
     this.sampler = createSampler(this.params);
     this.transport = Tone.getTransport();
     this.draw = Tone.getDraw();
-    this.part = null;
+    this.parts = [];
     this.score = null;
-    this.playbackProgress = 0;
     this.scoreManager = new ScoreManager();
     this.eventEmitter = new EventEmitter();
     transportEvents.forEach((eventName) =>
@@ -85,29 +88,28 @@ export class Player {
   setScore(score: Score | null) {
     if (!score) {
       this.score = null;
-      this.part?.clear();
+      this.clearParts();
       return this;
     }
     if (this.score?.hash === score.hash) {
       return this;
     }
     this.stop();
-    this.part?.clear();
+    this.clearParts();
     this.score = score;
     if (this.score.info.bpm) {
       this.transport.bpm.value = this.score.info.bpm;
     }
-    this.createPart();
+    this.createParts();
     return this;
   }
   async play() {
     // #TODO fix seek before first playback bug
-    // hint: playbackProgress should be a PlayerPosition and not just an integer
     await Tone.start();
-    if (!this.part) {
+    if (!this.parts.length) {
       return;
     }
-    this.part.start(this.transport.position);
+    this.parts.forEach((part) => part.start(this.transport.position));
     this.transport.start();
     return this;
   }
@@ -116,7 +118,6 @@ export class Player {
     return this;
   }
   stop() {
-    this.playbackProgress = 0;
     this.transport.stop();
     this.draw.cancel(0);
     return this;
@@ -125,7 +126,11 @@ export class Player {
     this.transport.position = position;
   }
 
-  private createPart() {
+  private clearParts() {
+    this.parts.forEach((part) => part.clear());
+  }
+
+  private createParts() {
     if (!this.score) {
       return;
     }
@@ -135,34 +140,46 @@ export class Player {
       this.params.timeTolerance,
     );
 
-    this.part = new Tone.Part((time: number, chord: PlaybackInfo) => {
-      const position = this.transport.position;
-      this.sampler.triggerAttackRelease(
-        chord.notes,
-        chord.duration,
-        time,
-        chord.velocity,
-      );
-      this.draw.schedule(
-        () =>
-          this.eventEmitter.emit("progress", {
-            playedNotes: chord.notes,
-            activeId: score.id,
-            position,
-          }),
-        time,
-      );
-      if (++this.playbackProgress == scoreData.length) {
-        this.draw.schedule(() => {
-          this.eventEmitter.emit("finished", {
-            playedNotes: [],
-            activeId: score.id,
-            position,
-          });
-          this.playbackProgress = 0;
-          this.stop();
-        }, time + 0.5);
-      }
-    }, scoreData);
+    this.transport.timeSignature = this.score.info.meter
+      ? this.score.info.meter!.split("/").map(Number)
+      : [4, 4];
+
+    this.parts = scoreData.map(
+      ({ notes, voice }) =>
+        new Tone.Part((time: number, chord: PlaybackInfo) => {
+          const position = this.transport.position;
+
+          if (chord.notes.some((note) => note.name === END_NOTE)) {
+            this.draw.schedule(() => {
+              this.eventEmitter.emit("finished", {
+                playedNotes: [],
+                activeId: score.id,
+                position,
+                voice,
+              });
+              this.stop();
+            }, time);
+            return;
+          }
+
+          this.sampler.triggerAttackRelease(
+            chord.notes.map(({ name }) => name),
+            chord.duration,
+            time,
+            chord.velocity,
+          );
+
+          this.draw.schedule(
+            () =>
+              this.eventEmitter.emit("progress", {
+                playedNotes: chord.notes.map(({ name }) => name),
+                activeId: score.id,
+                position,
+                voice,
+              }),
+            time,
+          );
+        }, notes),
+    );
   }
 }

@@ -11,9 +11,9 @@ export function parseNoteInput(
         .split(",")
         .filter(Boolean)
         .map((x) => x.split(" ").filter(Boolean));
-  const output = groups.flatMap((group, index) =>
-    group.map((note) => ({ note, group: index })),
-  );
+  const output = groups
+    .toReversed()
+    .flatMap((group, index) => group.map((note) => ({ note, group: index })));
   if (!noteLabels) {
     return output;
   }

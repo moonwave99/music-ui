@@ -7,17 +7,19 @@ title: Index
 A collection of music visualization tools for the web.
 
 <ABCScore pianoOptions={{ show: true, octaves: 3 }} showTempo={false}>
-T: You Are My Sunshine
-C: Traditional
-L: 1/4
-K: C
-Q: 180
-z G, C D|E2 E2-| E E D E| C2 C2-|
-w:You are my sun-shine,_ my on-ly sun-shine.
-C C D E|F2 A2-| A A G F|E4-|
-w:_You make me hap-py_ when skies are gray,
-E C D E|F2 A2-| A A G F|E2 C2-|
-w:_You'll ne-ver know, dear,_ how much I love you,
-C z C D| E3 F| D D2 E|C4|
-w:_Please don't take my sun-shine a-way.
+T:K.545 II Andante
+C:W.A.Mozart
+M:3/4
+L:1/4
+Q:60
+K:G
+%%staves \{V1 V2\}
+V:V1 clef=treble
+V:V2 clef=bass
+[V:V1] (B2 [L:1/16]dcBc) | [L:1/4] (d3/4B/4) Gz| \
+ (g3/2 [L:1/16] ag fed^c) | [L:1/4] (d3/4B1/4) Gz|
+[V:V2]
+[L:1/16]
+G,DB,D G,DB,D A,DCD | G,DB,D G,DB,D G,DB,D | \
+ G,ECE G,ECE G,^C^A,C | G,DB,D G,DB,D G,DB,D|
 </ABCScore>

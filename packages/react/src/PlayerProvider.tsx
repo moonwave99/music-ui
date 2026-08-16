@@ -27,6 +27,8 @@ function getPlayer(): Player {
   return _player;
 }
 
+export type PlayerStatus = "playing" | "paused" | "stopped";
+
 type PlayerContextType = {
   player: Player | null;
   currentScore: Score | null;
@@ -40,6 +42,11 @@ const PlayerContext: Context<PlayerContextType> =
     setCurrentScore: () => {},
   });
 
+export type UsePlayerParams = {
+  id: string;
+  onStop?: () => void;
+};
+
 export type UsePlayer = {
   play: (score: Score) => void;
   pause: () => void;
@@ -47,15 +54,15 @@ export type UsePlayer = {
   stop: () => void;
   seekTo: (position: PlayerPosition) => void;
   playerStatus: PlayerStatus;
-  playedNotes: string[];
+  playedNotes: string[][];
   position: PlayerPosition;
 };
 
-export type PlayerStatus = "playing" | "paused" | "stopped";
+const EMPTY_VOICES = [[], []] as string[][];
 
-export function usePlayer(id: string): UsePlayer {
+export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   const playerContext = use(PlayerContext);
-  const [playedNotes, setPlayedNotes] = useState<string[]>([]);
+  const [playedNotes, setPlayedNotes] = useState<string[][]>(EMPTY_VOICES);
   const [position, setPosition] = useState<PlayerPosition>("0:0:0");
   const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("stopped");
 
@@ -64,6 +71,7 @@ export function usePlayer(id: string): UsePlayer {
   }
 
   const { player, currentScore, setCurrentScore } = playerContext;
+
   useEffect(() => {
     const handlers: Record<PlayerEvents, PlayerCallback> = {
       pause: ({ activeId }) => {
@@ -78,9 +86,12 @@ export function usePlayer(id: string): UsePlayer {
         }
         setPosition("0:0:0");
         setPlayerStatus("stopped");
-        setPlayedNotes([]);
+        setPlayedNotes(EMPTY_VOICES);
+        if (onStop) {
+          onStop();
+        }
       },
-      progress: ({ playedNotes, activeId, position }) => {
+      progress: ({ playedNotes, activeId, position, voice }) => {
         if (id !== activeId) {
           setPosition("0:0:0");
           setPlayerStatus("stopped");
@@ -88,12 +99,14 @@ export function usePlayer(id: string): UsePlayer {
         }
         setPosition(position);
         setPlayerStatus("playing");
-        setPlayedNotes(playedNotes);
+        setPlayedNotes((prev) =>
+          prev.map((notes, index) => (index === voice ? playedNotes : notes)),
+        );
       },
       finished: () => {
         setPosition("0:0:0");
         setPlayerStatus("stopped");
-        setPlayedNotes([]);
+        setPlayedNotes(EMPTY_VOICES);
       },
     } as const;
 
@@ -108,7 +121,7 @@ export function usePlayer(id: string): UsePlayer {
     return () => {
       cancelHandlers.forEach((cancel) => cancel());
     };
-  }, [player, id]);
+  }, [player, id, onStop]);
 
   const play = useCallback(
     (score: Score) => {

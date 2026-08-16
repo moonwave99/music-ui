@@ -119,6 +119,7 @@ describe("Player - events", () => {
       activeId: "1",
       playedNotes: ["C4"],
       position: "0:0:0",
+      voice: 0,
     });
     expect(onPause).toHaveBeenCalled();
     expect(onStop).toHaveBeenCalled();
@@ -144,6 +145,7 @@ describe("Player - seek", () => {
       activeId: "1",
       playedNotes: ["D4"],
       position: "0:1:0",
+      voice: 0,
     });
   });
 });

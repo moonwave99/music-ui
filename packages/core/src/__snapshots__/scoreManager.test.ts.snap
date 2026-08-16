@@ -1,0 +1,173 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ScoreManager - getScoreContent > Gets the playback info of the passed score - with chords 1`] = `
+[
+  {
+    "notes": [
+      {
+        "duration": 0.5,
+        "notes": [
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 60,
+            "name": "C4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 64,
+            "name": "E4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 67,
+            "name": "G4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0.5,
+        "notes": [
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 62,
+            "name": "D4",
+            "ticks": 480,
+            "time": 0.5,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 65,
+            "name": "F4",
+            "ticks": 480,
+            "time": 0.5,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 69,
+            "name": "A4",
+            "ticks": 480,
+            "time": 0.5,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0.5,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0,
+        "notes": [
+          {
+            "name": "__END_NOTE__",
+          },
+        ],
+        "time": 1,
+        "velocity": 0,
+      },
+    ],
+    "voice": 0,
+  },
+]
+`;
+
+exports[`ScoreManager - getScoreContent > Gets the playback info of the passed score 1`] = `
+[
+  {
+    "notes": [
+      {
+        "duration": 0.5,
+        "notes": [
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 60,
+            "name": "C4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.8267716535433071,
+          },
+        ],
+        "time": 0,
+        "velocity": 0.8267716535433071,
+      },
+      {
+        "duration": 0.5,
+        "notes": [
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 62,
+            "name": "D4",
+            "ticks": 480,
+            "time": 0.5,
+            "velocity": 0.7480314960629921,
+          },
+        ],
+        "time": 0.5,
+        "velocity": 0.7480314960629921,
+      },
+      {
+        "duration": 0.5,
+        "notes": [
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 64,
+            "name": "E4",
+            "ticks": 960,
+            "time": 1,
+            "velocity": 0.7480314960629921,
+          },
+        ],
+        "time": 1,
+        "velocity": 0.7480314960629921,
+      },
+      {
+        "duration": 0.5,
+        "notes": [
+          {
+            "duration": 0.5,
+            "durationTicks": 480,
+            "midi": 65,
+            "name": "F4",
+            "ticks": 1440,
+            "time": 1.5,
+            "velocity": 0.7480314960629921,
+          },
+        ],
+        "time": 1.5,
+        "velocity": 0.7480314960629921,
+      },
+      {
+        "duration": 0,
+        "notes": [
+          {
+            "name": "__END_NOTE__",
+          },
+        ],
+        "time": 2,
+        "velocity": 0,
+      },
+    ],
+    "voice": 0,
+  },
+]
+`;

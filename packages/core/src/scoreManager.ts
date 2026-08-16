@@ -1,15 +1,15 @@
 import { synth } from "abcjs";
 import { Midi } from "@tonejs/midi";
 import { parseMidiData } from "./lib";
-import { PlaybackInfo } from "./player";
+import { ParsedVoice } from "./lib";
 import { Score } from "./utils";
 
 export class ScoreManager {
-  private cache: Record<string, PlaybackInfo[]>;
+  private cache: Record<string, ParsedVoice[]>;
   constructor() {
     this.cache = {};
   }
-  getScoreContent(score: Score, timeTolerance: number): PlaybackInfo[] {
+  getScoreContent(score: Score, timeTolerance: number): ParsedVoice[] {
     /* istanbul ignore if  */
     if (this.cache[score.hash]) {
       return this.cache[score.hash]!;

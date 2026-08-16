@@ -24,25 +24,59 @@ export function createSampler({
   return sampler;
 }
 
-export function parseMidiData(data: MidiJSON, timeTolerance: number) {
-  const { notes } = data.tracks.at(0)!;
-  const chords: PlaybackInfo[] = [];
+export const END_NOTE = "__END_NOTE__";
 
-  for (const note of notes) {
-    const existing = chords.find(
-      (c) =>
-        Math.abs(c.time - note.time) < timeTolerance &&
-        Math.abs(c.duration - note.duration) < timeTolerance,
-    );
-    if (existing) {
-      existing.notes.push(note.name);
-    } else
-      chords.push({
-        time: note.time,
-        duration: note.duration,
-        notes: [note.name],
-        velocity: note.velocity,
-      });
-  }
-  return chords;
+export type ParsedVoice = {
+  notes: PlaybackInfo[];
+  voice: number;
+};
+
+export function parseMidiData(
+  data: MidiJSON,
+  timeTolerance: number,
+): ParsedVoice[] {
+  const voices = data.tracks
+    .filter((x) => x.notes.length)
+    .map(({ notes }, index) => {
+      const groupedNotes: PlaybackInfo[] = [];
+      for (const note of notes) {
+        const existing = groupedNotes.find(
+          (c) => Math.abs(c.time - note.time) < timeTolerance,
+        );
+        if (existing) {
+          existing.notes.push(note);
+        } else
+          groupedNotes.push({
+            time: note.time,
+            duration: note.duration,
+            notes: [note],
+            velocity: note.velocity,
+          });
+      }
+      return {
+        notes: groupedNotes,
+        voice: index,
+      };
+    });
+
+  const longestVoiceIndex = voices
+    .toSorted((a, b) => {
+      return Math.sign(b.notes.at(-1)!.time - a.notes.at(-1)!.time);
+    })
+    .at(0)?.voice;
+
+  return voices.map((v, index) =>
+    index !== longestVoiceIndex
+      ? v
+      : { ...v, notes: [...v.notes, getEndNote(v.notes.at(-1)!)] },
+  );
+}
+
+function getEndNote({ time, duration }: PlaybackInfo) {
+  return {
+    time: time + duration,
+    duration: 0,
+    notes: [{ name: END_NOTE }],
+    velocity: 0,
+  } as PlaybackInfo;
 }

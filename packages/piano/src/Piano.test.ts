@@ -182,7 +182,7 @@ describe("Piano - setNotes", () => {
     );
 
     expect(
-      [...wrapper!.querySelectorAll(".group-2")].map((el) => ({
+      [...wrapper!.querySelectorAll(".group-1")].map((el) => ({
         ...(el as HTMLElement).dataset,
       })),
     ).toEqual([
@@ -205,7 +205,7 @@ describe("Piano - setNotes", () => {
     ]);
 
     expect(
-      [...wrapper!.querySelectorAll(".group-1")].map((el) => ({
+      [...wrapper!.querySelectorAll(".group-2")].map((el) => ({
         ...(el as HTMLElement).dataset,
       })),
     ).toEqual([
