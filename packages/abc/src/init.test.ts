@@ -19,8 +19,8 @@ describe("initABCScore - single element", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-T:Test Song
-C E G B        
+            T:Test Song
+            C E G B
           </div>
           <div class="staff"></div>
         </div>
@@ -59,9 +59,9 @@ C E G B
       <main>
         <div data-abc-score data-show-meter="false">
           <div class="content">
-M:4/4
-L:1
-CEG
+            M:4/4
+            L:1
+            CEG
           </div>
           <div class="staff"></div>
         </div>
@@ -83,9 +83,9 @@ CEG
       <main>
         <div data-abc-score>
           <div class="content">
-M:1/1
-L:1
-CEG
+            M:1/1
+            L:1
+            CEG
           </div>
           <div class="staff"></div>
           <div class="audio-controls"></div>
@@ -110,15 +110,15 @@ describe("initABCScore - multiple elements", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-T:Test Song 1
-C E G B        
+            T:Test Song 1
+            C E G B
           </div>
           <div class="staff"></div>
         </div>
         <div data-abc-score>
           <div class="content">
-T:Test Song 2
-C E G B        
+            T:Test Song 2
+            C E G B        
           </div>
           <div class="staff"></div>
         </div>
@@ -141,15 +141,15 @@ C E G B
       <main>
         <div data-abc-score>
           <div class="content">
-T:Test Song 1
-C E G B        
+            T:Test Song 1
+            C E G B        
           </div>
           <div class="staff"></div>
         </div>
         <div data-abc-score>
           <div class="content">
-T:Test Song 2
-C E G B        
+            T:Test Song 2
+            C E G B        
           </div>
           <div class="staff"></div>
         </div>
@@ -174,15 +174,15 @@ describe("initABCScore - abcOptions", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-T:Test Song 1
-C E G B        
+            T:Test Song 1
+            C E G B        
           </div>
           <div class="staff"></div>
         </div>
         <div data-abc-score>
           <div class="content">
-T:Test Song 2
-C E G B        
+            T:Test Song 2
+            C E G B        
           </div>
           <div class="staff"></div>
         </div>
@@ -209,8 +209,8 @@ describe("initABCScoreWithPlayer", () => {
       <main>
         <div data-abc-score>
           <div class="content">
-T:Test Song
-C E G B        
+            T:Test Song
+            C E G B        
           </div>
           <div class="staff"></div>
           <div class="controls"></div>

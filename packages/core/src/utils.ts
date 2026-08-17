@@ -1,6 +1,7 @@
 import md5 from "md5";
 import { scientificToAbcNotation } from "@tonaljs/abc-notation";
 import { parseAbc, getAbcInfo, type ParseAbcOptions } from "./abcParser";
+import dedent from "dedent";
 
 /**
  * @property id The score id
@@ -204,6 +205,16 @@ export function joinVoices(voices: string[][]) {
     .map((notes) => notes.join(" "))
     .toReversed()
     .join(",");
+}
+
+/**
+ * Removes indentation and leading / trailing whitespace from embedded content.
+ * Useful for cleaning up abc notation.
+ * @param element The element where the content is embedded
+ * @returns The cleaned content
+ */
+export function extractIndentedInput(element: HTMLElement) {
+  return dedent(element.textContent.trim());
 }
 
 function getScoreHash(id: string, content: string) {

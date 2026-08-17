@@ -125,7 +125,7 @@ describe("Player - events", () => {
     expect(onStop).toHaveBeenCalled();
     expect(onFinished).toHaveBeenCalled();
 
-    input.split("").forEach((x, index) => {
+    input.split("").forEach((x) => {
       expect(onProgress).toHaveBeenCalledWith({
         activeId: "1",
         voice: 0,

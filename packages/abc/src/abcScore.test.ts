@@ -2,15 +2,16 @@
 import { vi, test, describe, it, expect, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { ABCScore } from "./abcScore";
+import { extractIndentedInput } from "@music-ui/core";
 
 test.beforeEach(() => {
   document.body.innerHTML = `
 <div class="score">
   <div class="content">
-M:4/4
-L:1/4
-T:Test Song
-C E G B
+    M:4/4
+    L:1/4
+    T:Test Song
+    C E G B
   </div>
   <div class="staff"></div>
 </div>  
@@ -24,9 +25,11 @@ test.afterEach(() => {
 describe("ABCScore - constructor", () => {
   it("Does not render until render() is called", () => {
     const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
+
     new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content,
     });
     expect(wrapper.querySelector(".abcjs-container")).toBeNull();
   });
@@ -41,9 +44,10 @@ describe("ABCScore - constructor", () => {
 describe("ABCScore - render", () => {
   it("Renders with default options", () => {
     const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content,
     });
     score.render();
     expect(wrapper.querySelector(".abcjs-container")).not.toBeNull();
@@ -56,9 +60,10 @@ describe("ABCScore - render", () => {
 
   it("Does not display the score meter when showMeter is false", () => {
     const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content,
       showMeter: false,
     });
     score.render();
@@ -71,9 +76,10 @@ describe("ABCScore - render", () => {
 
   it("Does not display the cursor when showCursor is false", () => {
     const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content,
       showCursor: false,
     });
     score.render();
@@ -83,9 +89,10 @@ describe("ABCScore - render", () => {
 
   it("Is idempotent", () => {
     const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content,
     });
     score.render();
     expect(wrapper.querySelector(".abcjs-container")).not.toBeNull();
@@ -100,9 +107,10 @@ describe("ABCScore - render", () => {
 describe("ABCScore - updateCursor", () => {
   it("Updates the cursor and corresponding note selection", () => {
     const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content,
     });
     score.render();
 

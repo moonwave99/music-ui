@@ -7,6 +7,7 @@ import {
   ensureSelection,
   extractElementOptions,
   joinVoices,
+  extractIndentedInput,
 } from "./utils";
 
 describe("toAbcNotation", () => {
@@ -138,5 +139,19 @@ describe("joinVoices", () => {
         ["C3", "E3"],
       ]),
     ).toBe("C3 E3,G3 B3");
+  });
+});
+
+describe("extractIndentedInput", () => {
+  it("extracts and cleans the content embedded in the selected element", () => {
+    document.body.innerHTML = `
+      <div>
+        T: My Song
+        CDE
+      </div>
+    `;
+    expect(extractIndentedInput(document.querySelector("div")!)).toBe(
+      "T: My Song\nCDE",
+    );
   });
 });
