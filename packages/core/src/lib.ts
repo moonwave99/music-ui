@@ -60,9 +60,7 @@ export function parseMidiData(
     });
 
   const longestVoiceIndex = voices
-    .toSorted((a, b) => {
-      return Math.sign(b.notes.at(-1)!.time - a.notes.at(-1)!.time);
-    })
+    .toSorted((a, b) => Math.sign(b.notes.at(-1)!.time - a.notes.at(-1)!.time))
     .at(0)?.voice;
 
   return voices.map((v, index) =>

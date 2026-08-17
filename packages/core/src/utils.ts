@@ -2,6 +2,12 @@ import md5 from "md5";
 import { scientificToAbcNotation } from "@tonaljs/abc-notation";
 import { parseAbc, getAbcInfo, type ParseAbcOptions } from "./abcParser";
 
+/**
+ * @property id The score id
+ * @property content The score content (in abc notation)
+ * @property hash The score hash (computed for caching)
+ * @property info The score meta info
+ */
 export type Score = {
   id: string;
   content: string;
@@ -9,6 +15,14 @@ export type Score = {
   info: ScoreInfo;
 };
 
+/**
+ * @property title The score title
+ * @property composer The score composer
+ * @property meter The score meter (e.g. "4/4", "3/8")
+ * @property unitNoteLength The score unit note length (e.g. "1/8", "1/4")
+ * @property key The score key (e.g. "C", "Eb")
+ * @property bpm The score tempo
+ */
 export type ScoreInfo = {
   title?: string;
   composer?: string;
@@ -18,13 +32,26 @@ export type ScoreInfo = {
   bpm?: number;
 };
 
+/**
+ * Comma separated notes in a single string, or an array of notes (in scientific notation)
+ */
 export type NoteInput = string | string[];
 
+/**
+ * @param id The score id
+ * @param input The score input (in abc notation)
+ * @param options The abc parse options
+ */
 type GetAbcScoreParams = Pick<Score, "id"> & {
   input: string;
   options?: ParseAbcOptions;
 };
 
+/**
+ * Wraps abc notation input with meta info, and normalizes abc info fields.
+ * @param {GetAbcScoreParams} params The input for generating the score  
+ * @returns A score object with the normalized meta info and content
+ */
 export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
   const { info, content } = parseAbc(input, options);
   return {
@@ -35,8 +62,17 @@ export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
   };
 }
 
+/**
+ * Playback mode for the Piano widget.
+ */
 export type PlaybackMode = "block" | "arpeggio";
 
+/**
+ * @property id The score id
+ * @property bpm The score bpm
+ * @property input The score input (in scientific notation)
+ * @property playbackMode The playback mode (block or arpeggio)
+ */
 type GetPianoScoreParams = {
   id: string;
   bpm?: number;
@@ -63,24 +99,51 @@ export function getPianoScore({
   };
 }
 
+/**
+ * Converts scientific notation input to abc notation.
+ * @example
+ * // returns CEG
+ * toAbcNotation(['C3, 'G3', 'B3']);
+ * * @example
+ * // returns CEG
+ * toAbcNotation('C3 G3 B3');
+ * @param input The note input in scientific notation
+ * @returns The corresponding abc notation output
+ */
 export function toAbcNotation(input: NoteInput) {
   return (Array.isArray(input) ? input : input.split(" "))
     .map(scientificToAbcNotation)
     .join(" ");
 }
 
+/**
+ * Converts a scientific notation input to the abc notation of the desired playback mode.
+ * @example
+ * // returns [CEG]6
+ * withPlaybackMode(['C3, 'G3', 'B3'], 'block');
+ * @example
+ * // returns CEG
+ * withPlaybackMode(['C3, 'G3', 'B3'], 'arpeggio');*
+ * @param input The note input in scientific notation
+ * @param playbackMode The playback mode (arpeggio / block)
+ * @returns The corresponding abc notation
+ */
 export function withPlaybackMode(input: NoteInput, playbackMode: PlaybackMode) {
   const output = toAbcNotation(input);
   return playbackMode === "block" ? `[${output}]6` : output;
 }
 
-export function getScoreHash(id: string, score: string) {
-  return md5(`${id}${score}`);
-}
-
+/**
+ * A CSS selector, a single node or a list of nodes.
+ */
 export type ElementOrSelector<T extends HTMLElement> =
   NodeListOf<T> | T | string;
 
+/**
+ * Normalizes a selection (string, Element, NodeList) to a fixed state (jQuery <3).
+ * @param elementOrSelector A CSS selector, a single node or a list of nodes
+ * @returns An array of the selected elements
+ */
 export function ensureSelection<T extends HTMLElement>(
   elementOrSelector: ElementOrSelector<T>,
 ): T[] {
@@ -93,6 +156,12 @@ export function ensureSelection<T extends HTMLElement>(
   return [elementOrSelector as T];
 }
 
+/**
+ * Extracts data attributes from a given element out of a sample whitelist.
+ * @param el The element to gather attributes from
+ * @param baseOptions The whitelist of accepted data attributes and their relative types
+ * @returns An object of the available attributes and their values
+ */
 export function extractElementOptions<
   T extends Record<string, string | number | boolean>,
 >(el: HTMLElement, baseOptions: T): T {
@@ -119,9 +188,19 @@ export function extractElementOptions<
   return options as T;
 }
 
+/**
+ * Joins an array of voices to a comma separated string in reverse order.
+ * Needed to make the top voice (0-indexed) stay at the top when rendering on a Piano (right hand).
+ * @param voices The array of voices (e.g. [["G3", "B3"], ["C3", "G3"]])
+ * @returns The joined voices string
+ */
 export function joinVoices(voices: string[][]) {
   return voices
     .map((notes) => notes.join(" "))
     .toReversed()
     .join(",");
+}
+
+function getScoreHash(id: string, content: string) {
+  return md5(`${id}${content}`);
 }

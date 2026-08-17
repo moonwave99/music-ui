@@ -6,6 +6,7 @@ import {
   toAbcNotation,
   ensureSelection,
   extractElementOptions,
+  joinVoices,
 } from "./utils";
 
 describe("toAbcNotation", () => {
@@ -126,5 +127,16 @@ describe("extractElementOptions", () => {
       h: true,
     });
     expect(options).toEqual({ a: "abc", c: 123, e: false, f: true, g: true });
+  });
+});
+
+describe("joinVoices", () => {
+  it("joins an array of voices to a comma separated string in reverse order", () => {
+    expect(
+      joinVoices([
+        ["G3", "B3"],
+        ["C3", "E3"],
+      ]),
+    ).toBe("C3 E3,G3 B3");
   });
 });

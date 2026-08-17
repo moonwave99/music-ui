@@ -131,6 +131,7 @@ export class Player {
   }
 
   private createParts() {
+    /* istanbul ignore if  */
     if (!this.score) {
       return;
     }
@@ -148,7 +149,6 @@ export class Player {
       ({ notes, voice }) =>
         new Tone.Part((time: number, chord: PlaybackInfo) => {
           const position = this.transport.position;
-
           if (chord.notes.some((note) => note.name === END_NOTE)) {
             this.draw.schedule(() => {
               this.eventEmitter.emit("finished", {

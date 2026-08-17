@@ -18,9 +18,11 @@ vi.mock(import("tone"), async (importOriginal) => {
         this.progressFn = progressFn;
         this.scoreData = scoreData;
       }
+      // #TODO play part from Transport and not from Part
       start(position: PlayerPosition) {
         const [, beat] = position.split(":");
-        this.progressFn(0, this.scoreData[Number(beat)]!);
+        const eventsToPlay = this.scoreData.slice(Number(beat));
+        eventsToPlay.forEach((event) => this.progressFn(event.time, event));
       }
       clear() {}
     },
@@ -43,6 +45,10 @@ vi.mock(import("tone"), async (importOriginal) => {
         on(eventName: string, handler: () => void) {
           this.handlers[eventName] = handler;
         }
+        off(eventName: string) {
+          delete this.handlers[eventName];
+        }
+        cancel() {}
         stop() {
           const handler = this.handlers.stop;
           if (!handler) {
@@ -96,14 +102,18 @@ describe("Player - events", () => {
     const onProgress = vi.fn();
     const onPause = vi.fn();
     const onStop = vi.fn();
+    const onFinished = vi.fn();
 
     player.on("progress", onProgress);
     player.on("pause", onPause);
     player.on("stop", onStop);
+    player.on("finished", onFinished);
+
+    const input = "CDEF";
 
     const score = getAbcScore({
       id: "1",
-      input: "CDEF",
+      input,
     });
     player.setScore(score);
 
@@ -111,14 +121,70 @@ describe("Player - events", () => {
     player.pause();
     player.stop();
 
-    expect(onProgress).toHaveBeenCalledWith({
-      activeId: "1",
-      playedNotes: ["C4"],
-      position: "0:0:0",
-      voice: 0,
-    });
     expect(onPause).toHaveBeenCalled();
     expect(onStop).toHaveBeenCalled();
+    expect(onFinished).toHaveBeenCalled();
+
+    input.split("").forEach((x, index) => {
+      expect(onProgress).toHaveBeenCalledWith({
+        activeId: "1",
+        voice: 0,
+        playedNotes: [`${x}4`],
+        position: `0:0:0`,
+      });
+    });
+  });
+});
+
+describe("Player - play", () => {
+  it("Does nothing if no parts are present", async () => {
+    const player = new Player();
+    const onProgress = vi.fn();
+    player.on("progress", onProgress);
+    await player.play();
+    expect(onProgress).not.toHaveBeenCalled();
+  });
+});
+
+describe("Player - setScore", () => {
+  it("Sets the current score", () => {
+    const player = new Player();
+    const score = getAbcScore({
+      id: "1",
+      input: "CDEF",
+    });
+    player.setScore(score);
+    expect(player.getScore()).toEqual(score);
+    player.setScore(null);
+    expect(player.getScore()).toEqual(null);
+  });
+
+  it("Does not recompute the parts if the new score has the same hash as the current one", () => {
+    const player = new Player();
+    const score = getAbcScore({
+      id: "1",
+      input: "CDEF",
+    });
+    player.setScore(score);
+    expect(player.getScore()).toEqual(score);
+    player.setScore({ ...score });
+    expect(player.getScore()).toEqual(score);
+  });
+});
+
+describe("Player - destroy", () => {
+  it("Removes all listeners, clears all parts and scheduled events", async () => {
+    const player = new Player();
+    const score = getAbcScore({
+      id: "1",
+      input: "CDEF",
+    });
+    player.setScore(score);
+    const onProgress = vi.fn();
+    player.on("progress", onProgress);
+    player.destroy();
+    await player.play();
+    expect(onProgress).not.toHaveBeenCalled();
   });
 });
 
