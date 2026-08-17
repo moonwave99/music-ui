@@ -35,9 +35,10 @@ export function getCurrentNote(
 
 export function getNotePosition(element: SVGGElement): PlayerPosition {
   const bar = getValueFromNote(element, "abcjs-mm");
+  const voice = getValueFromNote(element, "abcjs-v");
 
   const barNotes = element.parentElement!.querySelectorAll<SVGGElement>(
-    `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}`,
+    `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}.abcjs-v${voice}`,
   );
 
   const barPosition = Array.from(barNotes).indexOf(element);
@@ -50,8 +51,7 @@ export function getNotePosition(element: SVGGElement): PlayerPosition {
   const beat = beatWithRest - rest;
   const sixteenths = rest * 4;
 
-  const position = `${bar}:${beat}:${sixteenths}` as PlayerPosition;
-  return position;
+  return `${bar}:${beat}:${sixteenths}`;
 }
 
 export function getValueFromNote(element: SVGGElement, classPrefix: string) {
@@ -78,5 +78,6 @@ export function getNoteDuration(element: SVGGElement) {
       ? durationValue.replace("-", ".")
       : durationValue,
   );
-  return duration;
+  // it fixes the sixteenth note duration
+  return duration === 0.063 ? 0.0625 : duration;
 }
