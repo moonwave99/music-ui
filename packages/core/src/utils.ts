@@ -80,12 +80,17 @@ type GetPianoScoreParams = {
   playbackMode?: PlaybackMode;
 };
 
+/**
+ * Generates a small abc score for playback of Piano widget chords / arpeggios.
+ * @param __namedParameters The parameters for generating a piano score
+ * @returns a Score with the abc notation of the passed notes in the desired playback mode (arpeggio / block).
+ */
 export function getPianoScore({
   id,
   input,
   playbackMode = "block",
   bpm = 120,
-}: GetPianoScoreParams) {
+}: GetPianoScoreParams): Score {
   const content = [
     getAbcInfo({ Q: bpm }),
     withPlaybackMode(input, playbackMode),
