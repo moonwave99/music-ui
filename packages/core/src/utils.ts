@@ -120,10 +120,10 @@ export function toAbcNotation(input: NoteInput) {
  * Converts a scientific notation input to the abc notation of the desired playback mode.
  * @example
  * // returns [CEG]6
- * withPlaybackMode(['C3, 'G3', 'B3'], 'block');
+ * withPlaybackMode(['C3', 'G3', 'B3'], 'block');
  * @example
  * // returns CEG
- * withPlaybackMode(['C3, 'G3', 'B3'], 'arpeggio');*
+ * withPlaybackMode(['C3', 'G3', 'B3'], 'arpeggio');
  * @param input The note input in scientific notation
  * @param playbackMode The playback mode (arpeggio / block)
  * @returns The corresponding abc notation
