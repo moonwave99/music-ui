@@ -132,9 +132,11 @@ export class Player {
     this.draw.cancel(0);
     return this;
   }
-  // #TODO convert compound meter positions to internal Tone.js handling
   seekTo(position: PlayerPosition) {
-    this.transport.position = position;
+    this.transport.position = normalizedPositionToTonePosition(
+      position,
+      this.timeSignature!,
+    );
   }
 
   private clearParts() {
@@ -155,7 +157,7 @@ export class Player {
     this.parts = scoreData.map(
       ({ notes, voice }) =>
         new Tone.Part((time: number, chord: PlaybackInfo) => {
-          const position = convertPlayerPosition(
+          const position = tonePositionToNormalizedPosition(
             this.transport.position as PlayerPosition,
             this.timeSignature!,
           );
@@ -193,7 +195,8 @@ export class Player {
   }
 }
 
-function convertPlayerPosition(
+// #TODO move everything to core/lib
+function tonePositionToNormalizedPosition(
   position: PlayerPosition,
   meter: [number, number],
 ) {
@@ -206,9 +209,32 @@ function convertPlayerPosition(
     number,
     number,
   ];
-  const totalBeats = bars! * 3 + beats!;
+  const totalBeats = bars * 3 + beats;
   const newBars = Math.floor(totalBeats / numerator);
   const newBeats = totalBeats - newBars * numerator;
   const newSubdivisions = subdivisions / 2;
+
+  return `${newBars}:${newBeats}:${newSubdivisions}`;
+}
+
+function normalizedPositionToTonePosition(
+  position: PlayerPosition,
+  meter: [number, number],
+) {
+  if (!["6,8", "9,8", "12,8"].includes(`${meter}`)) {
+    return position;
+  }
+  const numerator = meter.at(0)!;
+  const [bars, beats, subdivisions] = position.split(":").map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const totalBeats = bars * numerator + beats;
+  const newBars = Math.floor(totalBeats / 3);
+  const newBeatsWithRest = totalBeats - newBars * 3;
+  const newBeats = Math.floor(newBeatsWithRest);
+  const newSubdivisions = subdivisions * 2;
+
   return `${newBars}:${newBeats}:${newSubdivisions}`;
 }

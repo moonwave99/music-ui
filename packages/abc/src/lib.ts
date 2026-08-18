@@ -81,8 +81,15 @@ export function getNoteDuration(element: SVGGElement) {
       ? durationValue.replace("-", ".")
       : durationValue,
   );
-  // it fixes the sixteenth note duration
-  return duration === 0.063 ? 0.0625 : duration;
+  // fixes the 32th note duration
+  if (duration === 0.031) {
+    return 1 / 32;
+  }
+  // fixes the 16th note duration
+  if (duration === 0.063) {
+    return 1 / 16;
+  }
+  return duration;
 }
 
 const durationMap = {
