@@ -1,14 +1,12 @@
 import { PlayerPosition } from "@music-ui/core";
 
+export type TimeSignature = [number, number];
+
 export function getCurrentNote(
   barNotes: NodeListOf<SVGGElement>,
   position: PlayerPosition,
+  meter: [number, number],
 ) {
-  const [, beat, sixteenths] = position.split(":").map(Number) as [
-    number,
-    number,
-    number,
-  ];
   const elementsWithDurations = [];
 
   let relativePosition = 0;
@@ -16,16 +14,17 @@ export function getCurrentNote(
   for (const element of barNotes) {
     const duration = getNoteDuration(element);
     elementsWithDurations.push({
-      position: relativePosition * 4,
+      position: relativePosition,
       element,
       duration,
     });
     relativePosition += duration;
   }
 
-  // #TODO handle sixteenths properly
+  const relativeNotePosition = getRelativePosition(position, meter);
+
   for (const { element, position, duration } of elementsWithDurations) {
-    if (position + duration * 4 > beat + sixteenths / 4) {
+    if (position + duration > relativeNotePosition) {
       return element;
     }
   }
@@ -33,7 +32,10 @@ export function getCurrentNote(
   return null;
 }
 
-export function getNotePosition(element: SVGGElement): PlayerPosition {
+export function getNotePosition(
+  element: SVGGElement,
+  timeSignature: TimeSignature,
+): PlayerPosition {
   const bar = getValueFromNote(element, "abcjs-mm");
   const voice = getValueFromNote(element, "abcjs-v");
 
@@ -41,17 +43,18 @@ export function getNotePosition(element: SVGGElement): PlayerPosition {
     `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}.abcjs-v${voice}`,
   );
 
-  const barPosition = Array.from(barNotes).indexOf(element);
-  const beatWithRest =
-    Array.from(barNotes)
-      .slice(0, barPosition)
-      .reduce((memo, element) => memo + getNoteDuration(element), 0) * 4;
+  const indexInBar = Array.from(barNotes).indexOf(element);
+  const lengthSoFar = Array.from(barNotes)
+    .slice(0, indexInBar)
+    .reduce((memo, element) => memo + getNoteDuration(element), 0);
 
+  const barLength = getBarLength(timeSignature);
+  const beatWithRest = (lengthSoFar / barLength) * timeSignature[0];
   const rest = beatWithRest % 1;
   const beat = beatWithRest - rest;
-  const sixteenths = rest * 4;
+  const subDivisions = rest * subDivisionsMap[timeSignature[1]]!;
 
-  return `${bar}:${beat}:${sixteenths}`;
+  return `${bar}:${beat}:${subDivisions}`;
 }
 
 export function getValueFromNote(element: SVGGElement, classPrefix: string) {
@@ -80,4 +83,38 @@ export function getNoteDuration(element: SVGGElement) {
   );
   // it fixes the sixteenth note duration
   return duration === 0.063 ? 0.0625 : duration;
+}
+
+const durationMap = {
+  8: 0.125,
+  4: 0.25,
+  2: 0.5,
+  1: 1,
+} as Record<number, number>;
+
+const subDivisionsMap = {
+  8: 2,
+  4: 4,
+  2: 8,
+  1: 16,
+} as Record<number, number>;
+
+function getBarLength([num, den]: TimeSignature) {
+  return durationMap[den]! * num;
+}
+
+export function getRelativePosition(
+  position: PlayerPosition,
+  [, den]: TimeSignature,
+) {
+  const [, beat, subdivisions] = position.split(":").map(Number) as [
+    number,
+    number,
+    number,
+  ];
+
+  const beatDuration = durationMap[den]!;
+  const subDivisionDuration = beatDuration / subDivisionsMap[den]!;
+
+  return beatDuration * beat + subdivisions * subDivisionDuration;
 }

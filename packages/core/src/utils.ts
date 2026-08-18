@@ -110,7 +110,7 @@ export function getPianoScore({
  * @example
  * // returns CEG
  * toAbcNotation(['C3, 'G3', 'B3']);
- * * @example
+ * @example
  * // returns CEG
  * toAbcNotation('C3 G3 B3');
  * @param input The note input in scientific notation
@@ -215,6 +215,25 @@ export function joinVoices(voices: string[][]) {
  */
 export function extractIndentedInput(element: HTMLElement) {
   return dedent(element.textContent.trim());
+}
+
+/**
+ * Parses a time signature into a tuple of numbers.
+ * @example
+ * // returns [6, 8]
+ * parseTimeSignature("6/8");
+ * @param timeSignature The string containing the time signature, e.g. 4/4 or 6/8
+ * @returns The corresponding number tuple
+ */
+export function parseTimeSignature(timeSignature = "4/4"): [number, number] {
+  const match = timeSignature.match(/(\d+)\/(\d+)/);
+  if (!match) {
+    console.warn(
+      `Could not parse the passed time signature (${timeSignature}), assuming 4/4.`,
+    );
+    return [4, 4];
+  }
+  return [Number(match[1]), Number(match[2])];
 }
 
 function getScoreHash(id: string, content: string) {

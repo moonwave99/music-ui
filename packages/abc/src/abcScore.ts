@@ -5,7 +5,12 @@ import {
   type AbcVisualParams,
 } from "abcjs";
 import { type PlayerPosition } from "@music-ui/core";
-import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
+import {
+  getCurrentNote,
+  getNotePosition,
+  getValueFromNote,
+  TimeSignature,
+} from "./lib";
 
 /**
  * The cursor staff height overflow.
@@ -132,7 +137,7 @@ export class ABCScore {
     if (!this.showCursor || !this.rendered) {
       return this;
     }
-    [0, 1].forEach((voice) => this.updateVoicePosition(position, voice));
+    [0, 1, 2].forEach((voice) => this.updateVoicePosition(position, voice));
     return this;
   }
   private updateVoicePosition(position: PlayerPosition, voice: number) {
@@ -144,7 +149,13 @@ export class ABCScore {
     if (!barNotes.length) {
       return;
     }
-    const currentNote = getCurrentNote(barNotes, position);
+    const { num, den } = {
+      num: 4,
+      den: 4,
+      ...(this.tune?.getMeterFraction() || {}),
+    };
+
+    const currentNote = getCurrentNote(barNotes, position, [num, den]);
     if (!currentNote) {
       return;
     }
@@ -193,6 +204,14 @@ export class ABCScore {
     }
     return this;
   }
+  getTimeSignature(): TimeSignature {
+    const { num, den } = {
+      num: 4,
+      den: 4,
+      ...(this.tune?.getMeterFraction() || {}),
+    };
+    return [num, den];
+  }
   private baseRender() {
     /* istanbul ignore if  */
     if (this.rendered) {
@@ -210,7 +229,9 @@ export class ABCScore {
       }
       const currentNote = x.selectableElement as unknown as SVGGElement;
       this.updateCursor(currentNote);
-      this.onClick({ position: getNotePosition(currentNote) });
+      this.onClick({
+        position: getNotePosition(currentNote, this.getTimeSignature()),
+      });
     };
 
     this.tune = renderAbc(this.element, this.content, {

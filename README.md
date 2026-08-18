@@ -8,10 +8,11 @@ A collection of music visualization tools for the web.
 
 ## Roadmap
 
-- improve interaction coverage (e.g. `updateCursor`);
+- improve interaction coverage;
 - test `Player` playback interaction;
-- support multiple voices cursor;
 - improve responsive design.
+- test vanilla initializers;
+- make visualization options user configurable.
 
 ### piano
 

@@ -1,6 +1,6 @@
 import * as Tone from "tone";
 import { EventEmitter } from "events";
-import { type Score } from "./utils";
+import { parseTimeSignature, type Score } from "./utils";
 import { createSampler } from "./lib";
 import { ScoreManager } from "./scoreManager";
 import { type NoteJSON } from "@tonejs/midi/dist/Note";
@@ -50,6 +50,7 @@ export class Player {
   private draw: ReturnType<typeof Tone.getDraw>;
   private params: PlayerParams;
   private score: Score | null;
+  private timeSignature: [number, number] | null;
   private scoreManager: ScoreManager;
   private eventEmitter: EventEmitter;
   /**
@@ -64,6 +65,7 @@ export class Player {
     this.draw = Tone.getDraw();
     this.parts = [];
     this.score = null;
+    this.timeSignature = null;
     this.scoreManager = new ScoreManager();
     this.eventEmitter = new EventEmitter();
     transportEvents.forEach((eventName) =>
@@ -100,6 +102,14 @@ export class Player {
     if (this.score.info.bpm) {
       this.transport.bpm.value = this.score.info.bpm;
     }
+    if (this.score.info.meter) {
+      this.timeSignature = parseTimeSignature(this.score.info.meter);
+    } else {
+      this.timeSignature = [4, 4];
+    }
+
+    this.transport.timeSignature = this.timeSignature;
+
     this.createParts();
     return this;
   }
@@ -122,6 +132,7 @@ export class Player {
     this.draw.cancel(0);
     return this;
   }
+  // #TODO convert compound meter positions to internal Tone.js handling
   seekTo(position: PlayerPosition) {
     this.transport.position = position;
   }
@@ -141,14 +152,14 @@ export class Player {
       this.params.timeTolerance,
     );
 
-    this.transport.timeSignature = this.score.info.meter
-      ? this.score.info.meter!.split("/").map(Number)
-      : [4, 4];
-
     this.parts = scoreData.map(
       ({ notes, voice }) =>
         new Tone.Part((time: number, chord: PlaybackInfo) => {
-          const position = this.transport.position;
+          const position = convertPlayerPosition(
+            this.transport.position as PlayerPosition,
+            this.timeSignature!,
+          );
+
           if (chord.notes.some((note) => note.name === END_NOTE)) {
             this.draw.schedule(() => {
               this.eventEmitter.emit("finished", {
@@ -169,17 +180,35 @@ export class Player {
             chord.velocity,
           );
 
-          this.draw.schedule(
-            () =>
-              this.eventEmitter.emit("progress", {
-                playedNotes: chord.notes.map(({ name }) => name),
-                activeId: score.id,
-                position,
-                voice,
-              }),
-            time,
-          );
+          this.draw.schedule(() => {
+            this.eventEmitter.emit("progress", {
+              playedNotes: chord.notes.map(({ name }) => name),
+              activeId: score.id,
+              position,
+              voice,
+            });
+          }, time);
         }, notes),
     );
   }
+}
+
+function convertPlayerPosition(
+  position: PlayerPosition,
+  meter: [number, number],
+) {
+  if (!["6,8", "9,8", "12,8"].includes(`${meter}`)) {
+    return position;
+  }
+  const numerator = meter.at(0)!;
+  const [bars, beats, subdivisions] = position.split(":").map(Number) as [
+    number,
+    number,
+    number,
+  ];
+  const totalBeats = bars! * 3 + beats!;
+  const newBars = Math.floor(totalBeats / numerator);
+  const newBeats = totalBeats - newBars * numerator;
+  const newSubdivisions = subdivisions / 2;
+  return `${newBars}:${newBeats}:${newSubdivisions}`;
 }

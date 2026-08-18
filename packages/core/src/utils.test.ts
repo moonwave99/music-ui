@@ -8,6 +8,7 @@ import {
   extractElementOptions,
   joinVoices,
   extractIndentedInput,
+  parseTimeSignature,
 } from "./utils";
 
 describe("toAbcNotation", () => {
@@ -153,5 +154,15 @@ describe("extractIndentedInput", () => {
     expect(extractIndentedInput(document.querySelector("div")!)).toBe(
       "T: My Song\nCDE",
     );
+  });
+});
+
+describe("parseTimeSignature", () => {
+  it("parses the passed time signature", () => {
+    expect(parseTimeSignature()).toEqual([4, 4]);
+    expect(parseTimeSignature("A/B")).toEqual([4, 4]);
+    expect(parseTimeSignature("4/4")).toEqual([4, 4]);
+    expect(parseTimeSignature("6/8")).toEqual([6, 8]);
+    expect(parseTimeSignature("12/8")).toEqual([12, 8]);
   });
 });
