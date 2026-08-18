@@ -1,11 +1,16 @@
-import { PlayerPosition } from "@music-ui/core";
+import { type TransportPosition, TimeSignature } from "@music-ui/core";
 
-export type TimeSignature = [number, number];
-
+/**
+ * Returns the note at the given position (to update the score cursor on playback progress)
+ * @param barNotes The notes contained in the bar
+ * @param position The position to look for
+ * @param timeSignature The score time signature
+ * @returns
+ */
 export function getCurrentNote(
   barNotes: NodeListOf<SVGGElement>,
-  position: PlayerPosition,
-  meter: [number, number],
+  position: TransportPosition,
+  timeSignature: TimeSignature,
 ) {
   const elementsWithDurations = [];
 
@@ -21,7 +26,7 @@ export function getCurrentNote(
     relativePosition += duration;
   }
 
-  const relativeNotePosition = getRelativePosition(position, meter);
+  const relativeNotePosition = getRelativePosition(position, timeSignature);
 
   for (const { element, position, duration } of elementsWithDurations) {
     if (position + duration > relativeNotePosition) {
@@ -32,10 +37,16 @@ export function getCurrentNote(
   return null;
 }
 
+/**
+ * Returns the transport position of the passed note (e.g. 1:2:1).
+ * @param element The note element
+ * @param timeSignature The score time signature
+ * @returns the note position
+ */
 export function getNotePosition(
   element: SVGGElement,
   timeSignature: TimeSignature,
-): PlayerPosition {
+): TransportPosition {
   const bar = getValueFromNote(element, "abcjs-mm");
   const voice = getValueFromNote(element, "abcjs-v");
 
@@ -57,6 +68,17 @@ export function getNotePosition(
   return `${bar}:${beat}:${subDivisions}`;
 }
 
+/**
+ * Extracts a value from an abc.js element for the passed class prefix.
+ * @remark Abc.js stores note metadata inside css classes (and not inside data attributes)
+ * @see {@link https://docs.abcjs.net/visual/classes|Abc.js documentation}
+ * @example
+ * // returns the measure from the beginning of the tune
+ * getValueFromNote(element, "abcjs-mm");
+ * @param element The note element
+ * @param classPrefix How the class name starts (without the value)
+ * @returns The value for the passed class prefix
+ */
 export function getValueFromNote(element: SVGGElement, classPrefix: string) {
   return Number(
     element.classList
@@ -67,6 +89,11 @@ export function getValueFromNote(element: SVGGElement, classPrefix: string) {
   );
 }
 
+/**
+ * Extracts the note duration from an abc.js element.
+ * @param element The note element
+ * @returns The note duration
+ */
 export function getNoteDuration(element: SVGGElement) {
   const durationValue = element
     .getAttribute("class")
@@ -92,13 +119,6 @@ export function getNoteDuration(element: SVGGElement) {
   return duration;
 }
 
-const durationMap = {
-  8: 0.125,
-  4: 0.25,
-  2: 0.5,
-  1: 1,
-} as Record<number, number>;
-
 const subDivisionsMap = {
   8: 2,
   4: 4,
@@ -107,11 +127,11 @@ const subDivisionsMap = {
 } as Record<number, number>;
 
 function getBarLength([num, den]: TimeSignature) {
-  return durationMap[den]! * num;
+  return (1 / den!) * num;
 }
 
-export function getRelativePosition(
-  position: PlayerPosition,
+function getRelativePosition(
+  position: TransportPosition,
   [, den]: TimeSignature,
 ) {
   const [, beat, subdivisions] = position.split(":").map(Number) as [
@@ -120,7 +140,7 @@ export function getRelativePosition(
     number,
   ];
 
-  const beatDuration = durationMap[den]!;
+  const beatDuration = 1 / den!;
   const subDivisionDuration = beatDuration / subDivisionsMap[den]!;
 
   return beatDuration * beat + subdivisions * subDivisionDuration;

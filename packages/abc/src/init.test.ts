@@ -54,10 +54,10 @@ describe("initABCScore - single element", () => {
     expect(element!.querySelector(".abcjs-container")).not.toBeNull();
   });
 
-  it("does not display the meter if showMeter is false", () => {
+  it("does not display the time signature if showTimeSignature is false", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc-score data-show-meter="false">
+        <div data-abc-score data-show-time-signature="false">
           <div class="content">
             M:4/4
             L:1
@@ -78,7 +78,7 @@ describe("initABCScore - single element", () => {
     ).toBe("none");
   });
 
-  it("does not display the meter if it's x/1", () => {
+  it("does not display the time signature if it's x/1", () => {
     document.body.innerHTML = `
       <main>
         <div data-abc-score>

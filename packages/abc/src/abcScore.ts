@@ -4,13 +4,8 @@ import {
   ClickListenerAnalysis,
   type AbcVisualParams,
 } from "abcjs";
-import { type PlayerPosition } from "@music-ui/core";
-import {
-  getCurrentNote,
-  getNotePosition,
-  getValueFromNote,
-  TimeSignature,
-} from "./lib";
+import type { TransportPosition, TimeSignature } from "@music-ui/core";
+import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
 
 /**
  * The cursor staff height overflow.
@@ -25,11 +20,11 @@ const cursorOffset = -2.5;
 
 /**
  * @property {boolean} showCursor The default cursor display
- * @property {boolean} showMeter The default meter display
+ * @property {boolean} showTimeSignature The default time signature display
  */
 export const DEFAULT_ABC_SCORE_OPTIONS = {
   showCursor: true,
-  showMeter: true,
+  showTimeSignature: true,
 } as const;
 
 /**
@@ -68,7 +63,7 @@ export const cssClasses = {
  * @property content The abc notation content
  * @property element The element where the score will be rendered
  * @property showCursor Display the cursor or not
- * @property showMeter Display the meter or not
+ * @property showTimeSignature Display the time signature or not
  * @property abcOptions The options passed to the abcjs renderer
  * @property onClick The function called when clicking on a note
  */
@@ -76,7 +71,7 @@ export type ABCScoreParams = {
   content?: string;
   element: HTMLElement;
   showCursor?: boolean;
-  showMeter?: boolean;
+  showTimeSignature?: boolean;
   abcOptions?: AbcVisualParams;
   onClick?: (params: OnABCClickParams) => void;
 };
@@ -85,14 +80,14 @@ export type ABCScoreParams = {
  * @property position The current position of the score
  */
 export type OnABCClickParams = {
-  position: PlayerPosition;
+  position: TransportPosition;
 };
 
 export class ABCScore {
   private content: string;
   private element: HTMLElement;
   private showCursor: boolean;
-  private showMeter: boolean;
+  private showTimeSignature: boolean;
   private abcOptions: AbcVisualParams;
   private onClick: ((params: OnABCClickParams) => void) | undefined;
   private tune: TuneObject | null;
@@ -102,7 +97,7 @@ export class ABCScore {
     content = "",
     element,
     showCursor = true,
-    showMeter = true,
+    showTimeSignature = true,
     abcOptions = {},
     onClick,
   }: ABCScoreParams) {
@@ -112,7 +107,7 @@ export class ABCScore {
     this.content = content;
     this.element = element;
     this.showCursor = showCursor;
-    this.showMeter = showMeter;
+    this.showTimeSignature = showTimeSignature;
     this.abcOptions = abcOptions;
     this.onClick = onClick;
     this.tune = null;
@@ -133,14 +128,14 @@ export class ABCScore {
    * Updates the score position (moving the cursor and highlighting the corresponding note).
    * @param position The new score position
    */
-  updatePosition(position: PlayerPosition): ABCScore {
+  updatePosition(position: TransportPosition): ABCScore {
     if (!this.showCursor || !this.rendered) {
       return this;
     }
     [0, 1, 2].forEach((voice) => this.updateVoicePosition(position, voice));
     return this;
   }
-  private updateVoicePosition(position: PlayerPosition, voice: number) {
+  private updateVoicePosition(position: TransportPosition, voice: number) {
     const svgElement = this.getSVGElement()!;
     const [bar] = position.split(":");
     const barNotes = svgElement!.querySelectorAll<SVGGElement>(
@@ -249,9 +244,10 @@ export class ABCScore {
       this.getSVGElement()?.append(this.cursor);
     }
 
-    const isMeterDenominatorUnary = this.tune.getMeter().value?.at(0)!.den == 1;
+    const isTimeSignatureDenominatorOne =
+      this.tune.getMeter().value?.at(0)!.den == 1;
 
-    if (!this.showMeter || isMeterDenominatorUnary) {
+    if (!this.showTimeSignature || isTimeSignatureDenominatorOne) {
       const timeSignature = this.element!.querySelector<HTMLElement>(
         `.${cssClasses.timeSignature}`,
       );

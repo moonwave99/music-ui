@@ -1,9 +1,9 @@
-import { type Score, ScoreInfo } from "./utils";
+import { type Score, ScoreInfo } from "./types";
 
 const abcInfoToScoreInfoMap = {
   T: "title",
   C: "composer",
-  M: "meter",
+  M: "timeSignature",
   L: "unitNoteLength",
   K: "key",
   Q: "bpm",

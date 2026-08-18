@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from "vitest";
-import { PlayerPosition, type PlaybackInfo } from "./player";
+import { type TransportPosition } from "./types";
+import { type PlaybackInfo } from "./player";
 import { type ToneEventCallback, Sampler } from "tone";
 
 //@ts-expect-error Hard to mock the whole thing without having vi.mock to complain
@@ -19,7 +20,7 @@ vi.mock(import("tone"), async (importOriginal) => {
         this.scoreData = scoreData;
       }
       // #TODO play part from Transport and not from Part
-      start(position: PlayerPosition) {
+      start(position: TransportPosition) {
         const [, beat] = position.split(":");
         const eventsToPlay = this.scoreData.slice(Number(beat));
         eventsToPlay.forEach((event) => this.progressFn(event.time, event));
@@ -34,7 +35,7 @@ vi.mock(import("tone"), async (importOriginal) => {
       new (class {
         private handlers: Record<string, () => void>;
         public bpm: { value: number };
-        public position: PlayerPosition;
+        public position: TransportPosition;
         constructor() {
           this.handlers = {};
           this.bpm = {

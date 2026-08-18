@@ -1,12 +1,14 @@
 import * as Tone from "tone";
-import { EventEmitter } from "events";
-import { parseTimeSignature, type Score } from "./utils";
-import { createSampler } from "./lib";
-import { ScoreManager } from "./scoreManager";
 import { type NoteJSON } from "@tonejs/midi/dist/Note";
-import { END_NOTE } from "./lib";
-
-export type PlayerPosition = Tone.Unit.BarsBeatsSixteenths;
+import { EventEmitter } from "events";
+import type { TransportPosition, TimeSignature, Score } from "./types";
+import {
+  normalizedPositionToTonePosition,
+  parseTimeSignature,
+  tonePositionToNormalizedPosition,
+} from "./utils";
+import { createSampler, END_NOTE } from "./lib";
+import { ScoreManager } from "./scoreManager";
 
 export type PlaybackNote = NoteJSON;
 
@@ -35,13 +37,15 @@ const DEFAULT_PARAMS = {
 export type PlayerCallback = (params: {
   playedNotes: string[];
   activeId: string;
-  position: PlayerPosition;
+  position: TransportPosition;
   voice: number;
 }) => void;
 
 export type PlayerEvents = "stop" | "pause" | "progress" | "finished";
 
 const transportEvents = ["start", "stop", "pause"] as const;
+
+const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
 
 export class Player {
   private sampler: Tone.Sampler;
@@ -50,7 +54,7 @@ export class Player {
   private draw: ReturnType<typeof Tone.getDraw>;
   private params: PlayerParams;
   private score: Score | null;
-  private timeSignature: [number, number] | null;
+  private timeSignature: TimeSignature | null;
   private scoreManager: ScoreManager;
   private eventEmitter: EventEmitter;
   /**
@@ -102,10 +106,10 @@ export class Player {
     if (this.score.info.bpm) {
       this.transport.bpm.value = this.score.info.bpm;
     }
-    if (this.score.info.meter) {
-      this.timeSignature = parseTimeSignature(this.score.info.meter);
+    if (this.score.info.timeSignature) {
+      this.timeSignature = parseTimeSignature(this.score.info.timeSignature);
     } else {
-      this.timeSignature = [4, 4];
+      this.timeSignature = DEFAULT_TIME_SIGNATURE;
     }
 
     this.transport.timeSignature = this.timeSignature;
@@ -132,7 +136,7 @@ export class Player {
     this.draw.cancel(0);
     return this;
   }
-  seekTo(position: PlayerPosition) {
+  seekTo(position: TransportPosition) {
     this.transport.position = normalizedPositionToTonePosition(
       position,
       this.timeSignature!,
@@ -158,7 +162,7 @@ export class Player {
       ({ notes, voice }) =>
         new Tone.Part((time: number, chord: PlaybackInfo) => {
           const position = tonePositionToNormalizedPosition(
-            this.transport.position as PlayerPosition,
+            this.transport.position as TransportPosition,
             this.timeSignature!,
           );
 
@@ -193,48 +197,4 @@ export class Player {
         }, notes),
     );
   }
-}
-
-// #TODO move everything to core/lib
-function tonePositionToNormalizedPosition(
-  position: PlayerPosition,
-  meter: [number, number],
-) {
-  if (!["6,8", "9,8", "12,8"].includes(`${meter}`)) {
-    return position;
-  }
-  const numerator = meter.at(0)!;
-  const [bars, beats, subdivisions] = position.split(":").map(Number) as [
-    number,
-    number,
-    number,
-  ];
-  const totalBeats = bars * 3 + beats;
-  const newBars = Math.floor(totalBeats / numerator);
-  const newBeats = totalBeats - newBars * numerator;
-  const newSubdivisions = subdivisions / 2;
-
-  return `${newBars}:${newBeats}:${newSubdivisions}`;
-}
-
-function normalizedPositionToTonePosition(
-  position: PlayerPosition,
-  meter: [number, number],
-) {
-  if (!["6,8", "9,8", "12,8"].includes(`${meter}`)) {
-    return position;
-  }
-  const numerator = meter.at(0)!;
-  const [bars, beats, subdivisions] = position.split(":").map(Number) as [
-    number,
-    number,
-    number,
-  ];
-  const totalBeats = bars * numerator + beats;
-  const newBars = Math.floor(totalBeats / 3);
-  const newBeatsWithRest = totalBeats - newBars * 3;
-  const newBeats = Math.floor(newBeatsWithRest);
-  const newSubdivisions = subdivisions * 2;
-
-  return `${newBars}:${newBeats}:${newSubdivisions}`;
 }

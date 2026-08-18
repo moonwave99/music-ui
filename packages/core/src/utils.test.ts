@@ -9,6 +9,8 @@ import {
   joinVoices,
   extractIndentedInput,
   parseTimeSignature,
+  tonePositionToNormalizedPosition,
+  normalizedPositionToTonePosition,
 } from "./utils";
 
 describe("toAbcNotation", () => {
@@ -59,7 +61,7 @@ describe("getAbcScore", () => {
         title: "",
         composer: "",
         key: "C",
-        meter: "4/4",
+        timeSignature: "4/4",
         unitNoteLength: "1/4",
         bpm: 120,
       },
@@ -164,5 +166,41 @@ describe("parseTimeSignature", () => {
     expect(parseTimeSignature("4/4")).toEqual([4, 4]);
     expect(parseTimeSignature("6/8")).toEqual([6, 8]);
     expect(parseTimeSignature("12/8")).toEqual([12, 8]);
+  });
+});
+
+describe("tonePositionToNormalizedPosition", () => {
+  it("returns the same position for simple time signatures", () => {
+    [2, 3, 4].forEach((n) =>
+      expect(tonePositionToNormalizedPosition("1:2:3", [n, 4])).toBe("1:2:3"),
+    );
+  });
+
+  it("converts the position for compound time signatures", () => {
+    expect(tonePositionToNormalizedPosition("1:0:0", [6, 8])).toBe("0:3:0");
+    expect(tonePositionToNormalizedPosition("1:2:0", [6, 8])).toBe("0:5:0");
+    expect(tonePositionToNormalizedPosition("1:2:1", [6, 8])).toBe("0:5:0.5");
+    expect(tonePositionToNormalizedPosition("2:0:0", [6, 8])).toBe("1:0:0");
+
+    expect(tonePositionToNormalizedPosition("3:0:0", [9, 8])).toBe("1:0:0");
+    expect(tonePositionToNormalizedPosition("4:0:0", [12, 8])).toBe("1:0:0");
+  });
+});
+
+describe("normalizedPositionToTonePosition", () => {
+  it("returns the same position for simple time signatures", () => {
+    [2, 3, 4].forEach((n) =>
+      expect(normalizedPositionToTonePosition("1:2:3", [n, 4])).toBe("1:2:3"),
+    );
+  });
+
+  it("converts the position for compound time signatures", () => {
+    expect(normalizedPositionToTonePosition("0:3:0", [6, 8])).toBe("1:0:0");
+    expect(normalizedPositionToTonePosition("0:5:0", [6, 8])).toBe("1:2:0");
+    expect(normalizedPositionToTonePosition("0:5:0.5", [6, 8])).toBe("1:2:1");
+    expect(normalizedPositionToTonePosition("1:0:0", [6, 8])).toBe("2:0:0");
+
+    expect(normalizedPositionToTonePosition("1:0:0", [9, 8])).toBe("3:0:0");
+    expect(normalizedPositionToTonePosition("1:0:0", [12, 8])).toBe("4:0:0");
   });
 });

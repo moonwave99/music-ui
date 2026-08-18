@@ -58,13 +58,13 @@ describe("ABCScore - render", () => {
     );
   });
 
-  it("Does not display the score meter when showMeter is false", () => {
+  it("Does not display the score time signature when showTimeSignature is false", () => {
     const wrapper = document.querySelector(".score")!;
     const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
       content,
-      showMeter: false,
+      showTimeSignature: false,
     });
     score.render();
 
@@ -104,7 +104,7 @@ describe("ABCScore - render", () => {
   });
 });
 
-describe("ABCScore - updateCursor", () => {
+describe("ABCScore - updatePosition", () => {
   it("Updates the cursor and corresponding note selection", () => {
     const wrapper = document.querySelector(".score")!;
     const content = extractIndentedInput(wrapper.querySelector(".content")!);
@@ -127,6 +127,49 @@ describe("ABCScore - updateCursor", () => {
       wrapper.querySelector<HTMLElement>(".abcjs-current-note path")?.dataset
         .name,
     ).toBe("E");
+  });
+
+  it("Does nothing if there is no note at the passed position", () => {
+    const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content,
+    });
+    score.render();
+
+    score.updatePosition("0:4:0");
+
+    expect(wrapper.querySelectorAll(".abcjs-current-note").length).toBe(0);
+  });
+});
+
+describe("ABCScore - clearSelection", () => {
+  it("Clears the current note selection", async () => {
+    const user = userEvent.setup();
+    const wrapper = document.querySelector(".score")!;
+    const content = extractIndentedInput(wrapper.querySelector(".content")!);
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content,
+    });
+    score.render();
+
+    await user.click(wrapper.querySelector(".abcjs-n2")!);
+
+    expect(
+      wrapper
+        .querySelector(".abcjs-n2")
+        ?.classList.contains("abcjs-note_selected"),
+    ).toBeTruthy();
+
+    score.clearSelection();
+
+    expect(
+      wrapper
+        .querySelector(".abcjs-n2")
+        ?.classList.contains("abcjs-note_selected"),
+    ).not.toBeTruthy();
   });
 });
 

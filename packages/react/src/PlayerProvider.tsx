@@ -10,12 +10,13 @@ import {
   type SetStateAction,
 } from "react";
 
-import {
-  Player,
-  type Score,
+import { Player } from "@music-ui/core";
+
+import type {
+  Score,
   PlayerCallback,
   PlayerEvents,
-  PlayerPosition,
+  TransportPosition,
 } from "@music-ui/core";
 
 let _player: Player;
@@ -52,10 +53,10 @@ export type UsePlayer = {
   pause: () => void;
   resume: () => void;
   stop: () => void;
-  seekTo: (position: PlayerPosition) => void;
+  seekTo: (position: TransportPosition) => void;
   playerStatus: PlayerStatus;
   playedNotes: string[][];
-  position: PlayerPosition;
+  position: TransportPosition;
 };
 
 const EMPTY_VOICES = [[], []] as string[][];
@@ -63,7 +64,7 @@ const EMPTY_VOICES = [[], []] as string[][];
 export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   const playerContext = use(PlayerContext);
   const [playedNotes, setPlayedNotes] = useState<string[][]>(EMPTY_VOICES);
-  const [position, setPosition] = useState<PlayerPosition>("0:0:0");
+  const [position, setPosition] = useState<TransportPosition>("0:0:0");
   const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("stopped");
 
   if (!playerContext) {
@@ -141,7 +142,7 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   const pause = useCallback(() => player?.pause(), [player]);
   const stop = useCallback(() => player?.stop(), [player]);
   const seekTo = useCallback(
-    (position: PlayerPosition) => {
+    (position: TransportPosition) => {
       player?.seekTo(position);
     },
     [player],

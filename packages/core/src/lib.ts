@@ -7,6 +7,7 @@ type CreateSamplerParams = Pick<
   "instrument" | "baseUrl" | "reverbDuration"
 >;
 
+/* istanbul ignore next */
 export function createSampler({
   instrument,
   baseUrl,

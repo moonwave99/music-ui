@@ -51,16 +51,16 @@ You can pass a custom selector or collection of elements. In this example we'll 
 ```html
 <div class="score">
   <div class="content">
-L:1/8
-CDEF GABc|
+    L:1/8
+    CDEF GABc|
   </div>
   <div class="staff"></div>
 </div>
 <div class="score">
   <div class="content">
-L:1/8
-K:G
-GABc defg|
+    L:1/8
+    K:G
+    GABc defg|
   </div>
   <div class="staff"></div>
 </div>
@@ -101,11 +101,11 @@ The `initABCScore` function reads the parameters passed in the **data attributes
   data-abc-score
   data-show-player="false"
   data-show-tempo="false"
-  data-show-meter="false"
+  data-show-time-signature="false"
 >
   <div class="content">
-L:1/8
-CDEF GABc|
+    L:1/8
+    CDEF GABc|
   </div>
   <div class="staff"></div>
 </div>
@@ -122,18 +122,18 @@ initABCScore();
 
 Output:
 
-<ABCScore showPlayer={false} showTempo={false} showMeter={false}>
+<ABCScore showPlayer={false} showTempo={false} showTimeSignature={false}>
 L:1/8
 CDEF GABc|
 </ABCScore>
 
 The following data attributes are supported:
 
-| Attribute          | Type      | Description                    |
-| ------------------ | --------- | ------------------------------ |
-| `data-show-tempo`  | `boolean` | Shows or hides the score tempo |
-| `data-show-meter`  | `boolean` | Shows or hides the score meter |
-| `data-show-player` | `boolean` | Shows or hides the player      |
+| Attribute                  | Type      | Description                         |
+| -------------------------- | --------- | ----------------------------------- |
+| `data-show-tempo`          | `boolean` | Shows or hides the tempo indication |
+| `data-show-time-signature` | `boolean` | Shows or hides the time signature   |
+| `data-show-player`         | `boolean` | Shows or hides the player           |
 
 ### Passing `abc.js` options to `initABCScore`
 
@@ -145,9 +145,9 @@ The `initABCScore` functions accept a second parameter that is forwarded to the 
   data-show-tempo="false"
   data-show-player="false">
   <div class="content">
-L:1/8
-CDEF GABc|
-</div>
+    L:1/8
+    CDEF GABc|
+  </div>
   <div class="staff"></div>
 </div>
 ```
@@ -167,8 +167,8 @@ Output:
   showTempo={false}
   showPlayer={false}
   abcOptions={{ foregroundColor: "orange" }}>
-L:1/8
-CDEF GABc|
+  L:1/8
+  CDEF GABc|
 </ABCScore>
 
 <Callout type="warning">
@@ -191,22 +191,22 @@ If you need more control over the component lifecycle, you can use the underlyin
 
 The `ABCSCore` constructor accepts the following parameters:
 
-| Property     | Type                      | Default            | Description                                   |
-| ------------ | ------------------------- | ------------------ | --------------------------------------------- |
-| `element`    | `string` \| `HTMLElement` | `[data-abc-score]` | The container element or a valid CSS selector |
-| `content`    | `string`                  | ""                 | The abc notation that will be rendered        |
-| `showCursor` | `boolean`                 | true               | Shows or hides the position cursor            |
-| `showTempo`  | `boolean`                 | true               | Shows or hides the score tempo                |
-| `showMeter`  | `boolean`                 | true               | Shows or hides the score meter                |
+| Property            | Type                      | Default            | Description                                   |
+| ------------------- | ------------------------- | ------------------ | --------------------------------------------- |
+| `element`           | `string` \| `HTMLElement` | `[data-abc-score]` | The container element or a valid CSS selector |
+| `content`           | `string`                  | ""                 | The abc notation that will be rendered        |
+| `showCursor`        | `boolean`                 | true               | Shows or hides the position cursor            |
+| `showTempo`         | `boolean`                 | true               | Shows or hides the score tempo                |
+| `showTimeSignature` | `boolean`                 | true               | Shows or hides the score time signature       |
 
 You can use it like:
 
 ```html
 <div data-abc-score>
   <div class="content">
-L:1/8
-CDEF GABc|
-</div>
+    L:1/8
+    CDEF GABc|
+  </div>
   <div class="staff"></div>
 </div>
 ```
@@ -237,8 +237,8 @@ score.render();
   showTempo={false}
   showPlayer={false}
   abcOptions={{ foregroundColor: "orange" }}>
-L:1/8
-CDEF GABc|
+  L:1/8
+  CDEF GABc|
 </ABCScore>
 
 ### Updating the score position

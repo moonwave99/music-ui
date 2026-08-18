@@ -2,41 +2,13 @@ import md5 from "md5";
 import { scientificToAbcNotation } from "@tonaljs/abc-notation";
 import { parseAbc, getAbcInfo, type ParseAbcOptions } from "./abcParser";
 import dedent from "dedent";
-
-/**
- * @property id The score id
- * @property content The score content (in abc notation)
- * @property hash The score hash (computed for caching)
- * @property info The score meta info
- */
-export type Score = {
-  id: string;
-  content: string;
-  hash: string;
-  info: ScoreInfo;
-};
-
-/**
- * @property title The score title
- * @property composer The score composer
- * @property meter The score meter (e.g. "4/4", "3/8")
- * @property unitNoteLength The score unit note length (e.g. "1/8", "1/4")
- * @property key The score key (e.g. "C", "Eb")
- * @property bpm The score tempo
- */
-export type ScoreInfo = {
-  title?: string;
-  composer?: string;
-  meter?: string;
-  unitNoteLength?: string;
-  key?: string;
-  bpm?: number;
-};
-
-/**
- * Comma separated notes in a single string, or an array of notes (in scientific notation)
- */
-export type NoteInput = string | string[];
+import type {
+  TimeSignature,
+  TransportPosition,
+  ElementOrSelector,
+  Score,
+  NoteInput,
+} from "./types";
 
 /**
  * @param id The score id
@@ -140,12 +112,6 @@ export function withPlaybackMode(input: NoteInput, playbackMode: PlaybackMode) {
 }
 
 /**
- * A CSS selector, a single node or a list of nodes.
- */
-export type ElementOrSelector<T extends HTMLElement> =
-  NodeListOf<T> | T | string;
-
-/**
  * Normalizes a selection (string, Element, NodeList) to a fixed state (jQuery <3).
  * @param elementOrSelector A CSS selector, a single node or a list of nodes
  * @returns An array of the selected elements
@@ -225,7 +191,7 @@ export function extractIndentedInput(element: HTMLElement) {
  * @param timeSignature The string containing the time signature, e.g. 4/4 or 6/8
  * @returns The corresponding number tuple
  */
-export function parseTimeSignature(timeSignature = "4/4"): [number, number] {
+export function parseTimeSignature(timeSignature = "4/4"): TimeSignature {
   const match = timeSignature.match(/(\d+)\/(\d+)/);
   if (!match) {
     console.warn(
@@ -236,6 +202,65 @@ export function parseTimeSignature(timeSignature = "4/4"): [number, number] {
   return [Number(match[1]), Number(match[2])];
 }
 
+/**
+ * Converts the Tone transport position to match the score time signature.
+ * @remark Since Tone.js converts all time signatures to simple (e.g. 6/8 to 3/4), we need to convert the transport position to update the score progress position
+ * @param position The current position
+ * @param timeSignature The score time signature
+ * @returns
+ */
+export function tonePositionToNormalizedPosition(
+  position: TransportPosition,
+  timeSignature: TimeSignature,
+) {
+  if (!isTimeSignatureCompound(timeSignature)) {
+    return position;
+  }
+  const numerator = timeSignature.at(0)!;
+  const [bars, beats, subdivisions] = parseTransportPosition(position);
+  const totalBeats = bars * 3 + beats;
+  const newBars = Math.floor(totalBeats / numerator);
+  const newBeats = totalBeats - newBars * numerator;
+  const newSubdivisions = subdivisions / 2;
+
+  return `${newBars}:${newBeats}:${newSubdivisions}`;
+}
+
+/**
+ * Converts the current position to the Tone transport one.
+ * @see {@link tonePositionToNormalizedPosition}
+ * @param position The current position
+ * @param timeSignature The score time signature
+ * @returns
+ */
+export function normalizedPositionToTonePosition(
+  position: TransportPosition,
+  timeSignature: TimeSignature,
+) {
+  if (!isTimeSignatureCompound(timeSignature)) {
+    return position;
+  }
+  const numerator = timeSignature.at(0)!;
+  const [bars, beats, subdivisions] = parseTransportPosition(position);
+  const totalBeats = bars * numerator + beats;
+  const newBars = Math.floor(totalBeats / 3);
+  const newBeatsWithRest = totalBeats - newBars * 3;
+  const newBeats = Math.floor(newBeatsWithRest);
+  const newSubdivisions = subdivisions * 2;
+
+  return `${newBars}:${newBeats}:${newSubdivisions}`;
+}
+
 function getScoreHash(id: string, content: string) {
   return md5(`${id}${content}`);
+}
+
+function isTimeSignatureCompound(timeSignature: TimeSignature) {
+  return ["6,8", "9,8", "12,8"].includes(`${timeSignature}`);
+}
+
+function parseTransportPosition(
+  position: TransportPosition,
+): [number, number, number] {
+  return position.split(":").map(Number) as [number, number, number];
 }

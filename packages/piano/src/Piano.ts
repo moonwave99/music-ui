@@ -1,12 +1,16 @@
-import { get as getNote } from "@tonaljs/note";
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
 import {
   ensureSelection,
   type NoteInput,
-  ElementOrSelector,
+  type ElementOrSelector,
 } from "@music-ui/core";
-import { CHROMATIC_SCALE, normalizeInput, parseNoteInput } from "./lib";
+import {
+  CHROMATIC_SCALE,
+  parseNote,
+  normalizeInput,
+  parseNoteInput,
+} from "./lib";
 
 /**
  * @property chroma The scientific notation value of the pitch class (e.g. 0-11)
@@ -235,28 +239,4 @@ export class Piano {
       foundKey.innerHTML = label;
     });
   }
-}
-
-function parseNote(
-  noteString: string,
-  defaultOctave: number,
-): {
-  chroma: number;
-  note: string;
-  octave: number;
-  midi: number;
-} {
-  let octave = defaultOctave;
-  const maybeOctave = noteString.slice(-1);
-  if (Number.isInteger(+maybeOctave)) {
-    octave = +maybeOctave;
-    noteString = noteString.slice(0, -1);
-  }
-  const { chroma, pc: note, oct, midi } = getNote(`${noteString}${octave}`);
-  return {
-    chroma,
-    note,
-    octave: oct || 0,
-    midi: midi || 0,
-  };
 }

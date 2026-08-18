@@ -1,3 +1,4 @@
+import { get as getNote } from "@tonaljs/note";
 import type { NoteInput } from "@music-ui/core";
 import { type ScaleNote, GroupedInput } from "./Piano";
 
@@ -95,3 +96,27 @@ export const CHROMATIC_SCALE: ScaleNote[] = [
     note: "B",
   },
 ] as const;
+
+export function parseNote(
+  noteString: string,
+  defaultOctave: number,
+): {
+  chroma: number;
+  note: string;
+  octave: number;
+  midi: number;
+} {
+  let octave = defaultOctave;
+  const maybeOctave = noteString.slice(-1);
+  if (Number.isInteger(+maybeOctave)) {
+    octave = +maybeOctave;
+    noteString = noteString.slice(0, -1);
+  }
+  const { chroma, pc: note, oct, midi } = getNote(`${noteString}${octave}`);
+  return {
+    chroma,
+    note,
+    octave: oct || 0,
+    midi: midi || 0,
+  };
+}
