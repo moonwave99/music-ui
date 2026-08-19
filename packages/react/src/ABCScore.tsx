@@ -13,6 +13,7 @@ import {
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
 import { getAbcScore, joinVoices } from "@music-ui/core";
+import { getNodeText } from "./utils";
 
 export type ABCScoreProps = UseABCScoreParams & {
   id?: string;
@@ -48,7 +49,6 @@ export function ABCScore({
     input,
     options: { showTempo },
   });
-
   const {
     play,
     pause,
@@ -122,29 +122,4 @@ export function ABCScore({
       ) : null}
     </div>
   );
-}
-
-function getNodeText(node: ReactNode): string {
-  if (!node) {
-    return "";
-  }
-  switch (typeof node) {
-    case "string":
-    case "number":
-      return node.toString();
-    case "boolean":
-      return "";
-    case "object": {
-      if (Array.isArray(node)) {
-        return node.map(getNodeText).join("");
-      }
-      if (!("props" in node)) {
-        return "";
-      }
-      return getNodeText((node.props as { children?: ReactNode })?.children);
-    }
-    default:
-      console.warn("Unresolved `node` of type:", typeof node, node);
-      return "";
-  }
 }

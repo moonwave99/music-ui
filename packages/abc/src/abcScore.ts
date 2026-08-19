@@ -121,9 +121,6 @@ export class ABCScore {
     this.voiceCount = 1;
     this.rendered = false;
   }
-  getSVGElement() {
-    return this.element!.querySelector("svg");
-  }
   /**
    * Renders the UI inside the current element.
    */
@@ -144,31 +141,6 @@ export class ABCScore {
     );
     return this;
   }
-  private updateVoicePosition(position: TransportPosition, voice: number) {
-    const svgElement = this.getSVGElement()!;
-    const [bar] = position.split(":");
-    const barNotes = svgElement!.querySelectorAll<SVGGElement>(
-      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}.abcjs-v${voice}`,
-    );
-    if (!barNotes.length) {
-      return;
-    }
-    const { num, den } = {
-      num: 4,
-      den: 4,
-      ...(this.tune?.getMeterFraction() || {}),
-    };
-
-    const currentNote = getCurrentNote(barNotes, position, [num, den]);
-    if (!currentNote) {
-      return;
-    }
-    svgElement
-      .querySelectorAll(`.abcjs-v${voice}.${cssClasses.currentNote}`)
-      .forEach((element) => element.classList.remove(cssClasses.currentNote));
-    currentNote.classList.add(cssClasses.currentNote);
-    this.updateCursor(currentNote);
-  }
   /**
    * Clears current note selection
    */
@@ -184,6 +156,53 @@ export class ABCScore {
         el.setAttribute("fill", "currentColor");
       });
     return this;
+  }
+  getSVGElement() {
+    return this.element?.querySelector("svg");
+  }
+  getTimeSignature(): TimeSignature {
+    const { num, den } = {
+      num: 4,
+      den: 4,
+      ...(this.tune?.getMeterFraction() || {}),
+    };
+    return [num, den];
+  }
+  private getBarNotes(position: TransportPosition, voice: number) {
+    const svgElement = this.getSVGElement()!;
+    const [bar] = position.split(":");
+    return svgElement!.querySelectorAll<SVGGElement>(
+      `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}.abcjs-v${voice}`,
+    );
+  }
+  private updateVoicePosition(position: TransportPosition, voice: number) {
+    const svgElement = this.getSVGElement()!;
+    const timeSignature = this.getTimeSignature();
+
+    let currentNote = null;
+
+    if (`${timeSignature}` === "1,1") {
+      const [bar] = position.split(":");
+      currentNote = svgElement!.querySelectorAll<SVGGElement>(
+        `:is(.abcjs-note, .abcjs-rest).abcjs-v${voice}`,
+      )[Number(bar)];
+    } else {
+      const barNotes = this.getBarNotes(position, voice);
+      if (!barNotes.length) {
+        return;
+      }
+      currentNote = getCurrentNote(barNotes, position, timeSignature);
+    }
+
+    if (!currentNote) {
+      return;
+    }
+
+    svgElement
+      .querySelectorAll(`.abcjs-v${voice}.${cssClasses.currentNote}`)
+      .forEach((element) => element.classList.remove(cssClasses.currentNote));
+    currentNote.classList.add(cssClasses.currentNote);
+    this.updateCursor(currentNote);
   }
   private updateCursor(currentNote: SVGGElement): ABCScore {
     /* istanbul ignore if  */
@@ -207,14 +226,6 @@ export class ABCScore {
       );
     }
     return this;
-  }
-  getTimeSignature(): TimeSignature {
-    const { num, den } = {
-      num: 4,
-      den: 4,
-      ...(this.tune?.getMeterFraction() || {}),
-    };
-    return [num, den];
   }
   private baseRender() {
     /* istanbul ignore if  */

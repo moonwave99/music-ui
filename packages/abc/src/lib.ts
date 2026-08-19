@@ -50,6 +50,14 @@ export function getNotePosition(
   const bar = getValueFromNote(element, "abcjs-mm");
   const voice = getValueFromNote(element, "abcjs-v");
 
+  if (`${timeSignature}` == "1,1") {
+    const barNotes = element.parentElement!.querySelectorAll<SVGGElement>(
+      `:is(.abcjs-note, .abcjs-rest).abcjs-v${voice}`,
+    );
+    const index = [...barNotes].indexOf(element);
+    return `${index}:0:0`;
+  }
+
   const barNotes = element.parentElement!.querySelectorAll<SVGGElement>(
     `:is(.abcjs-note, .abcjs-rest).abcjs-mm${bar}.abcjs-v${voice}`,
   );
@@ -64,7 +72,6 @@ export function getNotePosition(
   const rest = beatWithRest % 1;
   const beat = beatWithRest - rest;
   const subDivisions = rest * subDivisionsMap[timeSignature[1]]!;
-
   return `${bar}:${beat}:${subDivisions}`;
 }
 
