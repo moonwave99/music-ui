@@ -14,7 +14,7 @@ By default, the `initABCScore` function looks selects all the `[data-abc-score]`
 - an **element containing the abc notation**, with the `.content` class;
 - an **element where the music notation will be rendered**, with the `.staff` class.
 
-For more granularity you can use the [`ABCScore` class](#the-abcscore-class), but you'll have to initialize the player function yourself.
+For more granularity you can use the [`ABCScore` class](#the-abcscore-class).
 
 ```html
 <div data-abc-score>
@@ -26,7 +26,7 @@ For more granularity you can use the [`ABCScore` class](#the-abcscore-class), bu
 ```
 
 <Callout type="info">
-Don't forget to hide the notation element via CSS! `[data-abc-score] .content { display: none; }`
+The `.content` element is hidden via `@music-ui/abc/styles.css`.
 </Callout>
 
 You can then render the content:
@@ -94,7 +94,6 @@ The `initABCScore` function reads the parameters passed in the **data attributes
 ```html
 <div
   data-abc-score
-  data-show-player="false"
   data-show-tempo="false"
   data-show-time-signature="false"
 >
@@ -126,17 +125,13 @@ The following data attributes are supported:
 | -------------------------- | --------- | ----------------------------------- |
 | `data-show-tempo`          | `boolean` | Shows or hides the tempo indication |
 | `data-show-time-signature` | `boolean` | Shows or hides the time signature   |
-| `data-show-player`         | `boolean` | Shows or hides the player           |
 
-### Passing `abc.js` options to `initABCScore`
+### Passing `abc.js` options
 
 The `initABCScore` functions accept a second parameter that is forwarded to the `abc.js` renderer. You can see the available options [on the library documentation](https://docs.abcjs.net/visual/render-abc-options).
 
 ```html
-<div
-  data-abc-score
-  data-show-tempo="false"
-  data-show-player="false">
+<div data-abc-score data-show-tempo="false">
   <div class="content">
     CDEF GABc|
   </div>
@@ -185,10 +180,10 @@ The `ABCSCore` constructor accepts the following parameters:
 | Property            | Type                      | Default            | Description                                   |
 | ------------------- | ------------------------- | ------------------ | --------------------------------------------- |
 | `element`           | `string` \| `HTMLElement` | `[data-abc-score]` | The container element or a valid CSS selector |
-| `content`           | `string`                  | ""                 | The abc notation that will be rendered        |
+| `content`           | `string`                  | ""                 | The abc notation to be rendered               |
 | `showCursor`        | `boolean`                 | true               | Shows or hides the position cursor            |
-| `showTempo`         | `boolean`                 | true               | Shows or hides the score tempo                |
-| `showTimeSignature` | `boolean`                 | true               | Shows or hides the score time signature       |
+| `showTempo`         | `boolean`                 | true               | Shows or hides the tempo                      |
+| `showTimeSignature` | `boolean`                 | true               | Shows or hides the time signature             |
 
 You can use it like:
 
@@ -213,7 +208,6 @@ const score = new ABCScore({
   element: wrapper.querySelector(".staff"),
   content: wrapper.querySelector(".content").textContent.trim(),
   showTempo: false,
-  showPlayer: false,
   abcOptions: {
     foregroundColor: "orange"
   }
