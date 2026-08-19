@@ -19,7 +19,6 @@ For more granularity you can use the [`ABCScore` class](#the-abcscore-class), bu
 ```html
 <div data-abc-score>
   <div class="content">
-    L:1/8
     CDEF GABc|
   </div>
   <div class="staff"></div>
@@ -42,7 +41,6 @@ initABCScore();
 Output:
 
 <ABCScore>
-L:1/8
 CDEF GABc|
 </ABCScore>
 
@@ -51,14 +49,12 @@ You can pass a custom selector or collection of elements. In this example we'll 
 ```html
 <div class="score">
   <div class="content">
-    L:1/8
     CDEF GABc|
   </div>
   <div class="staff"></div>
 </div>
 <div class="score">
   <div class="content">
-    L:1/8
     K:G
     GABc defg|
   </div>
@@ -78,12 +74,11 @@ initABCScore(".score");
 Output:
 
 <ABCScore>
-L:1/8
 CDEF GABc|
 </ABCScore>
 
 <ABCScore>
-L:1/8 K:G
+K:G
 GABc defg|
 </ABCScore>
 
@@ -104,7 +99,6 @@ The `initABCScore` function reads the parameters passed in the **data attributes
   data-show-time-signature="false"
 >
   <div class="content">
-    L:1/8
     CDEF GABc|
   </div>
   <div class="staff"></div>
@@ -123,7 +117,6 @@ initABCScore();
 Output:
 
 <ABCScore showPlayer={false} showTempo={false} showTimeSignature={false}>
-L:1/8
 CDEF GABc|
 </ABCScore>
 
@@ -145,7 +138,6 @@ The `initABCScore` functions accept a second parameter that is forwarded to the 
   data-show-tempo="false"
   data-show-player="false">
   <div class="content">
-    L:1/8
     CDEF GABc|
   </div>
   <div class="staff"></div>
@@ -167,7 +159,6 @@ Output:
   showTempo={false}
   showPlayer={false}
   abcOptions={{ foregroundColor: "orange" }}>
-  L:1/8
   CDEF GABc|
 </ABCScore>
 
@@ -204,7 +195,6 @@ You can use it like:
 ```html
 <div data-abc-score>
   <div class="content">
-    L:1/8
     CDEF GABc|
   </div>
   <div class="staff"></div>
@@ -237,7 +227,6 @@ score.render();
   showTempo={false}
   showPlayer={false}
   abcOptions={{ foregroundColor: "orange" }}>
-  L:1/8
   CDEF GABc|
 </ABCScore>
 

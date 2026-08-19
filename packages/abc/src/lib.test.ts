@@ -69,6 +69,7 @@ describe("getCurrentNote", () => {
 describe("getNoteDuration", () => {
   it("returns the note duration", () => {
     document.body.innerHTML = `<svg>
+      <g class="abcjs-d0-031"/>
       <g class="abcjs-d0-063"/>
       <g class="abcjs-d0-125"/>
       <g class="abcjs-d0-25"/>
@@ -77,7 +78,7 @@ describe("getNoteDuration", () => {
     </svg>`;
 
     const elements = document.querySelectorAll<SVGGElement>("g");
-    const expectedValues = [0.0625, 0.125, 0.25, 0.5, 1];
+    const expectedValues = [32, 16, 8, 4, 2, 1].map((x) => 1 / x);
     expectedValues.forEach((value, index) =>
       expect(getNoteDuration(elements[index]!)).toBe(value),
     );

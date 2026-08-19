@@ -36,7 +36,7 @@ type PlayerContextType = {
   setCurrentScore: Dispatch<SetStateAction<Score | null>>;
 };
 
-const PlayerContext: Context<PlayerContextType> =
+export const PlayerContext: Context<PlayerContextType> =
   createContext<PlayerContextType>({
     player: null,
     currentScore: null,

@@ -29,7 +29,7 @@ export type ABCScoreProps = UseABCScoreParams & {
 };
 
 export function ABCScore({
-  className = "score",
+  className = "abc-score",
   children,
   pianoOptions = { show: false },
   playButtonLabel = "Play",
@@ -37,15 +37,15 @@ export function ABCScore({
   stopButtonLabel = "Stop",
   showPlayer = true,
   showTempo = true,
+  showTimeSignature = true,
   ...params
 }: ABCScoreProps): ReactElement {
   const componentId = useId();
   const id = params.id || componentId;
   const input = getNodeText(children);
   const score = getAbcScore({
-    ...params,
-    input,
     id,
+    input,
     options: { showTempo },
   });
 
@@ -66,7 +66,7 @@ export function ABCScore({
   );
 
   const { ref, abcRef } = useABCScore<HTMLDivElement>({
-    ...params,
+    showTimeSignature,
     content: score.content,
     onClick,
   });

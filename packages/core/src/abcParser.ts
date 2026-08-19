@@ -20,7 +20,7 @@ const DEFAULT_ABC_INFO: Record<AbcInfoFields, unknown> = {
   C: "",
   K: "C",
   M: "4/4",
-  L: "1/4",
+  L: "1/8",
   Q: 120,
 };
 

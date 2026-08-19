@@ -62,11 +62,11 @@ describe("getAbcScore", () => {
         composer: "",
         key: "C",
         timeSignature: "4/4",
-        unitNoteLength: "1/4",
+        unitNoteLength: "1/8",
         bpm: 120,
       },
-      content: "T:\nC:\nK:C\nM:4/4\nL:1/4\nQ:120\nC E G",
-      hash: "cf0770b9c505737f4a593df9c813ea5d",
+      content: "T:\nC:\nK:C\nM:4/4\nL:1/8\nQ:120\nC E G",
+      hash: "fed79ed7114e3682105a1f6865d2d4eb",
     });
   });
 });

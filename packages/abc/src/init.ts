@@ -3,6 +3,7 @@ import {
   extractElementOptions,
   Player,
   extractIndentedInput,
+  getAbcScore,
   type ElementOrSelector,
 } from "@music-ui/core";
 import {
@@ -38,6 +39,7 @@ type InitABCScoreWithPlayerParams<T extends HTMLElement> = {
   player: Player;
 };
 
+// #TODO add update cursor and seek features
 export function initABCScoreWithPlayer<T extends HTMLElement>({
   selection,
   abcOptions = {},
@@ -49,20 +51,31 @@ export function initABCScoreWithPlayer<T extends HTMLElement>({
     if (!controlsElement) {
       throw new Error(`controlsElement not found for score with id: ${id}`);
     }
+
+    const options = extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS);
+
     const content =
       element.querySelector(`.${cssClasses.content}`)?.textContent.trim() || "";
 
-    initControls({
+    const score = getAbcScore({
       id,
+      input: content,
+      options,
+    });
+
+    const { resetButtons } = initControls({
+      score,
       player,
       element: element.querySelector(".controls")!,
-      input: content,
     });
+
+    player.on("finished", resetButtons);
+
     new ABCScore({
-      content,
+      content: score.content,
       element: element.querySelector(`.${cssClasses.staff}`)!,
       abcOptions,
-      ...extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS),
+      ...options,
     }).render();
   });
 }

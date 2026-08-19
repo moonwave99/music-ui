@@ -12,6 +12,7 @@
     "postbuild": "pagefind --site .next/server/app --output-path out/_pagefind"
   },
   "dependencies": {
+    "@music-ui/core": "workspace:*",
     "@music-ui/abc": "workspace:*",
     "@music-ui/piano": "workspace:*",
     "@music-ui/react": "workspace:*",

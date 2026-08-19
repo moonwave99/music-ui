@@ -1,19 +1,22 @@
-import { Player, getAbcScore } from "@music-ui/core";
+import { Player, type Score } from "@music-ui/core";
+import { cssClasses } from "./abcScore";
 
 type InitControlsParams = {
-  id: string;
-  input: string;
+  score: Score;
   element: HTMLElement;
   player: Player;
 };
 
-export async function initControls({
-  id,
-  input,
+type InitControls = {
+  resetButtons: () => void;
+};
+
+export function initControls({
+  score,
   element,
   player,
-}: InitControlsParams) {
-  const score = getAbcScore({ id, input });
+}: InitControlsParams): InitControls {
+  element.classList.add(cssClasses.audioControls);
   const { play, pause, stop } = createControls(element, {
     play: () => {
       player.setScore(score);
@@ -36,7 +39,13 @@ export async function initControls({
     },
   });
 
-  return player;
+  function resetButtons() {
+    play.disabled = false;
+    pause.disabled = true;
+    stop.disabled = true;
+  }
+
+  return { resetButtons };
 }
 
 function createControls(
@@ -51,7 +60,7 @@ function createControls(
 
   Object.entries(handlers).forEach(([name, handler]) => {
     const button = document.createElement("button");
-    button.classList.add("control-button", `${name}-button`);
+    button.classList.add(`${name}-button`);
     button.addEventListener("click", handler);
     button.textContent = name;
     element.append(button);

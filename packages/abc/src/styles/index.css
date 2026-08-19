@@ -6,7 +6,8 @@
   --abc-voice-4-color: lightcoral;
 }
 
-.score {
+.abc-score {
+  .content,
   .abcjs-css-warning {
     display: none;
   }
@@ -15,7 +16,7 @@
     align-items: center;
     gap: 0.5rem;
     line-height: 1.5rem;
-    .score-button {
+    > button {
       font-size: 0.8rem;
       border-radius: 0.25rem;
       background-color: rgba(100, 100, 100, 0.5);

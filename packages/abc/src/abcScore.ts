@@ -20,10 +20,12 @@ const cursorOffset = -2.5;
 
 /**
  * @property {boolean} showCursor The default cursor display
+ * @property {boolean} showTempo The default show tempo display
  * @property {boolean} showTimeSignature The default time signature display
  */
 export const DEFAULT_ABC_SCORE_OPTIONS = {
   showCursor: true,
+  showTempo: true,
   showTimeSignature: true,
 } as const;
 
@@ -45,6 +47,7 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
 /**
  * @property {string} content The abc notation element class
  * @property {string} staff The rendered notation element class
+ * @property {string} audioControls The audio controls element class
  * @property {string} timeSignature The time signature element class
  * @property {string} cursor The cursor element class
  * @property {string} currentNote The current note element class
@@ -53,6 +56,7 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
 export const cssClasses = {
   content: "content",
   staff: "staff",
+  audioControls: "score-audio-controls",
   timeSignature: "abcjs-time-signature",
   cursor: "abcjs-cursor",
   currentNote: "abcjs-current-note",

@@ -25,7 +25,6 @@ function App() {
         {/* rest of your app */}
         <ABCScore>
           M:4/4
-          L:1/8
           CDEF GABc|
         </ABCScore>
       </main>
@@ -35,21 +34,18 @@ function App() {
 ```
 
 <ABCScore showTempo={false}>
-L:1/8
 CDEF GABc|
 </ABCScore>
 
 Without player:
 
 <ABCScore showPlayer={false} showTempo={false}>
-L:1/8
 CDEF GABc|
 </ABCScore>
 
 Without time signature:
 
 <ABCScore showTimeSignature={false} showTempo={false}>
-L:1/8
 CDEF GABc|
 </ABCScore>
 
@@ -58,15 +54,15 @@ With piano below too!
 <ABCScore pianoOptions={{ show: true, octaves: 3 }} showTempo={false}>
 T: You Are My Sunshine
 C: Traditional
-L: 1/4
+L: 1/8
 K: C
-Q: 180
-z G, C D|E2 E2-| E E D E| C2 C2-|
-w:You are my sun-shine,_ my on-ly sun-shine.
-C C D E|F2 A2-| A A G F|E4-|
-w:_You make me hap-py_ when skies are gray,
-E C D E|F2 A2-| A A G F|E2 C2-|
-w:_You'll ne-ver know, dear,_ how much I love you,
-C z C D| E3 F| D D2 E|C4|
-w:_Please don't take my sun-shine a-way.
+Q: 90
+z4 z G, CD|E2 E2- E E DE| C2 C2- C C DE|
+w:You are my sun-shine,_ my on-ly sun-shine_ You make me
+F2 A2- A A GF|E4- E C DE|
+w:hap-py_ when skies are gray,_ You'll ne-ver
+F2 A2- A A GF|E2 C2- C z CD|
+w:know, dear,_ how much I love you,_ Please don't
+E2- E FD D2 E|C8|
+w:take_ my sun-shine a-ways.
 </ABCScore>
