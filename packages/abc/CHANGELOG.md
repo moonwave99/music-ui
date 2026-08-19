@@ -1,5 +1,17 @@
 # @music-ui/abc
 
+## 0.11.0
+
+### Minor Changes
+
+- e934686: Major playback support improvement
+
+### Patch Changes
+
+- Updated dependencies [e934686]
+  - @music-ui/core@0.11.0
+  - @music-ui/piano@0.11.0
+
 ## 0.10.0
 
 ### Minor Changes
