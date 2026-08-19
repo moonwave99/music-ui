@@ -67,9 +67,10 @@ export type GroupedInput = {
  * @property {string} keyPlayed The played key class
  * @property {string} keyOn The selected key class
  */
-const cssClasses = {
+export const cssClasses = {
   piano: "piano",
   pianoWrapper: "piano-wrapper",
+  controls: "controls",
   key: "key",
   keyPlayed: "key-played",
   keyOn: "key-on",

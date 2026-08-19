@@ -16,7 +16,7 @@ main {
   }
 }
 
-.piano-player {
+.piano-with-player {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
@@ -36,7 +36,7 @@ main {
     display: flex;
     align-items: center;
   }
-  .actions {
+  .controls {
     grid-area: c;
     display: flex;
     justify-content: end;

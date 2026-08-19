@@ -16,7 +16,7 @@ export function PianoPlayer({
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
   arpeggioSpeed = 120,
-  className = "piano-player",
+  className = "piano-with-player",
   ...props
 }: PianoPlayerProps): ReactElement {
   const componentId = useId();
@@ -28,7 +28,7 @@ export function PianoPlayer({
     <figure className={className}>
       <Piano playedNotes={joinVoices(playedNotes)} notes={notes} {...rest} />
       <figcaption>{label}</figcaption>
-      <div className="actions">
+      <div className="controls">
         <button
           disabled={playerStatus === "playing"}
           onClick={() => play(getPianoScore({ id, input: notes }))}

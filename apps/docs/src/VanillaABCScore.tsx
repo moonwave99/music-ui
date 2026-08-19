@@ -34,13 +34,13 @@ export function VanillaABCScore() {
         data-show-time-signature="false"
       >
         <div className="content">{content}</div>
-        <div className="staff score-staff"></div>
-        <div className="controls score-audio-controls"></div>
+        <div className="staff"></div>
+        <div className="controls"></div>
       </div>
       <div className="abc-score" data-show-piano>
         <div className="content">{content}</div>
-        <div className="staff score-staff"></div>
-        <div className="controls score-audio-controls"></div>
+        <div className="staff"></div>
+        <div className="controls"></div>
       </div>
     </div>
   );

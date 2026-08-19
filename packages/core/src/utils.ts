@@ -251,6 +251,24 @@ export function normalizedPositionToTonePosition(
   return `${newBars}:${newBeats}:${newSubdivisions}`;
 }
 
+export function createControls(
+  element: HTMLElement,
+  handlers: Record<string, () => void>,
+) {
+  const buttons = {} as Record<string, HTMLButtonElement>;
+
+  Object.entries(handlers).forEach(([name, handler]) => {
+    const button = document.createElement("button");
+    button.classList.add(`${name}-button`);
+    button.addEventListener("click", handler);
+    button.textContent = name;
+    element.append(button);
+    buttons[name] = button;
+  });
+
+  return buttons;
+}
+
 function getScoreHash(id: string, content: string) {
   return md5(`${id}${content}`);
 }

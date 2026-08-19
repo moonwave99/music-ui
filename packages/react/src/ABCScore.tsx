@@ -85,11 +85,11 @@ export function ABCScore({
 
   return (
     <div className={className}>
-      <div className="score-staff" ref={ref}></div>
+      <div className="staff" ref={ref}></div>
       {showPlayer ? (
-        <div className="score-audio-controls">
+        <div className="controls">
           <button
-            className="score-button score-play-button"
+            className="play-button"
             onClick={() => (playerStatus === "paused" ? resume() : play(score))}
             aria-label={playButtonLabel}
             disabled={playerStatus === "playing"}
@@ -97,7 +97,7 @@ export function ABCScore({
             {playButtonLabel}
           </button>
           <button
-            className="score-button score-pause-button"
+            className="pause-button"
             onClick={pause}
             aria-label={pauseButtonLabel}
             disabled={playerStatus !== "playing"}
@@ -105,7 +105,7 @@ export function ABCScore({
             {pauseButtonLabel}
           </button>
           <button
-            className="score-button score-stop-button"
+            className="stop-button"
             onClick={stop}
             aria-label={stopButtonLabel}
             disabled={playerStatus === "stopped"}

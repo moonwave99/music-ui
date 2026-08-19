@@ -11,7 +11,7 @@
   .abcjs-css-warning {
     display: none;
   }
-  .score-audio-controls {
+  .controls {
     display: flex;
     align-items: center;
     gap: 0.5rem;

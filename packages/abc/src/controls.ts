@@ -1,5 +1,4 @@
-import { Player, type Score } from "@music-ui/core";
-import { cssClasses } from "./abcScore";
+import { createControls, Player, type Score } from "@music-ui/core";
 
 type InitControlsParams = {
   score: Score;
@@ -16,7 +15,6 @@ export function initControls({
   element,
   player,
 }: InitControlsParams): InitControls {
-  element.classList.add(cssClasses.audioControls);
   const { play, pause, stop } = createControls(element, {
     play: () => {
       player.setScore(score);
@@ -37,7 +35,14 @@ export function initControls({
       pause.disabled = true;
       stop.disabled = true;
     },
-  });
+  }) as {
+    play: HTMLButtonElement;
+    pause: HTMLButtonElement;
+    stop: HTMLButtonElement;
+  };
+
+  pause.disabled = true;
+  stop.disabled = true;
 
   function resetButtons() {
     play.disabled = false;
@@ -46,31 +51,4 @@ export function initControls({
   }
 
   return { resetButtons };
-}
-
-function createControls(
-  element: HTMLElement,
-  handlers: {
-    play: () => void;
-    pause: () => void;
-    stop: () => void;
-  },
-) {
-  const buttons = {} as Record<string, HTMLButtonElement>;
-
-  Object.entries(handlers).forEach(([name, handler]) => {
-    const button = document.createElement("button");
-    button.classList.add(`${name}-button`);
-    button.addEventListener("click", handler);
-    button.textContent = name;
-    element.append(button);
-    button.disabled = name !== "play";
-    buttons[name] = button;
-  });
-
-  return buttons as {
-    play: HTMLButtonElement;
-    pause: HTMLButtonElement;
-    stop: HTMLButtonElement;
-  };
 }
