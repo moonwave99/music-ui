@@ -39,7 +39,7 @@ type InitABCScoreWithPlayerParams<T extends HTMLElement> = {
   player: Player;
 };
 
-// #TODO add update cursor and seek features
+// #TODO add piano option
 export function initABCScoreWithPlayer<T extends HTMLElement>({
   selection,
   abcOptions = {},
@@ -70,10 +70,25 @@ export function initABCScoreWithPlayer<T extends HTMLElement>({
     });
 
     player.on("finished", resetButtons);
+    player.on("progress", ({ activeId, position }) => {
+      if (activeId !== id) {
+        resetButtons();
+        return;
+      }
+      abcScore.clearSelection();
+      abcScore.updatePosition(position);
+    });
 
-    new ABCScore({
+    const abcScore = new ABCScore({
       content: score.content,
       element: element.querySelector(`.${cssClasses.staff}`)!,
+      onClick: ({ position }) => {
+        if (player.getScore()?.id !== id) {
+          return;
+        }
+        abcScore.updatePosition(position);
+        player.seekTo(position);
+      },
       abcOptions,
       ...options,
     }).render();

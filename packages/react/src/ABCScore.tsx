@@ -55,14 +55,20 @@ export function ABCScore({
     stop,
     resume,
     seekTo,
+    isCurrentScore,
     playedNotes,
     playerStatus,
     position,
   } = usePlayer({ id, onStop: () => abcRef.current?.clearSelection() });
 
   const onClick = useCallback(
-    ({ position }: OnABCClickParams) => seekTo(position),
-    [seekTo],
+    ({ position }: OnABCClickParams) => {
+      if (!isCurrentScore(score)) {
+        return;
+      }
+      seekTo(position);
+    },
+    [seekTo, isCurrentScore, score],
   );
 
   const { ref, abcRef } = useABCScore<HTMLDivElement>({

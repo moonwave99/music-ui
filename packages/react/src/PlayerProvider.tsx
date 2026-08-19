@@ -54,6 +54,7 @@ export type UsePlayer = {
   resume: () => void;
   stop: () => void;
   seekTo: (position: TransportPosition) => void;
+  isCurrentScore: (score: Score) => boolean;
   playerStatus: PlayerStatus;
   playedNotes: string[][];
   position: TransportPosition;
@@ -148,12 +149,18 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
     [player],
   );
 
+  const isCurrentScore = useCallback(
+    ({ id }: Score) => player?.getScore()?.id === id,
+    [player],
+  );
+
   return {
     play,
     pause,
     resume,
     stop,
     seekTo,
+    isCurrentScore,
     playedNotes,
     playerStatus,
     position,

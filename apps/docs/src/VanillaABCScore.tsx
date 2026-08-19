@@ -21,21 +21,27 @@ export function VanillaABCScore() {
     }
     firstRender.current = false;
     initABCScoreWithPlayer({
-      selection: ref.current!,
+      selection: ref.current!.querySelectorAll<HTMLElement>(".abc-score"),
       player,
     });
   }, [player]);
 
   return (
-    <div
-      ref={ref}
-      className="abc-score"
-      data-show-tempo="false"
-      data-show-time-signature="false"
-    >
-      <div className="content">{content}</div>
-      <div className="staff score-staff"></div>
-      <div className="controls score-audio-controls"></div>
+    <div ref={ref}>
+      <div
+        className="abc-score"
+        data-show-tempo="false"
+        data-show-time-signature="false"
+      >
+        <div className="content">{content}</div>
+        <div className="staff score-staff"></div>
+        <div className="controls score-audio-controls"></div>
+      </div>
+      <div className="abc-score">
+        <div className="content">{content}</div>
+        <div className="staff score-staff"></div>
+        <div className="controls score-audio-controls"></div>
+      </div>
     </div>
   );
 }
