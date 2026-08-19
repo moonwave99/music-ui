@@ -93,7 +93,7 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
           onStop();
         }
       },
-      progress: ({ playedNotes, activeId, position, voice }) => {
+      progress: ({ playedNotes, activeId, position }) => {
         if (id !== activeId) {
           setPosition("0:0:0");
           setPlayerStatus("stopped");
@@ -101,9 +101,7 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
         }
         setPosition(position);
         setPlayerStatus("playing");
-        setPlayedNotes((prev) =>
-          prev.map((notes, index) => (index === voice ? playedNotes : notes)),
-        );
+        setPlayedNotes(playedNotes);
       },
       finished: () => {
         setPosition("0:0:0");

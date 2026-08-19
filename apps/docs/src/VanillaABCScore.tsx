@@ -5,7 +5,7 @@ import { PlayerContext } from "@music-ui/react";
 const content = `
 T: Vanilla
 M: 4/4
-Q: 120
+Q: 80
 CD EF GA Bc|`;
 
 export function VanillaABCScore() {
@@ -37,7 +37,7 @@ export function VanillaABCScore() {
         <div className="staff score-staff"></div>
         <div className="controls score-audio-controls"></div>
       </div>
-      <div className="abc-score">
+      <div className="abc-score" data-show-piano>
         <div className="content">{content}</div>
         <div className="staff score-staff"></div>
         <div className="controls score-audio-controls"></div>

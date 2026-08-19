@@ -91,6 +91,9 @@ importers:
       '@music-ui/core':
         specifier: workspace:*
         version: link:../core
+      '@music-ui/piano':
+        specifier: workspace:*
+        version: link:../piano
       '@tonaljs/midi':
         specifier: ^4.10.2
         version: 4.10.2

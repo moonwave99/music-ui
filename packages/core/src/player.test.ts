@@ -130,7 +130,7 @@ describe("Player - events", () => {
       expect(onProgress).toHaveBeenCalledWith({
         activeId: "1",
         voice: 0,
-        playedNotes: [`${x}4`],
+        playedNotes: [[`${x}4`]],
         position: `0:0:0`,
       });
     });
@@ -206,7 +206,7 @@ describe("Player - seek", () => {
 
     expect(onProgress).toHaveBeenCalledWith({
       activeId: "1",
-      playedNotes: ["D4"],
+      playedNotes: [["D4"]],
       position: "0:1:0",
       voice: 0,
     });

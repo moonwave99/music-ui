@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@music-ui/core": "workspace:*",
+    "@music-ui/piano": "workspace:*",
     "@tonaljs/midi": "^4.10.2",
     "abcjs": "^6.7.0"
   }

@@ -18,9 +18,8 @@ export type ABCScoreProps = UseABCScoreParams & {
   id?: string;
   children: ReactNode;
   className?: string;
-  pianoOptions?: PianoProps & {
-    show?: boolean;
-  };
+  pianoOptions?: PianoProps;
+  showPiano?: boolean;
   showTempo?: boolean;
   showPlayer?: boolean;
   playButtonLabel?: string;
@@ -31,10 +30,11 @@ export type ABCScoreProps = UseABCScoreParams & {
 export function ABCScore({
   className = "abc-score",
   children,
-  pianoOptions = { show: false },
+  pianoOptions = {},
   playButtonLabel = "Play",
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
+  showPiano = false,
   showPlayer = true,
   showTempo = true,
   showTimeSignature = true,
@@ -61,14 +61,16 @@ export function ABCScore({
     position,
   } = usePlayer({ id, onStop: () => abcRef.current?.clearSelection() });
 
+  const isCurrent = isCurrentScore(score);
+
   const onClick = useCallback(
     ({ position }: OnABCClickParams) => {
-      if (!isCurrentScore(score)) {
+      if (!isCurrent) {
         return;
       }
       seekTo(position);
     },
-    [seekTo, isCurrentScore, score],
+    [seekTo, isCurrent],
   );
 
   const { ref, abcRef } = useABCScore<HTMLDivElement>({
@@ -112,8 +114,11 @@ export function ABCScore({
           </button>
         </div>
       ) : null}
-      {pianoOptions.show ? (
-        <Piano notes={joinVoices(playedNotes)} {...pianoOptions} />
+      {showPiano ? (
+        <Piano
+          notes={isCurrent ? joinVoices(playedNotes) : []}
+          {...pianoOptions}
+        />
       ) : null}
     </div>
   );

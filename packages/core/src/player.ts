@@ -35,7 +35,7 @@ const DEFAULT_PARAMS = {
 } as PlayerParams;
 
 export type PlayerCallback = (params: {
-  playedNotes: string[];
+  playedNotes: string[][];
   activeId: string;
   position: TransportPosition;
   voice: number;
@@ -55,6 +55,7 @@ export class Player {
   private params: PlayerParams;
   private score: Score | null;
   private timeSignature: TimeSignature | null;
+  private playedNotes: string[][];
   private scoreManager: ScoreManager;
   private eventEmitter: EventEmitter;
   /**
@@ -70,6 +71,7 @@ export class Player {
     this.parts = [];
     this.score = null;
     this.timeSignature = null;
+    this.playedNotes = [];
     this.scoreManager = new ScoreManager();
     this.eventEmitter = new EventEmitter();
     transportEvents.forEach((eventName) =>
@@ -134,6 +136,7 @@ export class Player {
   stop() {
     this.transport.stop();
     this.draw.cancel(0);
+    this.clearPlayedNotes();
     return this;
   }
   seekTo(position: TransportPosition) {
@@ -142,11 +145,17 @@ export class Player {
       this.timeSignature!,
     );
   }
-
+  private updatePlayedNotes(notes: string[], voice = 0) {
+    this.playedNotes = this.playedNotes.map((x, index) =>
+      index === voice ? notes : x,
+    );
+  }
+  private clearPlayedNotes() {
+    this.playedNotes = [];
+  }
   private clearParts() {
     this.parts.forEach((part) => part.clear());
   }
-
   private createParts() {
     /* istanbul ignore if  */
     if (!this.score) {
@@ -157,6 +166,8 @@ export class Player {
       score,
       this.params.timeTolerance,
     );
+
+    this.playedNotes = scoreData.map(() => []);
 
     this.parts = scoreData.map(
       ({ notes, voice }) =>
@@ -169,7 +180,7 @@ export class Player {
           if (chord.notes.some((note) => note.name === END_NOTE)) {
             this.draw.schedule(() => {
               this.eventEmitter.emit("finished", {
-                playedNotes: [],
+                playedNotes: this.playedNotes,
                 activeId: score.id,
                 position,
                 voice,
@@ -187,8 +198,12 @@ export class Player {
           );
 
           this.draw.schedule(() => {
+            this.updatePlayedNotes(
+              chord.notes.map(({ name }) => name),
+              voice,
+            );
             this.eventEmitter.emit("progress", {
-              playedNotes: chord.notes.map(({ name }) => name),
+              playedNotes: this.playedNotes,
               activeId: score.id,
               position,
               voice,

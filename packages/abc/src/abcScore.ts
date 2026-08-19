@@ -27,6 +27,7 @@ export const DEFAULT_ABC_SCORE_OPTIONS = {
   showCursor: true,
   showTempo: true,
   showTimeSignature: true,
+  showPiano: false,
 } as const;
 
 /**
@@ -97,6 +98,7 @@ export class ABCScore {
   private tune: TuneObject | null;
   private cursor: SVGLineElement | null;
   private rendered: boolean;
+  private voiceCount: number;
   constructor({
     content = "",
     element,
@@ -116,6 +118,7 @@ export class ABCScore {
     this.onClick = onClick;
     this.tune = null;
     this.cursor = null;
+    this.voiceCount = 1;
     this.rendered = false;
   }
   getSVGElement() {
@@ -136,7 +139,9 @@ export class ABCScore {
     if (!this.showCursor || !this.rendered) {
       return this;
     }
-    [0, 1, 2].forEach((voice) => this.updateVoicePosition(position, voice));
+    Array.from({ length: this.voiceCount }, (_, i) => i).forEach((voice) =>
+      this.updateVoicePosition(position, voice),
+    );
     return this;
   }
   private updateVoicePosition(position: TransportPosition, voice: number) {
@@ -238,6 +243,8 @@ export class ABCScore {
       ...this.abcOptions,
       clickListener,
     }).at(0) as TuneObject;
+
+    this.voiceCount = this.tune.makeVoicesArray().length;
 
     if (this.showCursor) {
       this.cursor = document.createElementNS(

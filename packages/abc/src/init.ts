@@ -5,7 +5,9 @@ import {
   extractIndentedInput,
   getAbcScore,
   type ElementOrSelector,
+  joinVoices,
 } from "@music-ui/core";
+import { Piano } from "@music-ui/piano";
 import {
   ABCScore,
   cssClasses,
@@ -69,14 +71,19 @@ export function initABCScoreWithPlayer<T extends HTMLElement>({
       element: element.querySelector(".controls")!,
     });
 
+    let piano: Piano;
+
     player.on("finished", resetButtons);
-    player.on("progress", ({ activeId, position }) => {
+
+    player.on("progress", ({ activeId, position, playedNotes }) => {
       if (activeId !== id) {
         resetButtons();
         return;
       }
       abcScore.clearSelection();
       abcScore.updatePosition(position);
+
+      piano?.setNotes(joinVoices(playedNotes));
     });
 
     const abcScore = new ABCScore({
@@ -92,5 +99,12 @@ export function initABCScoreWithPlayer<T extends HTMLElement>({
       abcOptions,
       ...options,
     }).render();
+
+    if (options.showPiano) {
+      const pianoElement = document.createElement("div");
+      piano = new Piano({ element: pianoElement });
+      element.append(pianoElement);
+      piano.render();
+    }
   });
 }
