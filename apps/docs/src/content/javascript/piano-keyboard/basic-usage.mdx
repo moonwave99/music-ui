@@ -1,0 +1,121 @@
+# Basic Usage
+
+Need to display a piano diagram with some highlighted notes?
+
+## Installation
+
+<Installation packageName="@music-ui/piano" />
+
+## Usage
+
+By default, the `initPiano` function selects a `#piano` element inside the document:
+
+```html
+<div id="piano"></div>
+```
+
+Setup code:
+
+```ts
+import { initPiano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+initPiano();
+```
+
+Output:
+
+<Piano />
+
+You can select a different element:
+
+```html
+<div id="my-element"></div>
+```
+
+Setup code:
+
+```ts
+import { initPiano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+// you can pass a selector string
+initPiano("#my-element");
+
+// or you can pass a previously selected HTMLElement
+const element = document.getElementById("my-element");
+initPiano(element);
+```
+
+### Rendering more pianos at once
+
+The `initPiano` functions initializes all the elements that match the selector / that are passed:
+
+```html
+<div data-piano></div>
+<div data-piano></div>
+```
+
+Setup code:
+
+```ts
+import { initPiano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+// with selector
+initPiano("[data-piano]");
+
+// with selection
+const elements = document.querySelectorAll("[data-piano]");
+initPiano(elements);
+```
+
+Output:
+
+<Piano />
+
+<Piano />
+
+Rendering multiple similar empty keyboards is not particularly exciting. Let's see how to customize them and to highlight some notes inside them!
+
+### Dataset options
+
+The `initPiano` function reads the parameters passed in the `data-*` attributes:
+
+```html
+<div id="piano" data-octaves="4" data-with-final-c="false"></div>
+```
+
+Setup code:
+
+```ts
+import { initPiano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+initPiano();
+```
+
+Output:
+
+<Piano octaves={3} withFinalC={false} />
+
+The following data attributes are supported:
+
+| Attribute           | Type      | Maps to `Piano` option | Description                                 |
+| ------------------- | --------- | ---------------------- | ------------------------------------------- |
+| `data-octaves`      | `number`  | `octaves`              | The amount of rendered octaves              |
+| `data-start-octave` | `number`  | `startOctave`          | The first octave being rendered             |
+| `data-with-final-c` | `boolean` | `withFinalC`           | Renders a final C key after the last octave |
+
+<Callout type="info">
+  Check [the complete `initPiano` API
+  reference](/api/functions/_music-ui_piano.initPiano.html) for more details.
+</Callout>
+
+## Appearance customization
+
+All the sizes and colors are configurable via CSS variables.
+
+The defaults are found [in the imported CSS file](https://github.com/moonwave99/music-ui/blob/main/packages/piano/src/styles/index.css).
+
+You can override them in your style files.

@@ -1,0 +1,119 @@
+# The `Piano` class
+
+If you need more control over the component lifecycle, you can use the `Piano` class.
+
+<Callout type="info">
+  Check [the complete `Piano` API
+  reference](/api/classes/_music-ui_piano.Piano.html) for more details.
+</Callout>
+
+## Installation
+
+<Installation packageName="@music-ui/piano" />
+
+## Constructor
+
+The `Piano` constructor accepts the following parameters:
+
+| Property      | Type                      | Default  | Description                                   |
+| ------------- | ------------------------- | -------- | --------------------------------------------- |
+| `element`     | `string` \| `HTMLElement` | `#piano` | The container element or a valid CSS selector |
+| `octaves`     | `number`                  | 2        | The amount of rendered octaves                |
+| `startOctave` | `number`                  | 3        | The first octave being rendered               |
+| `withFinalC`  | `boolean`                 | true     | Renders a final C key after the last octave   |
+
+## Note highlight
+
+You can highlight specific notes with `Piano.setNotes`:
+
+```ts {3}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("C4 E4 G4");
+```
+
+And a C major chord is highlighted:
+
+<Piano notes="C4 E4 G4" />
+
+<Callout type="warning">
+  Always append the desired octave after the note in order to avoid ambiguity,
+  e.g. `C4` for middle C. This is especially relevant for any chord that crosses
+  the octave line, e.g. `A3 C#4 E4 G4`.
+</Callout>
+
+## Highlight different groups
+
+If you want to split hands or outline specific voices, separate the groups via a comma:
+
+```ts {6}
+const piano = new Piano({
+  element: "#my-element",
+  octaves: 4,
+});
+piano.render();
+piano.setNotes("C3 C4, E4 G4 C5");
+```
+
+Et voilà:
+
+<Piano notes="C3 C4, E4 G4 C5" octaves={3} />
+
+## Display note labels
+
+You can pass the labels to be displayed in the highlighted keys as a second parameter to `Piano.setNotes`:
+
+```ts {3}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("F3 A3 C4 E4", "1 3 5 7");
+```
+
+<Piano notes="F3 A3 C4 E4" noteLabels="1 3 5 7" />
+
+<Callout type="warning">
+  The `noteLabels` and `notes` length should match.
+</Callout>
+
+## Clearing note highlight
+
+Use `piano.clearNotes`:
+
+```ts {5}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("C4 E4 G4");
+// later on
+piano.clearNotes();
+```
+
+## Setting additional note state
+
+Use `piano.setPlayedNotes` for playback scenarios when state changes over time but you still want to highlight the same set of notes:
+
+```ts {7}
+const piano = new Piano({
+  element: "#my-element",
+  octaves: 3,
+});
+piano.render();
+piano.setNotes("C4 E4 G4");
+piano.setPlayedNotes("C4 G4");
+```
+
+See:
+
+<Piano notes="C4 E4 G4" playedNotes="C4 G4" />
+
+## Clearing played notes
+
+Use `piano.clearPlayedNotes`:
+
+```ts {6}
+const piano = new Piano({ element: "#my-element" });
+piano.render();
+piano.setNotes("C4 E4 G4");
+piano.setPlayedNotes("C4 G4");
+// later on
+piano.clearPlayedNotes();
+```

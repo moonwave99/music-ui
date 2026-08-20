@@ -1,0 +1,76 @@
+---
+title: ABCSCore
+---
+
+# The `ABCSCore` class
+
+If you need more control over the component lifecycle, you can use the underlying `ABCSCore` class.
+
+## Installation
+
+<Installation packageName="@music-ui/abc" />
+
+## Usage
+
+Here you find and overview of the class methods and some relative examples.
+
+<Callout type="info">
+  Check [the complete `ABCScore` API
+  reference](/api/classes/_music-ui_abc.ABCScore.html) for more details.
+</Callout>
+
+### Constructor
+
+The `ABCSCore` constructor accepts the following parameters:
+
+| Property            | Type                      | Default            | Description                                   |
+| ------------------- | ------------------------- | ------------------ | --------------------------------------------- |
+| `element`           | `string` \| `HTMLElement` | `[data-abc-score]` | The container element or a valid CSS selector |
+| `content`           | `string`                  | ""                 | The abc notation to be rendered               |
+| `showCursor`        | `boolean`                 | true               | Shows or hides the position cursor            |
+| `showTempo`         | `boolean`                 | true               | Shows or hides the tempo                      |
+| `showTimeSignature` | `boolean`                 | true               | Shows or hides the time signature             |
+
+You can use it like:
+
+```html
+<div data-abc-score>
+  <div class="content">CDEF GABc|</div>
+  <div class="staff"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { ABCScore } from "@music-ui/abc";
+import "@music-ui/abc/styles.css";
+
+const wrapper = document.querySelector("[data-abc-score]");
+
+const score = new ABCScore({
+  element: wrapper.querySelector(".staff"),
+  content: wrapper.querySelector(".content").textContent.trim(),
+  showTempo: false,
+  abcOptions: {
+    foregroundColor: "orange",
+  },
+});
+
+// don't forget to render the score!
+score.render();
+```
+
+<ABCScore
+  showTempo={false}
+  showPlayer={false}
+  abcOptions={{ foregroundColor: "orange" }}
+>
+  CDEF GABc|
+</ABCScore>
+
+### Updating the score position
+
+You can pass the new position to `ABCScore.updatePosition` to update the cursor and highlight the corresponding note.
+
+TBD

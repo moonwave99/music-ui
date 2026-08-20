@@ -15,7 +15,7 @@ import {
 import { DEFAULT_SELECTOR } from "./init";
 
 type InitPianoWithPlayerParams<T extends HTMLElement> = {
-  selection: ElementOrSelector<T>;
+  selection?: ElementOrSelector<T>;
   player: Player;
 };
 
@@ -45,6 +45,7 @@ export function initPianoWithPlayer<T extends HTMLElement>({
 
     const piano = new Piano({ ...options, element: pianoElement });
     const { notes, noteLabels } = element.dataset;
+
     if (!notes) {
       console.warn(`Piano with player ${id} has no notes to play`);
       return;

@@ -251,6 +251,12 @@ export function normalizedPositionToTonePosition(
   return `${newBars}:${newBeats}:${newSubdivisions}`;
 }
 
+/**
+ * Creates buttons from a key-value list of handlers, attaches the handlers to them and appends them to the passed element.
+ * @param element The element where the buttons will be appended
+ * @param handlers The event handlers attached to the buttons
+ * @returns
+ */
 export function createControls(
   element: HTMLElement,
   handlers: Record<string, () => void>,

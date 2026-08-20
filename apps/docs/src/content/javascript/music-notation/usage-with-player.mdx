@@ -1,0 +1,103 @@
+# Usage with Player
+
+Here you can find the instructions to add playback support to your rendered [abc music notation](https://abcnotation.com/).
+
+## Installation
+
+<Installation packageName="@music-ui/core @music-ui/abc" />
+
+<Callout type="info">
+See the [`Player` page](/core/player) to know about playback setup.
+</Callout>
+
+## The `initABCScoreWithPlayer` function
+
+By default, the `initABCScore` function looks selects all the `[data-abc-score]` elements, and expects them to have the following children:
+
+- an element containing **the abc notation**, with the `.content` class;
+- an element where **the music notation will be rendered**, with the `.staff` class.
+- an element where **the playback controls will be rendered**, with the `.controls` class.
+
+```html
+<div data-abc-score>
+  <div class="content">
+    CDEF GABc|
+  </div>
+  <div class="staff"></div>
+  <div class="controls"></div>
+</div>
+```
+
+<Callout type="info">
+The `.content` element is hidden via `@music-ui/abc/styles.css`.
+</Callout>
+
+Setup code:
+
+```ts
+import { initABCScoreWithPlayer } from "@music-ui/abc";
+import { Player } from "@music-ui/player";
+import "@music-ui/abc/styles.css";
+
+const player = new Player
+
+initABCScoreWithPlayer({ player });
+```
+
+Output:
+
+<ABCScore showPlayer>
+  CDEF GABc|
+</ABCScore>
+
+Like `initABCScore`, `initABCScoreWithPlayer` can deal with multiple scores at once:
+
+```html
+<div data-abc-score>
+  <div class="content">
+    CDEF GABc|
+  </div>
+  <div class="staff"></div>
+  <div class="controls"></div>
+</div>
+<div data-abc-score data-show-tempo="false">
+  <div class="content">
+    K: G
+    GABc defg|
+  </div>
+  <div class="staff"></div>
+  <div class="controls"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { initABCScoreWithPlayer } from "@music-ui/abc";
+import { Player } from "@music-ui/player";
+import "@music-ui/abc/styles.css";
+
+const player = new Player
+
+initABCScoreWithPlayer({ player });
+```
+
+Output:
+
+<ABCScore showPlayer>
+  CDEF GABc|
+</ABCScore>
+
+<ABCScore showPlayer showTempo={false}>
+  K: G
+  GABc defg|
+</ABCScore>
+
+<Callout type="info">
+Check [`initABCScore`](/javascript/music-notation/initABCScore#dataset-options) for a list of allowed dataset options.
+</Callout>
+
+<Callout type="info">
+  Check [the complete `initABCScoreWithPlayer` API
+  reference](/api/functions/_music-ui_abc.initABCScoreWithPlayer.html) for more details.
+</Callout>

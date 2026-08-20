@@ -20,7 +20,7 @@ import { initControls } from "./controls";
 const DEFAULT_PIANO_OCTAVES = 5;
 
 type InitABCScoreWithPlayerParams<T extends HTMLElement> = {
-  selection: ElementOrSelector<T>;
+  selection?: ElementOrSelector<T>;
   abcOptions?: ABCScoreParams["abcOptions"];
   player: Player;
 };

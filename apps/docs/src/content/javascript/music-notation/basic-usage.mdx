@@ -1,20 +1,19 @@
-# ABCScore
+# Basic Usage
 
-[ABC notation](https://abcnotation.com/) is a form of music notation that is easily parsable and editable by both people and machines.  
-This library uses [abc.js](https://github.com/paulrosen/abcjs) to render ABC notation as music scores on screen.
+If you just need to render some [abc music notation](https://abcnotation.com/) on screen, this is the simplest approach.
 
 ## Installation
 
 <Installation packageName="@music-ui/abc" />
 
-## Basic usage
+## The `initABCScore` function
 
-By default, the `initABCScore` function looks selects all the `[data-abc-score]` elements, and expects them to have the following children:
+By default, `initABCScore` selects all the `[data-abc-score]` elements, and expects them to have the following children:
 
-- an **element containing the abc notation**, with the `.content` class;
-- an **element where the music notation will be rendered**, with the `.staff` class.
+- an element containing **the abc notation**, with the `.content` class;
+- an element where **the music notation will be rendered**, with the `.staff` class.
 
-For more granularity you can use the [`ABCScore` class](#the-abcscore-class).
+For more granularity you can use the [`ABCScore` class](/javascript/music-notation/ABCScore).
 
 ```html
 <div data-abc-score>
@@ -26,10 +25,10 @@ For more granularity you can use the [`ABCScore` class](#the-abcscore-class).
 ```
 
 <Callout type="info">
-The `.content` element is hidden via `@music-ui/abc/styles.css`.
+The `.content` element is hidden by default inside `@music-ui/abc/styles.css`.
 </Callout>
 
-You can then render the content:
+Setup code:
 
 ```ts
 import { initABCScore } from "@music-ui/abc";
@@ -163,69 +162,3 @@ Output:
   selections and parameters or create your own widget with the various
   `music-ui` classes.
 </Callout>
-
-## The `ABCSCore` class
-
-If you need more control over the component lifecycle, you can use the underlying `ABCSCore` class.
-
-<Callout type="info">
-  Check [the complete `ABCScore` API
-  reference](/api/classes/_music-ui_abc.ABCScore.html) for more details.
-</Callout>
-
-### Constructor
-
-The `ABCSCore` constructor accepts the following parameters:
-
-| Property            | Type                      | Default            | Description                                   |
-| ------------------- | ------------------------- | ------------------ | --------------------------------------------- |
-| `element`           | `string` \| `HTMLElement` | `[data-abc-score]` | The container element or a valid CSS selector |
-| `content`           | `string`                  | ""                 | The abc notation to be rendered               |
-| `showCursor`        | `boolean`                 | true               | Shows or hides the position cursor            |
-| `showTempo`         | `boolean`                 | true               | Shows or hides the tempo                      |
-| `showTimeSignature` | `boolean`                 | true               | Shows or hides the time signature             |
-
-You can use it like:
-
-```html
-<div data-abc-score>
-  <div class="content">
-    CDEF GABc|
-  </div>
-  <div class="staff"></div>
-</div>
-```
-
-Setup code:
-
-```ts
-import { ABCScore } from "@music-ui/abc";
-import "@music-ui/abc/styles.css";
-
-const wrapper = document.querySelector("[data-abc-score]");
-
-const score = new ABCScore({
-  element: wrapper.querySelector(".staff"),
-  content: wrapper.querySelector(".content").textContent.trim(),
-  showTempo: false,
-  abcOptions: {
-    foregroundColor: "orange"
-  }
-});
-
-// don't forget to render the score!
-score.render();
-```
-
-<ABCScore
-  showTempo={false}
-  showPlayer={false}
-  abcOptions={{ foregroundColor: "orange" }}>
-  CDEF GABc|
-</ABCScore>
-
-### Updating the score position
-
-You can pass the new position to `ABCScore.updatePosition` to update the cursor and highlight the corresponding note.
-
-TBD
