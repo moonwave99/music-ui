@@ -112,6 +112,16 @@ export class Piano {
   /**
    * Highlights the passed notes. Sets the corresponding note labels if passed.
    *
+   * Use an underscore in order to skip a note.
+   *
+   * @example
+   * // will highlight C4, E4 and C5 with labels 1, 3 and 5
+   * setNotes("C4 E4 G4", "1 3 5")
+   *
+   * @example
+   * // will highlight C4, E4 and C5 with labels 1, (nothing) and 5
+   * setNotes("C4 E4 G4", "1 _ 5")
+   *
    * @param notes The notes to be displayed
    * @param noteLabels The corresponding note labels
    */
