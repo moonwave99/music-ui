@@ -3,7 +3,7 @@ import { Piano, type PianoProps } from "./Piano";
 import { usePlayer } from "./PlayerProvider";
 import { getPianoScore, joinVoices } from "@music-ui/core";
 
-export type PianoPlayerProps = PianoProps & {
+export type PianoWithPlayerProps = PianoProps & {
   id: string;
   label?: string;
   playLabel?: string;
@@ -11,14 +11,14 @@ export type PianoPlayerProps = PianoProps & {
   arpeggioSpeed?: number;
 };
 
-export function PianoPlayer({
+export function PianoWithPlayer({
   label = "",
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
   arpeggioSpeed = 120,
   className = "piano-with-player",
   ...props
-}: PianoPlayerProps): ReactElement {
+}: PianoWithPlayerProps): ReactElement {
   const componentId = useId();
   const id = props.id || componentId;
   const { notes = [], ...rest } = props;
