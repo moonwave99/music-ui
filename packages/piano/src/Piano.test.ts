@@ -294,7 +294,7 @@ describe("Piano - setNotes with labels", () => {
     ] as const;
 
     piano.render().setNotes(
-      notes.map((x) => x[0]).join(" "),
+      notes.map((x) => x[0]),
       notes.map((x) => x[1]),
     );
 
@@ -306,11 +306,48 @@ describe("Piano - setNotes with labels", () => {
     });
   });
 
-  it("Throws error if notes and label mismatch", () => {
-    assert.throws(() => {
-      const piano = new Piano();
-      piano.render().setNotes("C3 E3 G3", "1 3");
-    }, "input and noteLabels length do not match");
+  it("Displays the passed notes with label information - less labels than notes", () => {
+    const piano = new Piano();
+
+    const notes = [
+      ["C3", "1"],
+      ["E3", "3"],
+      ["G3", ""],
+    ] as const;
+
+    piano.render().setNotes(
+      notes.map((x) => x[0]),
+      notes.map((x) => x[1]),
+    );
+
+    const wrapper = document.querySelector("#piano");
+    notes.forEach(([note, label]) => {
+      expect(
+        wrapper?.querySelector(`.note-with-octave-${note}`)?.innerHTML,
+      ).toBe(label);
+    });
+  });
+
+  it("Displays the passed notes with label information - labels with empty placeholder", () => {
+    const piano = new Piano();
+
+    const notes = [
+      ["C3", "1"],
+      ["E3", "_"],
+      ["G3", "5"],
+    ] as const;
+
+    piano.render().setNotes(
+      notes.map((x) => x[0]),
+      notes.map((x) => x[1]),
+    );
+
+    const wrapper = document.querySelector("#piano");
+    notes.forEach(([note, label]) => {
+      expect(
+        wrapper?.querySelector(`.note-with-octave-${note}`)?.innerHTML,
+      ).toBe(label === "_" ? "" : label);
+    });
   });
 });
 

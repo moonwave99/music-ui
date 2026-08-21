@@ -19,13 +19,18 @@ export function parseNoteInput(
     return output;
   }
   const normalizedNoteLabels = normalizeInput(noteLabels);
-  if (normalizedNoteLabels.length !== output.length) {
-    throw new Error("input and noteLabels length do not match");
-  }
+
   return output.map((note, index) => ({
     ...note,
-    label: normalizedNoteLabels[index],
+    label: getNoteLabel(normalizedNoteLabels[index]),
   }));
+}
+
+function getNoteLabel(label: string | undefined) {
+  if (!label || label === "_") {
+    return "";
+  }
+  return label;
 }
 
 export function normalizeInput(input: NoteInput) {
