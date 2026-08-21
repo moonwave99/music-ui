@@ -144,7 +144,9 @@ describe("initABCScore - multiple elements", () => {
         </div>
       </main>`;
 
-    initABCScore(document.querySelectorAll<HTMLElement>("[data-abc-score]"));
+    initABCScore({
+      selection: document.querySelectorAll<HTMLElement>("[data-abc-score]"),
+    });
 
     const elements = document.querySelectorAll("[data-abc-score]");
     expect(elements.length).toBe(2);
@@ -177,7 +179,10 @@ describe("initABCScore - abcOptions", () => {
         </div>
       </main>`;
 
-    initABCScore("[data-abc-score]", { paddingleft: 30 });
+    initABCScore({
+      selection: "[data-abc-score]",
+      abcOptions: { paddingleft: 30 },
+    });
 
     const elements = document.querySelectorAll("[data-abc-score]");
 

@@ -33,7 +33,7 @@ export type ScoreInfo = {
 };
 
 /**
- * Comma separated notes in a single string, or an array of notes (in scientific notation)
+ * Comma separated notes in a single string, or an array of notes (in scientific pitch notation)
  */
 export type NoteInput = string | string[];
 

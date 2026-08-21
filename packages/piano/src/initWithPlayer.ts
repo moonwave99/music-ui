@@ -4,7 +4,7 @@ import {
   Player,
   getPianoScore,
   createControls,
-  type ElementOrSelector,
+  ensureElements,
 } from "@music-ui/core";
 import {
   DEFAULT_PIANO_OPTIONS,
@@ -12,38 +12,39 @@ import {
   cssClasses,
   type PianoOptions,
 } from "./Piano";
-import { DEFAULT_SELECTOR } from "./init";
+import { DEFAULT_OPTIONS, type InitPianoParams } from "./init";
 
-type InitPianoWithPlayerParams<T extends HTMLElement> = {
-  selection?: ElementOrSelector<T>;
+type InitPianoWithPlayerParams<T extends HTMLElement> = InitPianoParams<T> & {
   player: Player;
 };
 
-export function initPianoWithPlayer<T extends HTMLElement>({
-  selection = DEFAULT_SELECTOR,
-  player,
-}: InitPianoWithPlayerParams<T>) {
+export function initPianoWithPlayer<T extends HTMLElement>(
+  params: Partial<InitPianoWithPlayerParams<T>> = {},
+) {
+  const { selection, player } = { ...DEFAULT_OPTIONS, ...params };
+
+  if (!(player instanceof Player)) {
+    throw new Error("You must pass a Player instance");
+  }
+
   return ensureSelection(selection).map((element, index) => {
     const id = element.dataset.id || `${index + 1}`;
-    const pianoElement = element.querySelector<HTMLElement>(
-      `.${cssClasses.piano}`,
-    );
-    if (!pianoElement) {
-      throw new Error(`pianoElement not found for piano with id: ${id}`);
-    }
-    const controlsElement = element.querySelector<HTMLElement>(
-      `.${cssClasses.controls}`,
-    );
-    if (!controlsElement) {
-      throw new Error(`controlsElement not found for piano with id: ${id}`);
-    }
+
+    const { pianoElement, controlsElement } = ensureElements({
+      id,
+      parentElement: element,
+      elements: {
+        pianoElement: `.${cssClasses.piano}`,
+        controlsElement: `.${cssClasses.controls}`,
+      },
+    });
 
     const options = extractElementOptions(
       element,
       DEFAULT_PIANO_OPTIONS as Omit<PianoOptions, "element">,
     );
 
-    const piano = new Piano({ ...options, element: pianoElement });
+    const piano = new Piano({ ...options, element: pianoElement! });
     const { notes, noteLabels } = element.dataset;
 
     if (!notes) {
@@ -52,7 +53,7 @@ export function initPianoWithPlayer<T extends HTMLElement>({
     }
 
     const { disableButtons, resetButtons } = initControls({
-      element: controlsElement,
+      element: controlsElement!,
       notes,
       player,
       id,

@@ -24,7 +24,7 @@ describe("initPiano", () => {
             <div id="my-element" data-notes="C3 E3 G3" data-note-labels="1 3 5"></div>
         </main>`;
 
-    initPiano("#my-element");
+    initPiano({ selection: "#my-element" });
 
     const piano = document.querySelector(".piano");
     expect(piano!.querySelectorAll(".key").length).toBe(12 + 12 + 1);
@@ -62,9 +62,9 @@ describe("initPiano", () => {
                 data-with-final-C="false"></div>
         </main>`;
 
-    const elements = document.querySelectorAll<HTMLElement>("[data-custom]");
+    const selection = document.querySelectorAll<HTMLElement>("[data-custom]");
 
-    initPiano(elements);
+    initPiano({ selection });
     const pianos = document.querySelectorAll(".piano");
     expect(pianos.length).toBe(2);
   });

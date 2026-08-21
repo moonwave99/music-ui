@@ -43,7 +43,7 @@ export type PlaybackMode = "block" | "arpeggio";
 /**
  * @property id The score id
  * @property bpm The score bpm
- * @property input The score input (in scientific notation)
+ * @property input The score input (in scientific pitch notation)
  * @property playbackMode The playback mode (block or arpeggio)
  */
 type GetPianoScoreParams = {
@@ -78,14 +78,14 @@ export function getPianoScore({
 }
 
 /**
- * Converts scientific notation input to abc notation.
+ * Converts scientific pitch notation input to abc notation.
  * @example
  * // returns CEG
  * toAbcNotation(['C3, 'G3', 'B3']);
  * @example
  * // returns CEG
  * toAbcNotation('C3 G3 B3');
- * @param input The note input in scientific notation
+ * @param input The note input in scientific pitch notation
  * @returns The corresponding abc notation output
  */
 export function toAbcNotation(input: NoteInput) {
@@ -95,14 +95,14 @@ export function toAbcNotation(input: NoteInput) {
 }
 
 /**
- * Converts a scientific notation input to the abc notation of the desired playback mode.
+ * Converts a scientific pitch notation input to the abc notation of the desired playback mode.
  * @example
  * // returns [CEG]6
  * withPlaybackMode(['C3', 'G3', 'B3'], 'block');
  * @example
  * // returns CEG
  * withPlaybackMode(['C3', 'G3', 'B3'], 'arpeggio');
- * @param input The note input in scientific notation
+ * @param input The note input in scientific pitch notation
  * @param playbackMode The playback mode (arpeggio / block)
  * @returns The corresponding abc notation
  */
@@ -273,6 +273,34 @@ export function createControls(
   });
 
   return buttons;
+}
+
+type EnsureElementsParams = {
+  id: string;
+  parentElement: HTMLElement;
+  elements: Record<string, string>;
+};
+
+/**
+ * Given a key-value lookup list of desired element names and relative CSS selectors, it populates an object with the same keys and the found elements.
+ * @throws `${key} not found inside element with id: ${id}` as soon as an element of the list is not found.
+ * @param __namedParameters The id of the context, the parent element, the key-value lookup list
+ * @returns The key-value list of element names and selections
+ */
+export function ensureElements({
+  id,
+  parentElement,
+  elements,
+}: EnsureElementsParams) {
+  const output = {} as Record<string, HTMLElement>;
+  Object.entries(elements).forEach(([key, value]) => {
+    const element = parentElement.querySelector<HTMLElement>(value);
+    if (!element) {
+      throw new Error(`${key} not found inside element with id: ${id}`);
+    }
+    output[key] = element;
+  });
+  return output;
 }
 
 function getScoreHash(id: string, content: string) {

@@ -6,99 +6,92 @@ import {
   getAbcScore,
   type ElementOrSelector,
   joinVoices,
+  ensureElements,
 } from "@music-ui/core";
 import { Piano } from "@music-ui/piano";
-import {
-  ABCScore,
-  cssClasses,
-  DEFAULT_ABC_SCORE_OPTIONS,
-  type ABCScoreParams,
-} from "./abcScore";
-import { DEFAULT_SELECTOR } from "./init";
+import { ABCScore, cssClasses, DEFAULT_ABC_SCORE_OPTIONS } from "./abcScore";
+import { DEFAULT_OPTIONS, type InitABCScoreParams } from "./init";
 import { initControls } from "./controls";
 
 const DEFAULT_PIANO_OCTAVES = 5;
 
-type InitABCScoreWithPlayerParams<T extends HTMLElement> = {
-  selection?: ElementOrSelector<T>;
-  abcOptions?: ABCScoreParams["abcOptions"];
-  player: Player;
-};
+type InitABCScoreWithPlayerParams<T extends HTMLElement> =
+  InitABCScoreParams<T> & {
+    player: Player;
+  };
 
-export function initABCScoreWithPlayer<T extends HTMLElement>({
-  selection = DEFAULT_SELECTOR,
-  abcOptions = {},
-  player,
-}: InitABCScoreWithPlayerParams<T>) {
-  return ensureSelection(selection).map((element, index) => {
-    const id = element.dataset.id || `${index + 1}`;
-    const staffElement = element.querySelector<HTMLElement>(
-      `.${cssClasses.staff}`,
-    );
-    if (!staffElement) {
-      throw new Error(`staffElement not found for score with id: ${id}`);
-    }
-    const contentElement = element.querySelector<HTMLElement>(
-      `.${cssClasses.content}`,
-    );
-    if (!contentElement) {
-      throw new Error(`contentElement not found for score with id: ${id}`);
-    }
-    const controlsElement = element.querySelector<HTMLElement>(
-      `.${cssClasses.controls}`,
-    );
-    if (!controlsElement) {
-      throw new Error(`controlsElement not found for score with id: ${id}`);
-    }
+export function initABCScoreWithPlayer<T extends HTMLElement>(
+  params: Partial<InitABCScoreWithPlayerParams<T>> = {},
+) {
+  const { selection, player, abcOptions } = { ...DEFAULT_OPTIONS, ...params };
 
-    const content = extractIndentedInput(contentElement) || "";
-    const options = extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS);
-    const score = getAbcScore({ id, options, input: content });
+  if (!(player instanceof Player)) {
+    throw new Error("You must pass a Player instance");
+  }
 
-    const { resetButtons } = initControls({
-      score,
-      player,
-      element: controlsElement,
-    });
+  return ensureSelection(selection as ElementOrSelector<T>).map(
+    (element, index) => {
+      const id = element.dataset.id || `${index + 1}`;
 
-    let piano: Piano;
+      const { staffElement, contentElement, controlsElement } = ensureElements({
+        id,
+        parentElement: element,
+        elements: {
+          staffElement: `.${cssClasses.staff}`,
+          contentElement: `.${cssClasses.content}`,
+          controlsElement: `.${cssClasses.controls}`,
+        },
+      });
 
-    player.on("finished", resetButtons);
-    player.on("progress", ({ activeId, position, playedNotes }) => {
-      if (activeId !== id) {
-        resetButtons();
-        return;
-      }
-      abcScore.clearSelection();
-      abcScore.updatePosition(position);
+      const content = extractIndentedInput(contentElement!) || "";
+      const options = extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS);
+      const score = getAbcScore({ id, options, input: content });
 
-      piano?.setNotes(joinVoices(playedNotes));
-    });
+      const { resetButtons } = initControls({
+        score,
+        player,
+        element: controlsElement!,
+      });
 
-    const abcScore = new ABCScore({
-      content: score.content,
-      element: staffElement,
-      onClick: ({ position }) => {
-        if (player.getScore()?.id !== id) {
+      let piano: Piano;
+
+      player.on("finished", resetButtons);
+      player.on("progress", ({ activeId, position, playedNotes }) => {
+        if (activeId !== id) {
+          resetButtons();
           return;
         }
+        abcScore.clearSelection();
         abcScore.updatePosition(position);
-        player.seekTo(position);
-      },
-      abcOptions,
-      ...options,
-    }).render();
 
-    if (options.showPiano) {
-      const pianoElement = document.createElement("div");
-      const { pianoOctaves } = element.dataset;
-      const octaves = pianoOctaves
-        ? Number(pianoOctaves)
-        : DEFAULT_PIANO_OCTAVES;
+        piano?.setNotes(joinVoices(playedNotes));
+      });
 
-      piano = new Piano({ element: pianoElement, octaves });
-      element.append(pianoElement);
-      piano.render();
-    }
-  });
+      const abcScore = new ABCScore({
+        content: score.content,
+        element: staffElement!,
+        onClick: ({ position }) => {
+          if (player.getScore()?.id !== id) {
+            return;
+          }
+          abcScore.updatePosition(position);
+          player.seekTo(position);
+        },
+        abcOptions,
+        ...options,
+      }).render();
+
+      if (options.showPiano) {
+        const pianoElement = document.createElement("div");
+        const { pianoOctaves } = element.dataset;
+        const octaves = pianoOctaves
+          ? Number(pianoOctaves)
+          : DEFAULT_PIANO_OCTAVES;
+
+        piano = new Piano({ element: pianoElement, octaves });
+        element.append(pianoElement);
+        piano.render();
+      }
+    },
+  );
 }

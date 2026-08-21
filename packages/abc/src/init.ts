@@ -11,13 +11,20 @@ import {
   type ABCScoreParams,
 } from "./abcScore";
 
-export const DEFAULT_SELECTOR = "[data-abc-score]";
+export type InitABCScoreParams<T extends HTMLElement> = {
+  selection: ElementOrSelector<T>;
+  abcOptions?: ABCScoreParams["abcOptions"];
+};
+
+export const DEFAULT_OPTIONS = {
+  selection: "[data-abc-score]",
+} as const;
 
 export function initABCScore<T extends HTMLElement>(
-  elementOrSelector: ElementOrSelector<T> = DEFAULT_SELECTOR,
-  abcOptions?: ABCScoreParams["abcOptions"],
+  params: Partial<InitABCScoreParams<T>> = {},
 ) {
-  return ensureSelection(elementOrSelector).map((element) => {
+  const { selection, abcOptions } = { ...DEFAULT_OPTIONS, ...params };
+  return ensureSelection(selection).map((element) => {
     const contentElement = element.querySelector<HTMLElement>(
       `.${cssClasses.content}`,
     );

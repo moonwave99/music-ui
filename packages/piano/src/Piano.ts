@@ -13,7 +13,7 @@ import {
 } from "./lib";
 
 /**
- * @property chroma The scientific notation value of the pitch class (e.g. 0-11)
+ * @property chroma The scientific pitch notation value of the pitch class (e.g. 0-11)
  * @property color The key color
  * @property note The pitch class of the note
  */

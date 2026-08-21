@@ -10,13 +10,11 @@ Here you can find the instructions to add playback support to your rendered [abc
 See the [`Player` page](/core/player) to know about playback setup.
 </Callout>
 
-## The `initABCScoreWithPlayer` function
+## Usage
 
-By default, the `initABCScore` function looks selects all the `[data-abc-score]` elements, and expects them to have the following children:
+The `@music-ui/abc` exports an `initABCScoreWithPlayer` function.
 
-- an element containing **the abc notation**, with the `.content` class;
-- an element where **the music notation will be rendered**, with the `.staff` class.
-- an element where **the playback controls will be rendered**, with the `.controls` class.
+It expects the same markup of [`initABCScore`](/javascript/music-notation/basic-usage#usage):
 
 ```html
 <div data-abc-score>
@@ -28,18 +26,14 @@ By default, the `initABCScore` function looks selects all the `[data-abc-score]`
 </div>
 ```
 
-<Callout type="info">
-The `.content` element is hidden via `@music-ui/abc/styles.css`.
-</Callout>
-
-Setup code:
+In addition to the `initABCScore` parameters, it needs a `Player` instance in order to playback the score content:
 
 ```ts
 import { initABCScoreWithPlayer } from "@music-ui/abc";
 import { Player } from "@music-ui/player";
 import "@music-ui/abc/styles.css";
 
-const player = new Player
+const player = new Player();
 
 initABCScoreWithPlayer({ player });
 ```

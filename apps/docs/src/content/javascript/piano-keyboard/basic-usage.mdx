@@ -8,10 +8,12 @@ Need to display a piano diagram with some highlighted notes?
 
 ## Usage
 
-By default, the `initPiano` function selects a `#piano` element inside the document:
+The `@music-ui/piano` package exports an `initPiano` function.
+
+By default it selects all `[data-piano]` element inside the document:
 
 ```html
-<div id="piano"></div>
+<div data-piano></div>
 ```
 
 Setup code:
@@ -27,10 +29,11 @@ Output:
 
 <Piano />
 
-You can select a different element:
+You can pass a custom selector or collection of elements.
 
 ```html
-<div id="my-element"></div>
+<div class="my-piano-class"></div>
+<div class="my-piano-class"></div>
 ```
 
 Setup code:
@@ -39,35 +42,11 @@ Setup code:
 import { initPiano } from "@music-ui/piano";
 import "@music-ui/piano/styles.css";
 
-// you can pass a selector string
-initPiano("#my-element");
+// via selector string
+initPiano({ selection: ".my-piano-class" });
 
-// or you can pass a previously selected HTMLElement
-const element = document.getElementById("my-element");
-initPiano(element);
-```
-
-### Rendering more pianos at once
-
-The `initPiano` functions initializes all the elements that match the selector / that are passed:
-
-```html
-<div data-piano></div>
-<div data-piano></div>
-```
-
-Setup code:
-
-```ts
-import { initPiano } from "@music-ui/piano";
-import "@music-ui/piano/styles.css";
-
-// with selector
-initPiano("[data-piano]");
-
-// with selection
-const elements = document.querySelectorAll("[data-piano]");
-initPiano(elements);
+// via actual DOM selection
+initABCScore({ selection: document.querySelectorAll(".my-piano-class") });
 ```
 
 Output:
@@ -76,14 +55,62 @@ Output:
 
 <Piano />
 
-Rendering multiple similar empty keyboards is not particularly exciting. Let's see how to customize them and to highlight some notes inside them!
+## Note highlight
 
-### Dataset options
-
-The `initPiano` function reads the parameters passed in the `data-*` attributes:
+You can highlight specific notes via the `data-notes` attribute:
 
 ```html
-<div id="piano" data-octaves="4" data-with-final-c="false"></div>
+<div data-piano data-notes="C4 E4 G4 B4"></div>
+```
+
+Setup code:
+
+```ts
+import { initPiano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+initPiano();
+```
+
+Output:
+
+<Piano notes="C4 E4 G4 B4" octaves={3} />
+
+<Callout type="warning">
+  To avoid position ambiguity, always append the octave after the note (i.e. use
+  [scientific pitch
+  notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation)).
+</Callout>
+
+### Multiple voices
+
+You can highlight different group of notes in different colors, e.g. when you need to separate left and right hand content.
+
+Separate the note groups via a comma, like:
+
+```html
+<div data-piano data-notes="C3 C4, E4 G4 C5"></div>
+```
+
+Setup code:
+
+```ts
+import { initPiano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+initPiano();
+```
+
+Output:
+
+<Piano notes="C3 C4, E4 G4 C5" octaves={3} />
+
+## Render options
+
+Configuration can also be stored inside data attributes:
+
+```html
+<div data-piano data-octaves="4" data-with-final-c="false"></div>
 ```
 
 Setup code:
@@ -101,11 +128,13 @@ Output:
 
 The following data attributes are supported:
 
-| Attribute           | Type      | Maps to `Piano` option | Description                                 |
-| ------------------- | --------- | ---------------------- | ------------------------------------------- |
-| `data-octaves`      | `number`  | `octaves`              | The amount of rendered octaves              |
-| `data-start-octave` | `number`  | `startOctave`          | The first octave being rendered             |
-| `data-with-final-c` | `boolean` | `withFinalC`           | Renders a final C key after the last octave |
+| Attribute           | Type      | Description                                 |
+| ------------------- | --------- | ------------------------------------------- |
+| `data-octaves`      | `number`  | The amount of rendered octaves              |
+| `data-start-octave` | `number`  | The first octave being rendered             |
+| `data-with-final-c` | `boolean` | Renders a final C key after the last octave |
+| `data-notes`        | `string`  | The notes to be highlighted                 |
+| `data-note-labels`  | `string`  | The note labels                             |
 
 <Callout type="info">
   Check [the complete `initPiano` API

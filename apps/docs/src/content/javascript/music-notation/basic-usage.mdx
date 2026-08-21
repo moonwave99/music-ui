@@ -6,9 +6,11 @@ If you just need to render some [abc music notation](https://abcnotation.com/) o
 
 <Installation packageName="@music-ui/abc" />
 
-## The `initABCScore` function
+## Usage
 
-By default, `initABCScore` selects all the `[data-abc-score]` elements, and expects them to have the following children:
+The `@music-ui/abc` package exports an `initABCScore` function.
+
+By default it selects all the `[data-abc-score]` elements, and expects them to have the following children:
 
 - an element containing **the abc notation**, with the `.content` class;
 - an element where **the music notation will be rendered**, with the `.staff` class.
@@ -67,7 +69,11 @@ Setup code:
 import { initABCScore } from "@music-ui/abc";
 import "@music-ui/abc/styles.css";
 
-initABCScore(".score");
+// via selector string
+initABCScore({ selection: ".score"});
+
+// via actual DOM selection
+initABCScore({ selection: document.querySelectorAll('.score') });
 ```
 
 Output:
@@ -127,7 +133,9 @@ The following data attributes are supported:
 
 ### Passing `abc.js` options
 
-The `initABCScore` functions accept a second parameter that is forwarded to the `abc.js` renderer. You can see the available options [on the library documentation](https://docs.abcjs.net/visual/render-abc-options).
+You can pass an `abcOptions` parameter, that will be forwarded to the `abc.js` renderer.
+
+You can see the available options [on the library documentation](https://docs.abcjs.net/visual/render-abc-options).
 
 ```html
 <div data-abc-score data-show-tempo="false">
@@ -144,7 +152,9 @@ Setup code:
 import { initABCScore } from "@music-ui/abc";
 import "@music-ui/abc/styles.css";
 
-initABCScore("[data-abc-score]", { foregroundColor: "orange" });
+initABCScore({
+  abcOptions: foregroundColor: "orange"
+});
 ```
 
 Output:

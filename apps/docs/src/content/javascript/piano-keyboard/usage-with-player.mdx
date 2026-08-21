@@ -1,0 +1,33 @@
+# Usage with Player
+
+Here you can find the instructions to add playback support to your rendered pianos.
+
+## Installation
+
+<Installation packageName="@music-ui/core @music-ui/piano" />
+
+<Callout type="info">
+  See the [`Player` page](/core/player) to know about playback setup.
+</Callout>
+
+## Usage
+
+The `@music-ui/piano` package exports an `initPianoWithPlayer` function that expects the same markup of [`initPiano`](/javascript/piano-keyboard/basic-usage#usage):
+
+```html
+<div data-piano data-notes="C4 E4 G4 B4"></div>
+```
+
+In addition to the `initPiano` parameters, it needs a `Player` instance in order to playback the notes:
+
+```ts
+import { initPianoWithPlayer } from "@music-ui/piano";
+import { Player } from "@music-ui/player";
+import "@music-ui/piano/styles.css";
+
+const player = new Player();
+
+initPianoWithPlayer({ player });
+```
+
+<PianoPlayer notes="C4 E4 G4 B4" octaves={3} />

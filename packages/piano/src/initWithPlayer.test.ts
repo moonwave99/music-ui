@@ -152,6 +152,12 @@ describe("initPianoWithPlayer", () => {
     ).toBe(0);
   });
 
+  it("Throws error if no player is passed", () => {
+    assert.throws(() => {
+      initPianoWithPlayer({ player: null as unknown as Player });
+    }, "You must pass a Player instance");
+  });
+
   it("Throws error if no piano element is found", () => {
     document.body.innerHTML = `
       <main>
@@ -169,7 +175,7 @@ describe("initPianoWithPlayer", () => {
       const selection = document.querySelector<HTMLElement>("[data-piano]")!;
       const player = new Player();
       initPianoWithPlayer({ selection, player });
-    }, "pianoElement not found for piano with id: piano-1");
+    }, "pianoElement not found inside element with id: piano-1");
   });
 
   it("Throws error if no controls element is found", () => {
@@ -189,7 +195,7 @@ describe("initPianoWithPlayer", () => {
       const selection = document.querySelector<HTMLElement>("[data-piano]")!;
       const player = new Player();
       initPianoWithPlayer({ selection, player });
-    }, "controlsElement not found for piano with id: piano-1");
+    }, "controlsElement not found inside element with id: piano-1");
   });
 });
 

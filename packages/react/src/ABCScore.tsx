@@ -77,6 +77,7 @@ export function ABCScore({
     showTimeSignature,
     content: score.content,
     onClick,
+    ...params,
   });
 
   useLayoutEffect(() => {

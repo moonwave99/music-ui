@@ -78,6 +78,12 @@ describe("initABCScoreWithPlayer", () => {
     expect(stopButton.disabled).toBeTruthy();
   });
 
+  it("Throws error if no player is passed", () => {
+    assert.throws(() => {
+      initABCScoreWithPlayer({ player: null as unknown as Player });
+    }, "You must pass a Player instance");
+  });
+
   it("Throws error if no staff element is found", () => {
     document.body.innerHTML = `
       <main>
@@ -96,7 +102,7 @@ describe("initABCScoreWithPlayer", () => {
         selection: element,
         player,
       });
-    }, "staffElement not found for score with id: 1");
+    }, "staffElement not found inside element with id: 1");
   });
 
   it("Throws error if no content element is found", () => {
@@ -114,7 +120,7 @@ describe("initABCScoreWithPlayer", () => {
         selection: element,
         player,
       });
-    }, "contentElement not found for score with id: 1");
+    }, "contentElement not found inside element with id: 1");
   });
 
   it("Throws error if no controls element is found", () => {
@@ -135,6 +141,6 @@ describe("initABCScoreWithPlayer", () => {
         selection: element,
         player,
       });
-    }, "controlsElement not found for score with id: 1");
+    }, "controlsElement not found inside element with id: 1");
   });
 });

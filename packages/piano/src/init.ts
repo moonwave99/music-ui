@@ -5,12 +5,19 @@ import {
 } from "@music-ui/core";
 import { DEFAULT_PIANO_OPTIONS, Piano, type PianoOptions } from "./Piano";
 
-export const DEFAULT_SELECTOR = "[data-piano]";
+export type InitPianoParams<T extends HTMLElement> = {
+  selection?: ElementOrSelector<T>;
+};
+
+export const DEFAULT_OPTIONS = {
+  selection: "[data-piano]",
+} as const;
 
 export function initPiano<T extends HTMLElement>(
-  elementOrSelector: ElementOrSelector<T> = DEFAULT_SELECTOR,
+  params: Partial<InitPianoParams<T>> = {},
 ) {
-  return ensureSelection(elementOrSelector).map((element) => {
+  const { selection } = { ...DEFAULT_OPTIONS, ...params };
+  return ensureSelection(selection).map((element) => {
     const options = extractElementOptions(
       element,
       DEFAULT_PIANO_OPTIONS as Omit<PianoOptions, "element">,

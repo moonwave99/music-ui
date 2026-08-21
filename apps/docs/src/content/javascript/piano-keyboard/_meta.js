@@ -1,5 +1,6 @@
 export default {
   index: "Index",
   "basic-usage": "Basic Usage",
-  piano: "Piano",
+  "usage-with-player": "Usage with Player",
+  piano: "The Piano class",
 };
