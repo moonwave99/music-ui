@@ -401,6 +401,61 @@ describe("Piano - clearPlayedNotes", () => {
   });
 });
 
+describe("Piano - showOctaves", () => {
+  it("Shows the octave numbers when showOctaves options is true", () => {
+    const piano = new Piano({ showOctaves: true });
+
+    piano.render();
+    const wrapper = document.querySelector("#piano");
+
+    const octaveLabels = wrapper?.querySelectorAll(".octave-label");
+    expect(octaveLabels?.length).toBe(3);
+    octaveLabels?.forEach((label, index) =>
+      expect(label.textContent).toBe(`C${index + 3}`),
+    );
+  });
+
+  it("Shows the octave numbers when showOctaves options is true - with different octave configuration", () => {
+    const piano = new Piano({
+      showOctaves: true,
+      startOctave: 2,
+      octaves: 4,
+      withFinalC: false,
+    });
+
+    piano.render();
+    const wrapper = document.querySelector("#piano");
+
+    const octaveLabels = wrapper?.querySelectorAll(".octave-label");
+    expect(octaveLabels?.length).toBe(4);
+    octaveLabels?.forEach((label, index) =>
+      expect(label.textContent).toBe(`C${index + 2}`),
+    );
+  });
+
+  it("Gives precedence to the note label", () => {
+    const piano = new Piano({
+      showOctaves: true,
+    });
+
+    piano.render();
+    const wrapper = document.querySelector("#piano");
+
+    let octaveLabels = wrapper?.querySelectorAll(".octave-label");
+    expect(octaveLabels?.length).toBe(3);
+
+    piano.setNotes(["C4", "E4", "G4"], ["1"]);
+
+    octaveLabels = wrapper?.querySelectorAll(".octave-label");
+    expect(octaveLabels?.length).toBe(2);
+
+    piano.clearNotes();
+
+    octaveLabels = wrapper?.querySelectorAll(".octave-label");
+    expect(octaveLabels?.length).toBe(3);
+  });
+});
+
 describe("Piano - destroy", () => {
   it("Removes the element from the dom", () => {
     const piano = new Piano();

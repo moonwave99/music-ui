@@ -9,6 +9,7 @@
   --piano-black-key-played-indicator-size: calc(var(--piano-black-key-width));
   --piano-played-indicator-background-color: rgba(255, 255, 255, 0.9);
   --piano-key-label-font-size: 0.7rem;
+  --piano-key-label-color: rgb(35, 35, 35);
   --piano-border-color: rgba(0, 0, 0, 0.4);
   --piano-white-key-color: white;
   --piano-black-key-color: rgb(35, 35, 35);
@@ -41,6 +42,7 @@
     line-height: 1.5rem;
     text-align: center;
     font-weight: bold;
+    color: var(--piano-key-label-color);
     display: flex;
     flex-direction: column;
     justify-content: end;

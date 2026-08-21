@@ -39,12 +39,14 @@ export type ScaleNoteWithOctave = ScaleNote & {
  * @property startOctave The first rendered octave (e.g. 2 will start from C2)
  * @property octaves The amount of rendered octaves
  * @property withFinalC Will render a final C key after the last octave
+ * @property showOctaves Shows current octave on every C note
  */
 export type PianoOptions = {
   element: ElementOrSelector<HTMLElement>;
   startOctave: number;
   octaves: number;
   withFinalC: boolean;
+  showOctaves: boolean;
 };
 
 /**
@@ -74,6 +76,7 @@ export const cssClasses = {
   key: "key",
   keyPlayed: "key-played",
   keyOn: "key-on",
+  octaveLabel: "octave-label",
 } as const;
 
 /**
@@ -87,6 +90,7 @@ export const DEFAULT_PIANO_OPTIONS = {
   startOctave: 3,
   octaves: 2,
   withFinalC: true,
+  showOctaves: false,
 } as PianoOptions;
 
 export class Piano {
@@ -139,8 +143,8 @@ export class Piano {
       .forEach((el: Element) => {
         el.classList.remove(cssClasses.keyOn);
         el.classList.remove(cssClasses.keyPlayed);
-        el.innerHTML = "";
       });
+    this.render();
     return this;
   }
   /**
@@ -148,6 +152,9 @@ export class Piano {
    */
   render(): Piano {
     this.baseRender();
+    if (this.options.showOctaves) {
+      this.showOctaves();
+    }
     return this;
   }
   /**
@@ -224,8 +231,13 @@ export class Piano {
         octave: startOctave + octaves,
       });
     }
-
     this.rendered = true;
+  }
+  private showOctaves() {
+    this.element.querySelectorAll(".chroma-0").forEach((note, index) => {
+      note.textContent = `C${this.options.startOctave + index}`;
+      note.classList.add(cssClasses.octaveLabel);
+    });
   }
   private getMiddleOctave(): number {
     const { startOctave, octaves } = this.options;
@@ -247,6 +259,7 @@ export class Piano {
       if (!label) {
         return;
       }
+      foundKey.classList.remove(cssClasses.octaveLabel);
       foundKey.innerHTML = label;
     });
   }

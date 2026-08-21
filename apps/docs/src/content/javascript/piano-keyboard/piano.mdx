@@ -66,20 +66,20 @@ You can pass the labels to be displayed in the highlighted keys as a second para
 ```ts {3}
 const piano = new Piano({ element: "#my-element" });
 piano.render();
-piano.setNotes("F3 A3 C4 E4", "1 3 5 7");
+piano.setNotes("F3 Ab3 C4 Eb4", "1 3 5 7");
 ```
 
-<Piano notes="F3 A3 C4 E4" noteLabels="1 3 5 7" />
+<Piano notes="F3 Ab3 C4 Eb4" noteLabels="1 3 5 7" />
 
 You can skip labels for certain notes. Just use an underscore (`_`) as a placeholder:
 
 ```ts {3}
 const piano = new Piano({ element: "#my-element" });
 piano.render();
-piano.setNotes("F3 A3 C4 E4", "_ 3 _ 7");
+piano.setNotes("F3 Ab3 C4 Eb4", "_ 3 _ 7");
 ```
 
-<Piano notes="F3 A3 C4 E4" noteLabels="_ 3 _ 7" />
+<Piano notes="F3 Ab3 C4 Eb4" noteLabels="_ 3 _ 7" />
 
 ## Clear note highlight
 
