@@ -1,0 +1,69 @@
+# ABCScoreWithPlayer
+
+The `<ABCScoreWithPlayer>` component renders ABC notation on screen with playback support.
+
+## Installation
+
+<Installation packageName="@music-ui/react" />
+
+## Usage
+
+The following code renders a score with the passed notes and the playback buttons:
+
+<Callout type="warning">
+Wrap your app in a `<PlayerProvider>` if you want to use playback features.
+</Callout>
+
+```tsx
+import { ABCScoreWithPlayer, PlayerProvider } from "@music-ui/react";
+
+function App() {
+  return (
+    <PlayerProvider>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <ABCScoreWithPlayer>
+          CDEF GABc|
+        </ABCScoreWithPlayer>
+      </main>
+    </PlayerProvider>
+  );
+}
+```
+
+<ABCScoreWithPlayer showTempo={false}>
+CDEF GABc|
+</ABCScoreWithPlayer>
+
+Without time signature:
+
+<ABCScoreWithPlayer showTimeSignature={false} showTempo={false}>
+CDEF GABc|
+</ABCScoreWithPlayer>
+
+With free tempo:
+
+<ABCScoreWithPlayer showTimeSignature={false} showTempo={false}>
+M: 1/1
+L: 1/1
+Q: 360
+C D E F G A B c || c d e f g a b c' |
+</ABCScoreWithPlayer>
+
+With piano below too!
+
+<ABCScoreWithPlayer showTempo={false} showPiano pianoOptions={{ octaves: 3 }}>
+T: You Are My Sunshine
+C: Traditional
+L: 1/4
+Q: 180
+z G, C D|E2 E2-| E E D E| C2 C2-|
+w:You are my sun-shine,_ my on-ly sun-shine.
+C C D E|F2 A2-| A A G F|E4-|
+w:_You make me hap-py_ when skies are gray,
+E C D E|F2 A2-| A A G F|E2 C2-|
+w:_You'll ne-ver know, dear,_ how much I love you,
+C z C D| E3 F| D D2 E|C4|]
+w:_Please don't take my sun-shine a-way.
+</ABCScoreWithPlayer>

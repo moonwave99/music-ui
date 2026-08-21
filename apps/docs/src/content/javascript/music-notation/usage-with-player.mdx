@@ -40,9 +40,9 @@ initABCScoreWithPlayer({ player });
 
 Output:
 
-<ABCScore showPlayer>
+<ABCScoreWithPlayer>
   CDEF GABc|
-</ABCScore>
+</ABCScoreWithPlayer>
 
 Like `initABCScore`, `initABCScoreWithPlayer` can deal with multiple scores at once:
 
@@ -78,14 +78,14 @@ initABCScoreWithPlayer({ player });
 
 Output:
 
-<ABCScore showPlayer>
+<ABCScoreWithPlayer>
   CDEF GABc|
-</ABCScore>
+</ABCScoreWithPlayer>
 
-<ABCScore showPlayer showTempo={false}>
+<ABCScoreWithPlayer showTempo={false}>
   K: G
   GABc defg|
-</ABCScore>
+</ABCScoreWithPlayer>
 
 <Callout type="info">
 Check [`initABCScore`](/javascript/music-notation/initABCScore#dataset-options) for a list of allowed dataset options.

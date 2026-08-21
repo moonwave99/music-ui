@@ -1,4 +1,5 @@
 export * from "./ABCScore";
+export * from "./ABCScoreWithPlayer";
 export * from "./useABCScore";
 
 export * from "./Piano";
