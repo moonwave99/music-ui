@@ -32,8 +32,8 @@ Output:
 You can pass a custom selector or collection of elements.
 
 ```html
-<div class="my-piano-class"></div>
-<div class="my-piano-class"></div>
+<div class="my-piano"></div>
+<div class="my-piano"></div>
 ```
 
 Setup code:
@@ -43,10 +43,10 @@ import { initPiano } from "@music-ui/piano";
 import "@music-ui/piano/styles.css";
 
 // via selector string
-initPiano({ selection: ".my-piano-class" });
+initPiano({ selection: ".my-piano" });
 
 // via actual DOM selection
-initABCScore({ selection: document.querySelectorAll(".my-piano-class") });
+initPiano({ selection: document.querySelectorAll(".my-piano") });
 ```
 
 Output:
@@ -107,7 +107,7 @@ Output:
 
 ## Render options
 
-Configuration can also be stored inside data attributes:
+Configuration can be passed via data attributes:
 
 ```html
 <div data-piano data-octaves="4" data-with-final-c="false"></div>
