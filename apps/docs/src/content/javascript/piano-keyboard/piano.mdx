@@ -21,6 +21,39 @@ The `Piano` constructor accepts the following parameters:
 | `octaves`     | `number`                  | 2        | The amount of rendered octaves                |
 | `startOctave` | `number`                  | 3        | The first octave being rendered               |
 | `withFinalC`  | `boolean`                 | true     | Renders a final C key after the last octave   |
+| `showOctaves` | `boolean`                 | false    | Displays the octave number on every C note    |
+
+Usage:
+
+```ts
+import { Piano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+// with default options
+const piano = new Piano();
+
+// with passed options
+const piano = new Piano({
+  element: "#my-element",
+  octaves: 4,
+  startOctave: 2,
+  showOctaves: true,
+});
+```
+
+Creating a new `Piano` does not render anything on screen. You have to call `render()` for that:
+
+```ts {5}
+import { Piano } from "@music-ui/piano";
+import "@music-ui/piano/styles.css";
+
+const piano = new Piano();
+piano.render();
+```
+
+Output:
+
+<Piano />
 
 ## Note highlight
 
@@ -46,25 +79,22 @@ And a C major chord is highlighted:
 
 If you want to split hands or outline specific voices, separate the groups via a comma:
 
-```ts {6}
-const piano = new Piano({
-  element: "#my-element",
-  octaves: 4,
-});
+```ts {3}
+const piano = new Piano({ octaves: 4, showOctaves: true });
 piano.render();
 piano.setNotes("C3 C4, E4 G4 C5");
 ```
 
 Et voilà:
 
-<Piano notes="C3 C4, E4 G4 C5" octaves={3} />
+<Piano notes="C3 C4, E4 G4 C5" octaves={3} showOctaves />
 
 ## Display note labels
 
 You can pass the labels to be displayed in the highlighted keys as a second parameter to `Piano.setNotes`:
 
 ```ts {3}
-const piano = new Piano({ element: "#my-element" });
+const piano = new Piano();
 piano.render();
 piano.setNotes("F3 Ab3 C4 Eb4", "1 3 5 7");
 ```
@@ -74,7 +104,7 @@ piano.setNotes("F3 Ab3 C4 Eb4", "1 3 5 7");
 You can skip labels for certain notes. Just use an underscore (`_`) as a placeholder:
 
 ```ts {3}
-const piano = new Piano({ element: "#my-element" });
+const piano = new Piano();
 piano.render();
 piano.setNotes("F3 Ab3 C4 Eb4", "_ 3 _ 7");
 ```
@@ -86,7 +116,7 @@ piano.setNotes("F3 Ab3 C4 Eb4", "_ 3 _ 7");
 Use `piano.clearNotes`:
 
 ```ts {5}
-const piano = new Piano({ element: "#my-element" });
+const piano = new Piano();
 piano.render();
 piano.setNotes("C4 E4 G4");
 // later on
@@ -97,11 +127,8 @@ piano.clearNotes();
 
 Use `piano.setPlayedNotes` for playback scenarios when state changes over time but you still want to highlight the same set of notes:
 
-```ts {7}
-const piano = new Piano({
-  element: "#my-element",
-  octaves: 3,
-});
+```ts {4}
+const piano = new Piano({ octaves: 3 });
 piano.render();
 piano.setNotes("C4 E4 G4");
 piano.setPlayedNotes("C4 G4");
@@ -116,7 +143,7 @@ See:
 Use `piano.clearPlayedNotes`:
 
 ```ts {6}
-const piano = new Piano({ element: "#my-element" });
+const piano = new Piano();
 piano.render();
 piano.setNotes("C4 E4 G4");
 piano.setPlayedNotes("C4 G4");

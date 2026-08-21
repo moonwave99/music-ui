@@ -38,6 +38,8 @@ export function VanillaPianoWithPlayer() {
         data-notes="C4 Eb4 G4 Bb4"
         data-note-labels="1 3 5 7"
         data-octaves="5"
+        data-with-final-c="false"
+        data-show-octaves
         data-id="piano-2"
       >
         <div className="piano"></div>

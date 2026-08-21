@@ -59,7 +59,7 @@ describe("initPiano", () => {
             <div data-custom></div>
             <div data-custom
                 data-octaves="1"
-                data-with-final-C="false"></div>
+                data-with-final-c="false"></div>
         </main>`;
 
     const selection = document.querySelectorAll<HTMLElement>("[data-custom]");

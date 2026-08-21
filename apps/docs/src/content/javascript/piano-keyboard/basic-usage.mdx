@@ -110,7 +110,13 @@ Output:
 Configuration can be passed via data attributes:
 
 ```html
-<div data-piano data-octaves="4" data-with-final-c="false"></div>
+<div
+  data-piano
+  data-start-octave="2"
+  data-octaves="4"
+  data-with-final-c="false"
+  data-show-octaves
+></div>
 ```
 
 Setup code:
@@ -124,7 +130,7 @@ initPiano();
 
 Output:
 
-<Piano octaves={3} withFinalC={false} />
+<Piano octaves={3} withFinalC={false} startOctave={2} showOctaves />
 
 The following data attributes are supported:
 
@@ -133,6 +139,7 @@ The following data attributes are supported:
 | `data-octaves`      | `number`  | The amount of rendered octaves              |
 | `data-start-octave` | `number`  | The first octave being rendered             |
 | `data-with-final-c` | `boolean` | Renders a final C key after the last octave |
+| `data-show-octaves` | `boolean` | Displays the octave number on every C note  |
 | `data-notes`        | `string`  | The notes to be highlighted                 |
 | `data-note-labels`  | `string`  | The note labels                             |
 
