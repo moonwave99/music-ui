@@ -275,6 +275,17 @@ export function createControls(
   return buttons;
 }
 
+/**
+ * @property id The rendering context id (e.g. `piano-1`, `score-3`)
+ * @property parentElement The element that should contain the children elements
+ * @property elements The key-value lookup list
+ *
+ * @example
+ * {
+ *    staffElement: ".staff",
+ *    controlsElement: ".controls",
+ * }
+ */
 type EnsureElementsParams = {
   id: string;
   parentElement: HTMLElement;
