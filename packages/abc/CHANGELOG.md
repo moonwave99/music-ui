@@ -1,5 +1,17 @@
 # @music-ui/abc
 
+## 0.12.0
+
+### Minor Changes
+
+- b1d6a46: Refactor initializers, uniform react components
+
+### Patch Changes
+
+- Updated dependencies [b1d6a46]
+  - @music-ui/core@0.12.0
+  - @music-ui/piano@0.12.0
+
 ## 0.11.0
 
 ### Minor Changes
