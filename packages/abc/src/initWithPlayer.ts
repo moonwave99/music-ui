@@ -2,7 +2,6 @@ import {
   ensureSelection,
   extractElementOptions,
   Player,
-  extractIndentedInput,
   getAbcScore,
   type ElementOrSelector,
   joinVoices,
@@ -43,7 +42,7 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         },
       });
 
-      const content = extractIndentedInput(contentElement!) || "";
+      const content = contentElement?.textContent || "";
       const options = extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS);
       const score = getAbcScore({ id, options, input: content });
 

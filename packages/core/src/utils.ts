@@ -176,11 +176,11 @@ export function joinVoices(voices: string[][]) {
 /**
  * Removes indentation and leading / trailing whitespace from embedded content.
  * Useful for cleaning up abc notation.
- * @param element The element where the content is embedded
+ * @param input The input to be cleaned
  * @returns The cleaned content
  */
-export function extractIndentedInput(element: HTMLElement) {
-  return dedent(element.textContent.trim());
+export function extractIndentedInput(input: string) {
+  return dedent(input.trim());
 }
 
 /**

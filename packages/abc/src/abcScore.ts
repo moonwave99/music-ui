@@ -4,6 +4,7 @@ import {
   ClickListenerAnalysis,
   type AbcVisualParams,
 } from "abcjs";
+import { extractIndentedInput } from "@music-ui/core";
 import type { TransportPosition, TimeSignature } from "@music-ui/core";
 import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
 
@@ -110,7 +111,7 @@ export class ABCScore {
     if (!element) {
       throw new Error("Element not found");
     }
-    this.content = content;
+    this.content = extractIndentedInput(content);
     this.element = element;
     this.showCursor = showCursor;
     this.showTimeSignature = showTimeSignature;

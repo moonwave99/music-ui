@@ -1,7 +1,6 @@
 import {
   ensureSelection,
   extractElementOptions,
-  extractIndentedInput,
   type ElementOrSelector,
 } from "@music-ui/core";
 import {
@@ -29,7 +28,7 @@ export function initABCScore<T extends HTMLElement>(
       `.${cssClasses.content}`,
     );
     new ABCScore({
-      content: contentElement ? extractIndentedInput(contentElement) : "",
+      content: contentElement?.textContent || "",
       element: element.querySelector(`.${cssClasses.staff}`)!,
       abcOptions,
       ...extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS),

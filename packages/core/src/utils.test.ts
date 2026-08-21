@@ -147,15 +147,11 @@ describe("joinVoices", () => {
 
 describe("extractIndentedInput", () => {
   it("extracts and cleans the content embedded in the selected element", () => {
-    document.body.innerHTML = `
-      <div>
+    const content = `
         T: My Song
         CDE
-      </div>
     `;
-    expect(extractIndentedInput(document.querySelector("div")!)).toBe(
-      "T: My Song\nCDE",
-    );
+    expect(extractIndentedInput(content)).toBe("T: My Song\nCDE");
   });
 });
 

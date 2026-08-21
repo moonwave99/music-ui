@@ -8,10 +8,10 @@ test.beforeEach(() => {
   document.body.innerHTML = `
 <div class="score">
   <div class="content">
-    M:4/4
-    L:1/4
-    T:Test Song
-    C E G B
+M:4/4
+L:1/4
+T:Test Song
+C E G B
   </div>
   <div class="staff"></div>
 </div>  
@@ -25,11 +25,9 @@ test.afterEach(() => {
 describe("ABCScore - constructor", () => {
   it("Does not render until render() is called", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
-
     new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
     });
     expect(wrapper.querySelector(".abcjs-container")).toBeNull();
   });
@@ -44,10 +42,9 @@ describe("ABCScore - constructor", () => {
 describe("ABCScore - render", () => {
   it("Renders with default options", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
     });
     score.render();
     expect(wrapper.querySelector(".abcjs-container")).not.toBeNull();
@@ -60,14 +57,12 @@ describe("ABCScore - render", () => {
 
   it("Does not display the score time signature when showTimeSignature is false", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
       showTimeSignature: false,
     });
     score.render();
-
     expect(
       wrapper.querySelector<HTMLElement>(".abcjs-time-signature")?.style
         .display,
@@ -76,23 +71,20 @@ describe("ABCScore - render", () => {
 
   it("Does not display the cursor when showCursor is false", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
       showCursor: false,
     });
     score.render();
-
     expect(wrapper.querySelector(".abcjs-cursor")).toBeNull();
   });
 
   it("Is idempotent", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
     });
     score.render();
     expect(wrapper.querySelector(".abcjs-container")).not.toBeNull();
@@ -107,10 +99,9 @@ describe("ABCScore - render", () => {
 describe("ABCScore - updatePosition", () => {
   it("Updates the cursor and corresponding note selection", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
     });
     score.render();
 
@@ -131,10 +122,9 @@ describe("ABCScore - updatePosition", () => {
 
   it("Does nothing if there is no note at the passed position", () => {
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
     });
     score.render();
 
@@ -148,10 +138,9 @@ describe("ABCScore - clearSelection", () => {
   it("Clears the current note selection", async () => {
     const user = userEvent.setup();
     const wrapper = document.querySelector(".score")!;
-    const content = extractIndentedInput(wrapper.querySelector(".content")!);
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content,
+      content: wrapper.querySelector(".content")!.textContent,
     });
     score.render();
 
@@ -180,11 +169,40 @@ describe("ABCScore - onClick handler", () => {
     const wrapper = document.querySelector(".score")!;
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
-      content: wrapper.querySelector(".content")?.textContent.trim(),
+      content: wrapper.querySelector(".content")!.textContent,
       onClick,
     });
     score.render();
     await user.click(wrapper.querySelector(".abcjs-n2")!);
     expect(onClick).toHaveBeenCalledWith({ position: "0:2:0" });
+  });
+
+  it("Gets called with the position of the clicked note - free tempo", async () => {
+    document.body.innerHTML = `
+<div class="score">
+  <div class="content">
+T: Test Song
+M: 1/1
+L: 1/1
+C E G B | D F A C
+  </div>
+  <div class="staff"></div>
+</div>  
+  `;
+
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")!.textContent,
+      onClick,
+    });
+    score.render();
+    await user.click(wrapper.querySelector(".abcjs-mm0.abcjs-n2")!);
+    expect(onClick).toHaveBeenCalledWith({ position: "2:0:0" });
+
+    await user.click(wrapper.querySelector(".abcjs-mm1.abcjs-n2")!);
+    expect(onClick).toHaveBeenCalledWith({ position: "6:0:0" });
   });
 });
