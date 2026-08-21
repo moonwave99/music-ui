@@ -1,6 +1,7 @@
 {
   "name": "@music-ui/piano",
   "description": "Simple piano diagram generator",
+  "homepage": "https://github.com/moonwave99/music-ui",
   "keywords": [
     "music",
     "piano",

@@ -1,6 +1,7 @@
 {
   "name": "@music-ui/core",
   "description": "Utilities shared by @music-ui packages",
+  "homepage": "https://github.com/moonwave99/music-ui",
   "keywords": [
     "music"
   ],

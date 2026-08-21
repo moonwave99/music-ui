@@ -1,6 +1,7 @@
 {
   "name": "@music-ui/abc",
   "description": "Abc notation rendering utilities.",
+  "homepage": "https://github.com/moonwave99/music-ui",
   "keywords": [
     "music",
     "abc"
