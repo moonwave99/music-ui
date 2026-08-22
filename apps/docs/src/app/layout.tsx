@@ -27,19 +27,21 @@ type RootLayoutProps = {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" dir="ltr" suppressHydrationWarning>
-      <Head></Head>
-      <body>
-        <Layout
-          navbar={navbar}
-          pageMap={await getPageMap()}
-          docsRepositoryBase={`${pkg.homepage}/tree/main/apps/docs`}
-          footer={footer}
-          copyPageButton={false}
-        >
-          <ProviderWrapper>{children}</ProviderWrapper>
-        </Layout>
-      </body>
-    </html>
+    <ProviderWrapper>
+      <html lang="en" dir="ltr" suppressHydrationWarning>
+        <Head></Head>
+        <body>
+          <Layout
+            navbar={navbar}
+            pageMap={await getPageMap()}
+            docsRepositoryBase={`${pkg.homepage}/tree/main/apps/docs`}
+            footer={footer}
+            copyPageButton={false}
+          >
+            {children}
+          </Layout>
+        </body>
+      </html>
+    </ProviderWrapper>
   );
 }

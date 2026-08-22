@@ -36,12 +36,8 @@ type PlayerContextType = {
   setCurrentScore: Dispatch<SetStateAction<Score | null>>;
 };
 
-export const PlayerContext: Context<PlayerContextType> =
-  createContext<PlayerContextType>({
-    player: null,
-    currentScore: null,
-    setCurrentScore: () => {},
-  });
+export const PlayerContext: Context<PlayerContextType | null> =
+  createContext<PlayerContextType | null>(null);
 
 export type UsePlayerParams = {
   id: string;
@@ -64,15 +60,13 @@ const EMPTY_VOICES = [[], [], [], []] as string[][];
 
 export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   const playerContext = use(PlayerContext);
-  const [playedNotes, setPlayedNotes] = useState<string[][]>(EMPTY_VOICES);
-  const [position, setPosition] = useState<TransportPosition>("0:0:0");
-  const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("stopped");
-
   if (!playerContext) {
     throw new Error("usePlayer has to be used within <PlayerProvider>");
   }
-
   const { player, currentScore, setCurrentScore } = playerContext;
+  const [playedNotes, setPlayedNotes] = useState<string[][]>(EMPTY_VOICES);
+  const [position, setPosition] = useState<TransportPosition>("0:0:0");
+  const [playerStatus, setPlayerStatus] = useState<PlayerStatus>("stopped");
 
   useEffect(() => {
     const handlers: Record<PlayerEvents, PlayerCallback> = {
@@ -162,11 +156,13 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
 }
 
 export function useStopPlayback() {
-  const { setCurrentScore, player } = use(PlayerContext);
+  const context = use(PlayerContext);
 
-  if (!setCurrentScore) {
+  if (!context) {
     throw new Error("usePlayer has to be used within <PlayerProvider>");
   }
+
+  const { setCurrentScore, player } = context;
 
   const stop = useCallback(() => {
     player?.setScore(null);

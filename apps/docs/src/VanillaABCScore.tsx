@@ -10,10 +10,13 @@ CD EF GA Bc|`;
 
 export function VanillaABCScore() {
   const playerContext = use(PlayerContext);
+  if (!playerContext) {
+    throw new Error("usePlayer has to be used within <PlayerProvider>");
+  }
+  const { player } = playerContext;
+
   const ref = useRef<HTMLDivElement>(null);
   const firstRender = useRef(true);
-
-  const { player } = playerContext;
 
   useLayoutEffect(() => {
     if (!player || !firstRender.current) {

@@ -2,7 +2,6 @@
 import { vi, test, describe, it, expect, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { ABCScore } from "./abcScore";
-import { extractIndentedInput } from "@music-ui/core";
 
 test.beforeEach(() => {
   document.body.innerHTML = `
