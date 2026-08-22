@@ -60,6 +60,7 @@ export const cssClasses = {
   staff: "staff",
   controls: "controls",
   timeSignature: "abcjs-time-signature",
+  tempo: "abcjs-tempo",
   cursor: "abcjs-cursor",
   currentNote: "abcjs-current-note",
   selectedNote: "abcjs-note_selected",
