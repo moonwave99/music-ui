@@ -10,36 +10,28 @@ main {
 
 .piano {
   margin-top: 1rem;
-  width: calc(var(--piano-white-key-width) * 22);
-  @container (width < 625px) {
-    width: 100%;
-  }
 }
 
 .piano-with-player {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: min-content 1fr;
   gap: 0.5rem;
   grid-template-areas:
     "a a"
     "b c";
-  width: min-content;
-  @container (width < 625px) {
-    width: auto;
-  }
+  width: 100%;
   .piano {
     grid-area: a;
   }
   figcaption {
-    grid-area: b;
+    grid-area: c;
     font-size: 0.8rem;
     display: flex;
     align-items: center;
   }
   .controls {
-    grid-area: c;
+    grid-area: b;
     display: flex;
-    justify-content: end;
     gap: 0.5rem;
     line-height: 1.5rem;
     button {

@@ -27,7 +27,6 @@ export function PianoWithPlayer({
   return (
     <figure className={className}>
       <Piano playedNotes={joinVoices(playedNotes)} notes={notes} {...rest} />
-      <figcaption>{label}</figcaption>
       <div className="controls">
         <button
           disabled={playerStatus === "playing"}
@@ -51,6 +50,7 @@ export function PianoWithPlayer({
           {arpeggioLabel}
         </button>
       </div>
+      <figcaption>{label}</figcaption>
     </figure>
   );
 }

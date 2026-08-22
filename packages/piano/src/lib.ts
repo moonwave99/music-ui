@@ -4,26 +4,28 @@ import { type ScaleNote, GroupedInput } from "./Piano";
 
 export function parseNoteInput(
   input: NoteInput,
-  noteLabels?: NoteInput,
+  noteLabels: NoteInput = "",
 ): GroupedInput {
-  const groups = Array.isArray(input)
+  const noteGroups = getGroups(input).toReversed();
+  const labelGroups = getGroups(noteLabels).toReversed();
+  return noteGroups.flatMap((group, groupIndex) =>
+    group.map((note, noteIndex) => ({
+      note,
+      group: groupIndex,
+      label: getNoteLabel(
+        labelGroups[groupIndex] ? labelGroups[groupIndex][noteIndex] : "",
+      ),
+    })),
+  );
+}
+
+function getGroups(input: NoteInput) {
+  return Array.isArray(input)
     ? [input]
     : input
         .split(",")
         .filter(Boolean)
         .map((x) => x.split(" ").filter(Boolean));
-  const output = groups
-    .toReversed()
-    .flatMap((group, index) => group.map((note) => ({ note, group: index })));
-  if (!noteLabels) {
-    return output;
-  }
-  const normalizedNoteLabels = normalizeInput(noteLabels);
-
-  return output.map((note, index) => ({
-    ...note,
-    label: getNoteLabel(normalizedNoteLabels[index]),
-  }));
 }
 
 function getNoteLabel(label: string | undefined) {
