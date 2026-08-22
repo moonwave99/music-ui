@@ -85,7 +85,6 @@ export function ABCScoreWithPlayer({
   return (
     <div className={className}>
       <div className="staff" ref={ref}></div>
-
       <div className="controls">
         <button
           className="play-button"
