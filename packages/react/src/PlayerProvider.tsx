@@ -60,7 +60,7 @@ export type UsePlayer = {
   position: TransportPosition;
 };
 
-const EMPTY_VOICES = [[], []] as string[][];
+const EMPTY_VOICES = [[], [], [], []] as string[][];
 
 export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   const playerContext = use(PlayerContext);
@@ -136,17 +136,13 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
     },
     [currentScore?.hash, player, setCurrentScore],
   );
-
   const resume = useCallback(() => player?.play(), [player]);
   const pause = useCallback(() => player?.pause(), [player]);
   const stop = useCallback(() => player?.stop(), [player]);
   const seekTo = useCallback(
-    (position: TransportPosition) => {
-      player?.seekTo(position);
-    },
+    (position: TransportPosition) => player?.seekTo(position),
     [player],
   );
-
   const isCurrentScore = useCallback(
     ({ id }: Score) => player?.getScore()?.id === id,
     [player],
