@@ -6,6 +6,8 @@ title: Index
  
 A collection of music visualization tools for the web.
 
+## Scores
+
 <ABCScoreWithPlayer highlightBars showTempo={false} showPiano pianoOptions={{ octaves: 3, showOctaves: true }}>
 T:K.545 II Andante
 C:W.A.Mozart
@@ -24,7 +26,7 @@ G,DB,D G,DB,D A,DCD | G,DB,D G,DB,D G,DB,D | \
  G,ECE G,ECE G,^C^A,C | G,DB,D G,DB,D G,DB,D|
 </ABCScoreWithPlayer>
 
-Or:
+---
 
 <ABCScoreWithPlayer showTempo={false} highlightBars>
 T: Compound Test
@@ -34,10 +36,12 @@ Q: 90
 cc ee gg cc ee gg|dd ff aa dd ff [L:1/32]aaaa| 
 </ABCScoreWithPlayer>
 
+## Pianos
+
 <PianoWithPlayer
   showOctaves
   startOctave={2}
-  octaves={5}
+  octaves={4}
   label="ii"
   notes="F#3 C#4, F#4 A4 C#5 E5"
   noteLabels="_ _, 1 3 5 7"
@@ -45,14 +49,14 @@ cc ee gg cc ee gg|dd ff aa dd ff [L:1/32]aaaa|
 <PianoWithPlayer
   showOctaves
   startOctave={2}
-  octaves={5}
+  octaves={4}
   label="V7"
   notes="B2 B3, F#4 A4 B4 D#5"
 />
 <PianoWithPlayer
   showOctaves
   startOctave={2}
-  octaves={5}
+  octaves={4}
   label="I"
   notes="E3 B3, E4 G#4 B4 D#5"
 />
