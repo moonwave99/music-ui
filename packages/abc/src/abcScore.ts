@@ -95,6 +95,14 @@ export type OnABCClickParams = {
   position: TransportPosition;
 };
 
+type BarBounds = Pick<DOMRect, "x" | "y" | "width" | "height">;
+
+type GroupedBarsEntry = {
+  barNumber: number;
+  isFirstOfLine: boolean;
+  voices: BarBounds[];
+};
+
 export class ABCScore {
   private content: string;
   private element: HTMLElement;
@@ -108,6 +116,7 @@ export class ABCScore {
   private barBox: SVGRectElement | null;
   private rendered: boolean;
   private voiceCount: number;
+  private barBounds: BarBounds[];
   constructor({
     content = "",
     element,
@@ -132,6 +141,7 @@ export class ABCScore {
     this.barBox = null;
     this.voiceCount = 1;
     this.rendered = false;
+    this.barBounds = [];
   }
   /**
    * Renders the UI inside the current element.
@@ -187,58 +197,53 @@ export class ABCScore {
     if (this.hasFreeTempo()) {
       return this;
     }
-    const svgElement = this.getSVGElement()!;
     const bar = Number(position.split(":").at(0)!);
-    const leftBar = svgElement.querySelector(`.abcjs-bar.abcjs-mm${bar - 1}`)!;
-    const rightBar = svgElement.querySelector(`.abcjs-bar.abcjs-mm${bar}`)!;
-    const leftBarBox = leftBar?.querySelector<SVGGElement>("path")?.getBBox();
-    const rightBarBox = rightBar?.querySelector<SVGGElement>("path")?.getBBox();
-
-    const isFirstOfLine =
-      getValueFromNote(
-        svgElement.querySelector(`.abcjs-mm${bar}`)!,
-        "abcjs-m",
-      ) === 0;
-
-    if (rightBarBox) {
-      let x = isFirstOfLine ? 0 : leftBarBox?.x || 0;
-      const y = rightBarBox.y;
-      let width = isFirstOfLine
-        ? rightBarBox.x
-        : rightBarBox.x - (leftBarBox?.x || 0);
-
-      let height = rightBarBox.height;
-      if (this.voiceCount > 1) {
-        const staffLine = getValueFromNote(
-          svgElement.querySelector(`.abcjs-mm${bar}`)!,
-          "abcjs-l",
-        );
-
-        const staffLeftMostBarLine = svgElement.querySelector<SVGPathElement>(
-          `.abcjs-staff-wrapper.abcjs-l${staffLine} path:last-child`,
-        );
-
-        if (isFirstOfLine) {
-          const xOffset = staffLeftMostBarLine!.getBBox().x;
-          x = xOffset;
-          width -= xOffset;
-        }
-
-        const rightBarLastVoice = svgElement.querySelector<SVGGElement>(
-          `.abcjs-bar.abcjs-mm${bar}.abcjs-v${this.voiceCount - 1}`,
-        );
-
-        if (rightBarLastVoice) {
-          height += rightBarLastVoice.getBBox().height;
-        }
-      }
-
-      this.barBox?.setAttribute("x", String(x));
-      this.barBox?.setAttribute("y", String(y));
-      this.barBox?.setAttribute("width", String(width));
-      this.barBox?.setAttribute("height", String(height));
+    const foundBarBound = this.barBounds[bar];
+    if (!foundBarBound) {
+      return this;
     }
+    Object.entries(foundBarBound).forEach(([key, value]) =>
+      this.barBox?.setAttribute(key, String(value)),
+    );
     return this;
+  }
+  private computeBarBounds() {
+    const svgElement = this.getSVGElement()!;
+    const bars = svgElement.querySelectorAll<SVGGElement>(".abcjs-bar");
+    const groupedBars = [...bars].reduce((memo, bar) => {
+      const barNumber = Number(getValueFromNote(bar, "abcjs-mm"));
+      const foundBar = memo.find((x) => x.barNumber === barNumber);
+      return foundBar
+        ? memo.map((x) =>
+            x.barNumber === barNumber
+              ? { ...x, voices: [...x.voices, bar.getBBox()] }
+              : x,
+          )
+        : [
+            ...memo,
+            {
+              barNumber,
+              isFirstOfLine: Number(getValueFromNote(bar, "abcjs-m")) === 0,
+              voices: [bar.getBBox()],
+            },
+          ];
+    }, [] as GroupedBarsEntry[]);
+
+    const staffLeftMostBarLine = svgElement.querySelector<SVGPathElement>(
+      `.abcjs-staff-wrapper.abcjs-l0 path:last-child`,
+    );
+
+    this.barBounds = groupedBars.map(({ isFirstOfLine, voices }, index) => {
+      let x = staffLeftMostBarLine ? staffLeftMostBarLine.getBBox().x : 0;
+      const y = voices[0]!.y;
+      let width = voices[0]!.x - x;
+      const height = voices.reduce((memo, { height }) => memo + height, 0);
+      if (!isFirstOfLine) {
+        x = groupedBars[index - 1]!.voices[0]!.x;
+        width = voices[0]!.x - x;
+      }
+      return { x, y, width, height };
+    });
   }
   private getBarNotes(position: TransportPosition, voice: number) {
     const svgElement = this.getSVGElement()!;
@@ -345,6 +350,8 @@ export class ABCScore {
       this.barBox.classList.add(cssClasses.barBox);
       this.getSVGElement()?.append(this.barBox);
     }
+
+    this.computeBarBounds();
 
     const isTimeSignatureDenominatorOne =
       this.tune.getMeter().value?.at(0)!.den == 1;
