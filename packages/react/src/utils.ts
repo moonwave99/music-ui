@@ -7,10 +7,7 @@ export function getNodeText(node: ReactNode): string {
   switch (typeof node) {
     case "string":
     case "number":
-      return Object.entries(replaceMap).reduce(
-        (memo, [key, value]) => memo.replaceAll(key, value),
-        node.toString(),
-      );
+      return replaceEntities(node.toString());
     case "boolean":
       return "";
     case "object": {
@@ -26,6 +23,13 @@ export function getNodeText(node: ReactNode): string {
       console.warn("Unresolved `node` of type:", typeof node, node);
       return "";
   }
+}
+
+function replaceEntities(input: string) {
+  return Object.entries(replaceMap).reduce(
+    (memo, [key, value]) => memo.replaceAll(key, value),
+    input,
+  );
 }
 
 const replaceMap = {
