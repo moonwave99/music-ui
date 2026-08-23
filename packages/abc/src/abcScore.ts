@@ -180,7 +180,13 @@ export class ABCScore {
     };
     return [num, den];
   }
+  hasFreeTempo() {
+    return `${this.getTimeSignature()}` === "1,1";
+  }
   highlightBar(position: TransportPosition): ABCScore {
+    if (this.hasFreeTempo()) {
+      return this;
+    }
     const svgElement = this.getSVGElement()!;
     const bar = Number(position.split(":").at(0)!);
     const leftBar = svgElement.querySelector(`.abcjs-bar.abcjs-mm${bar - 1}`)!;
@@ -247,7 +253,7 @@ export class ABCScore {
 
     let currentNote = null;
 
-    if (`${timeSignature}` === "1,1") {
+    if (this.hasFreeTempo()) {
       const [bar] = position.split(":");
       currentNote = svgElement!.querySelectorAll<SVGGElement>(
         `:is(.abcjs-note, .abcjs-rest).abcjs-v${voice}`,
