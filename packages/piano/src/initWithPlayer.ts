@@ -65,7 +65,7 @@ export function initPianoWithPlayer<T extends HTMLElement>(
     });
     player.on("progress", ({ activeId, playedNotes }) => {
       disableButtons();
-      if (activeId !== id) {
+      if (activeId !== id || !playedNotes.length) {
         return;
       }
       piano.setPlayedNotes(playedNotes.at(0)!);

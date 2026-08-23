@@ -2,11 +2,17 @@ import { use, useLayoutEffect, useRef } from "react";
 import { initABCScoreWithPlayer } from "@music-ui/abc";
 import { PlayerContext } from "@music-ui/react";
 
-const content = `
-T: Vanilla
+const scores = [
+  `T: Vanilla 1
 M: 4/4
 Q: 80
-CD EF GA Bc|`;
+CD EF GA Bc|`,
+  `T: Vanilla 2
+M: 4/4
+L: 1/4
+Q: 80
+CD EF | GA Bc|`,
+];
 
 export function VanillaABCScore() {
   const playerContext = use(PlayerContext);
@@ -36,12 +42,12 @@ export function VanillaABCScore() {
         data-show-tempo="false"
         data-show-time-signature="false"
       >
-        <div className="content">{content}</div>
+        <div className="content">{scores[0]}</div>
         <div className="staff"></div>
         <div className="controls"></div>
       </div>
-      <div className="abc-score" data-show-piano>
-        <div className="content">{content}</div>
+      <div className="abc-score" data-show-piano data-highlight-bars>
+        <div className="content">{scores[1]}</div>
         <div className="staff"></div>
         <div className="controls"></div>
       </div>

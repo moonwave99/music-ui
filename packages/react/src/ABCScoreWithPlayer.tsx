@@ -80,7 +80,10 @@ export function ABCScoreWithPlayer({
 
   useLayoutEffect(() => {
     abcRef.current?.updatePosition(position);
-  }, [position, abcRef]);
+    if (params.highlightBars) {
+      abcRef.current?.highlightBar(position);
+    }
+  }, [position, abcRef, params.highlightBars]);
 
   return (
     <div className={className}>

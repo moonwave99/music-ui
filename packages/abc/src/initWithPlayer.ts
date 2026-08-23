@@ -14,6 +14,12 @@ import { initControls } from "./controls";
 
 const DEFAULT_PIANO_OCTAVES = 5;
 
+const DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS = {
+  ...DEFAULT_ABC_SCORE_OPTIONS,
+  showPiano: false,
+  highlightBars: false,
+} as const;
+
 type InitABCScoreWithPlayerParams<T extends HTMLElement> =
   InitABCScoreParams<T> & {
     player: Player;
@@ -43,7 +49,10 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
       });
 
       const content = contentElement?.textContent || "";
-      const options = extractElementOptions(element, DEFAULT_ABC_SCORE_OPTIONS);
+      const options = extractElementOptions(
+        element,
+        DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS,
+      );
       const score = getAbcScore({ id, options, input: content });
 
       const { resetButtons } = initControls({
@@ -62,7 +71,9 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         }
         abcScore.clearSelection();
         abcScore.updatePosition(position);
-
+        if (options.highlightBars) {
+          abcScore.highlightBar(position);
+        }
         piano?.setNotes(joinVoices(playedNotes));
       });
 

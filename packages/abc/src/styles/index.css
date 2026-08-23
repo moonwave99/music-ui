@@ -4,6 +4,14 @@
   --abc-voice-2-color: magenta;
   --abc-voice-3-color: lightgreen;
   --abc-voice-4-color: lightcoral;
+  --abc-current-bar-color: rgba(30, 144, 255, 0.1);
+  --abc-cursor-stroke-width: 2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --abc-current-bar-color: rgba(30, 144, 255, 0.2);
+  }
 }
 
 .abc-score {
@@ -47,6 +55,9 @@
     }
   }
   .abcjs-cursor {
-    stroke-width: 2;
+    stroke-width: var(--abc-cursor-stroke-width);
+  }
+  .abcjs-bar-box {
+    fill: var(--abc-current-bar-color);
   }
 }

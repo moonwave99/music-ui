@@ -23,12 +23,13 @@ const cursorOffset = -2.5;
  * @property {boolean} showCursor The default cursor display
  * @property {boolean} showTempo The default show tempo display
  * @property {boolean} showTimeSignature The default time signature display
+ * @property {boolean} highlightBars The default highlightBars display
  */
 export const DEFAULT_ABC_SCORE_OPTIONS = {
   showCursor: true,
   showTempo: true,
   showTimeSignature: true,
-  showPiano: false,
+  highlightBars: false,
 } as const;
 
 /**
@@ -51,7 +52,9 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
  * @property {string} staff The rendered notation element class
  * @property {string} controls The controls element class
  * @property {string} timeSignature The time signature element class
+ * @property {string} tempo The tempo element class
  * @property {string} cursor The cursor element class
+ * @property {string} barBox The current bar element class
  * @property {string} currentNote The current note element class
  * @property {string} selectedNote The selected note element class
  */
@@ -62,6 +65,7 @@ export const cssClasses = {
   timeSignature: "abcjs-time-signature",
   tempo: "abcjs-tempo",
   cursor: "abcjs-cursor",
+  barBox: "abcjs-bar-box",
   currentNote: "abcjs-current-note",
   selectedNote: "abcjs-note_selected",
 } as const;
@@ -79,6 +83,7 @@ export type ABCScoreParams = {
   element: HTMLElement;
   showCursor?: boolean;
   showTimeSignature?: boolean;
+  highlightBars?: boolean;
   abcOptions?: AbcVisualParams;
   onClick?: (params: OnABCClickParams) => void;
 };
@@ -95,10 +100,12 @@ export class ABCScore {
   private element: HTMLElement;
   private showCursor: boolean;
   private showTimeSignature: boolean;
+  private highlightBars: boolean;
   private abcOptions: AbcVisualParams;
   private onClick: ((params: OnABCClickParams) => void) | undefined;
   private tune: TuneObject | null;
   private cursor: SVGLineElement | null;
+  private barBox: SVGRectElement | null;
   private rendered: boolean;
   private voiceCount: number;
   constructor({
@@ -106,6 +113,7 @@ export class ABCScore {
     element,
     showCursor = true,
     showTimeSignature = true,
+    highlightBars = false,
     abcOptions = {},
     onClick,
   }: ABCScoreParams) {
@@ -116,10 +124,12 @@ export class ABCScore {
     this.element = element;
     this.showCursor = showCursor;
     this.showTimeSignature = showTimeSignature;
+    this.highlightBars = highlightBars;
     this.abcOptions = abcOptions;
     this.onClick = onClick;
     this.tune = null;
     this.cursor = null;
+    this.barBox = null;
     this.voiceCount = 1;
     this.rendered = false;
   }
@@ -169,6 +179,60 @@ export class ABCScore {
       ...(this.tune?.getMeterFraction() || {}),
     };
     return [num, den];
+  }
+  highlightBar(position: TransportPosition): ABCScore {
+    const svgElement = this.getSVGElement()!;
+    const bar = Number(position.split(":").at(0)!);
+    const leftBar = svgElement.querySelector(`.abcjs-bar.abcjs-mm${bar - 1}`)!;
+    const rightBar = svgElement.querySelector(`.abcjs-bar.abcjs-mm${bar}`)!;
+    const leftBarBox = leftBar?.querySelector<SVGGElement>("path")?.getBBox();
+    const rightBarBox = rightBar?.querySelector<SVGGElement>("path")?.getBBox();
+
+    const isFirstOfLine =
+      getValueFromNote(
+        svgElement.querySelector(`.abcjs-mm${bar}`)!,
+        "abcjs-m",
+      ) === 0;
+
+    if (rightBarBox) {
+      let x = isFirstOfLine ? 0 : leftBarBox?.x || 0;
+      const y = rightBarBox.y;
+      let width = isFirstOfLine
+        ? rightBarBox.x
+        : rightBarBox.x - (leftBarBox?.x || 0);
+
+      let height = rightBarBox.height;
+      if (this.voiceCount > 1) {
+        const staffLine = getValueFromNote(
+          svgElement.querySelector(`.abcjs-mm${bar}`)!,
+          "abcjs-l",
+        );
+
+        const staffLeftMostBarLine = svgElement.querySelector<SVGPathElement>(
+          `.abcjs-staff-wrapper.abcjs-l${staffLine} path:last-child`,
+        );
+
+        if (isFirstOfLine) {
+          const xOffset = staffLeftMostBarLine!.getBBox().x;
+          x = xOffset;
+          width -= xOffset;
+        }
+
+        const rightBarLastVoice = svgElement.querySelector<SVGGElement>(
+          `.abcjs-bar.abcjs-mm${bar}.abcjs-v${this.voiceCount - 1}`,
+        );
+
+        if (rightBarLastVoice) {
+          height += rightBarLastVoice.getBBox().height;
+        }
+      }
+
+      this.barBox?.setAttribute("x", String(x));
+      this.barBox?.setAttribute("y", String(y));
+      this.barBox?.setAttribute("width", String(width));
+      this.barBox?.setAttribute("height", String(height));
+    }
+    return this;
   }
   private getBarNotes(position: TransportPosition, voice: number) {
     const svgElement = this.getSVGElement()!;
@@ -245,10 +309,9 @@ export class ABCScore {
         return;
       }
       const currentNote = x.selectableElement as unknown as SVGGElement;
+      const position = getNotePosition(currentNote, this.getTimeSignature());
       this.updateCursor(currentNote);
-      this.onClick({
-        position: getNotePosition(currentNote, this.getTimeSignature()),
-      });
+      this.onClick({ position });
     };
 
     this.tune = renderAbc(this.element, this.content, {
@@ -266,6 +329,15 @@ export class ABCScore {
       );
       this.cursor.classList.add(cssClasses.cursor);
       this.getSVGElement()?.append(this.cursor);
+    }
+
+    if (this.highlightBars) {
+      this.barBox = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "rect",
+      );
+      this.barBox.classList.add(cssClasses.barBox);
+      this.getSVGElement()?.append(this.barBox);
     }
 
     const isTimeSignatureDenominatorOne =
