@@ -151,7 +151,7 @@ export class Player {
     );
   }
   private clearPlayedNotes() {
-    this.playedNotes = [];
+    this.playedNotes = this.playedNotes.map(() => []);
   }
   private clearParts() {
     this.parts.forEach((part) => part.clear());
