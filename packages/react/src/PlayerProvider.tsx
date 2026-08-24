@@ -10,23 +10,13 @@ import {
   type SetStateAction,
 } from "react";
 
-import { Player } from "@music-ui/core";
-
 import type {
   Score,
+  Player,
   PlayerCallback,
   PlayerEvents,
   TransportPosition,
 } from "@music-ui/core";
-
-let _player: Player;
-
-function getPlayer(): Player {
-  if (!_player) {
-    _player = new Player();
-  }
-  return _player;
-}
 
 export type PlayerStatus = "playing" | "paused" | "stopped";
 
@@ -177,20 +167,11 @@ export function useStopPlayback() {
 
 type PlayerProviderProps = {
   children: ReactNode;
+  player: Player | null;
 };
 
-export function PlayerProvider({ children }: PlayerProviderProps) {
+export function PlayerProvider({ player, children }: PlayerProviderProps) {
   const [currentScore, setCurrentScore] = useState<Score | null>(null);
-  const [player, setPlayer] = useState<Player | null>(null);
-
-  useEffect(() => {
-    const player = getPlayer();
-    setPlayer(player);
-    return () => {
-      player.destroy();
-    };
-  }, []);
-
   return (
     <PlayerContext value={{ player, currentScore, setCurrentScore }}>
       {children}

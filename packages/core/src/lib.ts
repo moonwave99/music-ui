@@ -1,18 +1,26 @@
 import * as Tone from "tone";
-import { type PlaybackInfo, PlayerParams } from "./player";
+import { type PlaybackInfo } from "./player";
 import { type MidiJSON } from "@tonejs/midi";
 
-type CreateSamplerParams = Pick<
-  PlayerParams,
-  "instrument" | "baseUrl" | "reverbDuration"
->;
+export type CreateSamplerParams = {
+  instrument: string;
+  baseUrl: string;
+  reverbDuration: number;
+};
+
+export const DEFAULT_SAMPLER_OPTIONS = {
+  reverbDuration: 2,
+  instrument: "acoustic_grand_piano",
+  baseUrl:
+    "https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@master/FluidR3_GM",
+} as const;
 
 /* istanbul ignore next */
-export function createSampler({
-  instrument,
-  baseUrl,
-  reverbDuration,
-}: CreateSamplerParams) {
+export function createSampler(params: Partial<CreateSamplerParams> = {}) {
+  const { instrument, baseUrl, reverbDuration } = {
+    ...DEFAULT_SAMPLER_OPTIONS,
+    ...params,
+  };
   const sampler = new Tone.Sampler({
     urls: Array.from({ length: 6 }, (_, i) => `C${i + 2}`).reduce(
       (memo, key) => ({ ...memo, [key]: `${key}.mp3` }),

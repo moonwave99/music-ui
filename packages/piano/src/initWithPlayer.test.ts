@@ -1,50 +1,13 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, assert } from "vitest";
+import { describe, it, expect, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { initPianoWithPlayer } from "./initWithPlayer";
+import { getMockedPlayerParams } from "@music-ui/core";
 
-//@ts-expect-error Hard to mock the whole thing without having vi.mock to complain
-vi.mock(import("@music-ui/core"), async (importOriginal) => {
-  const originalModule = await importOriginal();
-  return {
-    ...originalModule,
-    Player: vi.fn(
-      class {
-        private handlers = {} as Record<
-          string,
-          ((...params: unknown[]) => void)[]
-        >;
-        private score: Score | null = null;
-        on = (eventName: string, handler: (...params: unknown[]) => void) => {
-          if (!this.handlers[eventName]) {
-            this.handlers[eventName] = [];
-          }
-          this.handlers[eventName].push(handler);
-        };
-        play = () => {
-          this.handlers.progress!.forEach((handler) =>
-            handler({
-              activeId: this.score?.id,
-              playedNotes: this.score?.content.endsWith("]6")
-                ? [["C4", "E4", "G4", "B4"]]
-                : [["C4"]],
-            }),
-          );
-          setTimeout(() => {
-            this.handlers.finished!.forEach((handler) => handler());
-          }, 100);
-        };
-        setScore = (score: Score) => (this.score = score);
-        pause = vi.fn();
-        stop = vi.fn();
-      },
-    ),
-  };
-});
-
-import { Player, Score } from "@music-ui/core";
+import { Player } from "@music-ui/core";
 
 describe("initPianoWithPlayer", () => {
+  // #TODO allow remote control for mocked Part
   it("initializes pianos with players on selection", async () => {
     const user = userEvent.setup();
     document.body.innerHTML = `
@@ -72,7 +35,8 @@ describe("initPianoWithPlayer", () => {
         </main>`;
 
     const elements = document.querySelectorAll<HTMLElement>("[data-piano]")!;
-    const player = new Player();
+    const mockedParams = getMockedPlayerParams();
+    const player = new Player(mockedParams);
 
     initPianoWithPlayer({ player });
 
@@ -101,29 +65,30 @@ describe("initPianoWithPlayer", () => {
       ).toBe(true),
     );
 
-    expect(otherElement.querySelectorAll(".key-played").length).toBe(0);
+    mockedParams.transport.next();
 
-    await wait();
+    expect(otherElement.querySelectorAll(".key-played").length).toBe(0);
 
     expect(playBlockButton.disabled).toBe(false);
     expect(playArpeggioButton.disabled).toBe(false);
 
     expect(activeElement.querySelectorAll(".key-played").length).toBe(0);
 
+    mockedParams.reset();
+
     await user.click(playArpeggioButton);
 
     expect(playBlockButton.disabled).toBe(true);
     expect(playArpeggioButton.disabled).toBe(true);
 
-    ["C4"].forEach((note) =>
+    ["C4", "E4", "G4", "B4"].forEach((note) => {
       expect(
         activeElement
           .querySelector(`.note-with-octave-${note}`)
           ?.classList.contains("key-played"),
-      ).toBe(true),
-    );
-
-    await wait();
+      ).toBe(true);
+      mockedParams.transport.next();
+    });
 
     expect(playBlockButton.disabled).toBe(false);
     expect(playArpeggioButton.disabled).toBe(false);
@@ -143,7 +108,7 @@ describe("initPianoWithPlayer", () => {
           </div>
       </main>`;
 
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
 
     initPianoWithPlayer({ player });
 
@@ -173,7 +138,7 @@ describe("initPianoWithPlayer", () => {
       </main>`;
     assert.throws(() => {
       const selection = document.querySelector<HTMLElement>("[data-piano]")!;
-      const player = new Player();
+      const player = new Player(getMockedPlayerParams());
       initPianoWithPlayer({ selection, player });
     }, "pianoElement not found inside element with id: piano-1");
   });
@@ -193,10 +158,8 @@ describe("initPianoWithPlayer", () => {
       </main>`;
     assert.throws(() => {
       const selection = document.querySelector<HTMLElement>("[data-piano]")!;
-      const player = new Player();
+      const player = new Player(getMockedPlayerParams());
       initPianoWithPlayer({ selection, player });
     }, "controlsElement not found inside element with id: piano-1");
   });
 });
-
-const wait = (ms = 100) => new Promise((r) => setTimeout(r, ms));

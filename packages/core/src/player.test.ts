@@ -1,104 +1,20 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi } from "vitest";
-import { type TransportPosition } from "./types";
-import { type PlaybackInfo } from "./player";
-import { type ToneEventCallback, Sampler } from "tone";
-
-//@ts-expect-error Hard to mock the whole thing without having vi.mock to complain
-vi.mock(import("tone"), async (importOriginal) => {
-  const originalModule = await importOriginal();
-  return {
-    ...originalModule,
-    Part: class {
-      private progressFn: ToneEventCallback<PlaybackInfo>;
-      private scoreData: PlaybackInfo[];
-      constructor(
-        progressFn: ToneEventCallback<PlaybackInfo>,
-        scoreData: PlaybackInfo[],
-      ) {
-        this.progressFn = progressFn;
-        this.scoreData = scoreData;
-      }
-      // #TODO play part from Transport and not from Part
-      start(position: TransportPosition) {
-        const [, beat] = position.split(":");
-        const eventsToPlay = this.scoreData.slice(Number(beat));
-        eventsToPlay.forEach((event) => this.progressFn(event.time, event));
-      }
-      clear() {}
-    },
-    getDraw: () => ({
-      cancel: vi.fn(),
-      schedule: (fn: () => void) => fn(),
-    }),
-    getTransport: () =>
-      new (class {
-        private handlers: Record<string, () => void>;
-        public bpm: { value: number };
-        public position: TransportPosition;
-        constructor() {
-          this.handlers = {};
-          this.bpm = {
-            value: 120,
-          };
-          this.position = "0:0:0";
-        }
-        on(eventName: string, handler: () => void) {
-          this.handlers[eventName] = handler;
-        }
-        off(eventName: string) {
-          delete this.handlers[eventName];
-        }
-        cancel() {}
-        stop() {
-          const handler = this.handlers.stop;
-          if (!handler) {
-            return;
-          }
-          handler();
-        }
-        start() {
-          const handler = this.handlers.start;
-          if (!handler) {
-            return;
-          }
-          handler();
-        }
-        pause() {
-          const handler = this.handlers.pause;
-          if (!handler) {
-            return;
-          }
-          handler();
-        }
-      })(),
-  };
-});
-
-vi.mock(import("./lib"), async (importOriginal) => {
-  const originalModule = await importOriginal();
-  return {
-    ...originalModule,
-    createSampler: () =>
-      ({
-        triggerAttackRelease: vi.fn(),
-      }) as unknown as Sampler,
-  };
-});
-
 import { Player } from "./player";
 import { getAbcScore } from "./utils";
+import { getMockedPlayerParams } from "./test/mocks";
 
 describe("Player - constructor", () => {
   it("Creates a new player with default options", () => {
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
     expect(player.getScore()).toBe(null);
   });
 });
 
 describe("Player - events", () => {
   it("Listens to the player events", async () => {
-    const player = new Player();
+    const mockedParams = getMockedPlayerParams();
+    const player = new Player(mockedParams);
 
     const onProgress = vi.fn();
     const onPause = vi.fn();
@@ -120,6 +36,9 @@ describe("Player - events", () => {
 
     await player.play();
     player.pause();
+
+    mockedParams.transport.playUntilEnd();
+
     player.stop();
 
     expect(onPause).toHaveBeenCalled();
@@ -139,7 +58,7 @@ describe("Player - events", () => {
 
 describe("Player - play", () => {
   it("Does nothing if no parts are present", async () => {
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
     const onProgress = vi.fn();
     player.on("progress", onProgress);
     await player.play();
@@ -149,7 +68,7 @@ describe("Player - play", () => {
 
 describe("Player - setScore", () => {
   it("Sets the current score", () => {
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
     const score = getAbcScore({
       id: "1",
       input: "CDEF",
@@ -161,7 +80,7 @@ describe("Player - setScore", () => {
   });
 
   it("Does not recompute the parts if the new score has the same hash as the current one", () => {
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
     const score = getAbcScore({
       id: "1",
       input: "CDEF",
@@ -175,7 +94,7 @@ describe("Player - setScore", () => {
 
 describe("Player - destroy", () => {
   it("Removes all listeners, clears all parts and scheduled events", async () => {
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
     const score = getAbcScore({
       id: "1",
       input: "CDEF",
@@ -191,7 +110,7 @@ describe("Player - destroy", () => {
 
 describe("Player - seek", () => {
   it("Seeks to the passed position", async () => {
-    const player = new Player();
+    const player = new Player(getMockedPlayerParams());
 
     const onProgress = vi.fn();
     player.on("progress", onProgress);

@@ -3,24 +3,7 @@ import { describe, it, expect, vi, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { initABCScoreWithPlayer } from "./initWithPlayer";
 
-//@ts-expect-error Hard to mock the whole thing without having vi.mock to complain
-vi.mock(import("@music-ui/core"), async (importOriginal) => {
-  const originalModule = await importOriginal();
-  return {
-    ...originalModule,
-    Player: vi.fn(
-      class {
-        on = vi.fn();
-        play = vi.fn();
-        pause = vi.fn();
-        stop = vi.fn();
-        setScore = vi.fn();
-      },
-    ),
-  };
-});
-
-import { Player } from "@music-ui/core";
+import { Player, getMockedPlayerParams } from "@music-ui/core";
 
 describe("initABCScoreWithPlayer", () => {
   it("renders an abc score with player on selection", async () => {
@@ -38,7 +21,8 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
 
     const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-    const player = new Player();
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
 
     initABCScoreWithPlayer({
       selection: element,
@@ -97,7 +81,7 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
     assert.throws(() => {
       const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-      const player = new Player();
+      const player = new Player(getMockedPlayerParams());
       initABCScoreWithPlayer({
         selection: element,
         player,
@@ -115,7 +99,7 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
     assert.throws(() => {
       const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-      const player = new Player();
+      const player = new Player(getMockedPlayerParams());
       initABCScoreWithPlayer({
         selection: element,
         player,
@@ -136,7 +120,7 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
     assert.throws(() => {
       const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-      const player = new Player();
+      const player = new Player(getMockedPlayerParams());
       initABCScoreWithPlayer({
         selection: element,
         player,

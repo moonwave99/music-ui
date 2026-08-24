@@ -236,7 +236,7 @@ export function tonePositionToNormalizedPosition(
 export function normalizedPositionToTonePosition(
   position: TransportPosition,
   timeSignature: TimeSignature,
-) {
+): TransportPosition {
   if (!isTimeSignatureCompound(timeSignature)) {
     return position;
   }

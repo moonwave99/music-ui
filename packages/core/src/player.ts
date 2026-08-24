@@ -1,4 +1,4 @@
-import * as Tone from "tone";
+import type { Unit } from "tone";
 import { type NoteJSON } from "@tonejs/midi/dist/Note";
 import { EventEmitter } from "events";
 import type { TransportPosition, TimeSignature, Score } from "./types";
@@ -7,7 +7,7 @@ import {
   parseTimeSignature,
   tonePositionToNormalizedPosition,
 } from "./utils";
-import { createSampler, END_NOTE } from "./lib";
+import { END_NOTE } from "./lib";
 import { ScoreManager } from "./scoreManager";
 
 export type PlaybackNote = NoteJSON;
@@ -19,20 +19,13 @@ export type PlaybackInfo = {
   velocity: number;
 };
 
-export type PlayerParams = {
-  instrument: string;
-  baseUrl: string;
+export type PlayerOptions = {
   timeTolerance: number;
-  reverbDuration: number;
 };
 
-const DEFAULT_PARAMS = {
+const DEFAULT_OPTIONS = {
   timeTolerance: 0.02,
-  reverbDuration: 2,
-  instrument: "acoustic_grand_piano",
-  baseUrl:
-    "https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@master/FluidR3_GM",
-} as PlayerParams;
+} as const;
 
 export type PlayerCallback = (params: {
   playedNotes: string[][];
@@ -43,16 +36,65 @@ export type PlayerCallback = (params: {
 
 export type PlayerEvents = "stop" | "pause" | "progress" | "finished";
 
+export type Transport = {
+  on: (eventName: "start" | "stop" | "pause", callback: () => void) => void;
+  off: (eventName: "start" | "stop" | "pause", callback?: () => void) => void;
+  cancel: (time: Unit.Time) => void;
+  bpm: {
+    value: number;
+  };
+  timeSignature: number | number[];
+  position: Unit.Time;
+  start: () => void;
+  stop: () => void;
+  pause: () => void;
+};
+
+export type Draw = {
+  cancel: (time: Unit.Time) => void;
+  schedule: (callback: () => void, time: Unit.Time) => void;
+};
+
+export type Sampler = {
+  triggerAttackRelease: (
+    notes: string[] | string,
+    duration: Unit.Time | Unit.Time[],
+    time?: Unit.Time,
+    velocity?: number,
+  ) => void;
+};
+
+export type Part = {
+  start: (time: Unit.Time) => void;
+  clear: (time?: Unit.Time) => void;
+};
+
 const transportEvents = ["start", "stop", "pause"] as const;
 
 const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
 
+type GetPart = (
+  callback: (time: number, chord: PlaybackInfo) => void,
+  info: PlaybackInfo[],
+) => Part;
+
+type PlayerParams = {
+  sampler: Sampler;
+  transport: Transport;
+  draw: Draw;
+  startAudio: () => Promise<void>;
+  getPart: GetPart;
+  options?: PlayerOptions;
+};
+
 export class Player {
-  private sampler: Tone.Sampler;
-  private parts: Tone.Part[];
-  private transport: ReturnType<typeof Tone.getTransport>;
-  private draw: ReturnType<typeof Tone.getDraw>;
-  private params: PlayerParams;
+  private sampler: Sampler;
+  private parts: Part[];
+  private transport: Transport;
+  private draw: Draw;
+  private startAudio: () => Promise<void>;
+  private getPart: GetPart;
+  private options: PlayerOptions;
   private score: Score | null;
   private timeSignature: TimeSignature | null;
   private playedNotes: string[][];
@@ -63,11 +105,20 @@ export class Player {
    *
    * @param params The accepted params
    */
-  constructor(params: Partial<PlayerParams> = {}) {
-    this.params = { ...DEFAULT_PARAMS, ...params };
-    this.sampler = createSampler(this.params);
-    this.transport = Tone.getTransport();
-    this.draw = Tone.getDraw();
+  constructor({
+    sampler,
+    transport,
+    draw,
+    startAudio,
+    getPart,
+    options = DEFAULT_OPTIONS,
+  }: PlayerParams) {
+    this.options = options;
+    this.sampler = sampler;
+    this.transport = transport;
+    this.draw = draw;
+    this.startAudio = startAudio;
+    this.getPart = getPart;
     this.parts = [];
     this.score = null;
     this.timeSignature = null;
@@ -121,13 +172,16 @@ export class Player {
   }
   async play() {
     // #TODO fix seek before first playback bug
-    await Tone.start();
+    await this.startAudio();
     if (!this.parts.length) {
       return;
     }
     this.parts.forEach((part) => part.start(this.transport.position));
     this.transport.start();
     return this;
+  }
+  setBpm(value: number) {
+    this.transport.bpm.value = value;
   }
   pause() {
     this.transport.pause();
@@ -164,52 +218,51 @@ export class Player {
     const score = this.score;
     const scoreData = this.scoreManager.getScoreContent(
       score,
-      this.params.timeTolerance,
+      this.options.timeTolerance,
     );
 
     this.playedNotes = scoreData.map(() => []);
 
-    this.parts = scoreData.map(
-      ({ notes, voice }) =>
-        new Tone.Part((time: number, chord: PlaybackInfo) => {
-          const position = tonePositionToNormalizedPosition(
-            this.transport.position as TransportPosition,
-            this.timeSignature!,
-          );
+    this.parts = scoreData.map(({ notes, voice }) =>
+      this.getPart((time: number, chord: PlaybackInfo) => {
+        const position = tonePositionToNormalizedPosition(
+          this.transport.position as TransportPosition,
+          this.timeSignature!,
+        );
 
-          if (chord.notes.some((note) => note.name === END_NOTE)) {
-            this.draw.schedule(() => {
-              this.eventEmitter.emit("finished", {
-                playedNotes: this.playedNotes,
-                activeId: score.id,
-                position,
-                voice,
-              });
-              this.stop();
-            }, time);
-            return;
-          }
-
-          this.sampler.triggerAttackRelease(
-            chord.notes.map(({ name }) => name),
-            chord.duration,
-            time,
-            chord.velocity,
-          );
-
+        if (chord.notes.some((note) => note.name === END_NOTE)) {
           this.draw.schedule(() => {
-            this.updatePlayedNotes(
-              chord.notes.map(({ name }) => name),
-              voice,
-            );
-            this.eventEmitter.emit("progress", {
+            this.eventEmitter.emit("finished", {
               playedNotes: this.playedNotes,
               activeId: score.id,
               position,
               voice,
             });
+            this.stop();
           }, time);
-        }, notes),
+          return;
+        }
+
+        this.sampler.triggerAttackRelease(
+          chord.notes.map(({ name }) => name),
+          chord.duration,
+          time,
+          chord.velocity,
+        );
+
+        this.draw.schedule(() => {
+          this.updatePlayedNotes(
+            chord.notes.map(({ name }) => name),
+            voice,
+          );
+          this.eventEmitter.emit("progress", {
+            playedNotes: this.playedNotes,
+            activeId: score.id,
+            position,
+            voice,
+          });
+        }, time);
+      }, notes),
     );
   }
 }

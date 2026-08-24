@@ -30,10 +30,10 @@ In addition to the `initABCScore` parameters, it needs a `Player` instance in or
 
 ```ts
 import { initABCScoreWithPlayer } from "@music-ui/abc";
-import { Player } from "@music-ui/player";
+import { playerFactory } from "@music-ui/player";
 import "@music-ui/abc/styles.css";
 
-const player = new Player();
+const player = playerFactory();
 
 initABCScoreWithPlayer({ player });
 ```
