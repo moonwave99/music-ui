@@ -1,5 +1,11 @@
 # @music-ui/core
 
+## 0.13.0
+
+### Minor Changes
+
+- 3259e16: Add bar highlight, improve coverage
+
 ## 0.12.0
 
 ### Minor Changes
