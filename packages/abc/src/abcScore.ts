@@ -194,7 +194,11 @@ export class ABCScore {
     return `${this.getTimeSignature()}` === "1,1";
   }
   highlightBar(position: TransportPosition): ABCScore {
-    if (this.hasFreeTempo()) {
+    if (!this.highlightBars || this.hasFreeTempo()) {
+      return this;
+    }
+    if (position === "0:0:0") {
+      this.resetBarBox();
       return this;
     }
     const bar = Number(position.split(":").at(0)!);
@@ -244,6 +248,11 @@ export class ABCScore {
       }
       return { x, y, width, height };
     });
+  }
+  private resetBarBox() {
+    ["x", "y", "width", "height"].forEach((x) =>
+      this.barBox?.setAttribute(x, "0"),
+    );
   }
   private getBarNotes(position: TransportPosition, voice: number) {
     const svgElement = this.getSVGElement()!;
@@ -349,9 +358,8 @@ export class ABCScore {
       );
       this.barBox.classList.add(cssClasses.barBox);
       this.getSVGElement()?.append(this.barBox);
+      this.computeBarBounds();
     }
-
-    this.computeBarBounds();
 
     const isTimeSignatureDenominatorOne =
       this.tune.getMeter().value?.at(0)!.den == 1;

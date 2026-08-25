@@ -205,3 +205,27 @@ C E G B | D F A C
     expect(onClick).toHaveBeenCalledWith({ position: "6:0:0" });
   });
 });
+
+describe("ABCScore - highlightBars", () => {
+  it("does not create the highlight bar box if highlightBars is false", () => {
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")!.textContent,
+      highlightBars: false,
+    });
+    score.render();
+    expect(wrapper.querySelector(".abcjs-bar-box")).toBe(null);
+  });
+
+  it("does create the highlight bar box if highlightBars is true", () => {
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")!.textContent,
+      highlightBars: true,
+    });
+    score.render();
+    expect(wrapper.querySelector(".abcjs-bar-box")).not.toBe(null);
+  });
+});

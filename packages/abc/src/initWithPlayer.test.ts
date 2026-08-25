@@ -62,6 +62,31 @@ describe("initABCScoreWithPlayer", () => {
     expect(stopButton.disabled).toBeTruthy();
   });
 
+  it("renders an abc score with player and piano on selection", () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score data-show-piano>
+          <div class="content">
+            T:Test Song
+            C E G B        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>
+      </main>`;
+
+    const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
+
+    initABCScoreWithPlayer({
+      selection: element,
+      player,
+    });
+
+    expect(element.querySelector(".piano")).not.toBe(null);
+  });
+
   it("Throws error if no player is passed", () => {
     assert.throws(() => {
       initABCScoreWithPlayer({ player: null as unknown as Player });

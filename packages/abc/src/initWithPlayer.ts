@@ -63,10 +63,17 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
 
       let piano: Piano;
 
-      player.on("finished", resetButtons);
+      function reset() {
+        resetButtons();
+        piano?.setNotes([]);
+        abcScore.updatePosition("0:0:0");
+        abcScore.highlightBar("0:0:0");
+      }
+
+      player.on("finished", reset);
       player.on("progress", ({ activeId, position, playedNotes }) => {
         if (activeId !== id) {
-          resetButtons();
+          reset();
           return;
         }
         abcScore.clearSelection();
