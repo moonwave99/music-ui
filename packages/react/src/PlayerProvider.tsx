@@ -16,9 +16,8 @@ import type {
   PlayerCallback,
   PlayerEvents,
   TransportPosition,
+  PlayerStatus,
 } from "@music-ui/core";
-
-export type PlayerStatus = "playing" | "paused" | "stopped";
 
 type PlayerContextType = {
   player: Player | null;

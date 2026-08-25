@@ -152,4 +152,130 @@ describe("initABCScoreWithPlayer", () => {
       });
     }, "controlsElement not found inside element with id: 1");
   });
+
+  it("resets status if another score is playing", async () => {
+    const user = userEvent.setup();
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score>
+          <div class="content">
+            T:Test Song 1
+            C E G B        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>
+        <div data-abc-score>
+          <div class="content">
+            T:Test Song 2 
+            D F A c        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>        
+      </main>`;
+
+    const elements =
+      document.querySelectorAll<HTMLElement>("[data-abc-score]")!;
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
+
+    initABCScoreWithPlayer({ selection: elements, player });
+
+    const firstPlayButton =
+      elements[0]!.querySelector<HTMLButtonElement>(".play-button")!;
+    const secondPlayButton =
+      elements[1]!.querySelector<HTMLButtonElement>(".play-button")!;
+
+    expect(firstPlayButton.disabled).toBe(false);
+    expect(secondPlayButton.disabled).toBe(false);
+
+    await user.click(firstPlayButton);
+    expect(firstPlayButton.disabled).toBe(true);
+    expect(secondPlayButton.disabled).toBe(false);
+
+    await user.click(secondPlayButton);
+    expect(firstPlayButton.disabled).toBe(false);
+    expect(secondPlayButton.disabled).toBe(true);
+  });
+
+  it("updates position on click", async () => {
+    const user = userEvent.setup();
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score>
+          <div class="content">
+            T:Test Song
+            C E G B | D F A C
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>
+      </main>`;
+
+    const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
+
+    initABCScoreWithPlayer({
+      selection: element,
+      player,
+    });
+
+    const playButton =
+      element.querySelector<HTMLButtonElement>(".play-button")!;
+    let targetNote = element.querySelector(".abcjs-m1.abcjs-n1")!;
+
+    await user.click(targetNote);
+
+    expect(targetNote.classList).toContain("abcjs-note_selected");
+    expect(mockedPlayedParams.transport.position).toBe("0:0:0");
+
+    await user.click(playButton);
+    expect(mockedPlayedParams.transport.position).toBe("0:1:0");
+
+    targetNote = element.querySelector(".abcjs-m1.abcjs-n2")!;
+    await user.click(targetNote);
+
+    expect(targetNote.classList).toContain("abcjs-note_selected");
+    expect(mockedPlayedParams.transport.position).toBe("1:1:0");
+  });
+
+  it("highlights bars on progress when highlightBars is true", async () => {
+    const user = userEvent.setup();
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score data-highlight-bars>
+          <div class="content">
+            T:Test Song
+            C E G B | D F A C
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>
+      </main>`;
+
+    const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
+
+    initABCScoreWithPlayer({
+      selection: element,
+      player,
+    });
+
+    const playButton =
+      element.querySelector<HTMLButtonElement>(".play-button")!;
+
+    const barBox = element.querySelector<SVGRectElement>(".abcjs-bar-box")!;
+    expect(barBox).not.toBe(null);
+    ["x", "y", "width", "height"].forEach((x) =>
+      expect(barBox.getAttribute(x)).toBe(null),
+    );
+    await user.click(playButton);
+    ["x", "y", "width", "height"].forEach((x) =>
+      // because the getBBox mock implementation returns 0,0,0,0
+      expect(barBox.getAttribute(x)).toBe("0"),
+    );
+  });
 });

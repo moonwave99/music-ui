@@ -274,9 +274,6 @@ export class ABCScore {
       )[Number(bar)];
     } else {
       const barNotes = this.getBarNotes(position, voice);
-      if (!barNotes.length) {
-        return;
-      }
       currentNote = getCurrentNote(barNotes, position, timeSignature);
     }
 

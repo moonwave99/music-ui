@@ -55,7 +55,7 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
       );
       const score = getAbcScore({ id, options, input: content });
 
-      const { resetButtons } = initControls({
+      const { updateButtonState } = initControls({
         score,
         player,
         element: controlsElement!,
@@ -64,7 +64,7 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
       let piano: Piano;
 
       function reset() {
-        resetButtons();
+        updateButtonState("stopped");
         piano?.setNotes([]);
         abcScore.updatePosition("0:0:0");
         abcScore.highlightBar("0:0:0");
@@ -73,9 +73,10 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
       player.on("finished", reset);
       player.on("progress", ({ activeId, position, playedNotes }) => {
         if (activeId !== id) {
-          reset();
+          updateButtonState("stopped");
           return;
         }
+        updateButtonState("playing");
         abcScore.clearSelection();
         abcScore.updatePosition(position);
         if (options.highlightBars) {
@@ -83,6 +84,8 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         }
         piano?.setNotes(joinVoices(playedNotes));
       });
+      player.on("pause", () => updateButtonState("paused"));
+      player.on("stop", reset);
 
       const abcScore = new ABCScore({
         content: score.content,

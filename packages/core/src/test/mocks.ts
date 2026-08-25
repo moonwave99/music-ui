@@ -3,7 +3,7 @@ import { PlaybackInfo } from "../player";
 import { TransportPosition } from "../types";
 
 export class MockedTransport {
-  private handlers: Record<string, () => void>;
+  private handlers: Record<string, (() => void)[]>;
   public bpm: { value: number };
   public position: TransportPosition;
   public timeSignature: number | number[];
@@ -20,35 +20,26 @@ export class MockedTransport {
     this.noteIndex = 0;
   }
   on(eventName: string, handler: () => void) {
-    this.handlers[eventName] = handler;
+    if (!this.handlers[eventName]) {
+      this.handlers[eventName] = [];
+    }
+    this.handlers[eventName].push(handler);
   }
   off(eventName: string) {
     delete this.handlers[eventName];
   }
   cancel() {}
   stop() {
-    const handler = this.handlers.stop;
-    if (!handler) {
-      return;
-    }
-    handler();
+    this.handlers.stop?.forEach((handler) => handler());
   }
   start() {
     const [, beat] = this.position.split(":");
     this.noteIndex = Number(beat);
     this.playNext();
-    const handler = this.handlers.start;
-    if (!handler) {
-      return;
-    }
-    handler();
+    this.handlers.start?.forEach((handler) => handler());
   }
   pause() {
-    const handler = this.handlers.pause;
-    if (!handler) {
-      return;
-    }
-    handler();
+    this.handlers.pause?.forEach((handler) => handler());
   }
   playNext() {
     this.parts.forEach((part) => part.playAt(this.noteIndex));

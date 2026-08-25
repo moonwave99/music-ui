@@ -21,6 +21,13 @@ describe("getCurrentNote", () => {
     expect(currentNote?.classList.contains("abcjs-n3")).toBe(true);
   });
 
+  it("returns null if the bar is empty", () => {
+    document.body.innerHTML = `<svg></svg>`;
+    const barNotes = document.querySelectorAll<SVGGElement>(".abcjs-mm0");
+    const currentNote = getCurrentNote(barNotes, "0:1:0", [4, 4]);
+    expect(currentNote).toBe(null);
+  });
+
   it("returns null if the position exceeds the passed bar - 4/4", () => {
     document.body.innerHTML = `<svg>
       <g class="abcjs-mm0 abcjs-n1 abcjs-d1"/>

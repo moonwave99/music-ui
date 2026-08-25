@@ -1,4 +1,9 @@
-import { createControls, Player, type Score } from "@music-ui/core";
+import {
+  createControls,
+  Player,
+  PlayerStatus,
+  type Score,
+} from "@music-ui/core";
 
 type InitControlsParams = {
   score: Score;
@@ -7,7 +12,7 @@ type InitControlsParams = {
 };
 
 type InitControls = {
-  resetButtons: () => void;
+  updateButtonState: (playerStatus: PlayerStatus) => void;
 };
 
 export function initControls({
@@ -16,25 +21,9 @@ export function initControls({
   player,
 }: InitControlsParams): InitControls {
   const { play, pause, stop } = createControls(element, {
-    play: () => {
-      player.setScore(score);
-      player.play();
-      play.disabled = true;
-      pause.disabled = false;
-      stop.disabled = false;
-    },
-    pause: () => {
-      player.pause();
-      play.disabled = false;
-      pause.disabled = true;
-      stop.disabled = false;
-    },
-    stop: () => {
-      player.stop();
-      play.disabled = false;
-      pause.disabled = true;
-      stop.disabled = true;
-    },
+    play: () => player.setScore(score).play(),
+    pause: () => player.pause(),
+    stop: () => player.stop(),
   }) as {
     play: HTMLButtonElement;
     pause: HTMLButtonElement;
@@ -44,11 +33,23 @@ export function initControls({
   pause.disabled = true;
   stop.disabled = true;
 
-  function resetButtons() {
+  function updateButtonState(playerStatus: PlayerStatus) {
+    if (playerStatus === "stopped") {
+      play.disabled = false;
+      pause.disabled = true;
+      stop.disabled = true;
+      return;
+    }
+    if (playerStatus === "playing") {
+      play.disabled = true;
+      pause.disabled = false;
+      stop.disabled = false;
+      return;
+    }
     play.disabled = false;
     pause.disabled = true;
-    stop.disabled = true;
+    stop.disabled = false;
   }
 
-  return { resetButtons };
+  return { updateButtonState };
 }

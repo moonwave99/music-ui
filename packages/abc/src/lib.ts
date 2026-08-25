@@ -12,6 +12,10 @@ export function getCurrentNote(
   position: TransportPosition,
   timeSignature: TimeSignature,
 ) {
+  if (!barNotes.length) {
+    return null;
+  }
+
   const elementsWithDurations = [];
 
   let relativePosition = 0;

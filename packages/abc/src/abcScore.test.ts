@@ -119,6 +119,40 @@ describe("ABCScore - updatePosition", () => {
     ).toBe("E");
   });
 
+  it("Updates the cursor and corresponding note selection - free tempo", () => {
+    document.body.innerHTML = `
+      <div class="score">
+        <div class="content">
+      M:1/1
+      L:1/1
+      T:Test Song
+      C E G B
+        </div>
+        <div class="staff"></div>
+      </div>
+      `;
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")!.textContent,
+    });
+    score.render();
+
+    score.updatePosition("0:0:0");
+    expect(wrapper.querySelectorAll(".abcjs-current-note").length).toBe(1);
+    expect(
+      wrapper.querySelector<HTMLElement>(".abcjs-current-note path")?.dataset
+        .name,
+    ).toBe("C");
+
+    score.updatePosition("1:0:0");
+    expect(wrapper.querySelectorAll(".abcjs-current-note").length).toBe(1);
+    expect(
+      wrapper.querySelector<HTMLElement>(".abcjs-current-note path")?.dataset
+        .name,
+    ).toBe("E");
+  });
+
   it("Does nothing if there is no note at the passed position", () => {
     const wrapper = document.querySelector(".score")!;
     const score = new ABCScore({
@@ -128,6 +162,20 @@ describe("ABCScore - updatePosition", () => {
     score.render();
 
     score.updatePosition("0:4:0");
+
+    expect(wrapper.querySelectorAll(".abcjs-current-note").length).toBe(0);
+  });
+
+  it("Does nothing if showCursor is false", () => {
+    const wrapper = document.querySelector(".score")!;
+    const score = new ABCScore({
+      element: wrapper.querySelector(".staff")!,
+      content: wrapper.querySelector(".content")!.textContent,
+      showCursor: false,
+    });
+    score.render();
+
+    score.updatePosition("0:1:0");
 
     expect(wrapper.querySelectorAll(".abcjs-current-note").length).toBe(0);
   });
@@ -178,15 +226,15 @@ describe("ABCScore - onClick handler", () => {
 
   it("Gets called with the position of the clicked note - free tempo", async () => {
     document.body.innerHTML = `
-<div class="score">
-  <div class="content">
-T: Test Song
-M: 1/1
-L: 1/1
-C E G B | D F A C
-  </div>
-  <div class="staff"></div>
-</div>  
+      <div class="score">
+        <div class="content">
+          T: Test Song
+          M: 1/1
+          L: 1/1
+          C E G B | D F A c
+        </div>
+        <div class="staff"></div>
+      </div>
   `;
 
     const user = userEvent.setup();
@@ -219,6 +267,17 @@ describe("ABCScore - highlightBars", () => {
   });
 
   it("does create the highlight bar box if highlightBars is true", () => {
+    document.body.innerHTML = `
+      <div class="score">
+        <div class="content">
+          M:4/4
+          L:1/4
+          T:Test Song
+          C E G B | D F A c |
+        </div>
+        <div class="staff"></div>
+      </div>  
+  `;
     const wrapper = document.querySelector(".score")!;
     const score = new ABCScore({
       element: wrapper.querySelector(".staff")!,
@@ -226,6 +285,28 @@ describe("ABCScore - highlightBars", () => {
       highlightBars: true,
     });
     score.render();
-    expect(wrapper.querySelector(".abcjs-bar-box")).not.toBe(null);
+
+    const barBox = wrapper.querySelector<SVGRectElement>(".abcjs-bar-box")!;
+    expect(barBox).not.toBe(null);
+    ["x", "y", "width", "height"].forEach((x) =>
+      expect(barBox.getAttribute(x)).toBe(null),
+    );
+
+    score.highlightBar("5:0:0");
+    ["x", "y", "width", "height"].forEach((x) =>
+      expect(barBox.getAttribute(x)).toBe(null),
+    );
+
+    score.highlightBar("1:0:0");
+    ["x", "y", "width", "height"].forEach((x) =>
+      // because the getBBox mock implementation returns 0,0,0,0
+      expect(barBox.getAttribute(x)).toBe("0"),
+    );
+
+    score.highlightBar("0:0:0");
+    ["x", "y", "width", "height"].forEach((x) =>
+      // because the getBBox mock implementation returns 0,0,0,0
+      expect(barBox.getAttribute(x)).toBe("0"),
+    );
   });
 });

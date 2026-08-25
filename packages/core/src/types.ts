@@ -33,6 +33,11 @@ export type ScoreInfo = {
 };
 
 /**
+ * The current player status.
+ */
+export type PlayerStatus = "playing" | "paused" | "stopped";
+
+/**
  * Comma separated notes in a single string, or an array of notes (in scientific pitch notation)
  */
 export type NoteInput = string | string[];
