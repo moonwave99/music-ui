@@ -1,10 +1,12 @@
 // @vitest-environment jsdom
-import { describe, it, expect, test } from "vitest";
+import { describe, it, expect, test, assert, vi } from "vitest";
 import {
   getAbcScore,
   getPianoScore,
   toAbcNotation,
+  createControls,
   ensureSelection,
+  ensureElements,
   extractElementOptions,
   joinVoices,
   extractIndentedInput,
@@ -71,6 +73,28 @@ describe("getAbcScore", () => {
   });
 });
 
+describe("createControls", () => {
+  it("creates buttons with the given configuration", () => {
+    document.body.innerHTML = `
+      <div class="controls"></div>
+    `;
+    const parentElement = document.querySelector<HTMLElement>(".controls")!;
+
+    const controls = createControls(parentElement, {
+      play: vi.fn(),
+      stop: vi.fn(),
+    });
+
+    const playButton = document.querySelector(".play-button");
+    const stopButton = document.querySelector(".stop-button");
+
+    expect(controls).toEqual({
+      play: playButton,
+      stop: stopButton,
+    });
+  });
+});
+
 describe("ensureSelection", () => {
   test.beforeEach(() => {
     document.body.innerHTML = `
@@ -102,6 +126,54 @@ describe("ensureSelection", () => {
     expect(Array.isArray(selection)).toBe(true);
     expect(selection.length).toBe(1);
     expect(selection[0]?.textContent).toBe("a");
+  });
+});
+
+describe("ensureElements", () => {
+  it("returns a key-value list of elements", () => {
+    document.body.innerHTML = `
+      <div class="parent">
+        <div class="piano"></div>
+        <div class="controls"></div>
+      </div>
+    `;
+
+    const parentElement = document.querySelector<HTMLElement>(".parent")!;
+
+    const elements = ensureElements({
+      id: "1",
+      parentElement,
+      elements: {
+        pianoElement: ".piano",
+        controlsElement: ".controls",
+      },
+    });
+
+    expect(elements).toEqual({
+      pianoElement: parentElement.querySelector(".piano"),
+      controlsElement: parentElement.querySelector(".controls"),
+    });
+  });
+
+  it("throws error if any element is not found", () => {
+    document.body.innerHTML = `
+      <div class="parent">
+        <div class="controls"></div>
+      </div>
+    `;
+
+    const parentElement = document.querySelector<HTMLElement>(".parent")!;
+
+    assert.throws(() => {
+      ensureElements({
+        id: "1",
+        parentElement,
+        elements: {
+          pianoElement: ".piano",
+          controlsElement: ".controls",
+        },
+      });
+    }, "pianoElement not found inside element with id: 1");
   });
 });
 

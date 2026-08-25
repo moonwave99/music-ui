@@ -10,6 +10,8 @@ import type {
   NoteInput,
 } from "./types";
 
+import { DEFAULT_TIME_SIGNATURE } from "./player";
+
 /**
  * @param id The score id
  * @param input The score input (in abc notation)
@@ -197,7 +199,7 @@ export function parseTimeSignature(timeSignature = "4/4"): TimeSignature {
     console.warn(
       `Could not parse the passed time signature (${timeSignature}), assuming 4/4.`,
     );
-    return [4, 4];
+    return DEFAULT_TIME_SIGNATURE;
   }
   return [Number(match[1]), Number(match[2])];
 }

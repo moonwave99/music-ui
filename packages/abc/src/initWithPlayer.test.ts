@@ -1,5 +1,5 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi, assert } from "vitest";
+import { describe, it, expect, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { initABCScoreWithPlayer } from "./initWithPlayer";
 

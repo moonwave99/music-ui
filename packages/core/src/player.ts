@@ -71,7 +71,7 @@ export type Part = {
 
 const transportEvents = ["start", "stop", "pause"] as const;
 
-const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
+export const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
 
 type GetPart = (
   callback: (time: number, chord: PlaybackInfo) => void,
@@ -159,14 +159,8 @@ export class Player {
     if (this.score.info.bpm) {
       this.transport.bpm.value = this.score.info.bpm;
     }
-    if (this.score.info.timeSignature) {
-      this.timeSignature = parseTimeSignature(this.score.info.timeSignature);
-    } else {
-      this.timeSignature = DEFAULT_TIME_SIGNATURE;
-    }
-
+    this.timeSignature = parseTimeSignature(this.score.info.timeSignature);
     this.transport.timeSignature = this.timeSignature;
-
     this.createParts();
     return this;
   }
@@ -199,7 +193,7 @@ export class Player {
       this.timeSignature!,
     );
   }
-  private updatePlayedNotes(notes: string[], voice = 0) {
+  private updatePlayedNotes(notes: string[], voice: number) {
     this.playedNotes = this.playedNotes.map((x, index) =>
       index === voice ? notes : x,
     );
@@ -229,7 +223,6 @@ export class Player {
           this.transport.position as TransportPosition,
           this.timeSignature!,
         );
-
         if (chord.notes.some((note) => note.name === END_NOTE)) {
           this.draw.schedule(() => {
             this.eventEmitter.emit("finished", {

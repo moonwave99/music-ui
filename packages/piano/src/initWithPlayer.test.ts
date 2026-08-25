@@ -7,7 +7,6 @@ import { getMockedPlayerParams } from "@music-ui/core";
 import { Player } from "@music-ui/core";
 
 describe("initPianoWithPlayer", () => {
-  // #TODO allow remote control for mocked Part
   it("initializes pianos with players on selection", async () => {
     const user = userEvent.setup();
     document.body.innerHTML = `
@@ -65,7 +64,7 @@ describe("initPianoWithPlayer", () => {
       ).toBe(true),
     );
 
-    mockedParams.transport.next();
+    mockedParams.transport.playUntilEnd();
 
     expect(otherElement.querySelectorAll(".key-played").length).toBe(0);
 
@@ -87,7 +86,7 @@ describe("initPianoWithPlayer", () => {
           .querySelector(`.note-with-octave-${note}`)
           ?.classList.contains("key-played"),
       ).toBe(true);
-      mockedParams.transport.next();
+      mockedParams.transport.playNext();
     });
 
     expect(playBlockButton.disabled).toBe(false);

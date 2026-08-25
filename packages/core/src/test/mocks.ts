@@ -36,7 +36,7 @@ export class MockedTransport {
   start() {
     const [, beat] = this.position.split(":");
     this.noteIndex = Number(beat);
-    this.parts.forEach((part) => part.playAt(this.noteIndex));
+    this.playNext();
     const handler = this.handlers.start;
     if (!handler) {
       return;
@@ -50,26 +50,37 @@ export class MockedTransport {
     }
     handler();
   }
-  next() {
-    this.parts.forEach((part) => part.playAt(++this.noteIndex));
+  playNext() {
+    this.parts.forEach((part) => part.playAt(this.noteIndex));
+    this.noteIndex++;
+    this.position = `0:${this.noteIndex}:0`;
   }
   playUntilEnd() {
-    this.parts.forEach((part) => part.playThrough());
+    if (!this.parts.length) {
+      return;
+    }
+    while (this.noteIndex < this.parts[0]!.length) {
+      this.playNext();
+    }
+    this.reset();
   }
   reset() {
     this.noteIndex = 0;
+    this.position = "0:0:0";
   }
 }
 
 export class MockedPart {
   private progressFn: ToneEventCallback<PlaybackInfo>;
   private scoreData: PlaybackInfo[];
+  public length: number;
   constructor(
     progressFn: ToneEventCallback<PlaybackInfo>,
     scoreData: PlaybackInfo[],
   ) {
     this.progressFn = progressFn;
     this.scoreData = scoreData;
+    this.length = scoreData.length;
   }
   playAt(index: number) {
     const eventToPlay = this.scoreData.at(index);
@@ -77,9 +88,6 @@ export class MockedPart {
       return;
     }
     this.progressFn(eventToPlay.time, eventToPlay);
-  }
-  playThrough() {
-    this.scoreData.forEach((event) => this.progressFn(event.time, event));
   }
   start() {}
   clear() {}

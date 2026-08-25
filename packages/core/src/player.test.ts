@@ -26,11 +26,21 @@ describe("Player - events", () => {
     player.on("stop", onStop);
     player.on("finished", onFinished);
 
-    const input = "CDEF";
-
+    const input = [
+      ["C", "F"],
+      ["D", "E"],
+      ["E", "D"],
+      ["F", "C"],
+    ];
     const score = getAbcScore({
       id: "1",
-      input,
+      input: `
+L:1/4
+V:V1 clef=treble
+V:V2 clef=bass      
+[V:V1] CDEF
+[V:V2] F,E,D,C,
+      `,
     });
     player.setScore(score);
 
@@ -45,12 +55,12 @@ describe("Player - events", () => {
     expect(onStop).toHaveBeenCalled();
     expect(onFinished).toHaveBeenCalled();
 
-    input.split("").forEach((x) => {
+    input.forEach(([a, b], index) => {
       expect(onProgress).toHaveBeenCalledWith({
         activeId: "1",
-        voice: 0,
-        playedNotes: [[`${x}4`]],
-        position: `0:0:0`,
+        voice: 1,
+        playedNotes: [[`${a}4`], [`${b}3`]],
+        position: `0:${index}:0`,
       });
     });
   });
@@ -77,6 +87,27 @@ describe("Player - setScore", () => {
     expect(player.getScore()).toEqual(score);
     player.setScore(null);
     expect(player.getScore()).toEqual(null);
+  });
+
+  it("Does not recompute the parts if the new score has the same hash as the current one", () => {
+    const player = new Player(getMockedPlayerParams());
+    const score = getAbcScore({
+      id: "1",
+      input: "CDEF",
+    });
+    player.setScore(score);
+    expect(player.getScore()).toEqual(score);
+    player.setScore({ ...score });
+    expect(player.getScore()).toEqual(score);
+  });
+});
+
+describe("Player - setBpm", () => {
+  it("Sets the playback bpm", () => {
+    const mockedParams = getMockedPlayerParams();
+    const player = new Player(mockedParams);
+    player.setBpm(99);
+    expect(mockedParams.transport.bpm.value).toBe(99);
   });
 
   it("Does not recompute the parts if the new score has the same hash as the current one", () => {
