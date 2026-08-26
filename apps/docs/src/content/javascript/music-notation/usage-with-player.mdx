@@ -14,7 +14,7 @@ See the [`Player` page](/core/player) to know about playback setup.
 
 The `@music-ui/abc` exports an `initABCScoreWithPlayer` function.
 
-It expects the same markup of [`initABCScore`](/javascript/music-notation/basic-usage#usage):
+In addition of the markup expected by [`initABCScore`](/javascript/music-notation/basic-usage#usage), a `.controls` element is needed:
 
 ```html
 <div data-abc-score>
@@ -26,7 +26,7 @@ It expects the same markup of [`initABCScore`](/javascript/music-notation/basic-
 </div>
 ```
 
-In addition to the `initABCScore` parameters, it needs a `Player` instance in order to playback the score content:
+A `Player` instance is needed in order to playback the score content:
 
 ```ts
 import { initABCScoreWithPlayer } from "@music-ui/abc";
@@ -68,11 +68,11 @@ Setup code:
 
 ```ts
 import { initABCScoreWithPlayer } from "@music-ui/abc";
-import { Player } from "@music-ui/player";
+import { playerFactory } from "@music-ui/player";
 import "@music-ui/abc/styles.css";
-
-const player = new Player
-
+ 
+const player = playerFactory();
+ 
 initABCScoreWithPlayer({ player });
 ```
 
@@ -88,10 +88,55 @@ Output:
 </ABCScoreWithPlayer>
 
 <Callout type="info">
-Check [`initABCScore`](/javascript/music-notation/initABCScore#dataset-options) for a list of allowed dataset options.
-</Callout>
-
-<Callout type="info">
   Check [the complete `initABCScoreWithPlayer` API
   reference](/api/functions/_music-ui_abc.initABCScoreWithPlayer.html) for more details.
 </Callout>
+
+### Dataset options
+
+The `initABCScoreWithPlayer` function reads the parameters passed in the data attributes **of the wrapper element**:
+
+```html
+<div
+  data-abc-score
+  data-show-tempo="false"
+  data-highlight-bars
+  data-show-piano
+>
+  <div class="content">
+    L:1/4
+    CDEF | GABc |
+  </div>
+  <div class="staff"></div>
+  <div class="controls"></div>
+</div>
+```
+
+Setup code:
+
+```ts
+import { initABCScoreWithPlayer } from "@music-ui/abc";
+import { playerFactory } from "@music-ui/player";
+import "@music-ui/abc/styles.css";
+ 
+const player = playerFactory();
+ 
+initABCScoreWithPlayer({ player });
+```
+
+Output:
+
+<ABCScoreWithPlayer showTempo={false} highlightBars showPiano>
+L:1/4
+CDEF | GABc |
+</ABCScoreWithPlayer>
+
+The following data attributes are supported:
+
+| Attribute                  | Type      | Default Value | Description                          |
+| -------------------------- | --------- | ------------- | ------------------------------------ |
+| `data-show-tempo`          | `boolean` | `true`        | Shows the tempo indication           |
+| `data-show-time-signature` | `boolean` | `true`        | Shows the time signature             |
+| `data-highlight-bars`      | `boolean` | `false`       | Highlights the current played bar    |
+| `data-show-piano`          | `boolean` | `false`       | Displays the played notes on a piano |
+| `data-show-tempo-controls` | `boolean` | `false`       | Shows the tempo controls             |
