@@ -5,7 +5,7 @@ import { PlayerContext } from "@music-ui/react";
 const scores = [
   `T: Vanilla 1
 M: 4/4
-Q: 80
+Q: 85
 CD EF GA Bc|`,
   `T: Vanilla 2
 M: 4/4

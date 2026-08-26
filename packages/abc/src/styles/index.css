@@ -24,7 +24,7 @@
     align-items: center;
     gap: 0.5rem;
     line-height: 1.5rem;
-    > button {
+    button {
       font-size: 0.8rem;
       border-radius: 0.25rem;
       background-color: rgba(100, 100, 100, 0.5);
@@ -36,6 +36,13 @@
       &:hover {
         background-color: rgba(100, 100, 100, 0.7);
       }
+    }
+    .tempo-control {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
     }
   }
   .abcjs-current-note,

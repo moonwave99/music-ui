@@ -20,7 +20,7 @@ G A B | G A B
         timeSignature: "3/4",
         unitNoteLength: "1/2",
         key: "G",
-        bpm: "99",
+        bpm: 99,
       },
       content: `T:Title
 C:Artist

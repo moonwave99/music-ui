@@ -34,11 +34,12 @@ export type UsePlayerParams = {
 };
 
 export type UsePlayer = {
-  play: (score: Score) => void;
+  play: (score: Score, bpm?: number) => void;
   pause: () => void;
   resume: () => void;
   stop: () => void;
   seekTo: (position: TransportPosition) => void;
+  setBpm: (bpm: number) => void;
   isCurrentScore: (score: Score) => boolean;
   playerStatus: PlayerStatus;
   playedNotes: string[][];
@@ -107,13 +108,16 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   }, [player, id, onStop]);
 
   const play = useCallback(
-    (score: Score) => {
+    (score: Score, bpm?: number) => {
       if (!score) {
         return;
       }
       if (currentScore?.hash !== score.hash) {
         player?.setScore(score);
         setCurrentScore(score);
+      }
+      if (bpm) {
+        player?.setBpm(bpm);
       }
       player?.play();
     },
@@ -131,12 +135,15 @@ export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
     [player],
   );
 
+  const setBpm = useCallback((bpm: number) => player?.setBpm(bpm), [player]);
+
   return {
     play,
     pause,
     resume,
     stop,
     seekTo,
+    setBpm,
     isCurrentScore,
     playedNotes,
     playerStatus,

@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
-import { describe, it, expect, vi } from "vitest";
-import { Player } from "./player";
+import { describe, it, expect, vi, assert } from "vitest";
+import { Player, BPM_RANGE } from "./player";
 import { getAbcScore } from "./utils";
 import { getMockedPlayerParams } from "./test/mocks";
 
@@ -108,6 +108,23 @@ describe("Player - setBpm", () => {
     const player = new Player(mockedParams);
     player.setBpm(99);
     expect(mockedParams.transport.bpm.value).toBe(99);
+  });
+
+  it("Throws error if new value is out of range", () => {
+    const mockedParams = getMockedPlayerParams();
+    const player = new Player(mockedParams);
+
+    assert.throws(() => {
+      player.setBpm(BPM_RANGE[0] - 1);
+    }, `Value must be in the ${BPM_RANGE} range`);
+
+    expect(mockedParams.transport.bpm.value).toBe(120);
+
+    assert.throws(() => {
+      player.setBpm(BPM_RANGE[1] + 1);
+    }, `Value must be in the ${BPM_RANGE} range`);
+
+    expect(mockedParams.transport.bpm.value).toBe(120);
   });
 
   it("Does not recompute the parts if the new score has the same hash as the current one", () => {

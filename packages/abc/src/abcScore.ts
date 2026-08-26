@@ -51,6 +51,7 @@ const DEFAULT_ABC_VISUAL_PARAMS = {
  * @property {string} content The abc notation element class
  * @property {string} staff The rendered notation element class
  * @property {string} controls The controls element class
+ * @property {string} tempoControl The tempo control element class
  * @property {string} timeSignature The time signature element class
  * @property {string} tempo The tempo element class
  * @property {string} cursor The cursor element class
@@ -62,6 +63,7 @@ export const cssClasses = {
   content: "content",
   staff: "staff",
   controls: "controls",
+  tempoControl: "tempo-control",
   timeSignature: "abcjs-time-signature",
   tempo: "abcjs-tempo",
   cursor: "abcjs-cursor",

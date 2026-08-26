@@ -1,9 +1,10 @@
 import {
+  useState,
   useLayoutEffect,
-  type ReactNode,
-  ReactElement,
   useCallback,
   useId,
+  type ReactNode,
+  ReactElement,
 } from "react";
 import {
   OnABCClickParams,
@@ -12,8 +13,9 @@ import {
 } from "./useABCScore";
 import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
-import { getAbcScore, joinVoices } from "@music-ui/core";
+import { TempoControl } from "./TempoControl";
 import { getNodeText } from "./utils";
+import { getAbcScore, joinVoices } from "@music-ui/core";
 
 export type ABCScoreWithPlayerProps = UseABCScoreParams & {
   id?: string;
@@ -47,12 +49,17 @@ export function ABCScoreWithPlayer({
     input,
     options: { showTempo },
   });
+
+  const originalTempo = score.info.bpm || 120;
+
+  const [scoreBpm, setScoreBpm] = useState(originalTempo);
   const {
     play,
     pause,
     stop,
     resume,
     seekTo,
+    setBpm,
     isCurrentScore,
     playedNotes,
     playerStatus,
@@ -85,13 +92,34 @@ export function ABCScoreWithPlayer({
     }
   }, [position, abcRef, params.highlightBars]);
 
+  function onTempoChange(value: number) {
+    setScoreBpm(value);
+    if (isCurrent) {
+      setBpm(value);
+    }
+  }
+
+  function onTempoReset() {
+    setScoreBpm(originalTempo);
+    if (isCurrent) {
+      setBpm(originalTempo);
+    }
+  }
+
   return (
     <div className={className}>
       <div className="staff" ref={ref}></div>
       <div className="controls">
         <button
           className="play-button"
-          onClick={() => (playerStatus === "paused" ? resume() : play(score))}
+          onClick={() => {
+            if (playerStatus === "paused") {
+              resume();
+              return;
+            }
+            setBpm(scoreBpm);
+            play(score, scoreBpm);
+          }}
           aria-label={playButtonLabel}
           disabled={playerStatus === "playing"}
         >
@@ -113,6 +141,12 @@ export function ABCScoreWithPlayer({
         >
           {stopButtonLabel}
         </button>
+        <TempoControl
+          id={id}
+          value={scoreBpm}
+          onChange={onTempoChange}
+          onReset={onTempoReset}
+        />
       </div>
       {showPiano ? (
         <Piano

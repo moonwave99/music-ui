@@ -2,12 +2,15 @@ import {
   createControls,
   Player,
   PlayerStatus,
+  BPM_RANGE,
   type Score,
 } from "@music-ui/core";
 
+import { cssClasses } from "./abcScore";
+
 type InitControlsParams = {
-  score: Score;
   element: HTMLElement;
+  score: Score;
   player: Player;
 };
 
@@ -16,12 +19,19 @@ type InitControls = {
 };
 
 export function initControls({
-  score,
   element,
+  score,
   player,
 }: InitControlsParams): InitControls {
+  const originalBpm = score.info.bpm || 120;
+  let currentBpm = originalBpm;
+
   const { play, pause, stop } = createControls(element, {
-    play: () => player.setScore(score).play(),
+    play: () => {
+      player.setScore(score);
+      player.setBpm(currentBpm);
+      player.play();
+    },
     pause: () => player.pause(),
     stop: () => player.stop(),
   }) as {
@@ -32,6 +42,25 @@ export function initControls({
 
   pause.disabled = true;
   stop.disabled = true;
+
+  function onTempoChange(value: number) {
+    currentBpm = value;
+    player.setBpm(currentBpm);
+  }
+
+  function onTempoReset() {
+    currentBpm = originalBpm;
+    setTempoValue(originalBpm);
+    player.setBpm(originalBpm);
+  }
+
+  const { setTempoValue } = initTempoControl({
+    element,
+    id: score.id,
+    originalBpm,
+    onChange: onTempoChange,
+    onReset: onTempoReset,
+  });
 
   function updateButtonState(playerStatus: PlayerStatus) {
     if (playerStatus === "stopped") {
@@ -53,3 +82,77 @@ export function initControls({
 
   return { updateButtonState };
 }
+
+type InitTempoControlParams = {
+  element: HTMLElement;
+  id: string;
+  originalBpm: number;
+  onChange: (value: number) => void;
+  onReset: () => void;
+};
+
+type InitTempoControl = {
+  setTempoValue: (value: number) => void;
+};
+
+function initTempoControl({
+  element,
+  id,
+  originalBpm,
+  onChange,
+  onReset,
+}: InitTempoControlParams): InitTempoControl {
+  const _id = `tempo-control-${id}`;
+
+  const tempoControlElement = document.createElement("div");
+  tempoControlElement.classList.add(cssClasses.tempoControl);
+
+  const label = document.createElement("label");
+  label.setAttribute("for", _id);
+  label.textContent = "Tempo";
+
+  const input = document.createElement("input");
+  input.type = "range";
+  input.id = _id;
+  input.min = `${BPM_RANGE[0]}`;
+  input.max = `${BPM_RANGE[1]}`;
+  input.addEventListener("change", (event: Event) => {
+    const value = (event.target as HTMLInputElement)?.value;
+    onChange(Number(value));
+    output.textContent = `${value}`;
+  });
+
+  const output = document.createElement("output");
+  output.setAttribute("for", _id);
+
+  const button = document.createElement("button");
+  button.textContent = "Reset";
+  button.addEventListener("click", onReset);
+
+  tempoControlElement.append(label, input, output, button);
+
+  setTempoValue(originalBpm);
+
+  element.append(tempoControlElement);
+
+  function setTempoValue(value: number) {
+    input.value = `${value}`;
+    output.textContent = `${value}`;
+  }
+
+  return { setTempoValue };
+}
+
+// <div className={className}>
+//   <label htmlFor={_id}>Tempo</label>
+//   <input
+//     type="range"
+//     value={value}
+//     id={_id}
+//     min={BPM_RANGE[0]}
+//     max={BPM_RANGE[1]}
+//     onChange={_onChange}
+//   />
+//   <output htmlFor={_id}>{value}</output>
+//   <button onClick={onReset}>Reset</button>
+// </div>

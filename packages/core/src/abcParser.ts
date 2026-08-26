@@ -22,7 +22,7 @@ const DEFAULT_ABC_INFO: Record<AbcInfoFields, unknown> = {
   M: "4/4",
   L: "1/8",
   Q: 120,
-};
+} as const;
 
 export type ParseAbcOptions = {
   showTempo?: boolean;
@@ -40,7 +40,13 @@ export function parseAbc(
       ([info, content], line) => {
         if (infoFields.some((field) => line.startsWith(`${field}:`))) {
           const match = line.match(/^(\w):\s?(.*)/);
-          return [{ ...info, [match?.at(1) as string]: match?.at(2) }, content];
+          const key = match?.at(1) as string;
+          const value =
+            typeof DEFAULT_ABC_INFO[key as keyof typeof DEFAULT_ABC_INFO] ===
+            "number"
+              ? Number(match?.at(2))
+              : match?.at(2);
+          return [{ ...info, [key]: value }, content];
         }
         return [info, [...content, line]];
       },

@@ -73,6 +73,8 @@ const transportEvents = ["start", "stop", "pause"] as const;
 
 export const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
 
+export const BPM_RANGE = [20, 200] as const;
+
 type GetPart = (
   callback: (time: number, chord: PlaybackInfo) => void,
   info: PlaybackInfo[],
@@ -157,7 +159,7 @@ export class Player {
     this.clearParts();
     this.score = score;
     if (this.score.info.bpm) {
-      this.transport.bpm.value = this.score.info.bpm;
+      this.setBpm(this.score.info.bpm);
     }
     this.timeSignature = parseTimeSignature(this.score.info.timeSignature);
     this.transport.timeSignature = this.timeSignature;
@@ -175,6 +177,9 @@ export class Player {
     return this;
   }
   setBpm(value: number) {
+    if (value < BPM_RANGE[0] || value > BPM_RANGE[1]) {
+      throw new Error(`Value must be in the ${BPM_RANGE} range`);
+    }
     this.transport.bpm.value = value;
   }
   pause() {

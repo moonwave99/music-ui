@@ -29,7 +29,7 @@ describe("initABCScoreWithPlayer", () => {
       player,
     });
 
-    expect(element.querySelectorAll(".controls button").length).toBe(3);
+    expect(element.querySelectorAll(".controls > button").length).toBe(3);
 
     const playButton =
       element.querySelector<HTMLButtonElement>(".play-button")!;
