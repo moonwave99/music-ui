@@ -36,6 +36,7 @@ export function parseAbc(
   const [info, content] = input
     .trim()
     .split("\n")
+    .map((x) => x.trim())
     .reduce(
       ([info, content], line) => {
         if (infoFields.some((field) => line.startsWith(`${field}:`))) {
@@ -46,6 +47,7 @@ export function parseAbc(
             "number"
               ? Number(match?.at(2))
               : match?.at(2);
+
           return [{ ...info, [key]: value }, content];
         }
         return [info, [...content, line]];

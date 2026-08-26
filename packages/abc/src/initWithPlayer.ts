@@ -18,6 +18,7 @@ const DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS = {
   ...DEFAULT_ABC_SCORE_OPTIONS,
   showPiano: false,
   highlightBars: false,
+  showTempoControls: true,
 } as const;
 
 type InitABCScoreWithPlayerParams<T extends HTMLElement> =
@@ -54,11 +55,12 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS,
       );
       const score = getAbcScore({ id, options, input: content });
-
       const { updateButtonState } = initControls({
         score,
         player,
         element: controlsElement!,
+        showTempoControls:
+          options.showTempoControls ?? score.info.timeSignature !== "1/1",
       });
 
       let piano: Piano;

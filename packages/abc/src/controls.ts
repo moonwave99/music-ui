@@ -12,6 +12,7 @@ type InitControlsParams = {
   element: HTMLElement;
   score: Score;
   player: Player;
+  showTempoControls?: boolean;
 };
 
 type InitControls = {
@@ -22,8 +23,9 @@ export function initControls({
   element,
   score,
   player,
+  showTempoControls = true,
 }: InitControlsParams): InitControls {
-  const originalBpm = score.info.bpm || 120;
+  const originalBpm = score.info.bpm;
   let currentBpm = originalBpm;
 
   const { play, pause, stop } = createControls(element, {
@@ -43,24 +45,26 @@ export function initControls({
   pause.disabled = true;
   stop.disabled = true;
 
-  function onTempoChange(value: number) {
-    currentBpm = value;
-    player.setBpm(currentBpm);
-  }
+  if (showTempoControls) {
+    const { setTempoValue } = initTempoControl({
+      element,
+      id: score.id,
+      originalBpm,
+      onChange: onTempoChange,
+      onReset: onTempoReset,
+    });
 
-  function onTempoReset() {
-    currentBpm = originalBpm;
-    setTempoValue(originalBpm);
-    player.setBpm(originalBpm);
-  }
+    function onTempoChange(value: number) {
+      currentBpm = value;
+      player.setBpm(currentBpm);
+    }
 
-  const { setTempoValue } = initTempoControl({
-    element,
-    id: score.id,
-    originalBpm,
-    onChange: onTempoChange,
-    onReset: onTempoReset,
-  });
+    function onTempoReset() {
+      currentBpm = originalBpm;
+      setTempoValue(originalBpm);
+      player.setBpm(originalBpm);
+    }
+  }
 
   function updateButtonState(playerStatus: PlayerStatus) {
     if (playerStatus === "stopped") {
@@ -142,17 +146,3 @@ function initTempoControl({
 
   return { setTempoValue };
 }
-
-// <div className={className}>
-//   <label htmlFor={_id}>Tempo</label>
-//   <input
-//     type="range"
-//     value={value}
-//     id={_id}
-//     min={BPM_RANGE[0]}
-//     max={BPM_RANGE[1]}
-//     onChange={_onChange}
-//   />
-//   <output htmlFor={_id}>{value}</output>
-//   <button onClick={onReset}>Reset</button>
-// </div>

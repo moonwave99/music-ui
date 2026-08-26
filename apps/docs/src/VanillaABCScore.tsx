@@ -8,6 +8,11 @@ M: 4/4
 Q: 85
 CD EF GA Bc|`,
   `T: Vanilla 2
+M: 1/1
+L: 1/1
+Q: 200
+CD EF GA Bc|`,
+  `T: Vanilla 3
 M: 4/4
 L: 1/4
 Q: 80
@@ -46,8 +51,13 @@ export function VanillaABCScore() {
         <div className="staff"></div>
         <div className="controls"></div>
       </div>
-      <div className="abc-score" data-show-piano data-highlight-bars>
+      <div className="abc-score">
         <div className="content">{scores[1]}</div>
+        <div className="staff"></div>
+        <div className="controls"></div>
+      </div>
+      <div className="abc-score" data-show-piano data-highlight-bars>
+        <div className="content">{scores[2]}</div>
         <div className="staff"></div>
         <div className="controls"></div>
       </div>

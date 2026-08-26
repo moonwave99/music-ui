@@ -20,6 +20,7 @@ export class MockedTransport {
     this.noteIndex = 0;
   }
   on(eventName: string, handler: () => void) {
+    /* istanbul ignore if  */
     if (!this.handlers[eventName]) {
       this.handlers[eventName] = [];
     }
@@ -47,6 +48,7 @@ export class MockedTransport {
     this.position = `0:${this.noteIndex}:0`;
   }
   playUntilEnd() {
+    /* istanbul ignore if  */
     if (!this.parts.length) {
       return;
     }
@@ -105,6 +107,7 @@ export function getMockedPlayerParams() {
       parts.push(part);
       return part;
     },
+    /* istanbul ignore next  */
     reset() {
       transport.reset();
       while (parts.length > 0) {

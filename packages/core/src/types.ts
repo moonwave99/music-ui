@@ -29,7 +29,7 @@ export type ScoreInfo = {
   timeSignature?: string;
   unitNoteLength?: string;
   key?: string;
-  bpm?: number;
+  bpm: number;
 };
 
 /**

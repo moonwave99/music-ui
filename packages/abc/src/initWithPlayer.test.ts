@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
+import { fireEvent } from "@testing-library/dom";
 import { initABCScoreWithPlayer } from "./initWithPlayer";
 
 import { Player, getMockedPlayerParams } from "@music-ui/core";
@@ -276,6 +277,91 @@ describe("initABCScoreWithPlayer", () => {
     ["x", "y", "width", "height"].forEach((x) =>
       // because the getBBox mock implementation returns 0,0,0,0
       expect(barBox.getAttribute(x)).toBe("0"),
+    );
+  });
+
+  it("handles tempo change", async () => {
+    const user = userEvent.setup();
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score>
+          <div class="content">
+            T:Test Song 1
+            Q:110
+            C E G B        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>
+        <div data-abc-score>
+          <div class="content">
+            T:Test Song 2 
+            Q:125
+            D F A c        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>        
+      </main>`;
+
+    const elements =
+      document.querySelectorAll<HTMLElement>("[data-abc-score]")!;
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
+
+    initABCScoreWithPlayer({ selection: elements, player });
+
+    const firstTempoControls = elements[0]!.querySelector(".tempo-control")!;
+    const secondTempoControls = elements[1]!.querySelector(".tempo-control")!;
+
+    expect(firstTempoControls.querySelector("output")!.value).toBe("110");
+    expect(secondTempoControls.querySelector("output")!.value).toBe("125");
+
+    fireEvent.change(firstTempoControls.querySelector("input")!, {
+      target: { value: 99 },
+    });
+
+    expect(firstTempoControls.querySelector("output")!.value).toBe("99");
+    expect(secondTempoControls.querySelector("output")!.value).toBe("125");
+
+    await user.click(firstTempoControls.querySelector("button")!);
+
+    expect(firstTempoControls.querySelector("output")!.value).toBe("110");
+    expect(secondTempoControls.querySelector("output")!.value).toBe("125");
+  });
+
+  it("does not show tempo controls when showTempoControls is false or on free tempo scores", () => {
+    document.body.innerHTML = `
+      <main>
+        <div data-abc-score data-show-tempo-controls="false">
+          <div class="content">
+            T:Test Song 1
+            C E G B        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>        
+        <div data-abc-score>
+          <div class="content">
+            T:Test Song 2
+            M:1/1
+            L:1/1
+            C E G B        
+          </div>
+          <div class="staff"></div>
+          <div class="controls"></div>
+        </div>    
+      </main>`;
+
+    const elements =
+      document.querySelectorAll<HTMLElement>("[data-abc-score]")!;
+    const mockedPlayedParams = getMockedPlayerParams();
+    const player = new Player(mockedPlayedParams);
+
+    initABCScoreWithPlayer({ selection: elements, player });
+
+    elements.forEach((element) =>
+      expect(element.querySelector(".tempo-control")).toBe(null),
     );
   });
 });
