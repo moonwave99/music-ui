@@ -1,6 +1,24 @@
 import { use, useLayoutEffect, useRef } from "react";
 import { initPianoWithPlayer } from "@music-ui/piano";
 import { PlayerContext } from "@music-ui/react";
+import { getDataAttributes } from "./utils";
+
+const pianos = [
+  {
+    notes: "C4 E4 G4 B4",
+    labels: "1 3 5 7",
+    octaves: 5,
+    id: "piano-1",
+  },
+  {
+    notes: "C4 Eb4 G4 Bb4",
+    labels: "1 3 5 7",
+    octaves: 5,
+    withFinalC: false,
+    showOctaves: true,
+    id: "piano-2",
+  },
+];
 
 export function VanillaPianoWithPlayer() {
   const playerContext = use(PlayerContext);
@@ -26,28 +44,16 @@ export function VanillaPianoWithPlayer() {
 
   return (
     <div ref={ref}>
-      <div
-        className="piano-with-player"
-        data-notes="C4 E4 G4 B4"
-        data-note-labels="1 3 5 7"
-        data-octaves="5"
-        data-id="piano-1"
-      >
-        <div className="piano"></div>
-        <div className="controls"></div>
-      </div>
-      <div
-        className="piano-with-player"
-        data-notes="C4 Eb4 G4 Bb4"
-        data-note-labels="1 3 5 7"
-        data-octaves="5"
-        data-with-final-c="false"
-        data-show-octaves
-        data-id="piano-2"
-      >
-        <div className="piano"></div>
-        <div className="controls"></div>
-      </div>
+      {pianos.map((options, index) => (
+        <div
+          key={index}
+          className="piano-with-player"
+          {...getDataAttributes(options)}
+        >
+          <div className="piano"></div>
+          <div className="controls"></div>
+        </div>
+      ))}
     </div>
   );
 }

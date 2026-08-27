@@ -1,22 +1,41 @@
 import { use, useLayoutEffect, useRef } from "react";
 import { initABCScoreWithPlayer } from "@music-ui/abc";
 import { PlayerContext } from "@music-ui/react";
+import { getDataAttributes } from "./utils";
 
 const scores = [
-  `T: Vanilla 1
+  {
+    options: {
+      showTempo: false,
+      showTimeSignature: false,
+    },
+    content: `T: Vanilla 1
 M: 4/4
 Q: 85
 CD EF GA Bc|`,
-  `T: Vanilla 2
+  },
+  {
+    options: {
+      showTempo: false,
+      showTimeSignature: false,
+    },
+    content: `T: Vanilla 2
 M: 1/1
 L: 1/1
 Q: 200
 CD EF GA Bc|`,
-  `T: Vanilla 3
+  },
+  {
+    options: {
+      showPiano: true,
+      highlightBars: true,
+    },
+    content: `T: Vanilla 3
 M: 4/4
 L: 1/4
 Q: 80
 CD EF | GA Bc|`,
+  },
 ];
 
 export function VanillaABCScore() {
@@ -42,25 +61,13 @@ export function VanillaABCScore() {
 
   return (
     <div ref={ref}>
-      <div
-        className="abc-score"
-        data-show-tempo="false"
-        data-show-time-signature="false"
-      >
-        <div className="content">{scores[0]}</div>
-        <div className="staff"></div>
-        <div className="controls"></div>
-      </div>
-      <div className="abc-score">
-        <div className="content">{scores[1]}</div>
-        <div className="staff"></div>
-        <div className="controls"></div>
-      </div>
-      <div className="abc-score" data-show-piano data-highlight-bars>
-        <div className="content">{scores[2]}</div>
-        <div className="staff"></div>
-        <div className="controls"></div>
-      </div>
+      {scores.map(({ content, options }, index) => (
+        <div key={index} className="abc-score" {...getDataAttributes(options)}>
+          <div className="content">{content}</div>
+          <div className="staff"></div>
+          <div className="controls"></div>
+        </div>
+      ))}
     </div>
   );
 }
