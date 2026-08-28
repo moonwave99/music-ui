@@ -5,6 +5,8 @@ import { cssClasses } from "@music-ui/abc";
 type TempoControlProps = {
   id: string;
   className?: string;
+  inputLabel?: string;
+  resetButtonText?: string;
   value: number;
   onChange: (value: number) => void;
   onReset: () => void;
@@ -13,6 +15,8 @@ type TempoControlProps = {
 export function TempoControl({
   id,
   className = cssClasses.tempoControl,
+  inputLabel = "Tempo",
+  resetButtonText = "Reset",
   value,
   onChange,
   onReset,
@@ -25,7 +29,7 @@ export function TempoControl({
 
   return (
     <div className={className}>
-      <label htmlFor={_id}>Tempo</label>
+      <label htmlFor={_id}>{inputLabel}</label>
       <input
         type="range"
         value={value}
@@ -35,7 +39,7 @@ export function TempoControl({
         onChange={_onChange}
       />
       <output htmlFor={_id}>{value}</output>
-      <button onClick={onReset}>Reset</button>
+      <button onClick={onReset}>{resetButtonText}</button>
     </div>
   );
 }
