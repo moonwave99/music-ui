@@ -6,6 +6,7 @@ type TempoControlProps = {
   id: string;
   className?: string;
   inputLabel?: string;
+  valueLabel?: string;
   resetButtonText?: string;
   value: number;
   onChange: (value: number) => void;
@@ -16,6 +17,7 @@ export function TempoControl({
   id,
   className = cssClasses.tempoControl,
   inputLabel = "Tempo",
+  valueLabel = "Current Tempo in BPM",
   resetButtonText = "Reset",
   value,
   onChange,
@@ -38,7 +40,9 @@ export function TempoControl({
         max={BPM_RANGE[1]}
         onChange={_onChange}
       />
-      <output htmlFor={_id}>{value}</output>
+      <output htmlFor={_id} aria-label={valueLabel}>
+        {value}
+      </output>
       <button onClick={onReset}>{resetButtonText}</button>
     </div>
   );

@@ -1,5 +1,5 @@
 import { describe, it, assert } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Player, getMockedPlayerParams } from "@music-ui/core";
 import { ABCScoreWithPlayer } from "./ABCScoreWithPlayer";
@@ -42,7 +42,7 @@ describe("ABCScoreWithPlayer", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
         <ABCScoreWithPlayer showTimeSignature={false}>
-          T: Test Score
+          T: TestScore
           CGEB
         </ABCScoreWithPlayer>
       </PlayerProvider>,
@@ -92,12 +92,62 @@ CGEB|DFAC
 
     expect(playerParams.transport.position).toBe("0:0:0");
 
-    await user.click(container.querySelector('.abcjs-mm1.abcjs-n1')!);
+    await user.click(container.querySelector(".abcjs-mm1.abcjs-n1")!);
     expect(playerParams.transport.position).toBe("0:0:0");
 
-    await user.click(screen.getByRole('button', { name: /play/i }));
+    await user.click(screen.getByRole("button", { name: /play/i }));
     await user.click(container.querySelector(".abcjs-mm1.abcjs-n1")!);
 
     expect(playerParams.transport.position).toBe("1:1:0");
+  });
+
+  it("handles tempo change", async () => {
+    const user = userEvent.setup();
+    const playerParams = getMockedPlayerParams();
+    const { container } = render(
+      <PlayerProvider player={new Player(playerParams)}>
+        <ABCScoreWithPlayer>
+          {`
+T: Test Score
+Q: 60
+L: 1/4 
+CGEB|DFAC
+`}
+        </ABCScoreWithPlayer>
+      </PlayerProvider>,
+    );
+
+    expect(playerParams.transport.bpm.value).toBe(120);
+
+    const output = screen.getByRole("status", { name: "Current Tempo in BPM" });
+    expect(output).toHaveTextContent("60");
+
+    fireEvent.change(container.querySelector("input")!, {
+      target: { value: 99 },
+    });
+
+    expect(output).toHaveTextContent("99");
+    expect(playerParams.transport.bpm.value).toBe(120);
+    expect(output).toHaveTextContent("99");
+
+    await user.click(screen.getByRole('button', { name: /reset/i }));
+
+    expect(output).toHaveTextContent("60");    
+
+    await user.click(screen.getByRole("button", { name: /play/i }));
+    
+    expect(playerParams.transport.bpm.value).toBe(60);
+
+    fireEvent.change(container.querySelector("input")!, {
+      target: { value: 99 },
+    });
+
+    expect(output).toHaveTextContent("99");
+    expect(playerParams.transport.bpm.value).toBe(99);
+
+    await user.click(screen.getByRole("button", { name: /reset/i }));
+
+    expect(output).toHaveTextContent("60");    
+    expect(playerParams.transport.bpm.value).toBe(60);
   });
 });
