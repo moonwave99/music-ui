@@ -26,7 +26,7 @@ export type Score = {
 export type ScoreInfo = {
   title?: string;
   composer?: string;
-  timeSignature?: string;
+  timeSignature: TimeSignature;
   unitNoteLength?: string;
   key?: string;
   bpm: number;

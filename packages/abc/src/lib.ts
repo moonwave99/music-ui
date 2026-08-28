@@ -1,4 +1,8 @@
-import { type TransportPosition, TimeSignature } from "@music-ui/core";
+import {
+  isTimeSignatureUnary,
+  TimeSignature,
+  type TransportPosition,
+} from "@music-ui/core";
 
 /**
  * Returns the note at the given position (to update the score cursor on playback progress)
@@ -54,7 +58,7 @@ export function getNotePosition(
   const bar = getValueFromNote(element, "abcjs-mm");
   const voice = getValueFromNote(element, "abcjs-v");
 
-  if (`${timeSignature}` == "1,1") {
+  if (isTimeSignatureUnary(timeSignature)) {
     const barNotes = element.parentElement!.querySelectorAll<SVGGElement>(
       `:is(.abcjs-note, .abcjs-rest).abcjs-v${voice}`,
     );

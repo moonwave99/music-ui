@@ -6,6 +6,7 @@ import {
   type ElementOrSelector,
   joinVoices,
   ensureElements,
+  isTimeSignatureUnary,
 } from "@music-ui/core";
 import { Piano } from "@music-ui/piano";
 import { ABCScore, cssClasses, DEFAULT_ABC_SCORE_OPTIONS } from "./abcScore";
@@ -60,7 +61,8 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         player,
         element: controlsElement!,
         showTempoControls:
-          options.showTempoControls ?? score.info.timeSignature !== "1/1",
+          options.showTempoControls ??
+          !isTimeSignatureUnary(score.info.timeSignature),
       });
 
       let piano: Piano;

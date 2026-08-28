@@ -36,6 +36,17 @@ L: 1/4
 Q: 80
 CD EF | GA Bc|`,
   },
+  {
+    options: {
+      showTempo: false,
+      showTimeSignature: false,
+    },
+    content: `T: Vanilla 4
+M: 1/1
+L: 1/1
+Q: 200
+C ^F | [C ^F] |`,
+  },
 ];
 
 export function VanillaABCScore() {

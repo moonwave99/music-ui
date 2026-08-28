@@ -19,10 +19,21 @@ const DEFAULT_ABC_INFO: Record<AbcInfoFields, unknown> = {
   T: "",
   C: "",
   K: "C",
-  M: "4/4",
+  M: [4, 4],
   L: "1/8",
   Q: 120,
 } as const;
+
+const parsers: Partial<Record<AbcInfoFields, (x: string) => unknown>> = {
+  Q: (x: string) => Number(x),
+  M: (x: string) => {
+    const [num, den] = x.split("/");
+    if (!num || !den) {
+      throw new Error(`M field should be in N/M format, received ${x} instead`);
+    }
+    return [Number(num), Number(den)];
+  },
+};
 
 export type ParseAbcOptions = {
   showTempo?: boolean;
@@ -41,12 +52,11 @@ export function parseAbc(
       ([info, content], line) => {
         if (infoFields.some((field) => line.startsWith(`${field}:`))) {
           const match = line.match(/^(\w):\s?(.*)/);
-          const key = match?.at(1) as string;
-          const value =
-            typeof DEFAULT_ABC_INFO[key as keyof typeof DEFAULT_ABC_INFO] ===
-            "number"
-              ? Number(match?.at(2))
-              : match?.at(2);
+          if (!match) {
+            return [info, content];
+          }
+          const key = match?.at(1) as AbcInfoFields;
+          const value = parsers[key] ? parsers[key](match.at(2)!) : match.at(2);
 
           return [{ ...info, [key]: value }, content];
         }
@@ -74,6 +84,10 @@ export function getAbcInfo(
   { showTempo }: ParseAbcOptions = {},
 ) {
   const output = Object.entries(info).reduce((memo, [key, value]) => {
+    if (key === "M") {
+      value = `${value}`.replace(",", "/");
+      return [...memo, `${key}:${value}`];
+    }
     if (!showTempo && key === "Q") {
       return [...memo, abcDirectives.hideTempo, `${key}:${value}`];
     }

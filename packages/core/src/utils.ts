@@ -74,7 +74,7 @@ export function getPianoScore({
   return {
     id,
     content,
-    info: { bpm },
+    info: { bpm, timeSignature: [4, 4] },
     hash: getScoreHash(id, content),
   };
 }
@@ -202,6 +202,15 @@ export function parseTimeSignature(timeSignature = "4/4"): TimeSignature {
     return DEFAULT_TIME_SIGNATURE;
   }
   return [Number(match[1]), Number(match[2])];
+}
+
+/**
+ * Checks if the time signature is 1/1 (for free tempos)
+ * @param timeSignature The time signature
+ * @returns
+ */
+export function isTimeSignatureUnary(timeSignature: TimeSignature) {
+  return `${timeSignature}` === "1,1";
 }
 
 /**

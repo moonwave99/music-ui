@@ -29,7 +29,7 @@ describe("getPianoScore", () => {
     expect(score).toEqual({
       id: "1",
       hash: "45da33dd1f4ee3b97bd1706c80aaba32",
-      info: { bpm: 120 },
+      info: { bpm: 120, timeSignature: [4, 4] },
       content: "%%printtempo 0\nQ:120\n[C, E, G, B,]6",
     });
 
@@ -37,7 +37,7 @@ describe("getPianoScore", () => {
     expect(scoreWithDefaultPlaybackMode).toEqual({
       id: "1",
       hash: "45da33dd1f4ee3b97bd1706c80aaba32",
-      info: { bpm: 120 },
+      info: { bpm: 120, timeSignature: [4, 4] },
       content: "%%printtempo 0\nQ:120\n[C, E, G, B,]6",
     });
   });
@@ -48,7 +48,7 @@ describe("getPianoScore", () => {
     expect(score).toEqual({
       id: "1",
       hash: "2df5ea19f579b803d9efd1f62db18d9b",
-      info: { bpm: 120 },
+      info: { bpm: 120, timeSignature: [4, 4] },
       content: "%%printtempo 0\nQ:120\nC, E, G, B,",
     });
   });
@@ -63,7 +63,7 @@ describe("getAbcScore", () => {
         title: "",
         composer: "",
         key: "C",
-        timeSignature: "4/4",
+        timeSignature: [4, 4],
         unitNoteLength: "1/8",
         bpm: 120,
       },

@@ -4,7 +4,7 @@ import {
   ClickListenerAnalysis,
   type AbcVisualParams,
 } from "abcjs";
-import { extractIndentedInput } from "@music-ui/core";
+import { extractIndentedInput, isTimeSignatureUnary } from "@music-ui/core";
 import type { TransportPosition, TimeSignature } from "@music-ui/core";
 import { getCurrentNote, getNotePosition, getValueFromNote } from "./lib";
 
@@ -193,7 +193,7 @@ export class ABCScore {
     return [num, den];
   }
   hasFreeTempo() {
-    return `${this.getTimeSignature()}` === "1,1";
+    return isTimeSignatureUnary(this.getTimeSignature());
   }
   highlightBar(position: TransportPosition): ABCScore {
     if (!this.highlightBars || this.hasFreeTempo()) {

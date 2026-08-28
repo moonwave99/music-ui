@@ -4,7 +4,6 @@ import { EventEmitter } from "events";
 import type { TransportPosition, TimeSignature, Score } from "./types";
 import {
   normalizedPositionToTonePosition,
-  parseTimeSignature,
   tonePositionToNormalizedPosition,
 } from "./utils";
 import { END_NOTE } from "./lib";
@@ -161,7 +160,7 @@ export class Player {
     if (this.score.info.bpm) {
       this.setBpm(this.score.info.bpm);
     }
-    this.timeSignature = parseTimeSignature(this.score.info.timeSignature);
+    this.timeSignature = this.score.info.timeSignature;
     this.transport.timeSignature = this.timeSignature;
     this.createParts();
     return this;

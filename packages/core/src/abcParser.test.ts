@@ -17,7 +17,7 @@ G A B | G A B
       info: {
         title: "Title",
         composer: "Artist",
-        timeSignature: "3/4",
+        timeSignature: [3, 4],
         unitNoteLength: "1/2",
         key: "G",
         bpm: 99,
