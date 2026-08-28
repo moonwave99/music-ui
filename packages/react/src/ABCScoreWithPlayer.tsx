@@ -15,7 +15,7 @@ import { usePlayer } from "./PlayerProvider";
 import { Piano, type PianoProps } from "./Piano";
 import { TempoControl } from "./TempoControl";
 import { getNodeText } from "./utils";
-import { getAbcScore, joinVoices } from "@music-ui/core";
+import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
 
 export type ABCScoreWithPlayerProps = UseABCScoreParams & {
   id?: string;
@@ -43,14 +43,13 @@ export function ABCScoreWithPlayer({
 }: ABCScoreWithPlayerProps): ReactElement {
   const componentId = useId();
   const id = params.id || componentId;
-  const input = getNodeText(children);
   const score = getAbcScore({
     id,
-    input,
+    input: extractIndentedInput(getNodeText(children)),
     options: { showTempo },
   });
 
-  const originalTempo = score.info.bpm || 120;
+  const originalTempo = score.info.bpm;
 
   const [scoreBpm, setScoreBpm] = useState(originalTempo);
   const {
@@ -87,23 +86,35 @@ export function ABCScoreWithPlayer({
 
   useLayoutEffect(() => {
     abcRef.current?.updatePosition(position);
-    if (params.highlightBars) {
-      abcRef.current?.highlightBar(position);
+    if (!params.highlightBars) {
+      return;
     }
+    abcRef.current?.highlightBar(position);
   }, [position, abcRef, params.highlightBars]);
 
   function onTempoChange(value: number) {
     setScoreBpm(value);
-    if (isCurrent) {
-      setBpm(value);
+    if (!isCurrent) {
+      return;
     }
+    setBpm(value);
   }
 
   function onTempoReset() {
     setScoreBpm(originalTempo);
-    if (isCurrent) {
-      setBpm(originalTempo);
+    if (!isCurrent) {
+      return;
     }
+    setBpm(originalTempo);
+  }
+
+  function onPlayClick() {
+    if (playerStatus === "paused") {
+      resume();
+      return;
+    }
+    setBpm(scoreBpm);
+    play(score, scoreBpm);
   }
 
   return (
@@ -112,14 +123,7 @@ export function ABCScoreWithPlayer({
       <div className="controls">
         <button
           className="play-button"
-          onClick={() => {
-            if (playerStatus === "paused") {
-              resume();
-              return;
-            }
-            setBpm(scoreBpm);
-            play(score, scoreBpm);
-          }}
+          onClick={onPlayClick}
           aria-label={playButtonLabel}
           disabled={playerStatus === "playing"}
         >
