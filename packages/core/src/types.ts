@@ -1,5 +1,17 @@
+/**
+ * The time signature of a score, expressed as a tuple of two integers.
+ */
 export type TimeSignature = [number, number];
 
+/**
+ * The default note length of an abc score, expressed as a fraction.
+ */
+export type UnitNoteLength = `${number}/${number}`;
+
+/**
+ * Indicates a transport position in the format {bars}:{beats}:{sub-subdivisions}.
+ * A TransportPosition must always be considered in the time signature context.
+ */
 export type TransportPosition = `${number}:${number}:${number}`;
 
 /**
@@ -27,7 +39,7 @@ export type ScoreInfo = {
   title?: string;
   composer?: string;
   timeSignature: TimeSignature;
-  unitNoteLength?: string;
+  unitNoteLength?: UnitNoteLength;
   key?: string;
   bpm: number;
 };

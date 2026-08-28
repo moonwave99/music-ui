@@ -33,6 +33,13 @@ const parsers: Partial<Record<AbcInfoFields, (x: string) => unknown>> = {
     }
     return [Number(num), Number(den)];
   },
+  L: (x: string) => {
+    const [num, den] = x.split("/");
+    if (!num || !den) {
+      throw new Error(`L field should be in N/M format, received ${x} instead`);
+    }
+    return x;
+  },
 };
 
 export type ParseAbcOptions = {
@@ -51,10 +58,7 @@ export function parseAbc(
     .reduce(
       ([info, content], line) => {
         if (infoFields.some((field) => line.startsWith(`${field}:`))) {
-          const match = line.match(/^(\w):\s?(.*)/);
-          if (!match) {
-            return [info, content];
-          }
+          const match = line.match(/^(\w):\s?(.*)/)!;
           const key = match?.at(1) as AbcInfoFields;
           const value = parsers[key] ? parsers[key](match.at(2)!) : match.at(2);
 

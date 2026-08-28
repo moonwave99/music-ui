@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, assert } from "vitest";
 import { parseAbc } from "./abcParser";
 
 describe("parser", () => {
@@ -30,5 +30,39 @@ L:1/2
 Q:99
 G A B | G A B`,
     });
+  });
+
+  it("throws error if the time signature is not in the right format", () => {
+    const input = `
+T:Title
+C:Artist
+M:3,4
+L:1/2
+K:G
+Q:99
+G A B | G A B
+    `;
+
+    assert.throws(
+      () => parseAbc(input),
+      "M field should be in N/M format, received 3,4 instead",
+    );
+  });
+
+  it("throws error if the unit note length is not in the right format", () => {
+    const input = `
+T:Title
+C:Artist
+M:3/4
+L:1,2
+K:G
+Q:99
+G A B | G A B
+    `;
+
+    assert.throws(
+      () => parseAbc(input),
+      "L field should be in N/M format, received 1,2 instead",
+    );
   });
 });

@@ -11,6 +11,7 @@ import {
   joinVoices,
   extractIndentedInput,
   parseTimeSignature,
+  isTimeSignatureUnary,
   tonePositionToNormalizedPosition,
   normalizedPositionToTonePosition,
 } from "./utils";
@@ -234,6 +235,13 @@ describe("parseTimeSignature", () => {
     expect(parseTimeSignature("4/4")).toEqual([4, 4]);
     expect(parseTimeSignature("6/8")).toEqual([6, 8]);
     expect(parseTimeSignature("12/8")).toEqual([12, 8]);
+  });
+});
+
+describe("isTimeSignatureUnary", () => {
+  it("checks if the passed time signature is unary", () => {
+    expect(isTimeSignatureUnary([1, 1])).toBe(true);
+    expect(isTimeSignatureUnary([4, 4])).toBe(false);
   });
 });
 
