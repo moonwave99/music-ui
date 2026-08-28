@@ -157,9 +157,7 @@ export class Player {
     this.stop();
     this.clearParts();
     this.score = score;
-    if (this.score.info.bpm) {
-      this.setBpm(this.score.info.bpm);
-    }
+    this.setBpm(this.score.info.bpm);
     this.timeSignature = this.score.info.timeSignature;
     this.transport.timeSignature = this.timeSignature;
     this.createParts();
@@ -177,7 +175,9 @@ export class Player {
   }
   setBpm(value: number) {
     if (value < BPM_RANGE[0] || value > BPM_RANGE[1]) {
-      throw new Error(`Value must be in the ${BPM_RANGE} range`);
+      throw new Error(
+        `Value must be in the ${BPM_RANGE} range, received ${value} instead`,
+      );
     }
     this.transport.bpm.value = value;
   }

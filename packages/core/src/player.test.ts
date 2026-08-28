@@ -114,15 +114,20 @@ describe("Player - setBpm", () => {
     const mockedParams = getMockedPlayerParams();
     const player = new Player(mockedParams);
 
-    assert.throws(() => {
-      player.setBpm(BPM_RANGE[0] - 1);
-    }, `Value must be in the ${BPM_RANGE} range`);
-
+    assert.throws(
+      () => {
+        player.setBpm(BPM_RANGE[0] - 1);
+      },
+      `Value must be in the ${BPM_RANGE} range, received ${BPM_RANGE[0] - 1} instead`,
+    );
     expect(mockedParams.transport.bpm.value).toBe(120);
 
-    assert.throws(() => {
-      player.setBpm(BPM_RANGE[1] + 1);
-    }, `Value must be in the ${BPM_RANGE} range`);
+    assert.throws(
+      () => {
+        player.setBpm(BPM_RANGE[1] + 1);
+      },
+      `Value must be in the ${BPM_RANGE} range, received ${BPM_RANGE[1] + 1} instead`,
+    );
 
     expect(mockedParams.transport.bpm.value).toBe(120);
   });
