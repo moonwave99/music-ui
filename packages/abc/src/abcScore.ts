@@ -299,17 +299,17 @@ export class ABCScore {
       `.abcjs-staff.abcjs-l${lineNumber}`,
     );
     const noteBox = currentNote.querySelector<SVGGElement>("path")?.getBBox();
-
     const lineBox = line?.getBBox();
-    if (noteBox && lineBox) {
-      this.cursor?.setAttribute("x1", String(noteBox.x! + cursorOffset));
-      this.cursor?.setAttribute("x2", String(noteBox.x! + cursorOffset));
-      this.cursor?.setAttribute("y1", String(lineBox.y! - cursorBleed));
-      this.cursor?.setAttribute(
-        "y2",
-        String(lineBox.y! + lineBox.height! + cursorBleed),
-      );
+    if (!noteBox || !lineBox) {
+      return this;
     }
+    this.cursor?.setAttribute("x1", String(noteBox.x! + cursorOffset));
+    this.cursor?.setAttribute("x2", String(noteBox.x! + cursorOffset));
+    this.cursor?.setAttribute("y1", String(lineBox.y! - cursorBleed));
+    this.cursor?.setAttribute(
+      "y2",
+      String(lineBox.y! + lineBox.height! + cursorBleed),
+    );
     return this;
   }
   private baseRender() {
@@ -360,10 +360,7 @@ export class ABCScore {
       this.computeBarBounds();
     }
 
-    const isTimeSignatureDenominatorOne =
-      this.tune.getMeter().value?.at(0)!.den == 1;
-
-    if (!this.showTimeSignature || isTimeSignatureDenominatorOne) {
+    if (!this.showTimeSignature || this.hasFreeTempo()) {
       const timeSignature = this.element!.querySelector<HTMLElement>(
         `.${cssClasses.timeSignature}`,
       );

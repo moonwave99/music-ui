@@ -272,8 +272,10 @@ describe("ABCScore - highlightBars", () => {
         <div class="content">
           M:4/4
           L:1/4
-          T:Test Song
-          C E G B | D F A c |
+          V:V1 clef=treble
+          V:V2 clef=bass      
+          [V:V1] CDEF|CDEF|
+          [V:V2] CDEF|CDEF|
         </div>
         <div class="staff"></div>
       </div>  
