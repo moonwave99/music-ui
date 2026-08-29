@@ -1,5 +1,5 @@
 import { type ReactElement } from "react";
-import { usePiano, type UsePianoParams } from "./usePiano";
+import { usePiano, type UsePianoParams } from "../hooks/usePiano";
 
 export type PianoProps = UsePianoParams & {
   id?: string;

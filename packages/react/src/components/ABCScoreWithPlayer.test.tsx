@@ -3,7 +3,7 @@ import { fireEvent, render, screen, act } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Player, getMockedPlayerParams } from "@music-ui/core";
 import { ABCScoreWithPlayer } from "./ABCScoreWithPlayer";
-import { PlayerProvider } from "./PlayerProvider";
+import { PlayerProvider } from "../PlayerProvider";
 
 describe("ABCScoreWithPlayer", () => {
   it("Renders correctly", () => {
@@ -18,7 +18,7 @@ describe("ABCScoreWithPlayer", () => {
   it("Throws error if not used within a PlayerProvider", () => {
     assert.throws(() => {
       render(<ABCScoreWithPlayer>CDEF GABc|</ABCScoreWithPlayer>);
-    }, "usePlayer has to be used within <PlayerProvider>");
+    }, "usePlayer has to be used within a <PlayerProvider>");
   });
 
   it("Renders passed button labels", () => {

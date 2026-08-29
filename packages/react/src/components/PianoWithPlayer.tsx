@@ -1,6 +1,6 @@
 import { useId, type ReactElement } from "react";
 import { Piano, type PianoProps } from "./Piano";
-import { usePlayer } from "./PlayerProvider";
+import { usePlayer } from "../hooks/usePlayer";
 import { getPianoScore, joinVoices } from "@music-ui/core";
 
 export type PianoWithPlayerProps = PianoProps & {

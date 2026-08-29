@@ -23,7 +23,7 @@ const pianos = [
 export function VanillaPianoWithPlayer() {
   const playerContext = use(PlayerContext);
   if (!playerContext) {
-    throw new Error("usePlayer has to be used within <PlayerProvider>");
+    throw new Error("usePlayer has to be used within a <PlayerProvider>");
   }
   const { player } = playerContext;
 

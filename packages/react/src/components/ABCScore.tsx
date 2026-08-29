@@ -1,7 +1,7 @@
 import { type ReactNode, ReactElement, useId } from "react";
-import { useABCScore, type UseABCScoreParams } from "./useABCScore";
+import { useABCScore, type UseABCScoreParams } from "../hooks/useABCScore";
 import { getAbcScore } from "@music-ui/core";
-import { getNodeText } from "./utils";
+import { getNodeText } from "../utils";
 
 export type ABCScoreProps = UseABCScoreParams & {
   id?: string;

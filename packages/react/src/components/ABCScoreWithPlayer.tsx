@@ -10,11 +10,11 @@ import {
   OnABCClickParams,
   useABCScore,
   type UseABCScoreParams,
-} from "./useABCScore";
-import { usePlayer } from "./PlayerProvider";
+} from "../hooks/useABCScore";
+import { usePlayer } from "../hooks/usePlayer";
 import { Piano, type PianoProps } from "./Piano";
 import { TempoControl } from "./TempoControl";
-import { getNodeText } from "./utils";
+import { getNodeText } from "../utils";
 import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
 
 export type ABCScoreWithPlayerProps = UseABCScoreParams & {

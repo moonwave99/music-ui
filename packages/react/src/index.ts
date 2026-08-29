@@ -1,9 +1,11 @@
-export * from "./ABCScore";
-export * from "./ABCScoreWithPlayer";
-export * from "./useABCScore";
+export * from "./components/ABCScore";
+export * from "./components/ABCScoreWithPlayer";
+export * from "./components/Piano";
+export * from "./components/PianoWithPlayer";
 
-export * from "./Piano";
-export * from "./usePiano";
+export * from "./hooks/useABCScore";
+export * from "./hooks/usePiano";
+export * from "./hooks/usePlayer";
+export * from "./hooks/useStopPlayback";
 
-export * from "./PianoWithPlayer";
 export * from "./PlayerProvider";

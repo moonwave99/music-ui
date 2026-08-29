@@ -52,7 +52,7 @@ C ^F | [C ^F] |`,
 export function VanillaABCScore() {
   const playerContext = use(PlayerContext);
   if (!playerContext) {
-    throw new Error("usePlayer has to be used within <PlayerProvider>");
+    throw new Error("usePlayer has to be used within a <PlayerProvider>");
   }
   const { player } = playerContext;
 

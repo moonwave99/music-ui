@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Piano } from "./Piano";
-import type { ImperativePiano } from "./usePiano";
+import type { ImperativePiano } from "../hooks/usePiano";
 
 describe("Piano", () => {
   it("renders correctly", () => {
