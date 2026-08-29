@@ -253,7 +253,7 @@ export class ABCScore {
   }
   private resetBarBox() {
     ["x", "y", "width", "height"].forEach((x) =>
-      this.barBox?.setAttribute(x, "0"),
+      this.barBox?.removeAttribute(x),
     );
   }
   private getBarNotes(position: TransportPosition, voice: number) {
@@ -357,6 +357,7 @@ export class ABCScore {
       );
       this.barBox.classList.add(cssClasses.barBox);
       this.getSVGElement()?.append(this.barBox);
+      this.resetBarBox();
       this.computeBarBounds();
     }
 

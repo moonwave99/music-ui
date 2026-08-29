@@ -266,7 +266,7 @@ describe("ABCScore - highlightBars", () => {
     expect(wrapper.querySelector(".abcjs-bar-box")).toBe(null);
   });
 
-  it("does create the highlight bar box if highlightBars is true", () => {
+  it("creates the highlight bar box if highlightBars is true", () => {
     document.body.innerHTML = `
       <div class="score">
         <div class="content">
@@ -307,8 +307,7 @@ describe("ABCScore - highlightBars", () => {
 
     score.highlightBar("0:0:0");
     ["x", "y", "width", "height"].forEach((x) =>
-      // because the getBBox mock implementation returns 0,0,0,0
-      expect(barBox.getAttribute(x)).toBe("0"),
+      expect(barBox.getAttribute(x)).toBe(null),
     );
   });
 });

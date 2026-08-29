@@ -22,8 +22,8 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
 
     const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({
       selection: element,
@@ -77,8 +77,8 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
 
     const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({
       selection: element,
@@ -178,8 +178,8 @@ describe("initABCScoreWithPlayer", () => {
 
     const elements =
       document.querySelectorAll<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({ selection: elements, player });
 
@@ -215,8 +215,8 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
 
     const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({
       selection: element,
@@ -230,16 +230,16 @@ describe("initABCScoreWithPlayer", () => {
     await user.click(targetNote);
 
     expect(targetNote.classList).toContain("abcjs-note_selected");
-    expect(mockedPlayedParams.transport.position).toBe("0:0:0");
+    expect(playerParams.transport.position).toBe("0:0:0");
 
     await user.click(playButton);
-    expect(mockedPlayedParams.transport.position).toBe("0:1:0");
+    expect(playerParams.transport.position).toBe("0:1:0");
 
     targetNote = element.querySelector(".abcjs-m1.abcjs-n2")!;
     await user.click(targetNote);
 
     expect(targetNote.classList).toContain("abcjs-note_selected");
-    expect(mockedPlayedParams.transport.position).toBe("1:1:0");
+    expect(playerParams.transport.position).toBe("1:1:0");
   });
 
   it("highlights bars on progress when highlightBars is true", async () => {
@@ -257,8 +257,8 @@ describe("initABCScoreWithPlayer", () => {
       </main>`;
 
     const element = document.querySelector<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({
       selection: element,
@@ -273,6 +273,7 @@ describe("initABCScoreWithPlayer", () => {
     ["x", "y", "width", "height"].forEach((x) =>
       expect(barBox.getAttribute(x)).toBe(null),
     );
+    playerParams.transport.playNext();
     await user.click(playButton);
     ["x", "y", "width", "height"].forEach((x) =>
       // because the getBBox mock implementation returns 0,0,0,0
@@ -306,8 +307,8 @@ describe("initABCScoreWithPlayer", () => {
 
     const elements =
       document.querySelectorAll<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({ selection: elements, player });
 
@@ -355,8 +356,8 @@ describe("initABCScoreWithPlayer", () => {
 
     const elements =
       document.querySelectorAll<HTMLElement>("[data-abc-score]")!;
-    const mockedPlayedParams = getMockedPlayerParams();
-    const player = new Player(mockedPlayedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     initABCScoreWithPlayer({ selection: elements, player });
 
