@@ -20,7 +20,5 @@ export function useStopPlayback(): UseStopPlayback {
     setCurrentScore(null);
   }, [player, setCurrentScore]);
 
-  return {
-    stop,
-  };
+  return { stop };
 }

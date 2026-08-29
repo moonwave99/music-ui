@@ -32,6 +32,7 @@ export class MockedTransport {
   cancel() {}
   stop() {
     this.handlers.stop?.forEach((handler) => handler());
+    this.position = "0:0:0";
   }
   start() {
     const [, beat] = this.position.split(":");

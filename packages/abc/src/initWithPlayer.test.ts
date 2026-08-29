@@ -273,8 +273,9 @@ describe("initABCScoreWithPlayer", () => {
     ["x", "y", "width", "height"].forEach((x) =>
       expect(barBox.getAttribute(x)).toBe(null),
     );
-    playerParams.transport.playNext();
     await user.click(playButton);
+    playerParams.transport.playNext();
+
     ["x", "y", "width", "height"].forEach((x) =>
       // because the getBBox mock implementation returns 0,0,0,0
       expect(barBox.getAttribute(x)).toBe("0"),
