@@ -316,17 +316,33 @@ describe("initABCScoreWithPlayer", () => {
     const firstTempoControls = elements[0]!.querySelector(".tempo-control")!;
     const secondTempoControls = elements[1]!.querySelector(".tempo-control")!;
 
+    const firstPlayButton = elements[0]!.querySelector(".play-button")!;
+
+    expect(player.getBpm()).toBe(120);
+
     expect(firstTempoControls.querySelector("output")!.value).toBe("110");
     expect(secondTempoControls.querySelector("output")!.value).toBe("125");
+
+    await user.click(firstPlayButton);
 
     fireEvent.change(firstTempoControls.querySelector("input")!, {
       target: { value: 99 },
     });
 
+    expect(player.getBpm()).toBe(99);
+
     expect(firstTempoControls.querySelector("output")!.value).toBe("99");
     expect(secondTempoControls.querySelector("output")!.value).toBe("125");
 
+    fireEvent.change(secondTempoControls.querySelector("input")!, {
+      target: { value: 66 },
+    });
+
+    expect(player.getBpm()).toBe(99);
+    expect(secondTempoControls.querySelector("output")!.value).toBe("66");
+
     await user.click(firstTempoControls.querySelector("button")!);
+    await user.click(secondTempoControls.querySelector("button")!);
 
     expect(firstTempoControls.querySelector("output")!.value).toBe("110");
     expect(secondTempoControls.querySelector("output")!.value).toBe("125");

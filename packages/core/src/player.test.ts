@@ -13,8 +13,8 @@ describe("Player - constructor", () => {
 
 describe("Player - events", () => {
   it("Listens to the player events", async () => {
-    const mockedParams = getMockedPlayerParams();
-    const player = new Player(mockedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     const onProgress = vi.fn();
     const onPause = vi.fn();
@@ -47,7 +47,7 @@ V:V2 clef=bass
     await player.play();
     player.pause();
 
-    mockedParams.transport.playUntilEnd();
+    playerParams.transport.playUntilEnd();
 
     player.stop();
 
@@ -104,15 +104,15 @@ describe("Player - setScore", () => {
 
 describe("Player - setBpm", () => {
   it("Sets the playback bpm", () => {
-    const mockedParams = getMockedPlayerParams();
-    const player = new Player(mockedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
     player.setBpm(99);
-    expect(mockedParams.transport.bpm.value).toBe(99);
+    expect(player.getBpm()).toBe(99);
   });
 
   it("Throws error if new value is out of range", () => {
-    const mockedParams = getMockedPlayerParams();
-    const player = new Player(mockedParams);
+    const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
 
     assert.throws(
       () => {
@@ -120,7 +120,7 @@ describe("Player - setBpm", () => {
       },
       `Value must be in the ${BPM_RANGE} range, received ${BPM_RANGE[0] - 1} instead`,
     );
-    expect(mockedParams.transport.bpm.value).toBe(120);
+    expect(player.getBpm()).toBe(120);
 
     assert.throws(
       () => {
@@ -129,7 +129,7 @@ describe("Player - setBpm", () => {
       `Value must be in the ${BPM_RANGE} range, received ${BPM_RANGE[1] + 1} instead`,
     );
 
-    expect(mockedParams.transport.bpm.value).toBe(120);
+    expect(player.getBpm()).toBe(120);
   });
 
   it("Does not recompute the parts if the new score has the same hash as the current one", () => {

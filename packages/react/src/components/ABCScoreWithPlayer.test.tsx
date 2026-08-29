@@ -186,8 +186,9 @@ CGEB|DFAC
   it("handles tempo change", async () => {
     const user = userEvent.setup();
     const playerParams = getMockedPlayerParams();
+    const player = new Player(playerParams);
     const { container } = render(
-      <PlayerProvider player={new Player(playerParams)}>
+      <PlayerProvider player={player}>
         <ABCScoreWithPlayer>
           {`
 T: Test Score
@@ -199,7 +200,7 @@ CGEB|DFAC
       </PlayerProvider>,
     );
 
-    expect(playerParams.transport.bpm.value).toBe(120);
+    expect(player.getBpm()).toBe(120);
 
     const output = screen.getByRole("status", { name: "Current Tempo in BPM" });
     expect(output).toHaveTextContent("60");
@@ -209,7 +210,7 @@ CGEB|DFAC
     });
 
     expect(output).toHaveTextContent("99");
-    expect(playerParams.transport.bpm.value).toBe(120);
+    expect(player.getBpm()).toBe(120);
     expect(output).toHaveTextContent("99");
 
     await user.click(screen.getByRole("button", { name: /reset/i }));
@@ -218,18 +219,18 @@ CGEB|DFAC
 
     await user.click(screen.getByRole("button", { name: /play/i }));
 
-    expect(playerParams.transport.bpm.value).toBe(60);
+    expect(player.getBpm()).toBe(60);
 
     fireEvent.change(container.querySelector("input")!, {
       target: { value: 99 },
     });
 
     expect(output).toHaveTextContent("99");
-    expect(playerParams.transport.bpm.value).toBe(99);
+    expect(player.getBpm()).toBe(99);
 
     await user.click(screen.getByRole("button", { name: /reset/i }));
 
     expect(output).toHaveTextContent("60");
-    expect(playerParams.transport.bpm.value).toBe(60);
+    expect(player.getBpm()).toBe(60);
   });
 });

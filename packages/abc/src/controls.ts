@@ -45,6 +45,10 @@ export function initControls({
   pause.disabled = true;
   stop.disabled = true;
 
+  function isCurrentScore() {
+    return player.getScore()?.id === score.id;
+  }
+
   if (showTempoControls) {
     const { setTempoValue } = initTempoControl({
       element,
@@ -56,12 +60,18 @@ export function initControls({
 
     function onTempoChange(value: number) {
       currentBpm = value;
+      if (!isCurrentScore()) {
+        return;
+      }
       player.setBpm(currentBpm);
     }
 
     function onTempoReset() {
       currentBpm = originalBpm;
       setTempoValue(originalBpm);
+      if (!isCurrentScore()) {
+        return;
+      }
       player.setBpm(originalBpm);
     }
   }

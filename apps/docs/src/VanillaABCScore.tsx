@@ -73,7 +73,12 @@ export function VanillaABCScore() {
   return (
     <div ref={ref}>
       {scores.map(({ content, options }, index) => (
-        <div key={index} className="abc-score" {...getDataAttributes(options)}>
+        <div
+          key={index}
+          className="abc-score"
+          data-id={`score-${index + 1}`}
+          {...getDataAttributes(options)}
+        >
           <div className="content">{content}</div>
           <div className="staff"></div>
           <div className="controls"></div>

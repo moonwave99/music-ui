@@ -181,6 +181,9 @@ export class Player {
     }
     this.transport.bpm.value = value;
   }
+  getBpm() {
+    return this.transport.bpm.value;
+  }
   pause() {
     this.transport.pause();
     return this;
