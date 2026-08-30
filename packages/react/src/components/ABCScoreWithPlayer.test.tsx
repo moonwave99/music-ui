@@ -29,20 +29,24 @@ describe("ABCScoreWithPlayer", () => {
           pauseButtonLabel="Pause!"
           stopButtonLabel="Stop!"
         >
+          {`
+          T: Test Score
           CDEF GABc|
+        `}
         </ABCScoreWithPlayer>
       </PlayerProvider>,
     );
-    expect(screen.getByLabelText("Play!")).toBeTruthy();
-    expect(screen.getByLabelText("Pause!")).toBeTruthy();
-    expect(screen.getByLabelText("Stop!")).toBeTruthy();
+    expect(screen.getByLabelText("Play! Test Score")).toBeTruthy();
+    expect(screen.getByLabelText("Pause! Test Score")).toBeTruthy();
+    expect(screen.getByLabelText("Stop! Test Score")).toBeTruthy();
   });
 
   it("Doesn't show the time signature when showTimeSignature is false", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
         <ABCScoreWithPlayer showTimeSignature={false}>
-          T: TestScore CGEB
+          T: TestScore
+          CGEB
         </ABCScoreWithPlayer>
       </PlayerProvider>,
     );
@@ -53,7 +57,8 @@ describe("ABCScoreWithPlayer", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
         <ABCScoreWithPlayer showTempo={false}>
-          T: Test Score CGEB
+          T: Test Score
+          CGEB
         </ABCScoreWithPlayer>
       </PlayerProvider>,
     );
@@ -63,7 +68,10 @@ describe("ABCScoreWithPlayer", () => {
   it("Shows the piano if showPiano is true", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
-        <ABCScoreWithPlayer showPiano>T: Test Score CGEB</ABCScoreWithPlayer>
+        <ABCScoreWithPlayer showPiano>
+          T: Test Score
+          CGEB
+        </ABCScoreWithPlayer>
       </PlayerProvider>,
     );
     expect(container.querySelector(".piano")).toBeTruthy();
@@ -76,7 +84,15 @@ describe("ABCScoreWithPlayer", () => {
       <PlayerProvider player={new Player(playerParams)}>
         <ABCScoreWithPlayer>
           {`
-T: Test Score
+T: Test Score 1
+Q: 60
+L: 1/4 
+CGEB|DFAC
+`}
+        </ABCScoreWithPlayer>
+        <ABCScoreWithPlayer>
+          {`
+T: Test Score 2
 Q: 60
 L: 1/4 
 CGEB|DFAC
@@ -85,9 +101,15 @@ CGEB|DFAC
       </PlayerProvider>,
     );
 
-    const playButton = screen.getByRole("button", { name: /play/i });
-    const pauseButton = screen.getByRole("button", { name: /pause/i });
-    const stopButton = screen.getByRole("button", { name: /stop/i });
+    const playButton = screen.getByRole("button", {
+      name: "Play Test Score 1",
+    });
+    const pauseButton = screen.getByRole("button", {
+      name: "Pause Test Score 1",
+    });
+    const stopButton = screen.getByRole("button", {
+      name: "Stop Test Score 1",
+    });
 
     expect(playButton).not.toBeDisabled();
     expect(pauseButton).toBeDisabled();

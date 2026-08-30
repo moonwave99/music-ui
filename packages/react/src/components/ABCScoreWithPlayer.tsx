@@ -117,6 +117,10 @@ export function ABCScoreWithPlayer({
     play(score, scoreBpm);
   }
 
+  function getButtonLabel(label: string) {
+    return `${label} ${score.info.title || `score ${id}`}`;
+  }
+
   return (
     <div className={className}>
       <div className="staff" ref={ref}></div>
@@ -124,7 +128,7 @@ export function ABCScoreWithPlayer({
         <button
           className="play-button"
           onClick={onPlayClick}
-          aria-label={playButtonLabel}
+          aria-label={getButtonLabel(playButtonLabel)}
           disabled={playerStatus === "playing"}
         >
           {playButtonLabel}
@@ -132,7 +136,7 @@ export function ABCScoreWithPlayer({
         <button
           className="pause-button"
           onClick={pause}
-          aria-label={pauseButtonLabel}
+          aria-label={getButtonLabel(pauseButtonLabel)}
           disabled={playerStatus !== "playing"}
         >
           {pauseButtonLabel}
@@ -140,7 +144,7 @@ export function ABCScoreWithPlayer({
         <button
           className="stop-button"
           onClick={stop}
-          aria-label={stopButtonLabel}
+          aria-label={getButtonLabel(stopButtonLabel)}
           disabled={playerStatus === "stopped"}
         >
           {stopButtonLabel}
