@@ -1,8 +1,7 @@
 import { synth } from "abcjs";
 import { Midi } from "@tonejs/midi";
 import type { Score } from "./types";
-import { parseMidiData } from "./lib";
-import { ParsedVoice } from "./lib";
+import { parseMidiData, type ParsedVoice } from "./lib";
 
 export class ScoreManager {
   private cache: Record<string, ParsedVoice[]>;

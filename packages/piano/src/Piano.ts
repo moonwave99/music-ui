@@ -128,6 +128,8 @@ export class Piano {
    *
    * @param notes The notes to be displayed
    * @param noteLabels The corresponding note labels
+   *
+   * @returns The current Piano instance.
    */
   setNotes(notes: NoteInput, noteLabels?: NoteInput): Piano {
     this.clearNotes();
@@ -136,6 +138,7 @@ export class Piano {
   }
   /**
    * Clears all highlighted notes.
+   * @returns The current Piano instance.
    */
   clearNotes(): Piano {
     this.element
@@ -149,6 +152,7 @@ export class Piano {
   }
   /**
    * Renders the UI inside the current element.
+   * @returns The current Piano instance.
    */
   render(): Piano {
     this.baseRender();
@@ -167,7 +171,8 @@ export class Piano {
   /**
    * Sets the passed notes as played.
    *
-   * @param notes The notes to be played
+   * @param notes The notes to be played.
+   * @returns The current Piano instance.
    */
   setPlayedNotes(notes: NoteInput): Piano {
     this.clearPlayedNotes();
@@ -180,6 +185,7 @@ export class Piano {
   }
   /**
    * Clears all played notes.
+   * @returns The current Piano instance.
    */
   clearPlayedNotes(): Piano {
     this.element

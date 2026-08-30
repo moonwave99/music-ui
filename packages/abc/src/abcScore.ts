@@ -73,6 +73,23 @@ export const cssClasses = {
 } as const;
 
 /**
+ * @property position The current position of the score
+ */
+export type OnABCClickParams = {
+  position: TransportPosition;
+};
+
+type BarBounds = Pick<DOMRect, "x" | "y" | "width" | "height">;
+
+type GroupedBarsEntry = {
+  barNumber: number;
+  isFirstOfLine: boolean;
+  voices: BarBounds[];
+};
+
+/**
+ * The parameters accepted by the ABCScore constructor.
+ *
  * @property content The abc notation content
  * @property element The element where the score will be rendered
  * @property showCursor Display the cursor or not
@@ -90,21 +107,6 @@ export type ABCScoreParams = {
   onClick?: (params: OnABCClickParams) => void;
 };
 
-/**
- * @property position The current position of the score
- */
-export type OnABCClickParams = {
-  position: TransportPosition;
-};
-
-type BarBounds = Pick<DOMRect, "x" | "y" | "width" | "height">;
-
-type GroupedBarsEntry = {
-  barNumber: number;
-  isFirstOfLine: boolean;
-  voices: BarBounds[];
-};
-
 export class ABCScore {
   private content: string;
   private element: HTMLElement;
@@ -119,6 +121,11 @@ export class ABCScore {
   private rendered: boolean;
   private voiceCount: number;
   private barBounds: BarBounds[];
+  /**
+   * Creates an `ABCScore` instance.
+   *
+   * @param __namedParameters The accepted params
+   */
   constructor({
     content = "",
     element,
@@ -147,6 +154,7 @@ export class ABCScore {
   }
   /**
    * Renders the UI inside the current element.
+   * @returns The current ABCScore instance.
    */
   render(): ABCScore {
     this.baseRender();
@@ -154,7 +162,8 @@ export class ABCScore {
   }
   /**
    * Updates the score position (moving the cursor and highlighting the corresponding note).
-   * @param position The new score position
+   * @param position The new score position.
+   * @returns The current ABCScore instance.
    */
   updatePosition(position: TransportPosition): ABCScore {
     if (!this.showCursor || !this.rendered) {
@@ -166,7 +175,8 @@ export class ABCScore {
     return this;
   }
   /**
-   * Clears current note selection
+   * Clears current note selection.
+   * @returns The current ABCScore instance.
    */
   clearSelection(): ABCScore {
     /* istanbul ignore if  */
@@ -181,9 +191,17 @@ export class ABCScore {
       });
     return this;
   }
+  /**
+   * Returns the <svg> element of the current instance.
+   * @returns The <svg> element.
+   */
   getSVGElement() {
     return this.element?.querySelector("svg");
   }
+  /**
+   * Returns the time signature of the current instance.
+   * @returns The time signature.
+   */
   getTimeSignature(): TimeSignature {
     const { num, den } = {
       num: 4,
@@ -192,9 +210,17 @@ export class ABCScore {
     };
     return [num, den];
   }
+  /**
+   * Tells if the current score has no tempo indication.
+   */
   hasFreeTempo() {
     return isTimeSignatureUnary(this.getTimeSignature());
   }
+  /**
+   * Highlights the bar at the passed position.
+   * @param position The current transport position.
+   * @returns The current ABCScore instance.
+   */
   highlightBar(position: TransportPosition): ABCScore {
     if (!this.highlightBars || this.hasFreeTempo()) {
       return this;

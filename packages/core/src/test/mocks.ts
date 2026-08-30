@@ -1,5 +1,5 @@
 import { type ToneEventCallback } from "tone";
-import { PlaybackInfo } from "../player";
+import { PlaybackEvent } from "../player";
 import { TransportPosition } from "../types";
 
 export class MockedTransport {
@@ -65,12 +65,12 @@ export class MockedTransport {
 }
 
 export class MockedPart {
-  private progressFn: ToneEventCallback<PlaybackInfo>;
-  private scoreData: PlaybackInfo[];
+  private progressFn: ToneEventCallback<PlaybackEvent>;
+  private scoreData: PlaybackEvent[];
   public length: number;
   constructor(
-    progressFn: ToneEventCallback<PlaybackInfo>,
-    scoreData: PlaybackInfo[],
+    progressFn: ToneEventCallback<PlaybackEvent>,
+    scoreData: PlaybackEvent[],
   ) {
     this.progressFn = progressFn;
     this.scoreData = scoreData;
@@ -101,10 +101,10 @@ export function getMockedPlayerParams() {
       triggerAttackRelease: () => {},
     },
     getPart: (
-      callback: ToneEventCallback<PlaybackInfo>,
-      info: PlaybackInfo[],
+      callback: ToneEventCallback<PlaybackEvent>,
+      events: PlaybackEvent[],
     ) => {
-      const part = new MockedPart(callback, info);
+      const part = new MockedPart(callback, events);
       parts.push(part);
       return part;
     },

@@ -2,8 +2,6 @@ import {
   ensureSelection,
   extractElementOptions,
   Player,
-  getPianoScore,
-  createControls,
   ensureElements,
 } from "@music-ui/core";
 import {
@@ -13,11 +11,20 @@ import {
   type PianoOptions,
 } from "./Piano";
 import { DEFAULT_OPTIONS, type InitPianoParams } from "./init";
+import { initControls } from "./controls";
 
+/**
+ * The params expected by the `initPianoWithPlayer` function.
+ * @property player A `Player` instance.
+ */
 type InitPianoWithPlayerParams<T extends HTMLElement> = InitPianoParams<T> & {
   player: Player;
 };
 
+/**
+ * Initializes pianos with player on the passed selection.
+ * @param params The initialization params.
+ */
 export function initPianoWithPlayer<T extends HTMLElement>(
   params: Partial<InitPianoWithPlayerParams<T>> = {},
 ) {
@@ -27,7 +34,7 @@ export function initPianoWithPlayer<T extends HTMLElement>(
     throw new Error("You must pass a Player instance");
   }
 
-  return ensureSelection(selection).map((element, index) => {
+  ensureSelection(selection).forEach((element, index) => {
     const id = element.dataset.id || `${index + 1}`;
 
     const { pianoElement, controlsElement } = ensureElements({
@@ -74,58 +81,4 @@ export function initPianoWithPlayer<T extends HTMLElement>(
     piano.render();
     piano.setNotes(notes, noteLabels);
   });
-}
-
-type InitControlsParams = {
-  id: string;
-  element: HTMLElement;
-  notes: string;
-  player: Player;
-};
-
-type InitControls = {
-  resetButtons: () => void;
-  disableButtons: () => void;
-};
-
-function initControls({
-  id,
-  element,
-  notes,
-  player,
-}: InitControlsParams): InitControls {
-  const blockScore = getPianoScore({ id, input: notes, playbackMode: "block" });
-  const arpeggioScore = getPianoScore({
-    id,
-    input: notes,
-    playbackMode: "arpeggio",
-  });
-  const { playBlock, playArpeggio } = createControls(element, {
-    playBlock: () => {
-      player.setScore(blockScore);
-      player.play();
-    },
-    playArpeggio: () => {
-      player.setScore(arpeggioScore);
-      player.play();
-    },
-  }) as {
-    playBlock: HTMLButtonElement;
-    playArpeggio: HTMLButtonElement;
-  };
-
-  function disableButtons() {
-    playBlock.disabled = true;
-    playArpeggio.disabled = true;
-  }
-
-  function resetButtons() {
-    playBlock.disabled = false;
-    playArpeggio.disabled = false;
-  }
-
-  playBlock.textContent = "Play";
-  playArpeggio.textContent = "Arpeggio";
-
-  return { disableButtons, resetButtons };
 }

@@ -22,11 +22,19 @@ const DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS = {
   showTempoControls: true,
 } as const;
 
+/**
+ * The params expected by the `initABCScoreWithPlayer` function.
+ * @property player A `Player` instance.
+ */
 type InitABCScoreWithPlayerParams<T extends HTMLElement> =
   InitABCScoreParams<T> & {
     player: Player;
   };
 
+/**
+ * Initializes scores with player on the passed selection.
+ * @param params The initialization params.
+ */
 export function initABCScoreWithPlayer<T extends HTMLElement>(
   params: Partial<InitABCScoreWithPlayerParams<T>> = {},
 ) {
@@ -36,7 +44,7 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
     throw new Error("You must pass a Player instance");
   }
 
-  return ensureSelection(selection as ElementOrSelector<T>).map(
+  ensureSelection(selection as ElementOrSelector<T>).forEach(
     (element, index) => {
       const id = element.dataset.id || `${index + 1}`;
 

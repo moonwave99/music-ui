@@ -3,23 +3,23 @@ import { getAbcScore } from "./utils";
 import { ScoreManager } from "./scoreManager";
 
 describe("ScoreManager - getScoreContent", () => {
-  it("Gets the playback info of the passed score", () => {
+  it("Gets the playback events from the passed score", () => {
     const score = getAbcScore({
       id: "1",
       input: "CDEF",
     });
     const scoreManager = new ScoreManager();
-    const playbackInfo = scoreManager.getScoreContent(score, 0.02);
-    expect(playbackInfo).toMatchSnapshot();
+    const playbackEvents = scoreManager.getScoreContent(score, 0.02);
+    expect(playbackEvents).toMatchSnapshot();
   });
 
-  it("Gets the playback info of the passed score - with chords", () => {
+  it("Gets the playback events from the passed score - with chords", () => {
     const score = getAbcScore({
       id: "1",
       input: "[CEG][DFA]",
     });
     const scoreManager = new ScoreManager();
-    const playbackInfo = scoreManager.getScoreContent(score, 0.02);
-    expect(playbackInfo).toMatchSnapshot();
+    const playbackEvents = scoreManager.getScoreContent(score, 0.02);
+    expect(playbackEvents).toMatchSnapshot();
   });
 });

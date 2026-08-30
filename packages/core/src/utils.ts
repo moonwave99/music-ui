@@ -1,7 +1,7 @@
 import md5 from "md5";
 import { scientificToAbcNotation } from "@tonaljs/abc-notation";
-import { parseAbc, getAbcInfo, type ParseAbcOptions } from "./abcParser";
 import dedent from "dedent";
+import { parseAbc, getAbcInfo, type ParseAbcOptions } from "./abcParser";
 import type {
   TimeSignature,
   TransportPosition,
@@ -9,10 +9,10 @@ import type {
   Score,
   NoteInput,
 } from "./types";
-
 import { DEFAULT_TIME_SIGNATURE } from "./player";
 
 /**
+ * The params expected by the `getAbcScore` function.
  * @param id The score id
  * @param input The score input (in abc notation)
  * @param options The abc parse options
@@ -43,6 +43,7 @@ export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
 export type PlaybackMode = "block" | "arpeggio";
 
 /**
+ * The params expected by the `getPianoScore` function.
  * @property id The score id
  * @property bpm The score bpm
  * @property input The score input (in scientific pitch notation)
@@ -287,6 +288,7 @@ export function createControls(
 }
 
 /**
+ * The params expected by the `ensureElements` function.
  * @property id The rendering context id (e.g. `piano-1`, `score-3`)
  * @property parentElement The element that should contain the children elements
  * @property elements The key-value lookup list

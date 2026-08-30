@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { type PlaybackInfo } from "./player";
+import { type PlaybackEvent } from "./player";
 import { type MidiJSON } from "@tonejs/midi";
 
 export type CreateSamplerParams = {
@@ -36,7 +36,7 @@ export function createSampler(params: Partial<CreateSamplerParams> = {}) {
 export const END_NOTE = "__END_NOTE__";
 
 export type ParsedVoice = {
-  notes: PlaybackInfo[];
+  notes: PlaybackEvent[];
   voice: number;
 };
 
@@ -47,7 +47,7 @@ export function parseMidiData(
   const voices = data.tracks
     .filter((x) => x.notes.length)
     .map(({ notes }, index) => {
-      const groupedNotes: PlaybackInfo[] = [];
+      const groupedNotes: PlaybackEvent[] = [];
       for (const note of notes) {
         const existing = groupedNotes.find(
           (c) => Math.abs(c.time - note.time) < timeTolerance,
@@ -79,11 +79,11 @@ export function parseMidiData(
   );
 }
 
-function getEndNote({ time, duration }: PlaybackInfo) {
+function getEndNote({ time, duration }: PlaybackEvent) {
   return {
     time: time + duration,
     duration: 0,
     notes: [{ name: END_NOTE }],
     velocity: 0,
-  } as PlaybackInfo;
+  } as PlaybackEvent;
 }

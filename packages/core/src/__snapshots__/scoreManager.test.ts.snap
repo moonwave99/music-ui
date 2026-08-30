@@ -1,5 +1,177 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`ScoreManager - getScoreContent > Gets the playback events from the passed score - with chords 1`] = `
+[
+  {
+    "notes": [
+      {
+        "duration": 0.25,
+        "notes": [
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 60,
+            "name": "C4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 64,
+            "name": "E4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 67,
+            "name": "G4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0.25,
+        "notes": [
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 62,
+            "name": "D4",
+            "ticks": 240,
+            "time": 0.25,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 65,
+            "name": "F4",
+            "ticks": 240,
+            "time": 0.25,
+            "velocity": 0.6692913385826772,
+          },
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 69,
+            "name": "A4",
+            "ticks": 240,
+            "time": 0.25,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0.25,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0,
+        "notes": [
+          {
+            "name": "__END_NOTE__",
+          },
+        ],
+        "time": 0.5,
+        "velocity": 0,
+      },
+    ],
+    "voice": 0,
+  },
+]
+`;
+
+exports[`ScoreManager - getScoreContent > Gets the playback events from the passed score 1`] = `
+[
+  {
+    "notes": [
+      {
+        "duration": 0.25,
+        "notes": [
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 60,
+            "name": "C4",
+            "ticks": 0,
+            "time": 0,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0.25,
+        "notes": [
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 62,
+            "name": "D4",
+            "ticks": 240,
+            "time": 0.25,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0.25,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0.25,
+        "notes": [
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 64,
+            "name": "E4",
+            "ticks": 480,
+            "time": 0.5,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0.5,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0.25,
+        "notes": [
+          {
+            "duration": 0.25,
+            "durationTicks": 240,
+            "midi": 65,
+            "name": "F4",
+            "ticks": 720,
+            "time": 0.75,
+            "velocity": 0.6692913385826772,
+          },
+        ],
+        "time": 0.75,
+        "velocity": 0.6692913385826772,
+      },
+      {
+        "duration": 0,
+        "notes": [
+          {
+            "name": "__END_NOTE__",
+          },
+        ],
+        "time": 1,
+        "velocity": 0,
+      },
+    ],
+    "voice": 0,
+  },
+]
+`;
+
 exports[`ScoreManager - getScoreContent > Gets the playback info of the passed score - with chords 1`] = `
 [
   {

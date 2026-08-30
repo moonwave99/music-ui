@@ -5,7 +5,6 @@ import {
   BPM_RANGE,
   type Score,
 } from "@music-ui/core";
-
 import { cssClasses } from "./abcScore";
 
 type InitControlsParams = {

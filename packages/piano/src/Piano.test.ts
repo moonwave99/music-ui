@@ -84,6 +84,39 @@ describe("Piano - setNotes", () => {
         octave: "4",
       },
     ]);
+
+    piano.setNotes("D4 F#4 A4");
+
+    expect(
+      [...wrapper!.querySelectorAll(".key-on")].map((el) => ({
+        ...(el as HTMLElement).dataset,
+      })),
+    ).toEqual([
+      {
+        chroma: "2",
+        color: "white",
+        midi: "62",
+        note: "D",
+        noteWithOctave: "D4",
+        octave: "4",
+      },
+      {
+        chroma: "6",
+        color: "black",
+        midi: "66",
+        note: "F#",
+        noteWithOctave: "F#4",
+        octave: "4",
+      },
+      {
+        chroma: "9",
+        color: "white",
+        midi: "69",
+        note: "A",
+        noteWithOctave: "A4",
+        octave: "4",
+      },
+    ]);
   });
 
   it("Displays the enharmonic equivalents of the passed notes", () => {
@@ -364,6 +397,18 @@ describe("Piano - setPlayedNotes", () => {
       wrapper?.querySelector(".note-with-octave-E4")?.classList,
     ).not.toContain("key-played");
     expect(wrapper?.querySelector(".note-with-octave-G4")?.classList).toContain(
+      "key-played",
+    );
+
+    piano.setNotes("D4 F#4 A4").setPlayedNotes("D4, A4");
+
+    expect(wrapper?.querySelector(".note-with-octave-D4")?.classList).toContain(
+      "key-played",
+    );
+    expect(
+      wrapper?.querySelector('[data-note-with-octave="F#4"]')?.classList,
+    ).not.toContain("key-played");
+    expect(wrapper?.querySelector(".note-with-octave-A4")?.classList).toContain(
       "key-played",
     );
   });

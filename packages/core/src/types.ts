@@ -1,20 +1,5 @@
 /**
- * The time signature of a score, expressed as a tuple of two integers.
- */
-export type TimeSignature = [number, number];
-
-/**
- * The default note length of an abc score, expressed as a fraction.
- */
-export type UnitNoteLength = `${number}/${number}`;
-
-/**
- * Indicates a transport position in the format {bars}:{beats}:{sub-subdivisions}.
- * A TransportPosition must always be considered in the time signature context.
- */
-export type TransportPosition = `${number}:${number}:${number}`;
-
-/**
+ * Holds the content and the meta information of a score.
  * @property id The score id
  * @property content The score content (in abc notation)
  * @property hash The score hash (computed for caching)
@@ -28,6 +13,7 @@ export type Score = {
 };
 
 /**
+ * The meta information of a score.
  * @property title The score title
  * @property composer The score composer
  * @property timeSignature The score time signature (e.g. "4/4", "3/8")
@@ -43,6 +29,22 @@ export type ScoreInfo = {
   key?: string;
   bpm: number;
 };
+
+/**
+ * The time signature of a score, expressed as a tuple of two integers.
+ */
+export type TimeSignature = [number, number];
+
+/**
+ * The default note length of an abc score, expressed as a fraction.
+ */
+export type UnitNoteLength = `${number}/${number}`;
+
+/**
+ * Indicates a transport position in the format {bars}:{beats}:{sub-subdivisions}.
+ * A TransportPosition must always be considered in the time signature context.
+ */
+export type TransportPosition = `${number}:${number}:${number}`;
 
 /**
  * The current player status.

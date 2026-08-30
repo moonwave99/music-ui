@@ -9,15 +9,24 @@ import {
 import { END_NOTE } from "./lib";
 import { ScoreManager } from "./scoreManager";
 
-export type PlaybackNote = NoteJSON;
-
-export type PlaybackInfo = {
+/**
+ * A playback event.
+ * @property time The event scheduled time.
+ * @property duration The event duration.
+ * @property notes The notes to be played.
+ * @property velocity The playback velocity
+ */
+export type PlaybackEvent = {
   time: number;
   duration: number;
-  notes: PlaybackNote[];
+  notes: NoteJSON[];
   velocity: number;
 };
 
+/**
+ * The Player options.
+ * @property timeTolerance The tolerance for grouping chord notes together.
+ */
 export type PlayerOptions = {
   timeTolerance: number;
 };
@@ -26,6 +35,24 @@ const DEFAULT_OPTIONS = {
   timeTolerance: 0.02,
 } as const;
 
+const transportEvents = ["start", "stop", "pause"] as const;
+
+export const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
+
+export const BPM_RANGE = [20, 200] as const;
+
+/**
+ * The events triggered by the player.
+ */
+export type PlayerEvents = "stop" | "pause" | "progress" | "finished";
+
+/**
+ * The player event listener callback.
+ * @property playedNotes The current played notes.
+ * @property activeId The current score id.
+ * @property position The current transport position.
+ * @property voice The current played voice.
+ */
 export type PlayerCallback = (params: {
   playedNotes: string[][];
   activeId: string;
@@ -33,8 +60,18 @@ export type PlayerCallback = (params: {
   voice: number;
 }) => void;
 
-export type PlayerEvents = "stop" | "pause" | "progress" | "finished";
-
+/**
+ * Transport for timing musical events.
+ * @property on Adds an event listener.
+ * @property off Removes an event listener.
+ * @property cancel Cancels future events.
+ * @property bpm The current bpm.
+ * @property timeSignature The current time signature.
+ * @property position The current position.
+ * @property start Starts playback.
+ * @property stop Stops playback.
+ * @property pause Pauses playback.
+ */
 export type Transport = {
   on: (eventName: "start" | "stop" | "pause", callback: () => void) => void;
   off: (eventName: "start" | "stop" | "pause", callback?: () => void) => void;
@@ -49,11 +86,20 @@ export type Transport = {
   pause: () => void;
 };
 
+/**
+ * Useful for synchronizing visuals and audio events.
+ * @property cancel Cancels future events.
+ * @property schedule Schedules the passed callback at the passed time.
+ */
 export type Draw = {
   cancel: (time: Unit.Time) => void;
   schedule: (callback: () => void, time: Unit.Time) => void;
 };
 
+/**
+ * Automatically interpolates between a set of pitched samples.
+ * @property triggerAttackRelease Plays the passed notes.
+ */
 export type Sampler = {
   triggerAttackRelease: (
     notes: string[] | string,
@@ -63,22 +109,33 @@ export type Sampler = {
   ) => void;
 };
 
+/**
+ * A collection of Tone.Events which can be started/stopped and looped as a single unit.
+ * @property start Starts the part.
+ * @property clear Clears the part.
+ */
 export type Part = {
   start: (time: Unit.Time) => void;
   clear: (time?: Unit.Time) => void;
 };
 
-const transportEvents = ["start", "stop", "pause"] as const;
-
-export const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
-
-export const BPM_RANGE = [20, 200] as const;
-
+/**
+ * A function that returns a Part from the given progress callback and playback info.
+ */
 type GetPart = (
-  callback: (time: number, chord: PlaybackInfo) => void,
-  info: PlaybackInfo[],
+  callback: (time: number, event: PlaybackEvent) => void,
+  events: PlaybackEvent[],
 ) => Part;
 
+/**
+ * The parameters accepted by the Player constructor.
+ * @property sampler The Sampler instance
+ * @property transport The Transport instance
+ * @property draw The Draw instance
+ * @property startAudio The audio initializer function
+ * @property getPart The function used to create the parts
+ * @property options The Player options
+ */
 type PlayerParams = {
   sampler: Sampler;
   transport: Transport;
@@ -104,7 +161,7 @@ export class Player {
   /**
    * Creates a `Player` instance.
    *
-   * @param params The accepted params
+   * @param __namedParameters The accepted params
    */
   constructor({
     sampler,
@@ -132,12 +189,19 @@ export class Player {
       ),
     );
   }
+  /**
+   * Clears all event listeners and future playback scheduled events.
+   */
   destroy() {
     transportEvents.forEach((eventName) => this.transport.off(eventName));
     this.eventEmitter.removeAllListeners();
     this.draw.cancel(0);
     this.transport.cancel(0);
   }
+  /**
+   * Returns the current score.
+   * @returns The current score.
+   */
   getScore() {
     return this.score;
   }
@@ -145,6 +209,11 @@ export class Player {
     this.eventEmitter.addListener(eventName, callback);
     return () => this.eventEmitter.removeListener(eventName, callback);
   }
+  /**
+   * Sets the current score.
+   * @param score The score to be set.
+   * @returns The current Player instance.
+   */
   setScore(score: Score | null) {
     if (!score) {
       this.score = null;
@@ -163,6 +232,30 @@ export class Player {
     this.createParts();
     return this;
   }
+  /**
+   * Sets the current transport bpm value.
+   * @throws `Value must be in the ${BPM_RANGE} range, received ${value} instead` if the passed value is not the BPM range.
+   * @param value The new bpm value.
+   */
+  setBpm(value: number) {
+    if (value < BPM_RANGE[0] || value > BPM_RANGE[1]) {
+      throw new Error(
+        `Value must be in the ${BPM_RANGE} range, received ${value} instead`,
+      );
+    }
+    this.transport.bpm.value = value;
+  }
+  /**
+   * Returns the current transport bpm value.
+   * @returns The bpm value.
+   */
+  getBpm() {
+    return this.transport.bpm.value;
+  }
+  /**
+   * Starts playback.
+   * @returns The current Player instance.
+   */
   async play() {
     // #TODO fix seek before first playback bug
     await this.startAudio();
@@ -173,32 +266,35 @@ export class Player {
     this.transport.start();
     return this;
   }
-  setBpm(value: number) {
-    if (value < BPM_RANGE[0] || value > BPM_RANGE[1]) {
-      throw new Error(
-        `Value must be in the ${BPM_RANGE} range, received ${value} instead`,
-      );
-    }
-    this.transport.bpm.value = value;
-  }
-  getBpm() {
-    return this.transport.bpm.value;
-  }
+  /**
+   * Pauses playback.
+   * @returns The current Player instance.
+   */
   pause() {
     this.transport.pause();
     return this;
   }
+  /**
+   * Stops playback.
+   * @returns The current Player instance.
+   */
   stop() {
     this.transport.stop();
     this.draw.cancel(0);
     this.clearPlayedNotes();
     return this;
   }
+  /**
+   * Seeks playback to the passed position.
+   * @param position The new position.
+   * @returns The current Player instance.
+   */
   seekTo(position: TransportPosition) {
     this.transport.position = normalizedPositionToTonePosition(
       position,
       this.timeSignature!,
     );
+    return this;
   }
   private updatePlayedNotes(notes: string[], voice: number) {
     this.playedNotes = this.playedNotes.map((x, index) =>
@@ -225,12 +321,12 @@ export class Player {
     this.playedNotes = scoreData.map(() => []);
 
     this.parts = scoreData.map(({ notes, voice }) =>
-      this.getPart((time: number, chord: PlaybackInfo) => {
+      this.getPart((time: number, event: PlaybackEvent) => {
         const position = tonePositionToNormalizedPosition(
           this.transport.position as TransportPosition,
           this.timeSignature!,
         );
-        if (chord.notes.some((note) => note.name === END_NOTE)) {
+        if (event.notes.some((note) => note.name === END_NOTE)) {
           this.draw.schedule(() => {
             this.eventEmitter.emit("finished", {
               playedNotes: this.playedNotes,
@@ -244,15 +340,15 @@ export class Player {
         }
 
         this.sampler.triggerAttackRelease(
-          chord.notes.map(({ name }) => name),
-          chord.duration,
+          event.notes.map(({ name }) => name),
+          event.duration,
           time,
-          chord.velocity,
+          event.velocity,
         );
 
         this.draw.schedule(() => {
           this.updatePlayedNotes(
-            chord.notes.map(({ name }) => name),
+            event.notes.map(({ name }) => name),
             voice,
           );
           this.eventEmitter.emit("progress", {
