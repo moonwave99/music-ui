@@ -1,5 +1,11 @@
 # @music-ui/core
 
+## 0.14.0
+
+### Minor Changes
+
+- df7f8e4: Various playback bugfixes
+
 ## 0.13.0
 
 ### Minor Changes
