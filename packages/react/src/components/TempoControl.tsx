@@ -2,6 +2,17 @@ import { type ChangeEvent } from "react";
 import { BPM_RANGE } from "@music-ui/core";
 import { cssClasses } from "@music-ui/abc";
 
+/**
+ * The props expected by the `TempoControl` component.
+ * @property id The score id.
+ * @property className The component class name.
+ * @property inputLabel The input element label.
+ * @property valueLabel The output element label.
+ * @property resetButtonText The reset button text.
+ * @property value The current tempo value.
+ * @property onChange Function called when the tempo value changes.
+ * @property onReset Function called when the tempo is reset.
+ */
 type TempoControlProps = {
   id: string;
   className?: string;
@@ -13,6 +24,9 @@ type TempoControlProps = {
   onReset: () => void;
 };
 
+/**
+ * A component that handles tempo change for the parent {@link ABCScore}.
+ */
 export function TempoControl({
   id,
   className = cssClasses.tempoControl,

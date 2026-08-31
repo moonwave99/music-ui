@@ -8,11 +8,29 @@ import type {
 } from "@music-ui/core";
 import { PlayerContext } from "../PlayerProvider";
 
+/**
+ * The params expected by the `usePlayer` function.
+ * @property id The current score id
+ * @property onStop Callback invoked when the playback stops.
+ */
 export type UsePlayerParams = {
   id: string;
   onStop?: () => void;
 };
 
+/**
+ * Properties exposed by the `usePlayer` hook.
+ * @property play Plays the current score.
+ * @property pause Pauses the current playback.
+ * @property resume Resumes the current playback.
+ * @property stop Stops the current playback.
+ * @property seekTo Seeks the current playback to the passed position.
+ * @property setBpm Sets the transport bpm to the passed value.
+ * @property isCurrentScore Tells if the passed score is the one being played.
+ * @property playerStatus The current playback status.
+ * @property playedNotes The notes being currently played.
+ * @property position The current transport position.
+ */
 export type UsePlayer = {
   play: (score: Score, bpm?: number) => void;
   pause: () => void;
@@ -28,6 +46,12 @@ export type UsePlayer = {
 
 const EMPTY_VOICES = [[], [], [], []] as string[][];
 
+/**
+ * Hook used to playback scores.
+ * @throws `usePlayer has to be used within a <PlayerProvider>` if the component is not a descendant of a {@link PlayerProvider}.
+ * @param __namedParameters The expected parameters.
+ * @returns { UsePlayer } The properties exposed by the hook.
+ */
 export function usePlayer({ id, onStop }: UsePlayerParams): UsePlayer {
   const playerContext = use(PlayerContext);
   if (!playerContext) {

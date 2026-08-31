@@ -1,24 +1,35 @@
-import { useId, type ReactElement } from "react";
+import { useId } from "react";
 import { Piano, type PianoProps } from "./Piano";
 import { usePlayer } from "../hooks/usePlayer";
 import { getPianoScore, joinVoices } from "@music-ui/core";
 
+/**
+ * Props expected by the `PianoWithPlayer` component.
+ * @property id The piano unique identifier.
+ * @property description The piano description.
+ * @property playLabel The playback label.
+ * @property arpeggioLabel The playback arpeggio label.
+ * @property arpeggioSpeed The arpeggio playback speed.
+ */
 export type PianoWithPlayerProps = PianoProps & {
   id: string;
-  label?: string;
+  description?: string;
   playLabel?: string;
   arpeggioLabel?: string;
   arpeggioSpeed?: number;
 };
 
+/**
+ * A component that adds playback to a {@link Piano}.
+ */
 export function PianoWithPlayer({
-  label = "",
+  description = "",
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
   arpeggioSpeed = 120,
   className = "piano-with-player",
   ...props
-}: PianoWithPlayerProps): ReactElement {
+}: PianoWithPlayerProps) {
   const componentId = useId();
   const id = props.id || componentId;
   const { notes = [], ...rest } = props;
@@ -50,7 +61,7 @@ export function PianoWithPlayer({
           {arpeggioLabel}
         </button>
       </div>
-      <figcaption>{label}</figcaption>
+      <figcaption>{description}</figcaption>
     </figure>
   );
 }

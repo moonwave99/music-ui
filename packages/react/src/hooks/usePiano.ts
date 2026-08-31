@@ -8,6 +8,13 @@ import {
 import { Piano, type PianoOptions } from "@music-ui/piano";
 import type { NoteInput } from "@music-ui/core";
 
+/**
+ * The params expected by the `usePiano` function.
+ * @property notes The notes to highlight.
+ * @property noteLabels The corresponding note labels.
+ * @property playedNotes The notes being currently played.
+ * @property imperativeRef A reference to the `ImperativePiano` methods.
+ */
 export type UsePianoParams = Partial<PianoOptions> & {
   notes?: NoteInput;
   noteLabels?: NoteInput;
@@ -15,12 +22,25 @@ export type UsePianoParams = Partial<PianoOptions> & {
   imperativeRef?: Ref<ImperativePiano>;
 };
 
+/**
+ * The piano methods that can be called imperatively from outside the component.
+ * @see {@link https://react.dev/reference/react/useImperativeHandle|React docs}
+ */
 export type ImperativePiano = Pick<Piano, "setNotes" | "clearNotes">;
 
+/**
+ * Properties exposed by the `usePiano` hook.
+ * @property ref Reference to the `HTMLElement` where the piano will be rendered.
+ */
 export type UsePiano<T extends HTMLElement> = {
   ref: RefObject<T | null>;
 };
 
+/**
+ *
+ * @param __namedParameters The parameters for rendering a piano on screen.
+ * @returns { UsePiano } The properties exposed by the hook.
+ */
 export function usePiano<T extends HTMLElement>({
   notes,
   noteLabels,

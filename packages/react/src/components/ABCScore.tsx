@@ -1,8 +1,15 @@
-import { type ReactNode, ReactElement, useId } from "react";
+import { useId, type ReactNode } from "react";
 import { useABCScore, type UseABCScoreParams } from "../hooks/useABCScore";
 import { getAbcScore } from "@music-ui/core";
 import { getNodeText } from "../utils";
 
+/**
+ * Props expected by the `ABCScore` component.
+ * @property id The score unique identifier.
+ * @property children The `textContext` holding the ABC notation.
+ * @property className The component class name.
+ * @property showTempo Displays or hides the score tempo indicator.
+ */
 export type ABCScoreProps = UseABCScoreParams & {
   id?: string;
   children: ReactNode;
@@ -10,13 +17,16 @@ export type ABCScoreProps = UseABCScoreParams & {
   showTempo?: boolean;
 };
 
+/**
+ * A component wrapped around the `@music-ui/abc` ABCScore class.
+ */
 export function ABCScore({
   className = "abc-score",
   children,
   showTempo = true,
   showTimeSignature = true,
   ...params
-}: ABCScoreProps): ReactElement {
+}: ABCScoreProps) {
   const componentId = useId();
   const id = params.id || componentId;
   const input = getNodeText(children);

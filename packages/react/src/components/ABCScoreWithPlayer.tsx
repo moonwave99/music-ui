@@ -4,7 +4,6 @@ import {
   useCallback,
   useId,
   type ReactNode,
-  ReactElement,
 } from "react";
 import {
   OnABCClickParams,
@@ -17,18 +16,32 @@ import { TempoControl } from "./TempoControl";
 import { getNodeText } from "../utils";
 import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
 
+/**
+ * Props expected by the `ABCScoreWithPlayer` component.
+ * @property id The score unique identifier.
+ * @property children The `textContext` holding the ABC notation.
+ * @property className The component class name.
+ * @property showTempo Displays or hides the score tempo indicator.
+ * @property showPiano Displays or hides the piano view.
+ * @property playButtonLabel The play button label.
+ * @property stopButtonLabel The stop button label.
+ * @property pauseButtonLabel The pause button label.
+ */
 export type ABCScoreWithPlayerProps = UseABCScoreParams & {
   id?: string;
   children: ReactNode;
   className?: string;
   pianoOptions?: PianoProps;
-  showPiano?: boolean;
   showTempo?: boolean;
+  showPiano?: boolean;
   playButtonLabel?: string;
   stopButtonLabel?: string;
   pauseButtonLabel?: string;
 };
 
+/**
+ * A component that adds playback to a {@link ABCScore}.
+ */
 export function ABCScoreWithPlayer({
   className = "abc-score",
   children,
@@ -36,11 +49,11 @@ export function ABCScoreWithPlayer({
   playButtonLabel = "Play",
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
-  showPiano = false,
   showTempo = true,
+  showPiano = false,
   showTimeSignature = true,
   ...params
-}: ABCScoreWithPlayerProps): ReactElement {
+}: ABCScoreWithPlayerProps) {
   const componentId = useId();
   const id = params.id || componentId;
   const score = getAbcScore({
