@@ -39,6 +39,9 @@ importers:
       '@music-ui/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@music-ui/fretboard':
+        specifier: workspace:*
+        version: link:../../packages/fretboard
       '@music-ui/piano':
         specifier: workspace:*
         version: link:../../packages/piano
@@ -229,6 +232,70 @@ importers:
         specifier: ^8.50.0
         version: 8.65.0(eslint@9.39.5(supports-color@7.2.0))(supports-color@7.2.0)(typescript@5.9.2)
 
+  packages/fretboard:
+    dependencies:
+      '@music-ui/core':
+        specifier: workspace:*
+        version: link:../core
+      '@tonaljs/interval':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@tonaljs/mode':
+        specifier: ^4.9.2
+        version: 4.9.2
+      '@tonaljs/note':
+        specifier: ^4.12.1
+        version: 4.12.1
+      '@tonaljs/scale':
+        specifier: ^4.13.4
+        version: 4.13.4
+      change-case:
+        specifier: ^5.4.4
+        version: 5.4.4
+      d3-selection:
+        specifier: ^3.0.0
+        version: 3.0.0
+      throttle-debounce:
+        specifier: ^5.0.2
+        version: 5.0.2
+    devDependencies:
+      '@music-ui/eslint-config':
+        specifier: workspace:*
+        version: link:../eslint-config
+      '@music-ui/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+      '@testing-library/user-event':
+        specifier: ^14.6.1
+        version: 14.6.1(@testing-library/dom@10.4.1)
+      '@types/d3-selection':
+        specifier: ^3.0.11
+        version: 3.0.11
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.20.1
+      '@types/throttle-debounce':
+        specifier: ^5.0.2
+        version: 5.0.2
+      '@vitest/coverage-istanbul':
+        specifier: 4.1.10
+        version: 4.1.10(supports-color@7.2.0)(vitest@4.1.10)
+      eslint:
+        specifier: ^9.39.1
+        version: 9.39.5(supports-color@7.2.0)
+      jsdom:
+        specifier: ^30.0.1
+        version: 30.0.1
+      tsup:
+        specifier: ^8.5.1
+        version: 8.5.1(postcss@8.5.25)(supports-color@7.2.0)(typescript@5.9.2)(yaml@2.9.0)
+      typescript:
+        specifier: 5.9.2
+        version: 5.9.2
+      vitest:
+        specifier: ^4.1.10
+        version: 4.1.10(@types/node@22.20.1)(@vitest/coverage-istanbul@4.1.10)(jsdom@30.0.1)(vite@8.1.5(@types/node@22.20.1)(esbuild@0.27.7)(yaml@2.9.0))
+
   packages/piano:
     dependencies:
       '@music-ui/core':
@@ -283,6 +350,9 @@ importers:
       '@music-ui/core':
         specifier: workspace:*
         version: link:../core
+      '@music-ui/fretboard':
+        specifier: workspace:*
+        version: link:../fretboard
       '@music-ui/piano':
         specifier: workspace:*
         version: link:../piano
@@ -1652,11 +1722,26 @@ packages:
   '@tonaljs/abc-notation@4.9.1':
     resolution: {integrity: sha512-2fDUdPsFDdgZgyIiZCTYGKy30QiwIQxSXCSN2thGrSMXbQKCp8iTC8haStYcrA+25MPWhWlmvC/pz3tGcTNAqQ==}
 
+  '@tonaljs/chord-type@5.1.1':
+    resolution: {integrity: sha512-ti4WzRYvvjH7to0G3zlJFq7WsjHqmcqbk8Jv98aZSR5YumLdY/ua2yOPPyoPq82n6vfgjZsacnAZ3v8/SodOcw==}
+
+  '@tonaljs/collection@4.9.0':
+    resolution: {integrity: sha512-Mk0h7O54nT6PgNVcUYauzxa5KOB23+0AOKudWzRH7JhJIN9vhVIC7PtwZXE+/G051UTbHSFIcN/afkgF4nB/8A==}
+
+  '@tonaljs/interval@5.1.0':
+    resolution: {integrity: sha512-GR9dUjn0j7yhjwjRh8HQxZYXOiVl05WfY3AFyMB9rfg807K4dSJmWfPTULPQXyHJ6NiZOPXcwRs8MxMLDxgdbg==}
+
   '@tonaljs/midi@4.10.2':
     resolution: {integrity: sha512-MPamXhEwPL7L1udLfYMm3Ft8mLYtHr62Zi2w5zYHM2P7YwIvNoiX0+dvAN5is1Wvq4iVRa8AjFHerjOW/SZhGg==}
 
+  '@tonaljs/mode@4.9.2':
+    resolution: {integrity: sha512-Il48fWX9SnGMzwNFVbizkWkr/SJ+aCIIHhjWfSf1agrQAoq81536qBXEyEyvia6aqEXC4OaXAQ5rSoBcmQRj1Q==}
+
   '@tonaljs/note@4.12.1':
     resolution: {integrity: sha512-yh6cnhu21bUb0VuIQWxObSbWBVp2cHIkJj4zZ4qsNOW4jSqn74+wHpSbOTDF8q+2hl6upz7TtBRavtqwPtLUCQ==}
+
+  '@tonaljs/pcset@4.10.1':
+    resolution: {integrity: sha512-CZG1rpKc38yMfpEJsbDTvsTmQqsek9xxcuMgK64Tr6sP1lEiDuZJbQeKVWWRnreBF2FQ1cEGLmfOpvSO+40csA==}
 
   '@tonaljs/pitch-distance@5.0.5':
     resolution: {integrity: sha512-dTfjsU0zyrj5YmiFio5prPaD5w7sBmHp4nnmlEg70nHY+SerAH0KiO9HM9usttVgRFUaXl0Gc7OI8YMGfSFmug==}
@@ -1669,6 +1754,12 @@ packages:
 
   '@tonaljs/pitch@5.0.2':
     resolution: {integrity: sha512-mxaXJPPe+LIJdjzpZEl8I8Wx3dEvlzkBbsr2Ltwc2dTAdnErAZ5R0TxVq2egF27lMvQN2QPQPWI9iDPPdVUmrg==}
+
+  '@tonaljs/scale-type@4.9.2':
+    resolution: {integrity: sha512-XDRPySg0X6owJ6AVzVRpS4ZpgleAUQakuq5VtfQ0JitnJKGRYo5Y0w7Fl/wEz/X9aEMk2lxcdF8VGGMIsQFo0g==}
+
+  '@tonaljs/scale@4.13.4':
+    resolution: {integrity: sha512-hyilnmsCmoGQiRhYWKM1QPrqaNH3KGEfrSfxeXcicPnEh12yvrVRm4djKmTVw7Rc/5P4GniPAA51+CS0C5dbLw==}
 
   '@tonejs/midi@2.0.28':
     resolution: {integrity: sha512-RII6YpInPsOZ5t3Si/20QKpNqB1lZ2OCFJSOzJxz38YdY/3zqDr3uaml4JuCWkdixuPqP1/TBnXzhQ39csyoVg==}
@@ -1881,6 +1972,9 @@ packages:
 
   '@types/stack-utils@2.0.3':
     resolution: {integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==}
+
+  '@types/throttle-debounce@5.0.2':
+    resolution: {integrity: sha512-pDzSNulqooSKvSNcksnV72nk8p7gRqN8As71Sp28nov1IgmPKWbOEIwAWvBME5pPTtaXJAvG3O4oc76HlQ4kqQ==}
 
   '@types/tough-cookie@4.0.5':
     resolution: {integrity: sha512-/Ad8+nIOV7Rl++6f1BdKxFSMgmoqEoYbHRpPcx3JEfv8VRsQe9Z4mCXeJBzxs7mbHY/XOZZuXlRNfhpVPbs6ZA==}
@@ -4511,6 +4605,10 @@ packages:
   thenify@3.3.1:
     resolution: {integrity: sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw==}
 
+  throttle-debounce@5.0.2:
+    resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
+    engines: {node: '>=12.22'}
+
   tinybench@2.9.0:
     resolution: {integrity: sha512-0+DUvqWMValLmha6lr4kD8iAMK1HzV0/aKnCtWb9v9641TnP/MFb7Pc2bxoxQjTXAErryXVgUOfv2YqNllqGeg==}
 
@@ -6168,13 +6266,42 @@ snapshots:
       '@tonaljs/pitch-distance': 5.0.5
       '@tonaljs/pitch-note': 6.1.0
 
+  '@tonaljs/chord-type@5.1.1':
+    dependencies:
+      '@tonaljs/pcset': 4.10.1
+
+  '@tonaljs/collection@4.9.0': {}
+
+  '@tonaljs/interval@5.1.0':
+    dependencies:
+      '@tonaljs/pitch': 5.0.2
+      '@tonaljs/pitch-distance': 5.0.5
+      '@tonaljs/pitch-interval': 6.1.0
+
   '@tonaljs/midi@4.10.2':
     dependencies:
       '@tonaljs/pitch-note': 6.1.0
 
+  '@tonaljs/mode@4.9.2':
+    dependencies:
+      '@tonaljs/collection': 4.9.0
+      '@tonaljs/interval': 5.1.0
+      '@tonaljs/pcset': 4.10.1
+      '@tonaljs/pitch-distance': 5.0.5
+      '@tonaljs/pitch-note': 6.1.0
+      '@tonaljs/scale-type': 4.9.2
+
   '@tonaljs/note@4.12.1':
     dependencies:
       '@tonaljs/midi': 4.10.2
+      '@tonaljs/pitch': 5.0.2
+      '@tonaljs/pitch-distance': 5.0.5
+      '@tonaljs/pitch-interval': 6.1.0
+      '@tonaljs/pitch-note': 6.1.0
+
+  '@tonaljs/pcset@4.10.1':
+    dependencies:
+      '@tonaljs/collection': 4.9.0
       '@tonaljs/pitch': 5.0.2
       '@tonaljs/pitch-distance': 5.0.5
       '@tonaljs/pitch-interval': 6.1.0
@@ -6195,6 +6322,20 @@ snapshots:
       '@tonaljs/pitch': 5.0.2
 
   '@tonaljs/pitch@5.0.2': {}
+
+  '@tonaljs/scale-type@4.9.2':
+    dependencies:
+      '@tonaljs/pcset': 4.10.1
+
+  '@tonaljs/scale@4.13.4':
+    dependencies:
+      '@tonaljs/chord-type': 5.1.1
+      '@tonaljs/collection': 4.9.0
+      '@tonaljs/note': 4.12.1
+      '@tonaljs/pcset': 4.10.1
+      '@tonaljs/pitch-distance': 5.0.5
+      '@tonaljs/pitch-note': 6.1.0
+      '@tonaljs/scale-type': 4.9.2
 
   '@tonejs/midi@2.0.28':
     dependencies:
@@ -6428,6 +6569,8 @@ snapshots:
       csstype: 3.2.3
 
   '@types/stack-utils@2.0.3': {}
+
+  '@types/throttle-debounce@5.0.2': {}
 
   '@types/tough-cookie@4.0.5': {}
 
@@ -9949,6 +10092,8 @@ snapshots:
   thenify@3.3.1:
     dependencies:
       any-promise: 1.3.0
+
+  throttle-debounce@5.0.2: {}
 
   tinybench@2.9.0: {}
 

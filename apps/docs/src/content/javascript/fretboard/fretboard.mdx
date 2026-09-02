@@ -1,0 +1,42 @@
+# The `Fretboard` class
+
+If you need more control over the component lifecycle, you can use the `Fretboard` class.
+
+<Callout type="info">
+  Check [the complete `Fretboard` API
+  reference](/api/classes/_music-ui_fretboard.Fretboard.html) for more details.
+</Callout>
+
+## Installation
+
+<Installation packageName="@music-ui/fretboard" />
+
+## Constructor
+
+The `Fretboard` constructor accepts the following parameters:
+
+| Property  | Type                      | Default      | Description                                   |
+| --------- | ------------------------- | ------------ | --------------------------------------------- |
+| `element` | `string` \| `HTMLElement` | `#fretboard` | The container element or a valid CSS selector |
+
+Usage:
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+// with default options
+const fretboard = new Fretboard();
+```
+
+Creating a new `Fretboard` does not render anything on screen. You have to call `render()` for that:
+
+```ts {4}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+fretboard.render();
+```
+
+Output:
+
+<Fretboard />
