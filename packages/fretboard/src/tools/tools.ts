@@ -43,10 +43,10 @@ export function disableStrings({
   box = [],
   strings = [],
 }: DisableStringsParams): FretboardPosition[] {
-  return box.map(({ string, ...dot }) => ({
+  return box.map(({ string, ...position }) => ({
     string,
     disabled: strings.includes(string),
-    ...dot,
+    ...position,
   }));
 }
 
@@ -81,7 +81,7 @@ export function sliceBox({
   return sortedBox.slice(fromIndex, toIndex);
 }
 
-export function disableDots({
+export function disablePositions({
   box = [],
   from = FIRST_FRET,
   to = INFINITY_FRET,
@@ -90,6 +90,6 @@ export function disableDots({
     box,
     from,
     to,
-    action: (dot: FretboardPosition) => ({ disabled: true, ...dot }),
+    action: (position: FretboardPosition) => ({ disabled: true, ...position }),
   });
 }

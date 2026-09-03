@@ -1,10 +1,16 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
-import { Fretboard, type FretboardOptions } from "@music-ui/fretboard";
+import {
+  Fretboard,
+  type FretboardOptions,
+  type FretboardPosition,
+} from "@music-ui/fretboard";
 
 /**
  * The params expected by the `useFretboard` function.
  */
-export type UseFretboardParams = Partial<FretboardOptions> & {};
+export type UseFretboardParams = Partial<FretboardOptions> & {
+  positions?: FretboardPosition[];
+};
 
 /**
  * Properties exposed by the `useFretboard` hook.
@@ -19,9 +25,10 @@ export type UseFretboard<T extends HTMLElement> = {
  * @param params The parameters for rendering a fretboard on screen.
  * @returns { UseFretboard } The properties exposed by the hook.
  */
-export function useFretboard<T extends HTMLElement>(
-  params: UseFretboardParams,
-): UseFretboard<T> {
+export function useFretboard<T extends HTMLElement>({
+  positions,
+  ...params
+}: UseFretboardParams): UseFretboard<T> {
   const ref = useRef<T>(null);
   const fretboardRef = useRef<Fretboard>(null);
 
@@ -36,6 +43,14 @@ export function useFretboard<T extends HTMLElement>(
     });
     fretboardRef.current.render();
   }, [params]);
+
+  useLayoutEffect(() => {
+    if (!positions || !positions.length) {
+      fretboardRef.current?.clear().render();
+      return;
+    }
+    fretboardRef.current?.setPositions(positions).render();
+  }, [positions]);
 
   return { ref };
 }

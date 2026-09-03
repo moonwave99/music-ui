@@ -108,16 +108,19 @@ function classRenderer(
   key: string,
   value: string | number | boolean,
 ): string {
-  return ["dot", prefix, kebabCase(key), valueRenderer(key, value)]
+  return ["position", prefix, kebabCase(key), valueRenderer(key, value)]
     .filter((x) => !!x)
     .join("-");
 }
 
-export function dotClasses(dot: FretboardPosition, prefix = ""): string {
+export function getPositionClasses(
+  position: FretboardPosition,
+  prefix = "",
+): string {
   return [
-    prefix ? `dot-${prefix}` : null,
-    `dot-id-s${dot.string}:f${dot.fret}`,
-    ...Object.entries(dot).map(([key, value]) => {
+    prefix ? `position-${prefix}` : null,
+    `position-id-s${position.string}:f${position.fret}`,
+    ...Object.entries(position).map(([key, value]) => {
       let valArray;
       if (!(value instanceof Array)) {
         valArray = [value];
@@ -176,7 +179,7 @@ type GetPositionParams = {
   nutWidth: number;
   strings: number[];
   frets: number[];
-  dots: FretboardPosition[];
+  positions: FretboardPosition[];
 };
 
 export const getPositionFromMouseCoords = ({
@@ -186,7 +189,7 @@ export const getPositionFromMouseCoords = ({
   nutWidth,
   strings,
   frets,
-  dots,
+  positions,
 }: GetPositionParams): FretboardPosition => {
   const { width: stringsGroupWidth, height: stringsGroupHeight } = (
     stringsGroup.node() as HTMLElement
@@ -221,11 +224,11 @@ export const getPositionFromMouseCoords = ({
     foundFret = 0;
   }
 
-  const foundDot = dots.find(
+  const foundPosition = positions.find(
     ({ fret, string }) => fret === foundFret && string === foundString + 1,
   );
   return (
-    foundDot || {
+    foundPosition || {
       string: foundString + 1,
       fret: foundFret,
     }

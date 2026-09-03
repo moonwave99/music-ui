@@ -1,5 +1,5 @@
 import { test, expect } from "vitest";
-import { sliceBox, disableDots, disableStrings } from "./tools";
+import { sliceBox, disablePositions, disableStrings } from "./tools";
 import { Systems, getBox } from "../fretboardSystem/systems/systems";
 
 const box = getBox({
@@ -53,8 +53,8 @@ test("sliceBox with wrong upper bound", () => {
   expect(slicedBox.length).toBe(box.length);
 });
 
-test("disableDots", () => {
-  const disabledBox = disableDots({
+test("disablePositions", () => {
+  const disabledBox = disablePositions({
     box,
     from: { string: 6, fret: 0 },
     to: { string: 6, fret: 2 },
@@ -62,15 +62,15 @@ test("disableDots", () => {
   expect(disabledBox.filter(({ disabled }) => disabled).length).toBe(2);
 });
 
-test("disableDots with default arguments", () => {
-  const disabledBox = disableDots({ box });
+test("disablePositions with default arguments", () => {
+  const disabledBox = disablePositions({ box });
   expect(disabledBox.filter(({ disabled }) => disabled).length).toBe(
     box.length,
   );
 });
 
-test("disableDots just one string", () => {
-  const disabledBox = disableDots({
+test("disablePositions just one string", () => {
+  const disabledBox = disablePositions({
     box,
     from: { string: 4, fret: 0 },
     to: { string: 4, fret: 3 },
