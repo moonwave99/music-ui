@@ -2,7 +2,7 @@
   "name": "@music-ui/react",
   "description": "A collection of React components and hooks based on Music UI tools.",
   "homepage": "https://github.com/moonwave99/music-ui",
-  "version": "0.14.0",
+  "version": "0.14.1",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",

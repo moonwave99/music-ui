@@ -1,5 +1,13 @@
 # docs
 
+## 0.1.15
+
+### Patch Changes
+
+- Updated dependencies [906e553]
+  - @music-ui/fretboard@0.14.1
+  - @music-ui/react@0.14.1
+
 ## 0.1.14
 
 ### Patch Changes
