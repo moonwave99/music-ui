@@ -5,7 +5,7 @@ import { isPositionInBox } from "../FretboardSystem";
 
 test("pentatonic system", () => {
   const positions = getBox({
-    system: Systems.pentatonic,
+    system: "pentatonic",
     root: "E",
     box: 1,
   });
@@ -15,7 +15,7 @@ test("pentatonic system", () => {
 
 test("pentatonic system - major pentatonic", () => {
   const positions = getBox({
-    system: Systems.pentatonic,
+    system: "pentatonic",
     root: "G",
     box: 1,
     mode: "major",
@@ -26,7 +26,7 @@ test("pentatonic system - major pentatonic", () => {
 
 test("CAGED system", () => {
   const positions = getBox({
-    system: Systems.CAGED,
+    system: "CAGED",
     root: "C",
     box: "A",
   });
@@ -38,7 +38,7 @@ test("CAGED system - box not found", () => {
   assert.throws(
     () =>
       getBox({
-        system: Systems.CAGED,
+        system: "CAGED",
         root: "E",
         box: "H",
       }),
@@ -50,7 +50,7 @@ test("pentatonic system - box not found", () => {
   assert.throws(
     () =>
       getBox({
-        system: Systems.pentatonic,
+        system: "pentatonic",
         root: "E",
         box: 6,
       }),
@@ -62,7 +62,7 @@ test("three notes per string system - box not found", () => {
   assert.throws(
     () =>
       getBox({
-        system: Systems.TNPS,
+        system: "TNPS",
         root: "E",
         box: 8,
       }),

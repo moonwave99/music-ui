@@ -57,7 +57,7 @@ test("FretboardSystem - getScale() with system", () => {
     type: "minor pentatonic",
     root: "E",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });
@@ -70,7 +70,7 @@ test("FretboardSystem - getScale() with system - upper octave", () => {
     type: "minor pentatonic",
     root: "E3",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });

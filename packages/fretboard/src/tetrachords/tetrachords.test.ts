@@ -13,8 +13,8 @@ test("tetrachord with default arguments", () => {
 
 test("tetrachord - major linear", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.Linear,
+    type: "Major",
+    layout: "Linear",
     string: 6,
     fret: 0,
     root: "E",
@@ -29,8 +29,8 @@ test("tetrachord - major linear", () => {
 
 test("tetrachord - minor linear", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Minor,
-    layout: TetrachordLayouts.Linear,
+    type: "Minor",
+    layout: "Linear",
     string: 6,
     fret: 0,
     root: "E",
@@ -45,8 +45,8 @@ test("tetrachord - minor linear", () => {
 
 test("tetrachord - major ThreePlusOne", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.ThreePlusOne,
+    type: "Major",
+    layout: "ThreePlusOne",
     string: 6,
     fret: 0,
     root: "E",
@@ -61,8 +61,8 @@ test("tetrachord - major ThreePlusOne", () => {
 
 test("tetrachord - minor ThreePlusOne", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Minor,
-    layout: TetrachordLayouts.ThreePlusOne,
+    type: "Minor",
+    layout: "ThreePlusOne",
     string: 6,
     fret: 0,
     root: "E",
@@ -77,8 +77,8 @@ test("tetrachord - minor ThreePlusOne", () => {
 
 test("tetrachord - major TwoPlusTwo", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.TwoPlusTwo,
+    type: "Major",
+    layout: "TwoPlusTwo",
     string: 6,
     fret: 3,
     root: "G",
@@ -93,8 +93,8 @@ test("tetrachord - major TwoPlusTwo", () => {
 
 test("tetrachord - minor TwoPlusTwo", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Minor,
-    layout: TetrachordLayouts.TwoPlusTwo,
+    type: "Minor",
+    layout: "TwoPlusTwo",
     string: 6,
     fret: 3,
     root: "G",
@@ -109,8 +109,8 @@ test("tetrachord - minor TwoPlusTwo", () => {
 
 test("tetrachord - major TwoPlusTwo - 3rd string", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.TwoPlusTwo,
+    type: "Major",
+    layout: "TwoPlusTwo",
     string: 3,
     fret: 3,
     root: "Bb",
@@ -125,8 +125,8 @@ test("tetrachord - major TwoPlusTwo - 3rd string", () => {
 
 test("tetrachord - minor TwoPlusTwo - 3rd string", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Minor,
-    layout: TetrachordLayouts.TwoPlusTwo,
+    type: "Minor",
+    layout: "TwoPlusTwo",
     string: 3,
     fret: 3,
     root: "Bb",
@@ -141,8 +141,8 @@ test("tetrachord - minor TwoPlusTwo - 3rd string", () => {
 
 test("tetrachord - major OnePlusThree", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.OnePlusThree,
+    type: "Major",
+    layout: "OnePlusThree",
     string: 6,
     fret: 5,
     root: "A",
@@ -157,8 +157,8 @@ test("tetrachord - major OnePlusThree", () => {
 
 test("tetrachord - minor OnePlusThree", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Minor,
-    layout: TetrachordLayouts.OnePlusThree,
+    type: "Minor",
+    layout: "OnePlusThree",
     string: 6,
     fret: 5,
     root: "A",
@@ -173,8 +173,8 @@ test("tetrachord - minor OnePlusThree", () => {
 
 test("tetrachord - major OnePlusThree - 3rd string", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.OnePlusThree,
+    type: "Major",
+    layout: "OnePlusThree",
     string: 3,
     fret: 5,
     root: "C",
@@ -189,8 +189,8 @@ test("tetrachord - major OnePlusThree - 3rd string", () => {
 
 test("tetrachord - minor OnePlusThree - 3rd string", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Minor,
-    layout: TetrachordLayouts.OnePlusThree,
+    type: "Minor",
+    layout: "OnePlusThree",
     string: 3,
     fret: 5,
     root: "C",
@@ -205,8 +205,8 @@ test("tetrachord - minor OnePlusThree - 3rd string", () => {
 
 test("tetrachord - lydian ThreePlusOne", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Lydian,
-    layout: TetrachordLayouts.ThreePlusOne,
+    type: "Lydian",
+    layout: "ThreePlusOne",
     string: 6,
     fret: 5,
     root: "A",
@@ -221,8 +221,8 @@ test("tetrachord - lydian ThreePlusOne", () => {
 
 test("tetrachord - lydian TwoPlusTwo", () => {
   const tetra = tetrachord({
-    type: TetrachordTypes.Lydian,
-    layout: TetrachordLayouts.TwoPlusTwo,
+    type: "Lydian",
+    layout: "TwoPlusTwo",
     string: 6,
     fret: 5,
     root: "A",
@@ -238,8 +238,8 @@ test("tetrachord - lydian TwoPlusTwo", () => {
 test("tetrachord - first string, multiple string layout", () => {
   assert.throws(() => {
     tetrachord({
-      type: TetrachordTypes.Major,
-      layout: TetrachordLayouts.ThreePlusOne,
+      type: "Major",
+      layout: "ThreePlusOne",
       string: 1,
       fret: 5,
       root: "A",
@@ -250,8 +250,8 @@ test("tetrachord - first string, multiple string layout", () => {
 test("tetrachord - fret out of bounds, multiple string layout", () => {
   assert.throws(() => {
     tetrachord({
-      type: TetrachordTypes.Major,
-      layout: TetrachordLayouts.OnePlusThree,
+      type: "Major",
+      layout: "OnePlusThree",
       string: 3,
       fret: 0,
       root: "G",

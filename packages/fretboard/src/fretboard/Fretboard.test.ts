@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { test, expect, assert } from "vitest";
-import { Fretboard, DEFAULT_FRETBOARD_OPTIONS, getBounds } from "./Fretboard";
+import { Fretboard, DEFAULT_FRETBOARD_OPTIONS } from "./Fretboard";
 import { Systems } from "../fretboardSystem/systems/systems";
 import { FretboardSystem } from "../fretboardSystem/FretboardSystem";
 import { GUITAR_TUNINGS } from "../constants";
@@ -31,7 +31,7 @@ const pentaPositions = system.getScale({
   root: "G",
   type: "minor pentatonic",
   box: {
-    system: Systems.pentatonic,
+    system: "pentatonic",
     box: 1,
   },
 });
@@ -114,7 +114,7 @@ test("Fretboard with positions", () => {
     root: "G2",
     type: "minor pentatonic",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });
@@ -137,7 +137,7 @@ test("Fretboard with cropping", () => {
       root: "C",
       type: "minor pentatonic",
       box: {
-        system: Systems.pentatonic,
+        system: "pentatonic",
         box: 1,
       },
     })
@@ -329,7 +329,7 @@ test("Fretboard renderBox()", () => {
     type: "minor",
     root: "E",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });
@@ -349,7 +349,7 @@ test("Fretboard renderBox() - custom tuning warning", () => {
     type: "major pentatonic",
     root: "C",
     box: {
-      system: Systems.CAGED,
+      system: "CAGED",
       box: "C",
     },
   });
@@ -382,7 +382,7 @@ test("Fretboard renderScale() - pentatonic", () => {
     type: "minor pentatonic",
     root: "E",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });
@@ -404,7 +404,7 @@ test("Fretboard renderScale() - CAGED", () => {
     type: "major pentatonic",
     root: "C",
     box: {
-      system: Systems.CAGED,
+      system: "CAGED",
       box: "C",
     },
   });
@@ -426,7 +426,7 @@ test("Fretboard renderScale() - TNPS", () => {
     type: "major pentatonic",
     root: "C",
     box: {
-      system: Systems.TNPS,
+      system: "TNPS",
       box: 1,
     },
   });
@@ -447,7 +447,7 @@ test("Fretboard renderScale() - custom tuning warning", () => {
     type: "major pentatonic",
     root: "C",
     box: {
-      system: Systems.CAGED,
+      system: "CAGED",
       box: "C",
     },
   });
@@ -475,7 +475,7 @@ test("Fretboard with custom classes (scalar)", () => {
     root: "G",
     type: "minor pentatonic",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });
@@ -496,7 +496,7 @@ test("Fretboard with custom classes (array)", () => {
     root: "G",
     type: "minor pentatonic",
     box: {
-      system: Systems.pentatonic,
+      system: "pentatonic",
       box: 1,
     },
   });
@@ -557,19 +557,4 @@ test("Fretboard - clearHighlightAreas", () => {
 
   expect(svg).toBeTruthy();
   expect(svg.querySelectorAll(".highlight-areas .area").length).toBe(0);
-});
-
-test("Fretboard - getBounds", () => {
-  const positions = [
-    { string: 3, fret: 3 },
-    { string: 2, fret: 4 },
-    { string: 1, fret: 3 },
-  ];
-  const bounds = getBounds(positions);
-  expect(bounds).toEqual({
-    bottomLeft: { string: 3, fret: 3 },
-    bottomRight: { string: 3, fret: 4 },
-    topLeft: { string: 1, fret: 3 },
-    topRight: { string: 1, fret: 4 },
-  });
 });

@@ -2,28 +2,18 @@ import { FretboardPosition } from "../fretboard/Fretboard";
 import { get as getInterval } from "@tonaljs/interval";
 import { transpose } from "@tonaljs/note";
 
-export enum TetrachordTypes {
-  Major = "Major",
-  Minor = "Minor",
-  Phrygian = "Phrygian",
-  Harmonic = "Harmonic",
-  Lydian = "Lydian",
-}
-
-export enum TetrachordLayouts {
-  Linear,
-  ThreePlusOne,
-  TwoPlusTwo,
-  OnePlusThree,
-}
+export type TetrachordTypes =
+  "Major" | "Minor" | "Phrygian" | "Harmonic" | "Lydian";
+export type TetrachordLayouts =
+  "Linear" | "ThreePlusOne" | "TwoPlusTwo" | "OnePlusThree";
 
 const Tetrachords = {
-  [TetrachordTypes.Major]: ["M2", "M2", "m2"],
-  [TetrachordTypes.Minor]: ["M2", "m2", "M2"],
-  [TetrachordTypes.Phrygian]: ["m2", "M2", "M2"],
-  [TetrachordTypes.Harmonic]: ["m2", "A2", "m2"],
-  [TetrachordTypes.Lydian]: ["M2", "M2", "M2"],
-};
+  Major: ["M2", "M2", "m2"],
+  Minor: ["M2", "m2", "M2"],
+  Phrygian: ["m2", "M2", "M2"],
+  Harmonic: ["m2", "A2", "m2"],
+  Lydian: ["M2", "M2", "M2"],
+} as const;
 
 type TetrachordArgs = {
   root: string;
@@ -36,8 +26,8 @@ type TetrachordArgs = {
 export function tetrachord(
   { root, type, layout, string, fret }: TetrachordArgs = {
     root: "E",
-    type: TetrachordTypes.Major,
-    layout: TetrachordLayouts.Linear,
+    type: "Major",
+    layout: "Linear",
     string: 6,
     fret: 0,
   },
@@ -53,7 +43,7 @@ export function tetrachord(
 
   let partial = 0;
   let currentNote = root;
-  if (layout === TetrachordLayouts.Linear) {
+  if (layout === "Linear") {
     tetrachord.forEach((x) => {
       const { semitones } = getInterval(x);
       currentNote = transpose(currentNote, x);
@@ -77,11 +67,11 @@ export function tetrachord(
 
   const splitIndex = ((): number => {
     switch (layout) {
-      case TetrachordLayouts.ThreePlusOne:
+      case "ThreePlusOne":
         return 2;
-      case TetrachordLayouts.TwoPlusTwo:
+      case "TwoPlusTwo":
         return 1;
-      case TetrachordLayouts.OnePlusThree:
+      case "OnePlusThree":
         return 0;
     }
   })();

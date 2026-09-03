@@ -1,6 +1,6 @@
 import { kebabCase } from "change-case";
 import type { Selection, BaseType } from "d3-selection";
-import type { FretboardPosition } from "./Fretboard";
+import type { FretboardOptions, FretboardPosition, Point } from "./Fretboard";
 
 type GetStringThicknessParams = {
   stringWidth: number | number[];
@@ -234,3 +234,78 @@ export const getPositionFromMouseCoords = ({
     }
   );
 };
+
+type GetPositionCoordsParams = {
+  fret: number;
+  string: number;
+  frets: number[];
+  strings: number[];
+};
+
+function getPositionCoords({
+  fret,
+  string,
+  frets,
+  strings,
+}: GetPositionCoordsParams): Point {
+  let x = 0;
+  if (fret === 0) {
+    x = frets[0]! / 2;
+  } else {
+    x = frets[fret]! - (frets[fret]! - frets[fret - 1]!) / 2;
+  }
+  return { x, y: strings[string - 1]! };
+}
+
+export function generateGrid({
+  fretCount,
+  stringCount,
+  frets,
+  strings,
+}: {
+  fretCount: number;
+  stringCount: number;
+  frets: number[];
+  strings: number[];
+}): Point[][] {
+  const positions = [];
+  for (let string = 1; string <= stringCount; string++) {
+    const currentString = [];
+    for (let fret = 0; fret <= fretCount; fret++) {
+      currentString.push(getPositionCoords({ fret, string, frets, strings }));
+    }
+    positions.push(currentString);
+  }
+  return positions;
+}
+
+export function validateOptions(options: FretboardOptions): void {
+  const { stringCount, tuning } = options;
+  if (stringCount !== tuning.length) {
+    throw new Error(
+      `stringCount (${stringCount}) and tuning size (${tuning.length}) do not match`,
+    );
+  }
+}
+
+export function getBounds(area: FretboardPosition[]): {
+  bottomLeft: FretboardPosition;
+  bottomRight: FretboardPosition;
+  topRight: FretboardPosition;
+  topLeft: FretboardPosition;
+} {
+  const getMinMax = (what: "string" | "fret"): [number, number] => [
+    Math.min(...area.map((x) => x[what])),
+    Math.max(...area.map((x) => x[what])),
+  ];
+
+  const [minString, maxString] = getMinMax("string");
+  const [minFret, maxFret] = getMinMax("fret");
+
+  return {
+    bottomLeft: { string: maxString, fret: minFret },
+    bottomRight: { string: maxString, fret: maxFret },
+    topRight: { string: minString, fret: maxFret },
+    topLeft: { string: minString, fret: minFret },
+  };
+}

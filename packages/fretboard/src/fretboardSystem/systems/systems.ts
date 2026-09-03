@@ -2,23 +2,12 @@ import { chroma as getChroma } from "@tonaljs/note";
 import { get as getMode } from "@tonaljs/mode";
 import { FretboardPosition } from "../../fretboard/Fretboard";
 
-export enum Systems {
-  pentatonic = "pentatonic",
-  CAGED = "CAGED",
-  TNPS = "TNPS",
-}
+export type Systems = "pentatonic" | "CAGED" | "TNPS";
 
 type ScaleDefinition = {
   box: string[];
   baseChroma: number;
   baseOctave: number;
-};
-
-type GetBoxParams = {
-  root: string;
-  box: number | string;
-  mode?: number | string;
-  system: Systems;
 };
 
 const DEFAULT_MODE = 0;
@@ -107,17 +96,19 @@ function getPentatonicBoxIndex(box: number, mode: number): number {
   return box % 5;
 }
 
+type GetBoxPositionsParams = {
+  root: string;
+  box: string[];
+  modeOffset: number;
+  baseChroma: number;
+};
+
 function getBoxPositions({
   root,
   box,
   modeOffset = 0,
   baseChroma,
-}: {
-  root: string;
-  box: string[];
-  modeOffset: number;
-  baseChroma: number;
-}): FretboardPosition[] {
+}: GetBoxPositionsParams): FretboardPosition[] {
   let delta = getChroma(root) - baseChroma - modeOffset;
   while (delta < -1) {
     delta += 12;
@@ -136,6 +127,13 @@ function getBoxPositions({
   );
 }
 
+type GetBoxParams = {
+  root: string;
+  box: number | string;
+  mode?: number | string;
+  system: Systems;
+};
+
 export function getBox({
   root,
   mode = -1,
@@ -144,7 +142,7 @@ export function getBox({
 }: GetBoxParams): FretboardPosition[] {
   let foundBox;
   let modeNumber =
-    system === Systems.pentatonic ? DEFAULT_PENTATONIC_MODE : DEFAULT_MODE;
+    system === "pentatonic" ? DEFAULT_PENTATONIC_MODE : DEFAULT_MODE;
 
   if (typeof mode === "string") {
     modeNumber = getModeFromScaleType(mode);
@@ -153,21 +151,19 @@ export function getBox({
   }
 
   switch (system) {
-    case Systems.pentatonic:
+    case "pentatonic":
       foundBox = CAGEDDefinition[getPentatonicBoxIndex(+box, modeNumber)];
       break;
-    case Systems.CAGED:
+    case "CAGED":
       foundBox = CAGEDDefinition[CAGED_ORDER.indexOf(`${box}`)];
       break;
-    case Systems.TNPS:
+    case "TNPS":
       foundBox = TNPSDefinition[+box - 1];
       break;
   }
 
   if (!foundBox) {
-    throw new Error(
-      `Cannot find box ${box} in the ${Systems[system]} scale system`,
-    );
+    throw new Error(`Cannot find box ${box} in the ${system} scale system`);
   }
 
   const { baseChroma, box: boxDefinition } = foundBox;
@@ -177,10 +173,8 @@ export function getBox({
     modeOffset: getModeOffset(modeNumber),
     baseChroma,
     box:
-      system === Systems.pentatonic
-        ? boxDefinition
-            .slice()
-            .map((x) => x.replace("4", "-").replace("7", "-"))
+      system === "pentatonic"
+        ? boxDefinition.map((x) => x.replace("4", "-").replace("7", "-"))
         : boxDefinition,
   });
 }

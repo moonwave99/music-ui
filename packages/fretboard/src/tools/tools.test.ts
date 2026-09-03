@@ -6,7 +6,7 @@ const box = getBox({
   mode: "major",
   root: "C",
   box: "C",
-  system: Systems.CAGED,
+  system: "CAGED",
 });
 
 test("disableStrings", () => {
