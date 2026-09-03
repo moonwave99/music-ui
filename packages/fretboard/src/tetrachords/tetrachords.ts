@@ -1,4 +1,4 @@
-import { Position } from "../fretboard/Fretboard";
+import { FretboardPosition } from "../fretboard/Fretboard";
 import { get as getInterval } from "@tonaljs/interval";
 import { transpose } from "@tonaljs/note";
 
@@ -41,7 +41,7 @@ export function tetrachord(
     string: 6,
     fret: 0,
   },
-): Position[] {
+): FretboardPosition[] {
   const tetrachord = Tetrachords[type];
   const pattern = [
     {

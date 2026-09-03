@@ -4,15 +4,13 @@ import { get as getScale } from "@tonaljs/scale";
 
 import { Systems, getBox, getModeFromScaleType } from "./systems/systems";
 
-import { Position, Tuning } from "../fretboard/Fretboard";
+import { FretboardPosition, Tuning } from "../fretboard/Fretboard";
 
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
 
 const CHROMATIC_SCALE = getScale("C chromatic").notes;
 
-export type FretboardPosition = {
-  string: number;
-  fret: number;
+export type SystemPosition = Pick<FretboardPosition, "string" | "fret"> & {
   chroma: number;
 };
 
@@ -68,8 +66,8 @@ function getOctaveInScale({
 }
 
 export function isPositionInBox(
-  { fret, string }: Position,
-  systemPositions: Position[],
+  { fret, string }: FretboardPosition,
+  systemPositions: FretboardPosition[],
 ): boolean {
   return !!systemPositions.find((x) => x.fret === fret && x.string === string);
 }
@@ -77,7 +75,7 @@ export function isPositionInBox(
 export class FretboardSystem {
   private tuning: Tuning = GUITAR_TUNINGS.default;
   private fretCount: number = DEFAULT_FRET_COUNT;
-  private positions: FretboardPosition[];
+  private positions: SystemPosition[];
   private baseNote: string;
   private baseOctave: number;
   constructor(params?: FretboardSystemParams) {
@@ -94,7 +92,7 @@ export class FretboardSystem {
   getFretCount(): number {
     return this.fretCount;
   }
-  getNoteAtPosition(position: Position): {
+  getNoteAtPosition(position: FretboardPosition): {
     chroma: number;
     note: string;
     octave: number;
@@ -114,7 +112,7 @@ export class FretboardSystem {
     type = "major",
     root: paramsRoot = "C",
     box,
-  }: ScaleParams): Position[] {
+  }: ScaleParams): FretboardPosition[] {
     const { baseOctave } = this;
     const { note: root } = parseNote(paramsRoot);
     const scaleName = `${root} ${type}`;
@@ -125,7 +123,7 @@ export class FretboardSystem {
     }
 
     const mode = getModeFromScaleType(type);
-    const boxPositions: Position[] = box
+    const boxPositions: FretboardPosition[] = box
       ? this.adjustOctave(
           getBox({
             root,
@@ -154,17 +152,20 @@ export class FretboardSystem {
           octave,
           octaveInScale: getOctaveInScale({ root, octave, baseOctave, ...x }),
           ...x,
-        } as Position;
+        } as FretboardPosition;
         if (
           boxPositions.length &&
-          isPositionInBox(x as Position, boxPositions)
+          isPositionInBox(x as FretboardPosition, boxPositions)
         ) {
           position.inBox = true;
         }
         return position;
       });
   }
-  private adjustOctave(positions: Position[], root: string): Position[] {
+  private adjustOctave(
+    positions: FretboardPosition[],
+    root: string,
+  ): FretboardPosition[] {
     const { tuning } = this;
     const rootOffset = semitones(distance(tuning[0]!, root)) >= 12;
     const negativeFrets = positions.filter((x) => x.fret < 0).length > 0;
@@ -184,7 +185,7 @@ export class FretboardSystem {
         chroma: (chroma + fret) % 12,
       }));
       return [...memo, ...filledString];
-    }, [] as FretboardPosition[]);
+    }, [] as SystemPosition[]);
   }
   private getOctave({
     fret,

@@ -1,15 +1,25 @@
-import { Position } from '../fretboard/Fretboard';
+import { FretboardPosition } from "../fretboard/Fretboard";
+
+type ActionBounds = {
+  box: FretboardPosition[];
+  from: FretboardPosition;
+  to: FretboardPosition;
+};
+
+type TransformParams = ActionBounds & {
+  action: (x: FretboardPosition) => FretboardPosition;
+};
+
+const FIRST_FRET = { string: 6, fret: 0 } as const;
+const INFINITY_FRET = { string: 1, fret: 100 } as const;
 
 function transform({
-  box = [] as Position[],
-  from = { string: 6, fret: 0 },
-  to = { string: 1, fret: 100 },
-  action = (x: Position): Position => x
-} = {}): Position[] {
-  function inSelection({ string, fret }: {
-    string: number;
-    fret: number;
-  }): boolean {
+  box = [],
+  from = FIRST_FRET,
+  to = INFINITY_FRET,
+  action = (x: FretboardPosition): FretboardPosition => x,
+}: TransformParams): FretboardPosition[] {
+  const inSelection = ({ string, fret }: FretboardPosition) => {
     if (string > from.string || string < to.string) {
       return false;
     }
@@ -20,30 +30,32 @@ function transform({
       return false;
     }
     return true;
-  }
-  return box.map(x => inSelection(x) ? action(x) : x);
+  };
+  return box.map((x) => (inSelection(x) ? action(x) : x));
 }
+
+type DisableStringsParams = {
+  box: FretboardPosition[];
+  strings: number[];
+};
 
 export function disableStrings({
   box = [],
-  strings = []
-}: {
-  box: Position[];
-  strings: number[];
-}): Position[] {
+  strings = [],
+}: DisableStringsParams): FretboardPosition[] {
   return box.map(({ string, ...dot }) => ({
     string,
-    disabled: strings.indexOf(string) > -1,
-    ...dot
+    disabled: strings.includes(string),
+    ...dot,
   }));
 }
 
 export function sliceBox({
-  box = [] as Position[],
-  from = { string: 6, fret: 0 },
-  to = { string: 1, fret: 100 }
-} = {}): Position[] {
-  const sortedBox = box.slice().sort((a, b) => {
+  box = [],
+  from = FIRST_FRET,
+  to = INFINITY_FRET,
+}: Partial<ActionBounds>): FretboardPosition[] {
+  const sortedBox = box.toSorted((a, b) => {
     if (a.string > b.string) {
       return -1;
     }
@@ -53,14 +65,10 @@ export function sliceBox({
     return -1;
   });
 
-  function findIndex(key: {
-    string: number;
-    fret: number;
-  }): number {
-    return sortedBox.findIndex(({ string, fret }) =>
-      string === key.string && fret === key.fret
+  const findIndex = (key: FretboardPosition) =>
+    sortedBox.findIndex(
+      ({ string, fret }) => string === key.string && fret === key.fret,
     );
-  }
 
   let fromIndex = findIndex(from);
   if (fromIndex === -1) {
@@ -74,12 +82,14 @@ export function sliceBox({
 }
 
 export function disableDots({
-  box = [] as Position[],
-  from = { string: 6, fret: 0 },
-  to = { string: 1, fret: 100 }
-} = {}): Position[] {
-  const action = (dot: Position): Position => {
-    return { disabled: true, ...dot };
-  };
-  return transform({ box, from, to, action });
+  box = [],
+  from = FIRST_FRET,
+  to = INFINITY_FRET,
+}: Partial<ActionBounds>): FretboardPosition[] {
+  return transform({
+    box,
+    from,
+    to,
+    action: (dot: FretboardPosition) => ({ disabled: true, ...dot }),
+  });
 }

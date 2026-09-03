@@ -1,12 +1,7 @@
 // @vitest-environment jsdom
 
 import { test, expect, assert } from "vitest";
-import {
-  Position,
-  Fretboard,
-  DEFAULT_FRETBOARD_OPTIONS,
-  getBounds,
-} from "./Fretboard";
+import { Fretboard, DEFAULT_FRETBOARD_OPTIONS, getBounds } from "./Fretboard";
 import { Systems } from "../fretboardSystem/systems/systems";
 import { FretboardSystem } from "../fretboardSystem/FretboardSystem";
 import { GUITAR_TUNINGS } from "../constants";
@@ -320,7 +315,7 @@ test("Fretboard renderChord() - multiple barres", () => {
 
 test("Fretboard renderBox()", () => {
   const fretboard = new Fretboard({
-    dotText: ({ note }: Position): string => note!,
+    dotText: ({ note }) => note!,
   });
   fretboard.renderBox({
     type: "minor",
@@ -355,7 +350,7 @@ test("Fretboard renderBox() - custom tuning warning", () => {
 
 test("Fretboard renderScale()", () => {
   const fretboard = new Fretboard({
-    dotText: ({ note }: Position): string => note!,
+    dotText: ({ note }) => note!,
   });
   fretboard.renderScale({
     type: "major",
@@ -373,7 +368,7 @@ test("Fretboard renderScale()", () => {
 
 test("Fretboard renderScale() - pentatonic", () => {
   const fretboard = new Fretboard({
-    dotText: ({ note }: Position): string => note!,
+    dotText: ({ note }) => note!,
   });
   fretboard.renderScale({
     type: "minor pentatonic",
@@ -395,7 +390,7 @@ test("Fretboard renderScale() - pentatonic", () => {
 
 test("Fretboard renderScale() - CAGED", () => {
   const fretboard = new Fretboard({
-    dotText: ({ note }: Position): string => note!,
+    dotText: ({ note }) => note!,
   });
   fretboard.renderScale({
     type: "major pentatonic",
@@ -417,7 +412,7 @@ test("Fretboard renderScale() - CAGED", () => {
 
 test("Fretboard renderScale() - TNPS", () => {
   const fretboard = new Fretboard({
-    dotText: ({ note }: Position): string => note!,
+    dotText: ({ note }) => note!,
   });
   fretboard.renderScale({
     type: "major pentatonic",
@@ -454,7 +449,7 @@ test("Fretboard renderScale() - custom tuning warning", () => {
 test("Fretboard event handlers", () => {
   new Fretboard()
     .render()
-    .on("click", (position: Position) =>
+    .on("click", (position) =>
       expect(position).toEqual({ string: 1, fret: 0, note: "E", chroma: 4 }),
     );
   const hoverDiv = document.querySelector("#fretboard .hoverDiv")!;
@@ -501,7 +496,7 @@ test("Fretboard event handlers - click on dot", () => {
   new Fretboard()
     .setDots([{ string: 1, fret: 0 }])
     .render()
-    .on("click", (position: Position) =>
+    .on("click", (position) =>
       expect(position).toEqual({ string: 1, fret: 0, note: "E", chroma: 4 }),
     );
   const hoverDiv = document.querySelector("#fretboard .hoverDiv")!;

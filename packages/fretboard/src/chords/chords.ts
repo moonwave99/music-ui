@@ -1,4 +1,4 @@
-import { type Position } from "../fretboard/Fretboard";
+import { type FretboardPosition } from "../fretboard/Fretboard";
 
 const CHORD_SYMBOLS = {
   mute: "x",
@@ -6,7 +6,7 @@ const CHORD_SYMBOLS = {
 } as const;
 
 type ParseChord = {
-  positions: Position[];
+  positions: FretboardPosition[];
   mutedStrings: number[];
 };
 
@@ -38,7 +38,7 @@ export function parseChord(chord: string): ParseChord {
         };
       },
       {
-        positions: [] as Position[],
+        positions: [] as FretboardPosition[],
         mutedStrings: [] as number[],
       },
     );

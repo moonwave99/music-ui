@@ -31,7 +31,7 @@ import { Systems } from "../fretboardSystem/systems/systems";
 
 export type Tuning = string[];
 
-export type Position = {
+export type FretboardPosition = {
   string: number;
   fret: number;
   note?: string;
@@ -53,7 +53,10 @@ type MouseEventNames = keyof Pick<
   }[keyof HTMLElementEventMap]
 >;
 
-type FretboardHandler = (position: Position, event: MouseEvent) => void;
+type FretboardHandler = (
+  position: FretboardPosition,
+  event: MouseEvent,
+) => void;
 
 export type Barre = {
   fret: number;
@@ -135,7 +138,7 @@ export type FretboardOptions = {
   dotStrokeWidth: number;
   dotTextSize: number;
   dotFill: string;
-  dotText: ValueFn<BaseType, Position, string>;
+  dotText: ValueFn<BaseType, FretboardPosition, string>;
   disabledOpacity: number;
   showFretNumbers: boolean;
   fretNumbersHeight: number;
@@ -219,11 +222,11 @@ function validateOptions(options: FretboardOptions): void {
   }
 }
 
-export function getBounds(area: Position[]): {
-  bottomLeft: Position;
-  bottomRight: Position;
-  topRight: Position;
-  topLeft: Position;
+export function getBounds(area: FretboardPosition[]): {
+  bottomLeft: FretboardPosition;
+  bottomRight: FretboardPosition;
+  topRight: FretboardPosition;
+  topLeft: FretboardPosition;
 } {
   const getMinMax = (what: "string" | "fret"): [number, number] => [
     Math.min(...area.map((x) => x[what])),
@@ -245,8 +248,18 @@ export class Fretboard {
   strings: number[];
   frets: number[];
   positions: Point[][];
-  svg: Selection<SVGSVGElement, unknown, HTMLElement, unknown>;
-  wrapper: Selection<SVGGElement, unknown, HTMLElement, unknown>;
+  svg: Selection<
+    SVGSVGElement,
+    FretboardPosition,
+    HTMLElement,
+    FretboardPosition
+  >;
+  wrapper: Selection<
+    SVGGElement,
+    FretboardPosition,
+    HTMLElement,
+    FretboardPosition
+  >;
   private options: FretboardOptions;
   private baseRendered = false;
   private hoverDiv: HTMLDivElement | null = null;
@@ -254,7 +267,7 @@ export class Fretboard {
     Record<MouseEventNames, (event: MouseEvent) => void>
   > = {};
   private system: FretboardSystem;
-  private dots: Position[] = [];
+  private dots: FretboardPosition[] = [];
   constructor(options: Partial<FretboardOptions> = {}) {
     this.options = { ...DEFAULT_FRETBOARD_OPTIONS, ...options };
     validateOptions(this.options);
@@ -285,7 +298,7 @@ export class Fretboard {
       ...this.options,
     });
 
-    this.svg = select(element as string)
+    this.svg = select<BaseType, FretboardPosition>(element as string)
       .append("div")
       .attr("class", "fretboard-html-wrapper")
       .attr("style", "position: relative")
@@ -376,7 +389,7 @@ export class Fretboard {
     return this;
   }
 
-  setDots(dots: Position[]): Fretboard {
+  setDots(dots: FretboardPosition[]): Fretboard {
     this.dots = dots;
     return this;
   }
@@ -392,29 +405,31 @@ export class Fretboard {
     ...opts
   }: {
     [key: string]:
-      string | number | ValueFn<BaseType, Position, number | boolean | string>;
+      | string
+      | number
+      | ValueFn<BaseType, FretboardPosition, number | boolean | string>;
   } & {
-    filter?: (dot: Position) => boolean;
+    filter?: (dot: FretboardPosition) => boolean;
   }): Fretboard {
     const { wrapper } = this;
     const { dotTextSize } = this.options;
     const filterFunction =
       filter instanceof Function
         ? filter
-        : (dot: Position): boolean => {
+        : (dot: FretboardPosition): boolean => {
             const [key, value] = Object.entries(filter)[0]!;
             return dot[key] === value;
           };
 
     const dots = wrapper
-      .selectAll<BaseType, Position>(".dot-circle")
+      .selectAll<BaseType, FretboardPosition>(".dot-circle")
       .filter(filterFunction);
 
     Object.keys(opts).forEach((key) => dots.attr(key, (opts as Rec)[key]!));
 
     if (opts.text) {
       wrapper
-        .selectAll<BaseType, Position>(".dot-text")
+        .selectAll<BaseType, FretboardPosition>(".dot-text")
         .filter(filterFunction)
         .text(opts.text)
         .attr("font-size", opts.fontSize || dotTextSize)
@@ -515,7 +530,9 @@ export class Fretboard {
     return this.setDots(dots).render();
   }
 
-  highlightAreas(...areas: [Position, Position][]): Fretboard {
+  highlightAreas(
+    ...areas: [FretboardPosition, FretboardPosition][]
+  ): Fretboard {
     const { wrapper, options, positions } = this;
     const {
       width,

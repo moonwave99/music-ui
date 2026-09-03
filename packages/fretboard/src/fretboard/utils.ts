@@ -1,6 +1,6 @@
 import { kebabCase } from "change-case";
 import type { Selection, BaseType } from "d3-selection";
-import type { Position, FretboardOptions } from "./Fretboard";
+import type { FretboardPosition, FretboardOptions } from "./Fretboard";
 
 type GetStringThicknessParams = {
   stringWidth: number | number[];
@@ -113,7 +113,7 @@ function classRenderer(
     .join("-");
 }
 
-export function dotClasses(dot: Position, prefix = ""): string {
+export function dotClasses(dot: FretboardPosition, prefix = ""): string {
   return [
     prefix ? `dot-${prefix}` : null,
     `dot-id-s${dot.string}:f${dot.fret}`,
@@ -166,12 +166,17 @@ export function getDimensions({
 
 type GetPositionParams = {
   event: MouseEvent;
-  stringsGroup: Selection<BaseType, unknown, HTMLElement, unknown>;
+  stringsGroup: Selection<
+    BaseType,
+    FretboardPosition,
+    HTMLElement,
+    FretboardPosition
+  >;
   leftPadding: number;
   nutWidth: number;
   strings: number[];
   frets: number[];
-  dots: Position[];
+  dots: FretboardPosition[];
 };
 
 export const getPositionFromMouseCoords = ({
@@ -182,7 +187,7 @@ export const getPositionFromMouseCoords = ({
   strings,
   frets,
   dots,
-}: GetPositionParams): Position => {
+}: GetPositionParams): FretboardPosition => {
   const { width: stringsGroupWidth, height: stringsGroupHeight } = (
     stringsGroup.node() as HTMLElement
   ).getBoundingClientRect();
