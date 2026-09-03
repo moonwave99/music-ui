@@ -1,6 +1,6 @@
 import { test, expect, assert } from "vitest";
 
-import { getBox, Systems } from "./systems";
+import { getBox } from "./systems";
 import { isPositionInBox } from "../FretboardSystem";
 
 test("pentatonic system", () => {

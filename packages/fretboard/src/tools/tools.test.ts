@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { sliceBox, disablePositions, disableStrings } from "./tools";
-import { Systems, getBox } from "../fretboardSystem/systems/systems";
+import { getBox } from "../fretboardSystem/systems/systems";
 
 const box = getBox({
   mode: "major",

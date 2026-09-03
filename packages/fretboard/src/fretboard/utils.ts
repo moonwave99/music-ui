@@ -1,5 +1,4 @@
 import { kebabCase } from "change-case";
-import type { Selection, BaseType } from "d3-selection";
 import type { FretboardOptions, FretboardPosition, Point } from "./Fretboard";
 
 type GetStringThicknessParams = {
@@ -136,6 +135,23 @@ export function getPositionClasses(
     .join(" ");
 }
 
+type GetDimensionsParams = Pick<
+  FretboardOptions,
+  | "topPadding"
+  | "bottomPadding"
+  | "leftPadding"
+  | "rightPadding"
+  | "width"
+  | "height"
+  | "showFretNumbers"
+  | "fretNumbersHeight"
+>;
+
+type Dimensions = {
+  totalWidth: number;
+  totalHeight: number;
+};
+
 export function getDimensions({
   topPadding,
   bottomPadding,
@@ -145,19 +161,7 @@ export function getDimensions({
   height,
   showFretNumbers,
   fretNumbersHeight,
-}: {
-  topPadding: number;
-  bottomPadding: number;
-  leftPadding: number;
-  rightPadding: number;
-  width: number;
-  height: number;
-  showFretNumbers: boolean;
-  fretNumbersHeight: number;
-}): {
-  totalWidth: number;
-  totalHeight: number;
-} {
+}: GetDimensionsParams): Dimensions {
   const totalWidth = width + leftPadding + rightPadding;
   let totalHeight = height + topPadding + bottomPadding;
 
@@ -166,74 +170,6 @@ export function getDimensions({
   }
   return { totalWidth, totalHeight };
 }
-
-type GetPositionParams = {
-  event: MouseEvent;
-  stringsGroup: Selection<
-    BaseType,
-    FretboardPosition,
-    HTMLElement,
-    FretboardPosition
-  >;
-  leftPadding: number;
-  nutWidth: number;
-  strings: number[];
-  frets: number[];
-  positions: FretboardPosition[];
-};
-
-export const getPositionFromMouseCoords = ({
-  event,
-  stringsGroup,
-  leftPadding,
-  nutWidth,
-  strings,
-  frets,
-  positions,
-}: GetPositionParams): FretboardPosition => {
-  const { width: stringsGroupWidth, height: stringsGroupHeight } = (
-    stringsGroup.node() as HTMLElement
-  ).getBoundingClientRect();
-  const bounds = (event.target as HTMLElement).getBoundingClientRect();
-  const x = event.clientX - bounds.left;
-  const y = event.clientY - bounds.top;
-
-  let foundString = 0;
-
-  const stringDistance = stringsGroupHeight / (strings.length - 1);
-
-  for (let i = 0; i < strings.length; i++) {
-    if (y < stringDistance * (i + 1)) {
-      foundString = i;
-      break;
-    }
-  }
-
-  let foundFret = -1;
-  const percentX = (Math.max(0, x - leftPadding) / stringsGroupWidth) * 100;
-
-  for (let i = 0; i < frets.length; i++) {
-    if (percentX < frets[i]!) {
-      foundFret = i;
-      break;
-    }
-    foundFret = i;
-  }
-
-  if (x < leftPadding + nutWidth) {
-    foundFret = 0;
-  }
-
-  const foundPosition = positions.find(
-    ({ fret, string }) => fret === foundFret && string === foundString + 1,
-  );
-  return (
-    foundPosition || {
-      string: foundString + 1,
-      fret: foundFret,
-    }
-  );
-};
 
 type GetPositionCoordsParams = {
   fret: number;

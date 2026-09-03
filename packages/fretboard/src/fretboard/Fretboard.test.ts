@@ -2,7 +2,6 @@
 
 import { test, expect, assert } from "vitest";
 import { Fretboard, DEFAULT_FRETBOARD_OPTIONS } from "./Fretboard";
-import { Systems } from "../fretboardSystem/systems/systems";
 import { FretboardSystem } from "../fretboardSystem/FretboardSystem";
 import { GUITAR_TUNINGS } from "../constants";
 

@@ -1,5 +1,5 @@
 import { test, expect, assert } from "vitest";
-import { tetrachord, TetrachordTypes, TetrachordLayouts } from "./tetrachords";
+import { tetrachord } from "./tetrachords";
 
 test("tetrachord with default arguments", () => {
   const tetra = tetrachord();

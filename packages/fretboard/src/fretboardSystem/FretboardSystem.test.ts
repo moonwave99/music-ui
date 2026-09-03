@@ -3,8 +3,6 @@ import { test, expect, assert } from "vitest";
 import { FretboardSystem, isPositionInBox } from "./FretboardSystem";
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
 
-import { Systems } from "./systems/systems";
-
 test("FretboardSystem - constructor with default options", () => {
   const system = new FretboardSystem();
   expect(system instanceof FretboardSystem).toBe(true);

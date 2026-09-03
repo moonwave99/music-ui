@@ -19,7 +19,7 @@ type FretboardSystemParams = {
   fretCount?: number;
 };
 
-type ScaleParams = {
+export type ScaleParams = {
   type: string;
   root: string;
   box?: {
@@ -76,13 +76,11 @@ export class FretboardSystem {
   private tuning: Tuning = GUITAR_TUNINGS.default;
   private fretCount: number = DEFAULT_FRET_COUNT;
   private positions: SystemPosition[];
-  private baseNote: string;
   private baseOctave: number;
   constructor(params?: FretboardSystemParams) {
     Object.assign(this, params);
     this.positions = [];
-    const { note: baseNote, octave: baseOctave } = parseNote(this.tuning[0]!);
-    this.baseNote = baseNote;
+    const { octave: baseOctave } = parseNote(this.tuning[0]!);
     this.baseOctave = baseOctave;
     this.populate();
   }

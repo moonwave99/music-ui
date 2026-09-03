@@ -25,8 +25,10 @@ import {
   DEFAULT_HIGHLIGHT_BLEND_MODE,
 } from "../constants";
 
-import { FretboardSystem } from "../fretboardSystem/FretboardSystem";
-import { Systems } from "../fretboardSystem/systems/systems";
+import {
+  FretboardSystem,
+  type ScaleParams,
+} from "../fretboardSystem/FretboardSystem";
 
 export type Tuning = string[];
 
@@ -238,7 +240,7 @@ export class Fretboard {
   }
 
   render(): Fretboard {
-    const { wrapper, grid, options } = this;
+    const { wrapper, options } = this;
     const {
       font,
       positionStrokeColor,
@@ -284,11 +286,13 @@ export class Fretboard {
       .attr("class", cssClasses.positionCircle)
       .attr(
         "cx",
-        ({ string, fret }) => `${grid[string - 1]![fret - positionOffset]!.x}%`,
+        ({ string, fret }) =>
+          `${this.getGridPositionAt(string - 1, fret - positionOffset)!.x}%`,
       )
       .attr(
         "cy",
-        ({ string, fret }) => grid[string - 1]![fret - positionOffset]!.y,
+        ({ string, fret }) =>
+          this.getGridPositionAt(string - 1, fret - positionOffset)!.y,
       )
       .attr("r", positionSize * 0.5)
       .attr("stroke", positionStrokeColor)
@@ -300,11 +304,13 @@ export class Fretboard {
       .attr("class", cssClasses.positionText)
       .attr(
         "x",
-        ({ string, fret }) => `${grid[string - 1]![fret - positionOffset]!.x}%`,
+        ({ string, fret }) =>
+          `${this.getGridPositionAt(string - 1, fret - positionOffset)!.x}%`,
       )
       .attr(
         "y",
-        ({ string, fret }) => grid[string - 1]![fret - positionOffset]!.y,
+        ({ string, fret }) =>
+          this.getGridPositionAt(string - 1, fret - positionOffset)!.y,
       )
       .attr("text-anchor", "middle")
       .attr("dominant-baseline", "central")
@@ -321,7 +327,7 @@ export class Fretboard {
 
   clear(): Fretboard {
     this.setPositions([]);
-    this.wrapper.select(".positions").remove();
+    this.wrapper.select(`.${cssClasses.positions}`).remove();
     return this;
   }
 
@@ -367,14 +373,12 @@ export class Fretboard {
   }
 
   muteStrings(params: MuteStringsParams): Fretboard {
-    const { wrapper, grid } = this;
-
     const { strings, stroke, strokeWidth, width } = {
       ...defaultMuteStringsParams,
       ...params,
     };
 
-    wrapper
+    this.wrapper
       .append("g")
       .attr("class", cssClasses.mutedStrings)
       .attr("transform", `translate(${-width / 2}, ${-width / 2})`)
@@ -383,7 +387,7 @@ export class Fretboard {
       .enter()
       .append("path")
       .attr("d", (d) => {
-        const { y } = grid[d - 1]![0]!;
+        const { y } = this.getGridPositionAt(d - 1, 0)!;
         return [
           `M 0 ${y}`,
           `L ${width} ${y + width}`,
@@ -409,18 +413,7 @@ export class Fretboard {
     return this;
   }
 
-  renderScale({
-    type,
-    root,
-    box,
-  }: {
-    type: string;
-    root: string;
-    box?: {
-      system: Systems;
-      box: string | number;
-    };
-  }): Fretboard {
+  renderScale({ type, root, box }: ScaleParams): Fretboard {
     if (
       box &&
       this.options.tuning.toString() !== GUITAR_TUNINGS.default.toString()
@@ -434,18 +427,7 @@ export class Fretboard {
     ).render();
   }
 
-  renderBox({
-    type,
-    root,
-    box,
-  }: {
-    type: string;
-    root: string;
-    box?: {
-      system: Systems;
-      box: string | number;
-    };
-  }): Fretboard {
+  renderBox({ type, root, box }: ScaleParams): Fretboard {
     if (this.options.tuning.toString() !== GUITAR_TUNINGS.default.toString()) {
       console.warn(
         "Selected scale system works for standard tuning. Wrong notes may be highlighted.",
@@ -460,7 +442,7 @@ export class Fretboard {
   highlightAreas(
     ...areas: [FretboardPosition, FretboardPosition][]
   ): Fretboard {
-    const { wrapper, options, grid } = this;
+    const { wrapper, options } = this;
     const {
       width,
       positionSize,
@@ -490,25 +472,31 @@ export class Fretboard {
       .attr(
         "y",
         ({ topLeft }) =>
-          grid[topLeft.string - 1]![topLeft.fret - positionOffset]!.y -
+          this.getGridPositionAt(
+            topLeft.string - 1,
+            topLeft.fret - positionOffset,
+          )!.y -
           positionSize * 0.5 -
           highlightPadding,
       )
       .attr(
         "x",
         ({ topLeft }) =>
-          `${grid[topLeft.string - 1]![topLeft.fret - positionOffset]!.x - positionPercentSize / 2 - highlightPaddingPercentSize}%`,
+          `${this.getGridPositionAt(topLeft.string - 1, topLeft.fret - positionOffset)!.x - positionPercentSize / 2 - highlightPaddingPercentSize}%`,
       )
       .attr("rx", highlightRadius)
       .attr("width", ({ topLeft, topRight }) => {
-        const from = grid[topLeft.string - 1]![topLeft.fret]!.x;
-        const to = grid[topRight.string - 1]![topRight.fret]!.x;
-        return `${to - from + positionPercentSize + 2 * highlightPaddingPercentSize}%`;
+        const from = this.getGridPositionAt(topLeft.string - 1, topLeft.fret);
+        const to = this.getGridPositionAt(topRight.string - 1, topRight.fret);
+        return `${to!.x - from!.x + positionPercentSize + 2 * highlightPaddingPercentSize}%`;
       })
       .attr("height", ({ topLeft, bottomLeft }) => {
-        const from = grid[topLeft.string - 1]![topLeft.fret]!.y;
-        const to = grid[bottomLeft.string - 1]![bottomLeft.fret]!.y;
-        return to - from + positionSize + 2 * highlightPadding;
+        const from = this.getGridPositionAt(topLeft.string - 1, topLeft.fret);
+        const to = this.getGridPositionAt(
+          bottomLeft.string - 1,
+          bottomLeft.fret,
+        );
+        return to!.y - from!.y + positionSize + 2 * highlightPadding;
       })
       .attr("stroke", highlightStroke)
       .attr("fill", highlightFill)
@@ -518,12 +506,20 @@ export class Fretboard {
   }
 
   clearHighlightAreas(): Fretboard {
-    this.wrapper.select(".highlight-areas").remove();
+    this.wrapper.select(`.${cssClasses.highlightAreas}`).remove();
     return this;
   }
 
+  private getGridPositionAt(x: number, y: number) {
+    const row = this.grid[x];
+    if (!row) {
+      return null;
+    }
+    return row[y];
+  }
+
   private renderBarres(barres: Barre[]): void {
-    const { wrapper, strings, options, grid } = this;
+    const { wrapper, strings, options } = this;
 
     const normalizedBarres = barres.map(
       ({ fret, stringFrom, stringTo }: Barre) => ({
@@ -552,13 +548,13 @@ export class Fretboard {
       .attr(
         "y",
         ({ fret, stringTo }: Barre) =>
-          grid[stringTo! - 1]![fret - positionOffset]!.y -
+          this.getGridPositionAt(stringTo! - 1, fret - positionOffset)!.y -
           positionOffset * 0.75,
       )
       .attr(
         "x",
         ({ fret, stringFrom }: Barre) =>
-          `${grid[stringFrom! - 1]![fret - positionOffset]!.x}%`,
+          `${this.getGridPositionAt(stringFrom! - 1, fret - positionOffset)!.x}%`,
       )
       .attr("rx", 7.5)
       .attr("width", barreWidth)
