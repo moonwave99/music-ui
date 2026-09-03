@@ -454,63 +454,6 @@ test("Fretboard renderScale() - custom tuning warning", () => {
   expect(fretboard instanceof Fretboard).toBe(true);
 });
 
-test("Fretboard event handlers", () => {
-  new Fretboard()
-    .render()
-    .on("click", (position) =>
-      expect(position).toEqual({ string: 1, fret: 0, note: "E", chroma: 4 }),
-    );
-  const hoverDiv = document.querySelector("#fretboard .hoverDiv")!;
-  hoverDiv.dispatchEvent(new MouseEvent("click"));
-});
-
-test("Fretboard add new event listener", () => {
-  let count = 0;
-  const handler = (): void => {
-    count++;
-  };
-  const fretboard = new Fretboard().render().on("click", handler);
-  const hoverDiv = document.querySelector("#fretboard .hoverDiv")!;
-  hoverDiv.dispatchEvent(new MouseEvent("click"));
-  expect(count).toBe(1);
-
-  fretboard.on("click", () => true);
-  hoverDiv.dispatchEvent(new MouseEvent("click"));
-  expect(count).toBe(1);
-});
-
-test("Fretboard removeEventListeners", () => {
-  let count = 0;
-  const handler = (): void => {
-    count++;
-  };
-  const fretboard = new Fretboard().render().on("click", handler);
-  const hoverDiv = document.querySelector("#fretboard .hoverDiv")!;
-  hoverDiv.dispatchEvent(new MouseEvent("click"));
-  expect(count).toBe(1);
-
-  fretboard.removeEventListeners();
-  hoverDiv.dispatchEvent(new MouseEvent("click"));
-  expect(count).toBe(1);
-});
-
-test("Fretboard removeEventListeners before adding listeners", () => {
-  new Fretboard().render().removeEventListeners();
-  const svg = document.querySelector("#fretboard svg")!;
-  expect(svg).toBeTruthy();
-});
-
-test("Fretboard event handlers - click on position", () => {
-  new Fretboard()
-    .setPositions([{ string: 1, fret: 0 }])
-    .render()
-    .on("click", (position) =>
-      expect(position).toEqual({ string: 1, fret: 0, note: "E", chroma: 4 }),
-    );
-  const hoverDiv = document.querySelector("#fretboard .hoverDiv")!;
-  hoverDiv.dispatchEvent(new MouseEvent("click"));
-});
-
 test("Fretboard with different stringWidths", () => {
   const stringWidth = [1, 2, 3, 4, 5, 6];
   const fretboard = new Fretboard({ stringWidth });

@@ -1,5 +1,4 @@
 export const MIDDLE_FRET = 11;
-export const THROTTLE_INTERVAL = 50;
 export const DEFAULT_FRET_COUNT = 15;
 
 export const DEFAULT_COLORS = {

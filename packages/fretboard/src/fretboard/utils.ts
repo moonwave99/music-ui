@@ -1,6 +1,6 @@
 import { kebabCase } from "change-case";
 import type { Selection, BaseType } from "d3-selection";
-import type { FretboardPosition, FretboardOptions } from "./Fretboard";
+import type { FretboardPosition } from "./Fretboard";
 
 type GetStringThicknessParams = {
   stringWidth: number | number[];
@@ -234,22 +234,3 @@ export const getPositionFromMouseCoords = ({
     }
   );
 };
-
-export function createHoverDiv({
-  bottomPadding,
-  showFretNumbers,
-  fretNumbersHeight,
-}: Pick<
-  FretboardOptions,
-  "bottomPadding" | "showFretNumbers" | "fretNumbersHeight"
->): HTMLDivElement {
-  const hoverDiv = document.createElement("div");
-  const bottom = bottomPadding + (showFretNumbers ? fretNumbersHeight : 0);
-  hoverDiv.className = "hoverDiv";
-  hoverDiv.style.position = "absolute";
-  hoverDiv.style.top = "0";
-  hoverDiv.style.bottom = `${bottom}px`;
-  hoverDiv.style.left = "0";
-  hoverDiv.style.right = "0";
-  return hoverDiv;
-}

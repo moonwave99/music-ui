@@ -1,22 +1,17 @@
 import { select, Selection, ValueFn, BaseType } from "d3-selection";
 
-import { throttle } from "throttle-debounce";
-
 import {
   generateStrings,
   generateFrets,
   getStringThickness,
   getPositionClasses,
   getDimensions,
-  getPositionFromMouseCoords,
-  createHoverDiv,
 } from "./utils";
 
 import { parseChord } from "../chords/chords";
 
 import {
   MIDDLE_FRET,
-  THROTTLE_INTERVAL,
   GUITAR_TUNINGS,
   DEFAULT_COLORS,
   DEFAULT_DIMENSIONS,
@@ -52,11 +47,6 @@ type MouseEventNames = keyof Pick<
       : never;
   }[keyof HTMLElementEventMap]
 >;
-
-type FretboardHandler = (
-  position: FretboardPosition,
-  event: MouseEvent,
-) => void;
 
 export type Barre = {
   fret: number;
@@ -262,7 +252,6 @@ export class Fretboard {
   >;
   private options: FretboardOptions;
   private baseRendered = false;
-  private hoverDiv: HTMLDivElement | null = null;
   private handlers: Partial<
     Record<MouseEventNames, (event: MouseEvent) => void>
   > = {};
@@ -594,49 +583,6 @@ export class Fretboard {
 
   clearHighlightAreas(): Fretboard {
     this.wrapper.select(".highlight-areas").remove();
-    return this;
-  }
-
-  on(eventName: MouseEventNames, handler: FretboardHandler): Fretboard {
-    const { svg, options, strings, frets, hoverDiv, positions, system } = this;
-    const stringsGroup = svg.select(".strings");
-
-    if (!hoverDiv) {
-      this.hoverDiv = createHoverDiv(options);
-      svg.node()!.parentNode!.appendChild(this.hoverDiv);
-    }
-
-    if (this.handlers[eventName]) {
-      this.hoverDiv!.removeEventListener(eventName, this.handlers[eventName]);
-    }
-    this.handlers[eventName] = throttle(
-      THROTTLE_INTERVAL,
-      (event: MouseEvent) => {
-        const position = getPositionFromMouseCoords({
-          event,
-          stringsGroup,
-          strings,
-          frets,
-          positions,
-          ...options,
-        });
-        const { note, chroma } = system.getNoteAtPosition(position);
-        handler({ ...position, note, chroma }, event);
-      },
-    );
-
-    this.hoverDiv!.addEventListener(eventName, this.handlers[eventName]);
-    return this;
-  }
-
-  removeEventListeners(): Fretboard {
-    const { hoverDiv, handlers } = this;
-    if (!hoverDiv) {
-      return this;
-    }
-    Object.entries(handlers).forEach(([eventName, handler]) =>
-      hoverDiv.removeEventListener(eventName as MouseEventNames, handler),
-    );
     return this;
   }
 
