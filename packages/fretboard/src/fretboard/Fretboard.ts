@@ -1,5 +1,5 @@
 import { select, Selection, ValueFn, BaseType } from "d3-selection";
-import { type ElementOrSelector } from "@music-ui/core";
+import { ensureSelection, type ElementOrSelector } from "@music-ui/core";
 
 import {
   generateStrings,
@@ -12,7 +12,7 @@ import {
   getBounds,
 } from "./utils";
 
-import { parseChord } from "../chords/chords";
+import { parseChord, type ParseChordParams } from "../chords/chords";
 
 import {
   MIDDLE_FRET,
@@ -49,6 +49,10 @@ export type Barre = {
   fret: number;
   stringFrom?: number;
   stringTo?: number;
+};
+
+export type RenderChordParams = ParseChordParams & {
+  barres?: Barre | Barre[];
 };
 
 type MuteStringsParams = {
@@ -198,6 +202,7 @@ export class Fretboard {
     HTMLElement,
     FretboardPosition
   >;
+  private element: HTMLElement;
   private options: FretboardOptions;
   private baseRendered = false;
   private system: FretboardSystem;
@@ -232,10 +237,10 @@ export class Fretboard {
       ...this.options,
     });
 
+    this.element = ensureSelection(this.options.element).at(0)!;
+    this.element.classList.add(cssClasses.htmlWrapper);
+
     this.svg = select<BaseType, FretboardPosition>(element as string)
-      .append("div")
-      .attr("class", cssClasses.htmlWrapper)
-      .attr("style", "position: relative")
       .append("svg")
       .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`);
 
@@ -394,9 +399,8 @@ export class Fretboard {
     return this;
   }
 
-  renderChord(chord: string, barres?: Barre | Barre[]): Fretboard {
-    // #TODO: render open strings too
-    const { positions, mutedStrings: strings } = parseChord(chord);
+  renderChord({ barres, ...rest }: RenderChordParams): Fretboard {
+    const { positions, mutedStrings: strings } = parseChord(rest);
     this.setPositions(positions);
     if (barres) {
       this.renderBarres(Array.isArray(barres) ? barres : [barres]);

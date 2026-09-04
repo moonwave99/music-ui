@@ -5,22 +5,30 @@ const CHORD_SYMBOLS = {
   splitter: "-",
 } as const;
 
+export type ParseChordParams = {
+  input: string;
+  showOpenStrings?: boolean;
+};
+
 type ParseChord = {
   positions: FretboardPosition[];
   mutedStrings: number[];
 };
 
-export function parseChord(chord: string): ParseChord {
-  const splitter = chord.includes(CHORD_SYMBOLS.splitter)
+export function parseChord({
+  input,
+  showOpenStrings,
+}: ParseChordParams): ParseChord {
+  const splitter = input.includes(CHORD_SYMBOLS.splitter)
     ? CHORD_SYMBOLS.splitter
     : "";
 
-  return chord
+  return input
     .split(splitter)
     .reverse()
     .reduce(
       (memo, fret, string) => {
-        if (fret === "0") {
+        if (fret === "0" && !showOpenStrings) {
           return memo;
         }
         if (fret === CHORD_SYMBOLS.mute) {

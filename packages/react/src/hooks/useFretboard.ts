@@ -3,21 +3,19 @@ import {
   Fretboard,
   type FretboardOptions,
   type FretboardPosition,
-  type Barre,
-  StyleParams,
+  type StyleParams,
+  type RenderChordParams,
 } from "@music-ui/fretboard";
 
 /**
  * The params expected by the `useFretboard` function.
  * @property positions An array of {@link FretboardPosition}.
- * @property chord A chord shorthand (e.g. `x02221`).
- * @property barres A single {@link Barre} / array of Barres.
+ * @property chord Params expected by the `Fretboard.renderChord` function.
  * @property style Params expected by the `Fretboard.style` function.
  */
 export type UseFretboardParams = Partial<FretboardOptions> & {
   positions?: FretboardPosition[];
-  chord?: string;
-  barres?: Barre | Barre[];
+  chord?: RenderChordParams;
   style?: StyleParams;
 };
 
@@ -37,7 +35,6 @@ export type UseFretboard<T extends HTMLElement> = {
 export function useFretboard<T extends HTMLElement>({
   positions,
   chord,
-  barres,
   style,
   ...params
 }: UseFretboardParams): UseFretboard<T> {
@@ -58,7 +55,7 @@ export function useFretboard<T extends HTMLElement>({
 
   useLayoutEffect(() => {
     if (chord) {
-      fretboardRef.current?.renderChord(chord, barres);
+      fretboardRef.current?.renderChord(chord);
       if (style) {
         fretboardRef.current?.style(style);
       }
@@ -72,7 +69,7 @@ export function useFretboard<T extends HTMLElement>({
     if (style) {
       fretboardRef.current?.style(style);
     }
-  }, [positions, chord, barres, style]);
+  }, [positions, chord, style]);
 
   return { ref };
 }

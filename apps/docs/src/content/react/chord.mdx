@@ -1,0 +1,29 @@
+# Chord
+
+The `<Chord>` component is a React component to render guitar chords.
+
+## Installation
+
+<Installation packageName="@music-ui/react" />
+
+## Usage
+
+The following code renders an open C chord:
+
+```tsx
+import { Chord } from "@music-ui/react";
+
+function App() {
+  return (
+    <main>
+      <h1>My App</h1>
+      {/* rest of your app */}
+      <Chord input="x32010" label="C major" showFretNumbers={false} />
+    </main>
+  );
+}
+```
+
+Output:
+
+<Chord input="x32010" label="C major" showFretNumbers={false} />

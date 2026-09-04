@@ -281,7 +281,7 @@ test("Fretboard muteStrings()", () => {
 
 test("Fretboard renderChord()", () => {
   const fretboard = new Fretboard();
-  fretboard.renderChord("x32010");
+  fretboard.renderChord({ input: "x32010" });
 
   const svg = document.querySelector("#fretboard svg")!;
 
@@ -291,7 +291,7 @@ test("Fretboard renderChord()", () => {
 
 test("Fretboard renderChord() - above 9th fret", () => {
   const fretboard = new Fretboard();
-  fretboard.renderChord("10-x-10-10-8-x");
+  fretboard.renderChord({ input: "10-x-10-10-8-x" });
 
   const svg = document.querySelector("#fretboard svg")!;
 
@@ -301,7 +301,7 @@ test("Fretboard renderChord() - above 9th fret", () => {
 
 test("Fretboard renderChord() - barres", () => {
   const fretboard = new Fretboard();
-  fretboard.renderChord("133211", { fret: 1 });
+  fretboard.renderChord({ input: "133211", barres: { fret: 1 } });
 
   const svg = document.querySelector("#fretboard svg")!;
 
@@ -310,10 +310,13 @@ test("Fretboard renderChord() - barres", () => {
 
 test("Fretboard renderChord() - multiple barres", () => {
   const fretboard = new Fretboard();
-  fretboard.renderChord("x35553", [
-    { fret: 3, stringFrom: 5 },
-    { fret: 5, stringFrom: 4, stringTo: 2 },
-  ]);
+  fretboard.renderChord({
+    input: "x35553",
+    barres: [
+      { fret: 3, stringFrom: 5 },
+      { fret: 5, stringFrom: 4, stringTo: 2 },
+    ],
+  });
 
   const svg = document.querySelector("#fretboard svg")!;
 

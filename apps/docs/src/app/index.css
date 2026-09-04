@@ -9,6 +9,7 @@ main {
 }
 
 .fretboard,
+.chord,
 .piano {
   margin-top: 1rem;
 }
@@ -54,4 +55,8 @@ main {
   .piano {
     width: 100%;
   }
+}
+
+.chord {
+  text-align: center;
 }
