@@ -3,12 +3,8 @@ import { distance, semitones } from "@tonaljs/interval";
 import { get as getScale } from "@tonaljs/scale";
 
 import { Systems, getBox, getModeFromScaleType } from "./systems/systems";
-
 import { FretboardPosition, Tuning } from "../fretboard/Fretboard";
-
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
-
-const CHROMATIC_SCALE = getScale("C chromatic").notes;
 
 export type SystemPosition = Pick<FretboardPosition, "string" | "fret"> & {
   chroma: number;
@@ -89,22 +85,6 @@ export class FretboardSystem {
   }
   getFretCount(): number {
     return this.fretCount;
-  }
-  getNoteAtPosition(position: FretboardPosition): {
-    chroma: number;
-    note: string;
-    octave: number;
-  } {
-    const { chroma } = this.positions.find(
-      (x) => x.string === position.string && x.fret === position.fret,
-    )!;
-    const note = CHROMATIC_SCALE[chroma]!;
-    const octave = this.getOctave({
-      ...position,
-      chroma,
-      note,
-    });
-    return { chroma, note, octave };
   }
   getScale({
     type = "major",

@@ -17,7 +17,7 @@ function transform({
   box = [],
   from = FIRST_FRET,
   to = INFINITY_FRET,
-  action = (x: FretboardPosition): FretboardPosition => x,
+  action = (x) => x,
 }: TransformParams): FretboardPosition[] {
   const inSelection = ({ string, fret }: FretboardPosition) => {
     if (string > from.string || string < to.string) {
@@ -59,7 +59,7 @@ export function sliceBox({
     if (a.string > b.string) {
       return -1;
     }
-    if (a.fret > b.fret) {
+    if (a.fret >= b.fret) {
       return 1;
     }
     return -1;

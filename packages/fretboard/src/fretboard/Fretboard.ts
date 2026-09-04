@@ -58,6 +58,15 @@ type MuteStringsParams = {
   stroke?: string;
 };
 
+type StyleParams = {
+  [key: string]:
+    | string
+    | number
+    | ValueFn<BaseType, FretboardPosition, number | boolean | string>;
+} & {
+  filter?: (position: FretboardPosition) => boolean;
+};
+
 export const DEFAULT_FRETBOARD_OPTIONS = {
   element: "#fretboard",
   tuning: GUITAR_TUNINGS.default,
@@ -331,30 +340,13 @@ export class Fretboard {
     return this;
   }
 
-  style({
-    filter = () => true,
-    ...opts
-  }: {
-    [key: string]:
-      | string
-      | number
-      | ValueFn<BaseType, FretboardPosition, number | boolean | string>;
-  } & {
-    filter?: (position: FretboardPosition) => boolean;
-  }): Fretboard {
+  style({ filter = () => true, ...opts }: StyleParams): Fretboard {
     const { wrapper } = this;
     const { positionTextSize } = this.options;
-    const filterFunction =
-      filter instanceof Function
-        ? filter
-        : (position: FretboardPosition): boolean => {
-            const [key, value] = Object.entries(filter)[0]!;
-            return position[key] === value;
-          };
 
     const positions = wrapper
       .selectAll<BaseType, FretboardPosition>(`.${cssClasses.positionCircle}`)
-      .filter(filterFunction);
+      .filter(filter);
 
     Object.keys(opts).forEach((key) =>
       positions.attr(key, (opts as Rec)[key]!),
@@ -363,7 +355,7 @@ export class Fretboard {
     if (opts.text) {
       wrapper
         .selectAll<BaseType, FretboardPosition>(`.${cssClasses.positionText}`)
-        .filter(filterFunction)
+        .filter(filter)
         .text(opts.text)
         .attr("font-size", opts.fontSize || positionTextSize)
         .attr("fill", opts.fontFill || DEFAULT_COLORS.positionText);
@@ -403,6 +395,7 @@ export class Fretboard {
   }
 
   renderChord(chord: string, barres?: Barre | Barre[]): Fretboard {
+    // #TODO: render open strings too
     const { positions, mutedStrings: strings } = parseChord(chord);
     this.setPositions(positions);
     if (barres) {
@@ -516,6 +509,17 @@ export class Fretboard {
       return null;
     }
     return row[y];
+  }
+
+  private getPositionOffset(): number {
+    const { positions } = this;
+    const { crop, fretLeftPadding } = this.options;
+    return crop
+      ? Math.max(
+          0,
+          Math.min(...positions.map(({ fret }) => fret)) - 1 - fretLeftPadding,
+        )
+      : 0;
   }
 
   private renderBarres(barres: Barre[]): void {
@@ -666,16 +670,5 @@ export class Fretboard {
     }
 
     this.baseRendered = true;
-  }
-
-  private getPositionOffset(): number {
-    const { positions } = this;
-    const { crop, fretLeftPadding } = this.options;
-    return crop
-      ? Math.max(
-          0,
-          Math.min(...positions.map(({ fret }) => fret)) - 1 - fretLeftPadding,
-        )
-      : 0;
   }
 }
