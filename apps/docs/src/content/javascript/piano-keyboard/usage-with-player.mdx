@@ -7,7 +7,7 @@ Here you can find the instructions to add playback support to your rendered pian
 <Installation packageName="@music-ui/core @music-ui/piano" />
 
 <Callout type="info">
-  See the [`Player` page](/core/player) to know about playback setup.
+  See the [`Player` page](/core/player) to know about the setup.
 </Callout>
 
 ## Usage
@@ -21,8 +21,8 @@ The `@music-ui/piano` package exports an `initPianoWithPlayer` function that exp
 In addition to the `initPiano` parameters, it needs a `Player` instance in order to playback the notes:
 
 ```ts
+import { playerFactory } from "@music-ui/core";
 import { initPianoWithPlayer } from "@music-ui/piano";
-import { playerFactory } from "@music-ui/player";
 import "@music-ui/piano/styles.css";
 
 const player = playerFactory();

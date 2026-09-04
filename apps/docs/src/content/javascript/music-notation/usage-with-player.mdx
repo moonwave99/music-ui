@@ -7,7 +7,7 @@ Here you can find the instructions to add playback support to your rendered [abc
 <Installation packageName="@music-ui/core @music-ui/abc" />
 
 <Callout type="info">
-See the [`Player` page](/core/player) to know about playback setup.
+See the [`Player` page](/core/player) to know about the setup.
 </Callout>
 
 ## Usage
@@ -29,8 +29,8 @@ In addition of the markup expected by [`initABCScore`](/javascript/music-notatio
 A `Player` instance is needed in order to playback the score content:
 
 ```ts
+import { playerFactory } from "@music-ui/core";
 import { initABCScoreWithPlayer } from "@music-ui/abc";
-import { playerFactory } from "@music-ui/player";
 import "@music-ui/abc/styles.css";
 
 const player = playerFactory();
@@ -67,8 +67,8 @@ Like `initABCScore`, `initABCScoreWithPlayer` can deal with multiple scores at o
 Setup code:
 
 ```ts
+import { playerFactory } from "@music-ui/core";
 import { initABCScoreWithPlayer } from "@music-ui/abc";
-import { playerFactory } from "@music-ui/player";
 import "@music-ui/abc/styles.css";
  
 const player = playerFactory();
@@ -115,8 +115,8 @@ The `initABCScoreWithPlayer` function reads the parameters passed in the data at
 Setup code:
 
 ```ts
+import { playerFactory } from "@music-ui/core";
 import { initABCScoreWithPlayer } from "@music-ui/abc";
-import { playerFactory } from "@music-ui/player";
 import "@music-ui/abc/styles.css";
  
 const player = playerFactory();

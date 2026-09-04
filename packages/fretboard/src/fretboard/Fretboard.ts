@@ -255,7 +255,7 @@ export class Fretboard {
     const positionOffset = this.getPositionOffset();
 
     this.baseRender(positionOffset);
-    wrapper.select(".positions").remove();
+    wrapper.select(`.${cssClasses.positions}`).remove();
 
     const positions = this.positions.filter(
       ({ fret }) => fret <= options.fretCount + positionOffset,
@@ -353,7 +353,7 @@ export class Fretboard {
           };
 
     const positions = wrapper
-      .selectAll<BaseType, FretboardPosition>(".position-circle")
+      .selectAll<BaseType, FretboardPosition>(`.${cssClasses.positionCircle}`)
       .filter(filterFunction);
 
     Object.keys(opts).forEach((key) =>
@@ -362,7 +362,7 @@ export class Fretboard {
 
     if (opts.text) {
       wrapper
-        .selectAll<BaseType, FretboardPosition>(".position-text")
+        .selectAll<BaseType, FretboardPosition>(`.${cssClasses.positionText}`)
         .filter(filterFunction)
         .text(opts.text)
         .attr("font-size", opts.fontSize || positionTextSize)

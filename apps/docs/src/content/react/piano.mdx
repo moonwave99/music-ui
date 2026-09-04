@@ -26,7 +26,28 @@ function App() {
 
 <Piano />
 
-### Component props
+<Callout type="info">
+  Check [the complete `Piano` component
+  reference](/api/classes/_music-ui_react.Piano.html) for more details.
+</Callout>
+
+## Component props
+
+The component accepts the following props:
+
+| Name          | Type                   | Default Value | Description                                 |
+| ------------- | ---------------------- | ------------- | ------------------------------------------- |
+| `notes`       | `string` \| `string[]` |               | The highlighted notes                       |
+| `noteLabels`  | `string` \| `string[]` |               | The highlighted notes labels                |
+| `playedNotes` | `string` \| `string[]` |               | The notes being currently played            |
+| `startOctave` | `number`               | 3             | The first rendered octave                   |
+| `octaves`     | `number`               | 2             | The count of rendered octaves               |
+| `withFinalC`  | `boolean`              | true          | Renders a final C key after the last octave |
+| `showOctaves` | `boolean`              | false         | Shows current octave on every C note        |
+| `id`          | `string`               |               | The piano unique identifier                 |
+| `className`   | `string`               |               | The component class name                    |
+
+## Props showcase
 
 A showcase of the component props:
 
@@ -36,7 +57,7 @@ import { Piano } from "@music-ui/react";
 function App() {
   return (
     <main>
-      <Piano octaves={4} />
+      <Piano octaves={4} showOctaves />
       <Piano notes="C4 E4 G4" />
       <Piano notes="C4, E4, G4" />
       <Piano notes="C4 E4 G4" noteLabels="1 3 5" />
@@ -48,7 +69,7 @@ function App() {
 
 ### `octaves`
 
-<Piano octaves={4} />
+<Piano octaves={4} showOctaves />
 
 ### `notes`
 

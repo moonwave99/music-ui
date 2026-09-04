@@ -3,6 +3,7 @@ import {
   Fretboard,
   type FretboardOptions,
   type FretboardPosition,
+  type Barre,
 } from "@music-ui/fretboard";
 
 /**
@@ -10,6 +11,8 @@ import {
  */
 export type UseFretboardParams = Partial<FretboardOptions> & {
   positions?: FretboardPosition[];
+  chord?: string;
+  barres?: Barre | Barre[];
 };
 
 /**
@@ -27,6 +30,8 @@ export type UseFretboard<T extends HTMLElement> = {
  */
 export function useFretboard<T extends HTMLElement>({
   positions,
+  chord,
+  barres,
   ...params
 }: UseFretboardParams): UseFretboard<T> {
   const ref = useRef<T>(null);
@@ -45,12 +50,16 @@ export function useFretboard<T extends HTMLElement>({
   }, [params]);
 
   useLayoutEffect(() => {
+    if (chord) {
+      fretboardRef.current?.renderChord(chord, barres);
+      return;
+    }
     if (!positions || !positions.length) {
       fretboardRef.current?.clear().render();
       return;
     }
     fretboardRef.current?.setPositions(positions).render();
-  }, [positions]);
+  }, [positions, chord, barres]);
 
   return { ref };
 }

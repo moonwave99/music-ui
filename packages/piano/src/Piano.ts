@@ -37,8 +37,8 @@ export type ScaleNoteWithOctave = ScaleNote & {
  *
  * @property element The Element where the piano will be rendered
  * @property startOctave The first rendered octave (e.g. 2 will start from C2)
- * @property octaves The amount of rendered octaves
- * @property withFinalC Will render a final C key after the last octave
+ * @property octaves The count of rendered octaves
+ * @property withFinalC Renders a final C key after the last octave
  * @property showOctaves Shows current octave on every C note
  */
 export type PianoOptions = {
@@ -63,6 +63,8 @@ export type GroupedInput = {
 }[];
 
 /**
+ * The CSS classes used by the Piano class.
+ *
  * @property {string} piano The outer wrapper class
  * @property {string} pianoWrapper The inner wrapper class (needed to handle overflow)
  * @property {string} key The piano key class

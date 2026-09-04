@@ -1,0 +1,98 @@
+# PianoWithPlayer
+
+The `<PianoWithPlayer>` component adds playback functionality to the `<Piano>` component.
+
+## Installation
+
+<Installation packageName="@music-ui/core @music-ui/react" />
+
+## Usage
+
+The following code renders a piano with the passed notes and the playback buttons:
+
+<Callout type="warning">
+Wrap your app in a `<PlayerProvider>` if you want to use playback features.  
+See the [`Player` page](/core/player) to know about the setup.
+</Callout>
+
+```tsx
+import { playerFactory } from "@music-ui/core";
+import { PianoWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/piano/styles.css";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <PianoWithPlayer notes="C4 E4 G4 B4" noteLabels="1 3 5 7" octaves={4} />
+      </main>
+    </PlayerProvider>
+  );
+}
+```
+
+<PianoWithPlayer notes="C4 E4 G4 B4" noteLabels="1 3 5 7" octaves={4} />
+
+You can render multiple pianos, each with independent playback feature:
+
+```tsx
+import { PianoWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/piano/styles.css";
+
+function App() {
+  return (
+    <PlayerProvider>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <PianoWithPlayer
+          notes="C4 E4 G4 B4"
+          noteLabels="1 3 5 7"
+          octaves={4}
+          description="Cmaj7"
+        />
+        <PianoWithPlayer
+          notes="D4 F4 A4 C5"
+          noteLabels="1 3 5 7"
+          octaves={4}
+          description="Dm7"
+        />
+      </main>
+    </PlayerProvider>
+  );
+}
+```
+
+<PianoWithPlayer
+  notes="C4 E4 G4 B4"
+  noteLabels="1 3 5 7"
+  octaves={4}
+  description="Cmaj7"
+/>
+<PianoWithPlayer
+  notes="D4 F4 A4 C5"
+  noteLabels="1 3 5 7"
+  octaves={4}
+  description="Dm7"
+/>
+
+## Component props
+
+In addition to the [`Piano` component props](/react/piano#component-props), the component accepts the following props:
+
+| Name            | Type     | Default Value | Description                        |
+| --------------- | -------- | ------------- | ---------------------------------- |
+| `description`   | `string` |               | A description label                |
+| `playLabel`     | `string` | Play          | The playback button label          |
+| `arpeggioLabel` | `string` | Arpeggio      | The arpeggio playback button label |
+| `arpeggioSpeed` | `number` | 120           | The arpeggio playback tempo        |
+
+<Callout type="info">
+  Check [the complete `PianoWithPlayer` component
+  reference](/api/classes/_music-ui_react.PianoWithPlayer.html) for more
+  details.
+</Callout>

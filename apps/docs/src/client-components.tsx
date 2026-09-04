@@ -4,6 +4,7 @@ export { VanillaABCScore } from "./VanillaABCScore";
 export { VanillaPianoWithPlayer } from "./VanillaPianoWithPlayer";
 
 export {
+  Chord,
   Fretboard,
   Piano,
   PianoWithPlayer,
