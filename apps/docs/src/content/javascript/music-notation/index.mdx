@@ -3,6 +3,18 @@
 [ABC notation](https://abcnotation.com/) is a form of music notation that is easily parsable and editable by both people and machines.  
 This library uses [abc.js](https://github.com/paulrosen/abcjs) to render ABC notation as music scores on screen.
 
+<ABCScoreWithPlayer showTempo={false} highlightBars>
+C: Christian Petzold
+T: Minuet in G
+M: 3/4
+L: 1/8
+K: G
+d2 (GA) Bc |   d2 .G2 .G2 |e2 (cd) ef |g2 .G2 .G2 |\
+c2 (dc) BA |B2 (cB)  AG   |F2 (GA) BG |   A6      |
+d2 (GA) Bc |   d2 .G2  .G2|e2 (cd) ef |g2 .G2 .G2 |\
+c2 (dc) BA |B2 (cB)  AG   |A2 (BA) GF |G6        ||
+</ABCScoreWithPlayer>
+
 The `@music-ui/abc` package provide various ways to render music notation:
 
 - [the `initABCScore` function](/javascript/music-notation/basic-usage): the quickest way;

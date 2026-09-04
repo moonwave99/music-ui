@@ -55,16 +55,17 @@ A showcase of the component props:
 
 ```tsx
 import { Piano } from "@music-ui/react";
+import "@music-ui/piano/styles.css";
 
 function App() {
   return (
-    <main>
+    <>
       <Piano octaves={4} showOctaves />
       <Piano notes="C4 E4 G4" />
       <Piano notes="C4, E4, G4" />
       <Piano notes="C4 E4 G4" noteLabels="1 3 5" />
       <Piano notes="C4 E4 G4" playedNotes="C4 G4" />
-    </main>
+    </>
   );
 }
 ```

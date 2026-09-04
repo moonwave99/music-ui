@@ -1,15 +1,6 @@
-import {
-  useState,
-  useLayoutEffect,
-  useCallback,
-  useId,
-  type ReactNode,
-} from "react";
-import {
-  OnABCClickParams,
-  useABCScore,
-  type UseABCScoreParams,
-} from "../hooks/useABCScore";
+import { useState, useLayoutEffect, useCallback, useId } from "react";
+import type { ABCScoreProps } from "./ABCScore";
+import { OnABCClickParams, useABCScore } from "../hooks/useABCScore";
 import { usePlayer } from "../hooks/usePlayer";
 import { Piano, type PianoProps } from "./Piano";
 import { TempoControl } from "./TempoControl";
@@ -18,22 +9,17 @@ import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
 
 /**
  * Props expected by the `ABCScoreWithPlayer` component.
- * @property id The score unique identifier.
- * @property children The `textContext` holding the ABC notation.
- * @property className The component class name.
- * @property showTempo Displays or hides the score tempo indicator.
  * @property showPiano Displays or hides the piano view.
+ * @property pianoOptions Props expected by the `Piano` renderer.
+ * @property showTempoControls Displays or hides the tempo controls.
  * @property playButtonLabel The play button label.
  * @property stopButtonLabel The stop button label.
  * @property pauseButtonLabel The pause button label.
  */
-export type ABCScoreWithPlayerProps = UseABCScoreParams & {
-  id?: string;
-  children: ReactNode;
-  className?: string;
-  pianoOptions?: PianoProps;
-  showTempo?: boolean;
+export type ABCScoreWithPlayerProps = ABCScoreProps & {
   showPiano?: boolean;
+  pianoOptions?: PianoProps;
+  showTempoControls?: boolean;
   playButtonLabel?: string;
   stopButtonLabel?: string;
   pauseButtonLabel?: string;
@@ -49,6 +35,7 @@ export function ABCScoreWithPlayer({
   playButtonLabel = "Play",
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
+  showTempoControls = true,
   showTempo = true,
   showPiano = false,
   showTimeSignature = true,
@@ -162,12 +149,14 @@ export function ABCScoreWithPlayer({
         >
           {stopButtonLabel}
         </button>
-        <TempoControl
-          id={id}
-          value={scoreBpm}
-          onChange={onTempoChange}
-          onReset={onTempoReset}
-        />
+        {showTempoControls ? (
+          <TempoControl
+            id={id}
+            value={scoreBpm}
+            onChange={onTempoChange}
+            onReset={onTempoReset}
+          />
+        ) : null}
       </div>
       {showPiano ? (
         <Piano

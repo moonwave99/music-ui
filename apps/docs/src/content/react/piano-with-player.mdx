@@ -40,12 +40,15 @@ function App() {
 You can render multiple pianos, each with independent playback feature:
 
 ```tsx
+import { playerFactory } from "@music-ui/core";
 import { PianoWithPlayer, PlayerProvider } from "@music-ui/react";
 import "@music-ui/piano/styles.css";
 
+const player = playerFactory();
+
 function App() {
   return (
-    <PlayerProvider>
+    <PlayerProvider player={player}>
       <main>
         <h1>My App</h1>
         {/* rest of your app */}

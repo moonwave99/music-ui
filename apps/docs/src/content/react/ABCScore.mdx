@@ -12,6 +12,7 @@ The following code renders a score with the passed notes:
 
 ```tsx
 import { ABCScore } from "@music-ui/react";
+import '@music-ui/abc/styles.css';
 
 function App() {
   return (
@@ -19,7 +20,6 @@ function App() {
       <h1>My App</h1>
       {/* rest of your app */}
       <ABCScore>
-        M:4/4
         CDEF GABc|
       </ABCScore>
     </main>
@@ -43,4 +43,59 @@ With free tempo:
 M: 1/1
 L: 1/1
 C D E F G A B c || c d e f g a b c' |
+</ABCScore>
+
+## Component props
+
+The component accepts the following props:
+
+| Name                | Type      | Default Value                                                                              | Description                                 |
+| ------------------- | --------- | ------------------------------------------------------------------------------------------ | ------------------------------------------- |
+| `children`          | `string`  |                                                                                            | The abc notation content                    |
+| `showTempo`         | `boolean` | `true`                                                                                     | Displays or hides the score tempo indicator |
+| `showTimeSignature` | `boolean` | `true`                                                                                     | Displays or hides the time signature        |
+| `abcOptions`        | `object`  | [`DEFAULT_ABC_VISUAL_PARAMS`](/api/variables/_music-ui_abc.DEFAULT_ABC_VISUAL_PARAMS.html) | The options passed to the abcjs renderer    |
+| `id`                | `string`  |                                                                                            | The score unique identifier                 |
+| `className`         | `string`  |                                                                                            | The component class name                    |
+
+## Props showcase
+
+A showcase of the component props:
+
+```tsx
+import { ABCScore } from "@music-ui/react";
+import "@music-ui/abc/styles.css";
+
+function App() {
+  return (
+    <main>
+      <ABCScore showTempo={false}>
+        CDEF GABc|
+      </ABCScore>
+      <ABCScore showTimeSignature={false}>
+        CDEF GABc|
+      </ABCScore>
+      <ABCScore abcOptions={{ foregroundColor: "orange" }}>
+        CDEF GABc|
+      </ABCScore>
+    </main>
+  );
+}
+```
+### `showTempo`
+
+<ABCScore showTempo={false}>
+{`CDEF GABc|`}
+</ABCScore>
+
+### `showTimeSignature`
+
+<ABCScore showTimeSignature={false}>
+{`CDEF GABc|`}
+</ABCScore>
+
+### `abcOptions`
+
+<ABCScore abcOptions={{ foregroundColor: "orange" }}>
+{`CDEF GABc|`}
 </ABCScore>

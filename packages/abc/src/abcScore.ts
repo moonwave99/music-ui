@@ -39,7 +39,7 @@ export const DEFAULT_ABC_SCORE_OPTIONS = {
  * @property {number} paddingright The default right score padding
  * @property {string} selectionColor The default selection color
  */
-const DEFAULT_ABC_VISUAL_PARAMS = {
+export const DEFAULT_ABC_VISUAL_PARAMS = {
   responsive: "resize",
   add_classes: true,
   paddingleft: 0,

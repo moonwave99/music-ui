@@ -6,7 +6,7 @@ import { getNodeText } from "../utils";
 /**
  * Props expected by the `ABCScore` component.
  * @property id The score unique identifier.
- * @property children The `textContext` holding the ABC notation.
+ * @property children The `textContext` containing the ABC notation.
  * @property className The component class name.
  * @property showTempo Displays or hides the score tempo indicator.
  */

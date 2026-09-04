@@ -4,7 +4,7 @@ The `<ABCScoreWithPlayer>` component renders ABC notation on screen with playbac
 
 ## Installation
 
-<Installation packageName="@music-ui/react" />
+<Installation packageName="@music-ui/core @music-ui/react" />
 
 ## Usage
 
@@ -15,11 +15,15 @@ Wrap your app in a `<PlayerProvider>` if you want to use playback features.
 </Callout>
 
 ```tsx
+import { playerFactory } from "@music-ui/core";
 import { ABCScoreWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/abc/styles.css";
+
+const player = playerFactory();
 
 function App() {
   return (
-    <PlayerProvider>
+    <PlayerProvider player={player}>
       <main>
         <h1>My App</h1>
         {/* rest of your app */}
@@ -32,38 +36,98 @@ function App() {
 }
 ```
 
-<ABCScoreWithPlayer showTempo={false}>
-CDEF GABc|
-</ABCScoreWithPlayer>
-
-Without time signature:
-
-<ABCScoreWithPlayer showTimeSignature={false} showTempo={false}>
+<ABCScoreWithPlayer>
 CDEF GABc|
 </ABCScoreWithPlayer>
 
 With free tempo:
 
-<ABCScoreWithPlayer showTimeSignature={false} showTempo={false}>
+```tsx
+import { playerFactory } from "@music-ui/core";
+import { ABCScoreWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/abc/styles.css";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <ABCScoreWithPlayer>
+          M: 1/1
+          L: 1/1
+          Q: 200
+          C D E F G A B c || c d e f g a b c' |
+        </ABCScoreWithPlayer>
+      </main>
+    </PlayerProvider>
+  );
+}
+```
+
+<ABCScoreWithPlayer showTempo={false}>
 M: 1/1
 L: 1/1
-Q: 360
+Q: 200
 C D E F G A B c || c d e f g a b c' |
 </ABCScoreWithPlayer>
 
-With piano below too!
+## Component props
 
-<ABCScoreWithPlayer showTempo={false} showPiano pianoOptions={{ octaves: 3 }} highlightBars>
-T: You Are My Sunshine
-C: Traditional
-L: 1/4
-Q: 180
-z G, C D|E2 E2-| E E D E| C2 C2-|
-w:You are my sun-shine,_ my on-ly sun-shine.
-C C D E|F2 A2-| A A G F|E4-|
-w:_You make me hap-py_ when skies are gray,
-E C D E|F2 A2-| A A G F|E2 C2-|
-w:_You'll ne-ver know, dear,_ how much I love you,
-C z C D| E3 F| D D2 E|C4|]
-w:_Please don't take my sun-shine a-way.
+In addition to the [`ABCScore` component props](/react/ABCScore#component-props), the component accepts the following props:
+
+| Name                | Type      | Default Value                                                                        | Description                              |
+| ------------------- | --------- | ------------------------------------------------------------------------------------ | ---------------------------------------- |
+| `showPiano`         | `boolean` | `false`                                                                              | Displays or hides the piano view         |
+| `pianoOptions`      | `object`  | [`DEFAULT_PIANO_OPTIONS`](/api/variables/_music-ui_piano.DEFAULT_PIANO_OPTIONS.html) | Props expected by the `Piano` renderer   |
+| `showTempoControls` | `boolean` | `true`                                                                               | Displays or hides the tempo controls     |
+| `highlightBars`     | `boolean` | `false`                                                                              | Highlights the current played bar or not |
+
+## Props showcase
+
+A showcase of the component props:
+
+```tsx
+import { playerFactory } from "@music-ui/core";
+import { ABCScoreWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/abc/styles.css";
+import "@music-ui/piano/styles.css";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <ABCScoreWithPlayer highlightBars>
+        CDEF GABc|cBAGFEDC|
+      </ABCScoreWithPlayer>
+      <ABCScoreWithPlayer showTempoControls={false}>
+        CDEF GABc|
+      </ABCScoreWithPlayer>
+      <ABCScoreWithPlayer showPiano pianoOptions={{ showOctaves: true, octaves: 3 }}>
+        CDEF GABc|
+      </ABCScoreWithPlayer>
+    </PlayerProvider>
+  );
+}
+```
+
+### `highlightBars`
+
+<ABCScoreWithPlayer highlightBars>
+{`CDEF GABc|cBAGFEDC|`}
+</ABCScoreWithPlayer>
+
+### `showTempoControls`
+
+<ABCScoreWithPlayer showTempoControls={false}>
+{`CDEF GABc|`}
+</ABCScoreWithPlayer>
+
+### `showPiano`
+
+<ABCScoreWithPlayer showPiano pianoOptions={{ showOctaves: true, octaves: 3 }}>
+{`CDEF GABc|`}
 </ABCScoreWithPlayer>
