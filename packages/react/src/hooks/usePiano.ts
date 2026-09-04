@@ -37,7 +37,7 @@ export type UsePiano<T extends HTMLElement> = {
 };
 
 /**
- *
+ * Hook used to render a piano on screen.
  * @param __namedParameters The parameters for rendering a piano on screen.
  * @returns { UsePiano } The properties exposed by the hook.
  */

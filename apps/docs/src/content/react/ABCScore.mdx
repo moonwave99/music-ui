@@ -27,6 +27,8 @@ function App() {
 }
 ```
 
+Output:
+
 <ABCScore showTempo={false}>
 CDEF GABc|
 </ABCScore>
@@ -68,7 +70,7 @@ import "@music-ui/abc/styles.css";
 
 function App() {
   return (
-    <main>
+    <>
       <ABCScore showTempo={false}>
         CDEF GABc|
       </ABCScore>
@@ -78,7 +80,7 @@ function App() {
       <ABCScore abcOptions={{ foregroundColor: "orange" }}>
         CDEF GABc|
       </ABCScore>
-    </main>
+    </>
   );
 }
 ```
