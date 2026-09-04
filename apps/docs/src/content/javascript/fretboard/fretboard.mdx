@@ -21,6 +21,12 @@ The `Fretboard` constructor accepts the following parameters:
 
 Usage:
 
+```html
+<div id="fretboard"></div>
+```
+
+Setup code:
+
 ```ts
 import { Fretboard } from "@music-ui/fretboard";
 
@@ -28,7 +34,7 @@ import { Fretboard } from "@music-ui/fretboard";
 const fretboard = new Fretboard();
 ```
 
-Creating a new `Fretboard` does not render anything on screen. You have to call `render()` for that:
+Creating a new `Fretboard` does not render anything on screen yet - fort that you to call `render()`:
 
 ```ts {4}
 import { Fretboard } from "@music-ui/fretboard";
@@ -39,6 +45,4 @@ fretboard.render();
 
 Output:
 
----
-
-<Chord chord="x32010" />
+<Fretboard />

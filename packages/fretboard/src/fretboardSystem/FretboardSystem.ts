@@ -10,7 +10,7 @@ export type SystemPosition = Pick<FretboardPosition, "string" | "fret"> & {
   chroma: number;
 };
 
-type FretboardSystemParams = {
+export type FretboardSystemParams = {
   tuning?: Tuning;
   fretCount?: number;
 };
@@ -22,51 +22,8 @@ export type ScaleParams = {
     system: Systems;
     box: string | number;
   };
+  displayBoxOnly?: boolean;
 };
-
-function parseNote(note: string): {
-  note: string;
-  octave: number;
-} {
-  let octave = +note.slice(-1);
-  let parsedNote = note;
-  if (isNaN(octave)) {
-    octave = 2;
-  } else {
-    parsedNote = note.slice(0, -1);
-  }
-  return {
-    octave,
-    note: parsedNote,
-  };
-}
-
-function getOctaveInScale({
-  root,
-  note,
-  octave,
-  baseOctave,
-}: {
-  root: string;
-  note: string;
-  octave: number;
-  baseOctave: number;
-}): number {
-  const noteChroma = getChroma(note) || 0;
-  const rootChroma = getChroma(root) || 0;
-
-  if (rootChroma > noteChroma) {
-    return octave - 1 - baseOctave;
-  }
-  return octave - baseOctave;
-}
-
-export function isPositionInBox(
-  { fret, string }: FretboardPosition,
-  systemPositions: FretboardPosition[],
-): boolean {
-  return !!systemPositions.find((x) => x.fret === fret && x.string === string);
-}
 
 export class FretboardSystem {
   private tuning: Tuning = GUITAR_TUNINGS.default;
@@ -102,14 +59,7 @@ export class FretboardSystem {
 
     const mode = getModeFromScaleType(type);
     const boxPositions: FretboardPosition[] = box
-      ? this.adjustOctave(
-          getBox({
-            root,
-            mode,
-            ...box,
-          }),
-          paramsRoot,
-        )
+      ? this.adjustOctave(getBox({ root, mode, ...box }), paramsRoot)
       : [];
 
     const reverseMap = notes.map((note, index) => ({
@@ -118,6 +68,7 @@ export class FretboardSystem {
       interval: intervals[index],
       degree: Number(intervals[index]![0]),
     }));
+
     return this.positions
       .filter(({ chroma }) => reverseMap.find((x) => x.chroma === chroma))
       .map(({ chroma, ...rest }) => ({
@@ -126,18 +77,15 @@ export class FretboardSystem {
       }))
       .map((x) => {
         const octave = this.getOctave(x);
-        const position = {
+        return {
           octave,
           octaveInScale: getOctaveInScale({ root, octave, baseOctave, ...x }),
+          inBox: Boolean(
+            boxPositions.length &&
+            isPositionInBox(x as FretboardPosition, boxPositions),
+          ),
           ...x,
         } as FretboardPosition;
-        if (
-          boxPositions.length &&
-          isPositionInBox(x as FretboardPosition, boxPositions)
-        ) {
-          position.inBox = true;
-        }
-        return position;
       });
   }
   private adjustOctave(
@@ -165,17 +113,7 @@ export class FretboardSystem {
       return [...memo, ...filledString];
     }, [] as SystemPosition[]);
   }
-  private getOctave({
-    fret,
-    string,
-    chroma,
-    note,
-  }: {
-    fret: number;
-    string: number;
-    note: string;
-    chroma: number;
-  }): number {
+  private getOctave({ fret, string, chroma, note }: GetOctaveParams): number {
     const { tuning } = this;
     const baseNoteWithOctave = tuning[tuning.length - string]!;
     const { note: baseNote, octave: baseOctave } =
@@ -192,4 +130,53 @@ export class FretboardSystem {
     octaveIncrement += Math.floor(fret / 12);
     return baseOctave + octaveIncrement;
   }
+}
+
+export function isPositionInBox(
+  { fret, string }: FretboardPosition,
+  systemPositions: FretboardPosition[],
+) {
+  return !!systemPositions.find((x) => x.fret === fret && x.string === string);
+}
+
+type GetOctaveParams = {
+  fret: number;
+  string: number;
+  note: string;
+  chroma: number;
+};
+
+function parseNote(note: string) {
+  let octave = +note.slice(-1);
+  let parsedNote = note;
+  if (isNaN(octave)) {
+    octave = 2;
+  } else {
+    parsedNote = note.slice(0, -1);
+  }
+  return {
+    octave,
+    note: parsedNote,
+  };
+}
+
+type GetOctaveInScaleParams = {
+  root: string;
+  note: string;
+  octave: number;
+  baseOctave: number;
+};
+
+function getOctaveInScale({
+  root,
+  note,
+  octave,
+  baseOctave,
+}: GetOctaveInScaleParams) {
+  const noteChroma = getChroma(note) || 0;
+  const rootChroma = getChroma(root) || 0;
+  if (rootChroma > noteChroma) {
+    return octave - 1 - baseOctave;
+  }
+  return octave - baseOctave;
 }

@@ -137,10 +137,10 @@ export function getPositionClasses(
 
 type GetDimensionsParams = Pick<
   FretboardOptions,
-  | "topPadding"
-  | "bottomPadding"
-  | "leftPadding"
-  | "rightPadding"
+  | "paddingTop"
+  | "paddingBottom"
+  | "paddingLeft"
+  | "paddingRight"
   | "width"
   | "height"
   | "showFretNumbers"
@@ -153,17 +153,17 @@ type Dimensions = {
 };
 
 export function getDimensions({
-  topPadding,
-  bottomPadding,
-  leftPadding,
-  rightPadding,
+  paddingTop,
+  paddingBottom,
+  paddingLeft,
+  paddingRight,
   width,
   height,
   showFretNumbers,
   fretNumbersHeight,
 }: GetDimensionsParams): Dimensions {
-  const totalWidth = width + leftPadding + rightPadding;
-  let totalHeight = height + topPadding + bottomPadding;
+  const totalWidth = width + paddingLeft + paddingRight;
+  let totalHeight = height + paddingTop + paddingBottom;
 
   if (showFretNumbers) {
     totalHeight += fretNumbersHeight;

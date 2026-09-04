@@ -82,11 +82,11 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   middleFretWidth: 3 * DEFAULT_DIMENSIONS.line,
   scaleFrets: true,
   crop: false,
-  fretLeftPadding: 0,
-  topPadding: DEFAULT_DIMENSIONS.unit,
-  bottomPadding: DEFAULT_DIMENSIONS.unit * 0.75,
-  leftPadding: DEFAULT_DIMENSIONS.unit,
-  rightPadding: DEFAULT_DIMENSIONS.unit,
+  fretPaddingLeft: 0,
+  paddingTop: DEFAULT_DIMENSIONS.unit,
+  paddingBottom: DEFAULT_DIMENSIONS.unit * 0.75,
+  paddingLeft: DEFAULT_DIMENSIONS.unit,
+  paddingRight: DEFAULT_DIMENSIONS.unit,
   height: DEFAULT_DIMENSIONS.height,
   width: DEFAULT_DIMENSIONS.width,
   positionSize: DEFAULT_DIMENSIONS.unit,
@@ -147,10 +147,10 @@ export type FretboardOptions = {
   middleFretColor: string;
   middleFretWidth: number;
   scaleFrets: boolean;
-  topPadding: number;
-  bottomPadding: number;
-  leftPadding: number;
-  rightPadding: number;
+  paddingTop: number;
+  paddingBottom: number;
+  paddingLeft: number;
+  paddingRight: number;
   height: number;
   width: number;
   positionSize: number;
@@ -165,7 +165,7 @@ export type FretboardOptions = {
   fretNumbersMargin: number;
   fretNumbersColor: string;
   crop: boolean;
-  fretLeftPadding: number;
+  fretPaddingLeft: number;
   font: string;
   barresColor: string;
   highlightPadding: number;
@@ -209,8 +209,8 @@ export class Fretboard {
       element,
       height,
       width,
-      leftPadding,
-      topPadding,
+      paddingLeft,
+      paddingTop,
       stringCount,
       stringWidth,
       fretCount,
@@ -244,7 +244,7 @@ export class Fretboard {
       .attr("class", cssClasses.svgWrapper)
       .attr(
         "transform",
-        `translate(${leftPadding}, ${topPadding}) scale(${width / totalWidth})`,
+        `translate(${paddingLeft}, ${paddingTop}) scale(${width / totalWidth})`,
       );
   }
 
@@ -406,29 +406,12 @@ export class Fretboard {
     return this;
   }
 
-  renderScale({ type, root, box }: ScaleParams): Fretboard {
-    if (
-      box &&
-      this.options.tuning.toString() !== GUITAR_TUNINGS.default.toString()
-    ) {
-      console.warn(
-        "Selected scale system works for standard tuning. Wrong notes may be highlighted.",
-      );
-    }
+  renderScale({ type, root, box, displayBoxOnly }: ScaleParams): Fretboard {
+    this.checkTuning();
     return this.setPositions(
-      this.system.getScale({ type, root, box }),
-    ).render();
-  }
-
-  renderBox({ type, root, box }: ScaleParams): Fretboard {
-    if (this.options.tuning.toString() !== GUITAR_TUNINGS.default.toString()) {
-      console.warn(
-        "Selected scale system works for standard tuning. Wrong notes may be highlighted.",
-      );
-    }
-
-    return this.setPositions(
-      this.system.getScale({ type, root, box }).filter(({ inBox }) => inBox),
+      this.system
+        .getScale({ type, root, box })
+        .filter(({ inBox }) => (displayBoxOnly ? inBox : true)),
     ).render();
   }
 
@@ -503,6 +486,15 @@ export class Fretboard {
     return this;
   }
 
+  private checkTuning() {
+    if (this.options.tuning.toString() === GUITAR_TUNINGS.default.toString()) {
+      return;
+    }
+    console.warn(
+      "Selected scale system works for standard tuning. Wrong notes may be highlighted.",
+    );
+  }
+
   private getGridPositionAt(x: number, y: number) {
     const row = this.grid[x];
     if (!row) {
@@ -513,11 +505,11 @@ export class Fretboard {
 
   private getPositionOffset(): number {
     const { positions } = this;
-    const { crop, fretLeftPadding } = this.options;
+    const { crop, fretPaddingLeft } = this.options;
     return crop
       ? Math.max(
           0,
-          Math.min(...positions.map(({ fret }) => fret)) - 1 - fretLeftPadding,
+          Math.min(...positions.map(({ fret }) => fret)) - 1 - fretPaddingLeft,
         )
       : 0;
   }
@@ -593,7 +585,7 @@ export class Fretboard {
       showFretNumbers,
       fretNumbersMargin,
       fretNumbersColor,
-      topPadding,
+      paddingTop,
     } = this.options;
 
     const { totalWidth } = getDimensions(this.options);
@@ -653,7 +645,7 @@ export class Fretboard {
         .attr("font-family", font)
         .attr(
           "transform",
-          `translate(0 ${fretNumbersMargin + topPadding + strings[strings.length - 1]!})`,
+          `translate(0 ${fretNumbersMargin + paddingTop + strings[strings.length - 1]!})`,
         );
 
       fretNumbersGroup

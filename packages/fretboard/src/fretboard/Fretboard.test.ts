@@ -10,16 +10,16 @@ const {
   fretCount,
   width,
   height,
-  topPadding,
-  bottomPadding,
-  leftPadding,
-  rightPadding,
+  paddingTop,
+  paddingBottom,
+  paddingLeft,
+  paddingRight,
   fretNumbersHeight,
 } = DEFAULT_FRETBOARD_OPTIONS;
 
-const defaultWidth = width + leftPadding + rightPadding;
+const defaultWidth = width + paddingLeft + paddingRight;
 
-const defaultHeight = height + topPadding + bottomPadding + fretNumbersHeight;
+const defaultHeight = height + paddingTop + paddingBottom + fretNumbersHeight;
 
 test.beforeEach(() => {
   document.body.innerHTML = '<div id="fretboard"></div>';
@@ -320,41 +320,6 @@ test("Fretboard renderChord() - multiple barres", () => {
   expect(svg.querySelectorAll(".barres rect").length).toBe(2);
 });
 
-test("Fretboard renderBox()", () => {
-  const fretboard = new Fretboard({
-    positionText: ({ note }) => note!,
-  });
-  fretboard.renderBox({
-    type: "minor",
-    root: "E",
-    box: {
-      system: "pentatonic",
-      box: 1,
-    },
-  });
-
-  const svg = document.querySelector("#fretboard svg")!;
-  const positions = svg.querySelectorAll(".positions .position");
-  positions.forEach((position) => {
-    expect("EGABD".split("").includes(position.textContent)).toBe(true);
-  });
-  expect(positions.length).toBe(12);
-});
-
-test("Fretboard renderBox() - custom tuning warning", () => {
-  const fretboard = new Fretboard({
-    tuning: GUITAR_TUNINGS.openG,
-  }).renderBox({
-    type: "major pentatonic",
-    root: "C",
-    box: {
-      system: "CAGED",
-      box: "C",
-    },
-  });
-  expect(fretboard instanceof Fretboard).toBe(true);
-});
-
 test("Fretboard renderScale()", () => {
   const fretboard = new Fretboard({
     positionText: ({ note }) => note!,
@@ -437,6 +402,28 @@ test("Fretboard renderScale() - TNPS", () => {
     .forEach((position) =>
       expect("CDEFGAB".split("").includes(position.textContent)).toBe(true),
     );
+});
+
+test("Fretboard renderScale() - displayBoxOnly", () => {
+  const fretboard = new Fretboard({
+    positionText: ({ note }) => note!,
+  });
+  fretboard.renderScale({
+    type: "minor",
+    root: "E",
+    box: {
+      system: "pentatonic",
+      box: 1,
+    },
+    displayBoxOnly: true,
+  });
+
+  const svg = document.querySelector("#fretboard svg")!;
+  const positions = svg.querySelectorAll(".positions .position");
+  positions.forEach((position) =>
+    expect("EGABD".split("").includes(position.textContent)).toBe(true),
+  );
+  expect(positions.length).toBe(12);
 });
 
 test("Fretboard renderScale() - custom tuning warning", () => {

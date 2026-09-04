@@ -36,6 +36,7 @@ test("FretboardSystem - getScale()", () => {
     degree: 1,
     string: 1,
     fret: 0,
+    inBox: false,
   });
 });
 
