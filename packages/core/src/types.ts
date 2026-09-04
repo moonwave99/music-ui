@@ -41,8 +41,9 @@ export type TimeSignature = [number, number];
 export type UnitNoteLength = `${number}/${number}`;
 
 /**
- * Indicates a transport position in the format {bars}:{beats}:{sub-subdivisions}.
- * A TransportPosition must always be considered in the time signature context.
+ * Indicates a transport position in the format {bars}:{beats}:{sub-subdivisions}, e.g. 2:1:0.
+ *
+ * A TransportPosition must always be considered in the time signature context, e.g. 0:2:0 in 6/8 means the second beat of the first bar, i.e. 4/8 from the beginning.
  */
 export type TransportPosition = `${number}:${number}:${number}`;
 
