@@ -2,6 +2,7 @@
   "entryPoints": [
     "packages/core",
     "packages/abc",
+    "packages/fretboard",
     "packages/piano",
     "packages/react"
   ],

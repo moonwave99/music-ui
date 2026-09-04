@@ -58,7 +58,7 @@ type MuteStringsParams = {
   stroke?: string;
 };
 
-type StyleParams = {
+export type StyleParams = {
   [key: string]:
     | string
     | number

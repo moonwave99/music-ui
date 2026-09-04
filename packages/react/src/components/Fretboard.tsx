@@ -13,7 +13,10 @@ export type FretboardProps = UseFretboardParams & {
 /**
  * A component wrapped around the `@music-ui/fretboard` Fretboard class.
  */
-export function Fretboard({ className, ...params }: FretboardProps) {
+export function Fretboard({
+  className = "fretboard",
+  ...params
+}: FretboardProps) {
   const { ref } = useFretboard<HTMLDivElement>(params);
   return <div className={className} ref={ref}></div>;
 }

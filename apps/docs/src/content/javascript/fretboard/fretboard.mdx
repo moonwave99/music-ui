@@ -1,3 +1,9 @@
+import {
+  Arpeggio,
+  ArpeggioWithText,
+  ArpeggioWithTextAndRootNotes,
+} from "../../../app/examples/fretboard/FretboardWithText";
+
 # The `Fretboard` class
 
 If you need more control over the component lifecycle, you can use the `Fretboard` class.
@@ -46,3 +52,192 @@ fretboard.render();
 Output:
 
 <Fretboard />
+
+### Constructor options
+
+TBD
+
+## Displaying fretboard positions
+
+An empty fretboard is not much useful. Let's see how to display some positions on it and to customize their appearance:
+
+```ts {6-10}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+
+// a good ole open C cowboy chord
+fretboard.setPositions([
+  { string: 5, fret: 3 },
+  { string: 4, fret: 2 },
+  { string: 2, fret: 1 },
+]);
+
+fretboard.render();
+```
+
+<Fretboard
+  positions={[
+    { string: 5, fret: 3 },
+    { string: 4, fret: 2 },
+    { string: 2, fret: 1 },
+  ]}
+/>
+
+The `Fretboard.setPositions` methods accepts an array of fretboard positions.
+
+A [`FretboardPosition`](/api/types/_music-ui_fretboard.FretboardPosition.html) can hold multiple information, the minimum requirement being the `string` and the `fret` keys like in the example above.
+
+### Displaying the position text
+
+Let's display the full C major arpeggio in first position:
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+
+fretboard.setPositions([
+  { string: 6, fret: 0 },
+  { string: 6, fret: 3 },
+  { string: 5, fret: 3 },
+  { string: 4, fret: 2 },
+  { string: 3, fret: 0 },
+  { string: 2, fret: 1 },
+  { string: 1, fret: 0 },
+  { string: 1, fret: 3 },
+]);
+
+fretboard.render();
+```
+
+Output:
+
+<Arpeggio />
+
+That looks great! What about knowing which note corresponds to every position?
+
+Let's expand the position array with such information:
+
+```ts {6-13}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+
+fretboard.setPositions([
+  { string: 6, fret: 0, note: "E" },
+  { string: 6, fret: 3, note: "G" },
+  { string: 5, fret: 3, note: "C" },
+  { string: 4, fret: 2, note: "E" },
+  { string: 3, fret: 0, note: "G" },
+  { string: 2, fret: 1, note: "C" },
+  { string: 1, fret: 0, note: "E" },
+  { string: 1, fret: 3, note: "G" },
+]);
+
+fretboard.render();
+```
+
+Output:
+
+<Arpeggio />
+
+Exactly, that doesn't change anything automatically. The fretboard constructor accepts a `positionText` function that helps us to achieve our goal:
+
+```ts {4}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: (position) => position.note,
+});
+
+fretboard.setPositions([
+  { string: 6, fret: 0, note: "E" },
+  { string: 6, fret: 3, note: "G" },
+  { string: 5, fret: 3, note: "C" },
+  { string: 4, fret: 2, note: "E" },
+  { string: 3, fret: 0, note: "G" },
+  { string: 2, fret: 1, note: "C" },
+  { string: 1, fret: 0, note: "E" },
+  { string: 1, fret: 3, note: "G" },
+]);
+
+fretboard.render();
+```
+
+<ArpeggioWithText />
+
+That's brilliant! `positionText` is a callback that exposes every position and allows us to return what we need.
+
+<Callout type="info">
+  In this example we compiled the position information manually. The
+  [`@music-ui/fretboard` package](/javascript/fretboard) contains scale and
+  arpeggio generation utilities.
+</Callout>
+
+### Style the positions
+
+Let's highlight the root notes of the arpeggio with the `Fretboard.style` function:
+
+```ts {20-22}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: (position) => position.note,
+});
+
+fretboard.setPositions([
+  { string: 6, fret: 0, note: "E" },
+  { string: 6, fret: 3, note: "G" },
+  { string: 5, fret: 3, note: "C" },
+  { string: 4, fret: 2, note: "E" },
+  { string: 3, fret: 0, note: "G" },
+  { string: 2, fret: 1, note: "C" },
+  { string: 1, fret: 0, note: "E" },
+  { string: 1, fret: 3, note: "G" },
+]);
+
+fretboard.render();
+
+fretboard.style({
+  fill: (position) => (position.note === "C" ? "orange" : "white"),
+});
+```
+
+Output:
+
+<ArpeggioWithTextAndRootNotes />
+
+The `Fretboard.style` functions accepts a key-value list of stylable properties and their corresponding values / function generating values.
+
+Another approach is to use the `filter` property:
+
+```ts {20-23}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: (position) => position.note,
+});
+
+fretboard.setPositions([
+  { string: 6, fret: 0, note: "E" },
+  { string: 6, fret: 3, note: "G" },
+  { string: 5, fret: 3, note: "C" },
+  { string: 4, fret: 2, note: "E" },
+  { string: 3, fret: 0, note: "G" },
+  { string: 2, fret: 1, note: "C" },
+  { string: 1, fret: 0, note: "E" },
+  { string: 1, fret: 3, note: "G" },
+]);
+
+fretboard.render();
+
+fretboard.style({
+  filter: (position) => position.note === "C",
+  fill: "orange",
+});
+```
+
+Same output:
+
+<ArpeggioWithTextAndRootNotes />
