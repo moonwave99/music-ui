@@ -48,6 +48,8 @@
   },
   "dependencies": {
     "@tonaljs/abc-notation": "^4.9.1",
+    "@tonaljs/chord": "^6.1.2",
+    "@tonaljs/note": "^4.12.1",
     "@tonejs/midi": "^2.0.28",
     "abcjs": "^6.7.0",
     "dedent": "^1.7.2",

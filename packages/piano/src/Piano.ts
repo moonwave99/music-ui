@@ -1,16 +1,12 @@
 import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
 import {
+  CHROMATIC_SCALE,
   ensureSelection,
   type NoteInput,
   type ElementOrSelector,
 } from "@music-ui/core";
-import {
-  CHROMATIC_SCALE,
-  parseNote,
-  normalizeInput,
-  parseNoteInput,
-} from "./lib";
+import { parseNote, normalizeInput, parseNoteInput } from "./lib";
 
 /**
  * @property chroma The scientific pitch notation value of the pitch class (e.g. 0-11)

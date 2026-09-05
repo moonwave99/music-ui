@@ -4,28 +4,40 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * Props expected by the `Chord` component.
  * @property id The chord unique identifier.
  * @property className The component class name.
- * @property label The chord label.
+ * @property showName Show the chord name or not.
  */
 export type ChordProps = Omit<UseFretboardParams, "chord"> &
   UseFretboardParams["chord"] & {
     id?: string;
     className?: string;
-    label?: string;
+    name?: string;
+    showName?: boolean;
   };
 
 /**
- * A component wrapped around the `@music-ui/fretboard` Fretboard class.
+ * A component that renders a guitar chord diagram.
  */
-export function Chord({ className = "chord", label, ...params }: ChordProps) {
+export function Chord({
+  className = "chord",
+  chordName,
+  fretCount = 3,
+  showFretNumbers = false,
+  showName = true,
+  ...params
+}: ChordProps) {
   const { ref } = useFretboard<HTMLDivElement>({
     ...params,
-    fretCount: 3,
-    chord: params,
+    fretCount,
+    showFretNumbers,
+    chord: {
+      ...params,
+      chordName,
+    },
   });
   return (
     <figure className={className}>
       <div ref={ref}></div>
-      {label ? <figcaption>{label}</figcaption> : null}
+      {showName && chordName ? <figcaption>{chordName}</figcaption> : null}
     </figure>
   );
 }

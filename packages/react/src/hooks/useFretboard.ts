@@ -12,11 +12,13 @@ import {
  * @property positions An array of {@link FretboardPosition}.
  * @property chord Params expected by the `Fretboard.renderChord` function.
  * @property style Params expected by the `Fretboard.style` function.
+ * @property showNoteNames Display the note names or not.
  */
 export type UseFretboardParams = Partial<FretboardOptions> & {
   positions?: FretboardPosition[];
   chord?: RenderChordParams;
   style?: StyleParams;
+  showNoteNames?: boolean;
 };
 
 /**
@@ -36,6 +38,7 @@ export function useFretboard<T extends HTMLElement>({
   positions,
   chord,
   style,
+  showNoteNames,
   ...params
 }: UseFretboardParams): UseFretboard<T> {
   const ref = useRef<T>(null);
@@ -46,12 +49,17 @@ export function useFretboard<T extends HTMLElement>({
     if (fretboardRef.current) {
       return;
     }
+
+    const defaultPositionText = ({ note }: FretboardPosition) =>
+      showNoteNames && note ? note : "";
+
+    const positionText = params.positionText || defaultPositionText;
     fretboardRef.current = new Fretboard({
       element: ref.current!,
       ...params,
+      positionText,
     });
-    fretboardRef.current.render();
-  }, [params]);
+  }, [params, showNoteNames]);
 
   useLayoutEffect(() => {
     if (chord) {

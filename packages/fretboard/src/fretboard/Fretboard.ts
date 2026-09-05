@@ -32,9 +32,12 @@ import {
 
 export type Tuning = string[];
 
-export type FretboardPosition = {
+export type BareFretboardPosition = {
   string: number;
   fret: number;
+};
+
+export type FretboardPosition = BareFretboardPosition & {
   note?: string;
   disabled?: boolean;
   octave?: number;
@@ -51,7 +54,7 @@ export type Barre = {
   stringTo?: number;
 };
 
-export type RenderChordParams = ParseChordParams & {
+export type RenderChordParams = Omit<ParseChordParams, "system"> & {
   barres?: Barre | Barre[];
 };
 
@@ -267,7 +270,6 @@ export class Fretboard {
     } = this.options;
 
     const positionOffset = this.getPositionOffset();
-
     this.baseRender(positionOffset);
     wrapper.select(`.${cssClasses.positions}`).remove();
 
@@ -400,7 +402,10 @@ export class Fretboard {
   }
 
   renderChord({ barres, ...rest }: RenderChordParams): Fretboard {
-    const { positions, mutedStrings: strings } = parseChord(rest);
+    const { positions, mutedStrings: strings } = parseChord({
+      ...rest,
+      system: this.system,
+    });
     this.setPositions(positions);
     if (barres) {
       this.renderBarres(Array.isArray(barres) ? barres : [barres]);
@@ -510,12 +515,13 @@ export class Fretboard {
   private getPositionOffset(): number {
     const { positions } = this;
     const { crop, fretPaddingLeft } = this.options;
-    return crop
+    const offset = crop
       ? Math.max(
           0,
           Math.min(...positions.map(({ fret }) => fret)) - 1 - fretPaddingLeft,
         )
       : 0;
+    return offset;
   }
 
   private renderBarres(barres: Barre[]): void {

@@ -13,12 +13,21 @@ test("FretboardSystem - constructor with default options", () => {
 test("FretboardSystem - constructor with custom options", () => {
   const customParams = {
     tuning: ["G2", "B2", "D3", "G3", "B3", "D4"],
-    fretCount: 12,
+    fretCount: 18,
   };
   const system = new FretboardSystem(customParams);
   expect(system instanceof FretboardSystem).toBe(true);
   expect(system.getTuning()).toBe(customParams.tuning);
   expect(system.getFretCount()).toBe(customParams.fretCount);
+});
+
+test("FretboardSystem - constructor with shorter fretCount", () => {
+  const customParams = {
+    fretCount: 5,
+  };
+  const system = new FretboardSystem(customParams);
+  expect(system instanceof FretboardSystem).toBe(true);
+  expect(system.getFretCount()).toBe(12);
 });
 
 test("FretboardSystem - getScale()", () => {

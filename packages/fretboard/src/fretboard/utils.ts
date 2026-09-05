@@ -1,5 +1,10 @@
 import { kebabCase } from "change-case";
-import type { FretboardOptions, FretboardPosition, Point } from "./Fretboard";
+import type {
+  BareFretboardPosition,
+  FretboardOptions,
+  FretboardPosition,
+  Point,
+} from "./Fretboard";
 
 type GetStringThicknessParams = {
   stringWidth: number | number[];
@@ -118,7 +123,7 @@ export function getPositionClasses(
 ): string {
   return [
     prefix ? `position-${prefix}` : null,
-    `position-id-s${position.string}:f${position.fret}`,
+    `position-id-s${position.string}-f${position.fret}`,
     ...Object.entries(position).map(([key, value]) => {
       let valArray;
       if (!(value instanceof Array)) {
@@ -171,9 +176,7 @@ export function getDimensions({
   return { totalWidth, totalHeight };
 }
 
-type GetPositionCoordsParams = {
-  fret: number;
-  string: number;
+type GetPositionCoordsParams = BareFretboardPosition & {
   frets: number[];
   strings: number[];
 };
@@ -224,11 +227,11 @@ export function validateOptions(options: FretboardOptions): void {
   }
 }
 
-export function getBounds(area: FretboardPosition[]): {
-  bottomLeft: FretboardPosition;
-  bottomRight: FretboardPosition;
-  topRight: FretboardPosition;
-  topLeft: FretboardPosition;
+export function getBounds(area: BareFretboardPosition[]): {
+  bottomLeft: BareFretboardPosition;
+  bottomRight: BareFretboardPosition;
+  topRight: BareFretboardPosition;
+  topLeft: BareFretboardPosition;
 } {
   const getMinMax = (what: "string" | "fret"): [number, number] => [
     Math.min(...area.map((x) => x[what])),

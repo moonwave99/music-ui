@@ -1,6 +1,6 @@
 # Chord
 
-The `<Chord>` component is a React component to render guitar chords diagrams.
+The `<Chord>` React component renders guitar chords diagrams.
 
 ## Installation
 
@@ -18,7 +18,7 @@ function App() {
     <main>
       <h1>My App</h1>
       {/* rest of your app */}
-      <Chord input="x32010" label="C major" showFretNumbers={false} />
+      <Chord input="x32010" chordName="C major" />
     </main>
   );
 }
@@ -26,4 +26,85 @@ function App() {
 
 Output:
 
-<Chord input="x32010" label="C major" showFretNumbers={false} />
+<Chord input="x32010" chordName="C major" />
+
+## Component props
+
+The component accepts the following props:
+
+| Name              | Type                  | Default Value | Description                     |
+| ----------------- | --------------------- | ------------- | ------------------------------- |
+| `input`           | `string`              |               | The chord input (e.g. `x32010`) |
+| `chordName`       | `string`              |               | The chord name (e.g. "C major") |
+| `barres`          | `Barre` \| `Barres[]` |               | One or more chord barres        |
+| `showName`        | `boolean`             | `true`        | Shows the chord name            |
+| `showOpenStrings` | `boolean`             | `false`       | Shows the open string positions |
+| `showNoteNames`   | `boolean`             | `false`       | Shows the note names            |
+| `className`       | `string`              | `chord`       | The component class name        |
+
+## Props showcase
+
+A showcase of the component props:
+
+```tsx
+import { Chord } from "@music-ui/react";
+
+function App() {
+  return (
+    <>
+      <Chord input="x32010" chordName="C major" showName={false} />
+      <Chord input="x32010" chordName="C major" showNoteNames showOpenStrings />
+      <Chord
+        input="x355421"
+        barres={{ fret: 3, stringFrom: 5 }}
+        chordName="C minor"
+        showName={false}
+      />
+    </>
+  );
+}
+```
+
+### `showName` = `false`
+
+<Chord input="x32010" chordName="C major" showName={false} />
+
+### `showNoteNames` and `showOpenStrings`
+
+<Chord input="x32010" chordName="C minor" showNoteNames showOpenStrings />
+
+<Callout type="info">
+  In order to display the right note name (e.g. `Eb` vs `D#`), the `chordName`
+  property **must include the chord quality** (e.g. `major` or `minor`), see:
+</Callout>
+
+```tsx
+import { Chord } from "@music-ui/react";
+
+function App() {
+  return (
+    <>
+      <Chord input="133111" showNoteNames showOpenStrings />
+      <Chord input="133111" chordName="F minor" showNoteNames showOpenStrings />
+    </>
+  );
+}
+```
+
+No `chordName`: displays `G#` on the third string, first fret:
+
+<Chord input="133111" showNoteNames showOpenStrings />
+
+Right `chordName`: displays `Ab` on the third string, first fret:
+
+<Chord input="133111" chordName="F minor" showNoteNames showOpenStrings />
+
+### `barres`
+
+<Chord
+  input="x35543"
+  barres={{ fret: 3, stringFrom: 5 }}
+  chordName="C minor"
+  showFretNumbers
+  crop
+/>

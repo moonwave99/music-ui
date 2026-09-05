@@ -143,6 +143,12 @@ importers:
       '@tonaljs/abc-notation':
         specifier: ^4.9.1
         version: 4.9.1
+      '@tonaljs/chord':
+        specifier: ^6.1.2
+        version: 6.1.2
+      '@tonaljs/note':
+        specifier: ^4.12.1
+        version: 4.12.1
       '@tonejs/midi':
         specifier: ^2.0.28
         version: 2.0.28
@@ -1716,8 +1722,14 @@ packages:
   '@tonaljs/abc-notation@4.9.1':
     resolution: {integrity: sha512-2fDUdPsFDdgZgyIiZCTYGKy30QiwIQxSXCSN2thGrSMXbQKCp8iTC8haStYcrA+25MPWhWlmvC/pz3tGcTNAqQ==}
 
+  '@tonaljs/chord-detect@4.9.1':
+    resolution: {integrity: sha512-rV/9+R7aZ9cQorQ3jdNMMMh63onosglYZM71Q0n7KKcWMAGrxF66MzxBG82xy+w1QDMJQslB3iHfDHUiS6wRjA==}
+
   '@tonaljs/chord-type@5.1.1':
     resolution: {integrity: sha512-ti4WzRYvvjH7to0G3zlJFq7WsjHqmcqbk8Jv98aZSR5YumLdY/ua2yOPPyoPq82n6vfgjZsacnAZ3v8/SodOcw==}
+
+  '@tonaljs/chord@6.1.2':
+    resolution: {integrity: sha512-39crsPVyBJxdGJ1DGl+4diM+6+mZ/ws6crkQMlqX4zTYHMUVfJOQrko4mPF1CD89AFhHJe1zCT9Js+nNp3Gffg==}
 
   '@tonaljs/collection@4.9.0':
     resolution: {integrity: sha512-Mk0h7O54nT6PgNVcUYauzxa5KOB23+0AOKudWzRH7JhJIN9vhVIC7PtwZXE+/G051UTbHSFIcN/afkgF4nB/8A==}
@@ -6253,9 +6265,26 @@ snapshots:
       '@tonaljs/pitch-distance': 5.0.5
       '@tonaljs/pitch-note': 6.1.0
 
+  '@tonaljs/chord-detect@4.9.1':
+    dependencies:
+      '@tonaljs/chord-type': 5.1.1
+      '@tonaljs/pcset': 4.10.1
+      '@tonaljs/pitch-note': 6.1.0
+
   '@tonaljs/chord-type@5.1.1':
     dependencies:
       '@tonaljs/pcset': 4.10.1
+
+  '@tonaljs/chord@6.1.2':
+    dependencies:
+      '@tonaljs/chord-detect': 4.9.1
+      '@tonaljs/chord-type': 5.1.1
+      '@tonaljs/collection': 4.9.0
+      '@tonaljs/interval': 5.1.0
+      '@tonaljs/pcset': 4.10.1
+      '@tonaljs/pitch-distance': 5.0.5
+      '@tonaljs/pitch-note': 6.1.0
+      '@tonaljs/scale-type': 4.9.2
 
   '@tonaljs/collection@4.9.0': {}
 
