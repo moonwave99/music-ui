@@ -1,0 +1,210 @@
+# Chords diagrams
+
+Manually passing an array of positions to a `Fretboard` can be tedious.
+
+The `Fretboard.renderChord` method accepts a shorthand input, in the format found in chord/tab websites.
+
+<Callout type="info">
+
+The convention are the following:
+
+- the input must have 6 characters (one per string);
+- it starts from the 6th string;
+- every character stands for the fret at the corresponding string;
+- a `0` stands for an open string;
+- a `x` stands for a muted string.
+
+E.g. `x32010` is an open C chord, `133211` is an F chord in first position.
+
+</Callout>
+
+Setup code:
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({ fretCount: 3 });
+
+fretboard.renderChord({ input: "x32010" });
+```
+
+Output:
+
+<Chord input="x32010" showName={false} />
+
+## Displaying note names
+
+The `renderChord` method associates the corresponding note name to every position.
+
+We can access it in the `positionText` option:
+
+```ts {5}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 3,
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderChord({ input: "x32010" });
+```
+
+Output:
+
+<Chord input="x32010" showNoteNames showName={false} />
+
+### Render the right note names (sharps vs. flats)
+
+Being the guitar a tempered instrument, notes like `Eb` and `D#` coincide on the fretboard.
+
+In order to display the right note name, we have to pass **the chord name** to the `renderChord` method:
+
+```ts {8}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 3,
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderChord({ input: "133111", chordName: "F minor" });
+```
+
+Output:
+
+<Chord input="133111" chordName="F minor" showNoteNames showName={false} />
+
+Without the `chordName` parameter, sharps are the default:
+
+```ts {8}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 3,
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderChord({ input: "133111" });
+```
+
+Output:
+
+<Chord input="133111" showNoteNames showName={false} />
+
+## Include open strings
+
+You can display the open string positions by passing `showOpenStrings: true` to the `renderChord` method.  
+This is useful if you want to show all notes being played.
+
+```ts {8}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 3,
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderChord({ input: "x32010", showOpenStrings: true });
+```
+
+Output:
+
+<Chord input="x32010" showNoteNames showOpenStrings showName={false} />
+
+## Displaying barre indications
+
+Some chords require barres (fretting multiple strings with one finger).
+
+Usually this is indicated with a vertical line across all the covered frets.
+
+The `renderChord` method accepts a `barres` parameter, that can be a single [`Barre`](/api/types/_music-ui_fretboard.Barre.html) or an array of `Barre`s.
+
+This is the code to display an F major chord in first position, with a barre across the whole first fret (remember how much you struggled getting it right on your awfully setup first acoustic):
+
+```ts {5}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({ fretCount: 3 });
+
+fretboard.renderChord({ input: "133211", barres: { fret: 1 } });
+```
+
+Output:
+
+<Chord input="133211" barres={{ fret: 1 }} />
+
+### Partial barres
+
+You can display partial barres with the `stringFrom` and `stringTo` properties of the `Barre` type:
+
+```ts {5}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({ fretCount: 3 });
+
+fretboard.renderChord({ input: "xx1211", barres: { fret: 1, stringFrom: 4 } });
+```
+
+Output:
+
+<Chord input="xx1211" barres={{ fret: 1, stringFrom: 4 }} />
+
+### Multiple barres
+
+Need to play that `F7#9` in first position? No worries!
+
+```ts {7-10}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({ fretCount: 3 });
+
+fretboard.renderChord({
+  input: "131233",
+  barres: [
+    { fret: 1, stringTo: 4 },
+    { fret: 3, stringFrom: 2 },
+  ],
+});
+```
+
+Output:
+
+<Chord
+  input="131233"
+  barres={[
+    { fret: 1, stringTo: 4 },
+    { fret: 3, stringFrom: 2 },
+  ]}
+/>
+
+## Cropping to the desired frets
+
+We want to focus on the chord position, without displaying the empty frets before it.
+
+Pass `crop: true` and `showFretNumbers: true` to the `Fretboard` constructor to show just the relevant frets with the corresponding fret numbers.
+
+This renders a **C minor chord** in **third position**:
+
+```ts {5-6}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 3,
+  crop: true,
+  showFretNumbers: true,
+});
+
+fretboard.renderChord({
+  input: "x35543",
+  barres: { fret: 3, stringFrom: 5 },
+});
+```
+
+Output:
+
+<Chord
+  input="x35543"
+  crop
+  showFretNumbers
+  barres={{ fret: 3, stringFrom: 5 }}
+/>

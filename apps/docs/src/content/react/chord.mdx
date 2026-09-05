@@ -30,7 +30,7 @@ Output:
 
 ## Component props
 
-The component accepts the following props:
+In addition to the [`Fretboard` component props](/react/fretboard#component-props), the component accepts the following props:
 
 | Name              | Type                  | Default Value | Description                     |
 | ----------------- | --------------------- | ------------- | ------------------------------- |
@@ -58,6 +58,7 @@ function App() {
         input="x355421"
         barres={{ fret: 3, stringFrom: 5 }}
         chordName="C minor"
+        crop
         showName={false}
       />
     </>
@@ -99,7 +100,7 @@ Right `chordName`: displays `Ab` on the third string, first fret:
 
 <Chord input="133111" chordName="F minor" showNoteNames showOpenStrings />
 
-### `barres`
+### `barres` and `crop`
 
 <Chord
   input="x35543"

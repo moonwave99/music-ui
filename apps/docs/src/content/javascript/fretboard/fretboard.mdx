@@ -4,9 +4,9 @@ import {
   ArpeggioWithTextAndRootNotes,
 } from "../../../app/examples/fretboard/FretboardWithText";
 
-# The `Fretboard` class
+# Fretboard
 
-If you need more control over the component lifecycle, you can use the `Fretboard` class.
+The `Fretboard` class renders highly configurable fretboard diagrams in SVG format.
 
 <Callout type="info">
   Check [the complete `Fretboard` API
@@ -241,3 +241,21 @@ fretboard.style({
 Same output:
 
 <ArpeggioWithTextAndRootNotes />
+
+## Rendering chord diagrams
+
+The `Fretboard` class has a convenient `renderChord` method:
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({ fretCount: 3 });
+
+fretboard.renderChord({ input: "x32010" });
+```
+
+Output:
+
+<Chord input="x32010" showName={false} />
+
+[See chord diagrams page for more details](/javascript/fretboard/chord-diagrams).
