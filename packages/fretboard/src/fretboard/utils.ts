@@ -1,4 +1,5 @@
 import { kebabCase } from "change-case";
+import { ACCIDENTAL_MAP } from "@music-ui/core";
 import type {
   BareFretboardPosition,
   FretboardOptions,
@@ -49,13 +50,15 @@ export function generateStrings({
   return strings;
 }
 
+type GenerateFretsParams = {
+  scaleFrets: boolean;
+  fretCount: number;
+};
+
 export function generateFrets({
   scaleFrets,
   fretCount,
-}: {
-  scaleFrets: boolean;
-  fretCount: number;
-}): number[] {
+}: GenerateFretsParams): number[] {
   const fretRatio = Math.pow(2, 1 / 12);
   const frets = [0];
 
@@ -69,35 +72,13 @@ export function generateFrets({
   return frets.map((x) => (x / frets[frets.length - 1]!) * 100);
 }
 
-const accidentalMap: { symbol: string; replacement: string }[] = [
-  {
-    symbol: "##",
-    replacement: "double-sharp",
-  },
-  {
-    symbol: "bb",
-    replacement: "double-flat",
-  },
-  {
-    symbol: "#",
-    replacement: "sharp",
-  },
-  {
-    symbol: "b",
-    replacement: "flat",
-  },
-] as const;
-
-function valueRenderer(
-  key: string,
-  value: string | number | boolean,
-): string | null {
+function valueRenderer(key: string, value: string | number | boolean): string {
   if (typeof value === "boolean") {
-    return !value ? "false" : null;
+    return !value ? "false" : "";
   }
   if (key === "note") {
-    for (let i = 0; i < accidentalMap.length; i++) {
-      const { symbol, replacement } = accidentalMap[i]!;
+    for (let i = 0; i < ACCIDENTAL_MAP.length; i++) {
+      const { symbol, replacement } = ACCIDENTAL_MAP[i]!;
       if (`${value}`.endsWith(symbol)) {
         return `${`${value}`[0]}-${replacement}`;
       }
@@ -111,16 +92,13 @@ function classRenderer(
   prefix: string,
   key: string,
   value: string | number | boolean,
-): string {
+) {
   return ["position", prefix, kebabCase(key), valueRenderer(key, value)]
-    .filter((x) => !!x)
+    .filter(Boolean)
     .join("-");
 }
 
-export function getPositionClasses(
-  position: FretboardPosition,
-  prefix = "",
-): string {
+export function getPositionClasses(position: FretboardPosition, prefix = "") {
   return [
     prefix ? `position-${prefix}` : null,
     `position-id-s${position.string}-f${position.fret}`,
@@ -152,7 +130,7 @@ type GetDimensionsParams = Pick<
   | "fretNumbersHeight"
 >;
 
-type Dimensions = {
+type FretboardDimensions = {
   totalWidth: number;
   totalHeight: number;
 };
@@ -166,7 +144,7 @@ export function getDimensions({
   height,
   showFretNumbers,
   fretNumbersHeight,
-}: GetDimensionsParams): Dimensions {
+}: GetDimensionsParams): FretboardDimensions {
   const totalWidth = width + paddingLeft + paddingRight;
   let totalHeight = height + paddingTop + paddingBottom;
 
@@ -196,17 +174,19 @@ function getPositionCoords({
   return { x, y: strings[string - 1]! };
 }
 
+type GenerateGridParams = {
+  fretCount: number;
+  stringCount: number;
+  frets: number[];
+  strings: number[];
+};
+
 export function generateGrid({
   fretCount,
   stringCount,
   frets,
   strings,
-}: {
-  fretCount: number;
-  stringCount: number;
-  frets: number[];
-  strings: number[];
-}): Point[][] {
+}: GenerateGridParams): Point[][] {
   const positions = [];
   for (let string = 1; string <= stringCount; string++) {
     const currentString = [];
@@ -227,12 +207,14 @@ export function validateOptions(options: FretboardOptions): void {
   }
 }
 
-export function getBounds(area: BareFretboardPosition[]): {
+type FretboardBounds = {
   bottomLeft: BareFretboardPosition;
   bottomRight: BareFretboardPosition;
   topRight: BareFretboardPosition;
   topLeft: BareFretboardPosition;
-} {
+};
+
+export function getBounds(area: BareFretboardPosition[]): FretboardBounds {
   const getMinMax = (what: "string" | "fret"): [number, number] => [
     Math.min(...area.map((x) => x[what])),
     Math.max(...area.map((x) => x[what])),

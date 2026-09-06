@@ -1,6 +1,25 @@
 import { enharmonic } from "@tonaljs/note";
 import { get as getChord } from "@tonaljs/chord";
 
+export const ACCIDENTAL_MAP = [
+  {
+    symbol: "##",
+    replacement: "double-sharp",
+  },
+  {
+    symbol: "bb",
+    replacement: "double-flat",
+  },
+  {
+    symbol: "#",
+    replacement: "sharp",
+  },
+  {
+    symbol: "b",
+    replacement: "flat",
+  },
+] as const;
+
 export const CHROMATIC_SCALE = [
   {
     chroma: 0,

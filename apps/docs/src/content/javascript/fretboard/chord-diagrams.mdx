@@ -8,13 +8,18 @@ The `Fretboard.renderChord` method accepts a shorthand input, in the format foun
 
 The convention are the following:
 
-- the input must have 6 characters (one per string);
-- it starts from the 6th string;
-- every character stands for the fret at the corresponding string;
+- the input must have 6 entries (one per string) if all the frets are single digits;
+- for double digits frets, the entries must be hyphen separated.
+- the entries start from the 6th string;
+- every entry stands for the fret at the corresponding string;
 - a `0` stands for an open string;
 - a `x` stands for a muted string.
 
-E.g. `x32010` is an open C chord, `133211` is an F chord in first position.
+Some examples:
+
+- `x32010` is an **open C chord**;
+- `133211` is an **F chord in first position**;
+- `x-10-12-12-11-10` is a **G minor in tenth position**.
 
 </Callout>
 

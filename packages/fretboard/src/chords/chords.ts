@@ -47,6 +47,9 @@ export function parseChord({
         });
 
         if (!position) {
+          console.warn(
+            `Could not find position at: fret ${fret}, string ${string + 1}`,
+          );
           return memo;
         }
 
