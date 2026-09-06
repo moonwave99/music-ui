@@ -5,7 +5,7 @@ export const DEFAULT_COLORS = {
   line: "#666",
   highlight: "#ff636c",
   positionStroke: "#555",
-  positionFill: "white",
+  positionFillColor: "white",
   fretNumber: "#00000099",
   mutedString: "#333",
   positionText: "#111",

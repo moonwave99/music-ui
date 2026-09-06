@@ -98,7 +98,7 @@ export class Piano {
   /**
    * Creates a `Piano` instance.
    *
-   * @param options The rendering options
+   * @param options The accepted options
    */
   constructor(options: Partial<PianoOptions> = {}) {
     this.options = { ...DEFAULT_PIANO_OPTIONS, ...options };

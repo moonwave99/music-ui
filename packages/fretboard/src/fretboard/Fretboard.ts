@@ -30,24 +30,50 @@ import {
   type ScaleParams,
 } from "../fretboardSystem/FretboardSystem";
 
+/**
+ * An array of notes in scientific notation starting from the bottom string of the instrument.
+ * @example ["E2", "A2", "D3", "G3", "B3", "E4"] // guitar standard tuning
+ */
 export type Tuning = string[];
 
+/**
+ * Defines a physical position on the fretboard, without any musical attributes.
+ * @property string The string number
+ * @property fret The fret number
+ */
 export type BareFretboardPosition = {
   string: number;
   fret: number;
 };
 
+/**
+ * Extends the {@link BareFretboardPosition} with musical attributes.
+ * @property note The note name
+ * @property octave The note octave
+ * @property octaveInScale The note octave inside the scale system
+ * @property interval The note interval from the root
+ * @property degree The note degree inside the scale
+ * @property chroma The note chroma (0-11)
+ * @property inBox Tells if the note is inside the box system
+ * @property disabled Need to display dimmed positions
+ */
 export type FretboardPosition = BareFretboardPosition & {
   note?: string;
-  disabled?: boolean;
   octave?: number;
   octaveInScale?: number;
-  inBox?: boolean;
   interval?: string;
   degree?: number;
   chroma?: number;
+  inBox?: boolean;
+  disabled?: boolean;
 } & Record<string, string | number | boolean | string[] | number[]>;
 
+/**
+ * Defines a guitar barre position (i.e. a finger holding multiple strings at once).
+ * @property fret The fret to bar
+ * @property stringFrom The string from where the barre starts
+ * @property stringTo The string where the barre ends
+ */
 export type Barre = {
   fret: number;
   stringFrom?: number;
@@ -100,7 +126,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   positionStrokeColor: DEFAULT_COLORS.positionStroke,
   positionStrokeWidth: 2 * DEFAULT_DIMENSIONS.line,
   positionTextSize: DEFAULT_FONT_SIZE,
-  positionFill: DEFAULT_COLORS.positionFill,
+  positionFillColor: DEFAULT_COLORS.positionFillColor,
   positionText: () => "",
   disabledOpacity: 0.9,
   showFretNumbers: true,
@@ -140,6 +166,56 @@ export const cssClasses = {
   fretNumbers: "fret-numbers",
 } as const;
 
+type Rec = Record<string, string | number | boolean>;
+
+export type Point = {
+  x: number;
+  y: number;
+};
+
+/**
+ * Options accepted by the Fretboard constructor.
+ * @property element The element where the fretboard will be rendered
+ * @property tuning The instrument tuning
+ * @property stringCount The amount of strings to render
+ * @property stringWidth The string thickness
+ * @property stringColor The string color
+ * @property fretCount The amount of frets to render
+ * @property fretWidth The fret width
+ * @property fretColor The fret color
+ * @property nutWidth The nut color
+ * @property nutColor The nut color
+ * @property middleFretWidth The middle fret width
+ * @property middleFretColor The middle fret color
+ * @property paddingTop The top padding around the svg element
+ * @property paddingBottom The bottom padding around the svg element
+ * @property paddingLeft The left padding around the svg element
+ * @property paddingRight The right padding around the svg element
+ * @property width The desired element width
+ * @property height The desired element height
+ * @property positionSize The fretboard position size
+ * @property positionStrokeColor The fretboard position stroke color
+ * @property positionStrokeWidth The fretboard position stroke width
+ * @property positionFillColor The fretboard position fill color
+ * @property positionTextSize The fretboard position text size
+ * @property positionText The fretboard position text getter
+ * @property disabledOpacity The opacity (0-1) of the disabled frets
+ * @property crop If true, renders just the frets with positions in them
+ * @property fretPaddingLeft If `crop` is true, it determines how many empty frets to display before the first rendered position.
+ * @property scaleFrets If true, the fret will be scale logarithmically (like in a real instrument)
+ * @property showFretNumbers If true, shows the fret numbers below the fretboard
+ * @property fretNumbersHeight The fret numbers height
+ * @property fretNumbersMargin The fret numbers top margin
+ * @property fretNumbersColor The fret numbers color
+ * @property fretNumbersColor The fret numbers color
+ * @property font The used font
+ * @property barresColor The barres color
+ * @property highlightPadding The highlight areas padding
+ * @property highlightRadius The highlight areas border radius
+ * @property highlightStroke The highlight areas stroke color
+ * @property highlightFill The highlight areas fill color
+ * @property highlightBlendMode The highlight areas blend mode
+ */
 export type FretboardOptions = {
   element: ElementOrSelector<HTMLElement>;
   tuning: Tuning;
@@ -151,28 +227,28 @@ export type FretboardOptions = {
   fretColor: string;
   nutWidth: number;
   nutColor: string;
-  middleFretColor: string;
   middleFretWidth: number;
-  scaleFrets: boolean;
+  middleFretColor: string;
   paddingTop: number;
   paddingBottom: number;
   paddingLeft: number;
   paddingRight: number;
-  height: number;
   width: number;
+  height: number;
   positionSize: number;
   positionStrokeColor: string;
   positionStrokeWidth: number;
+  positionFillColor: string;
   positionTextSize: number;
-  positionFill: string;
   positionText: ValueFn<BaseType, FretboardPosition, string>;
   disabledOpacity: number;
+  crop: boolean;
+  fretPaddingLeft: number;
+  scaleFrets: boolean;
   showFretNumbers: boolean;
   fretNumbersHeight: number;
   fretNumbersMargin: number;
   fretNumbersColor: string;
-  crop: boolean;
-  fretPaddingLeft: number;
   font: string;
   barresColor: string;
   highlightPadding: number;
@@ -180,13 +256,6 @@ export type FretboardOptions = {
   highlightStroke: string;
   highlightFill: string;
   highlightBlendMode: string;
-};
-
-type Rec = Record<string, string | number | boolean>;
-
-export type Point = {
-  x: number;
-  y: number;
 };
 
 export class Fretboard {
@@ -210,6 +279,11 @@ export class Fretboard {
   private baseRendered = false;
   private system: FretboardSystem;
   private positions: FretboardPosition[] = [];
+  /**
+   * Creates a `Fretboard` instance.
+   *
+   * @param options The accepted options
+   */
   constructor(options: Partial<FretboardOptions> = {}) {
     this.options = { ...DEFAULT_FRETBOARD_OPTIONS, ...options };
     validateOptions(this.options);
@@ -256,13 +330,17 @@ export class Fretboard {
       );
   }
 
+  /**
+   * Renders the fretboard with the current positions.
+   * @returns The current Fretboard instance
+   */
   render(): Fretboard {
     const { wrapper, options } = this;
     const {
       font,
       positionStrokeColor,
       positionStrokeWidth,
-      positionFill,
+      positionFillColor,
       positionSize,
       positionText,
       positionTextSize,
@@ -313,7 +391,7 @@ export class Fretboard {
       .attr("r", positionSize * 0.5)
       .attr("stroke", positionStrokeColor)
       .attr("stroke-width", positionStrokeWidth)
-      .attr("fill", positionFill);
+      .attr("fill", positionFillColor);
 
     positionNodes
       .append("text")
@@ -336,17 +414,31 @@ export class Fretboard {
     return this;
   }
 
+  /**
+   * Sets the current positions
+   * @param positions The positions to be set.
+   * @returns The current Fretboard instance.
+   */
   setPositions(positions: FretboardPosition[]): Fretboard {
     this.positions = positions;
     return this;
   }
 
+  /**
+   * Clears the current positions
+   * @returns The current Fretboard instance.
+   */
   clear(): Fretboard {
     this.setPositions([]);
     this.wrapper.select(`.${cssClasses.positions}`).remove();
     return this;
   }
 
+  /**
+   * Controls all the style parameters.
+   * @param __namedParameters The expected parameters.
+   * @returns The current Fretboard instance.
+   */
   style({ filter = () => true, ...opts }: StyleParams): Fretboard {
     const { wrapper } = this;
     const { positionTextSize } = this.options;
@@ -371,6 +463,11 @@ export class Fretboard {
     return this;
   }
 
+  /**
+   * Marks the passed strings as muted.
+   * @param params The expected parameters.
+   * @returns The current Fretboard instance.
+   */
   muteStrings(params: MuteStringsParams): Fretboard {
     const { strings, stroke, strokeWidth, width } = {
       ...defaultMuteStringsParams,
@@ -401,6 +498,11 @@ export class Fretboard {
     return this;
   }
 
+  /**
+   * Renders a chord diagram (i.e. a cropped fretboard with just the chord positions)
+   * @param __namedParameters The expected parameters.
+   * @returns The current Fretboard instance.
+   */
   renderChord({ barres, ...rest }: RenderChordParams): Fretboard {
     const { positions, mutedStrings: strings } = parseChord({
       ...rest,
@@ -415,6 +517,11 @@ export class Fretboard {
     return this;
   }
 
+  /**
+   * Renders the positions of the passed scale.
+   * @param __namedParameters The expected parameters.
+   * @returns The current Fretboard instance.
+   */
   renderScale({ type, root, box, displayBoxOnly }: ScaleParams): Fretboard {
     this.checkTuning();
     return this.setPositions(
@@ -424,6 +531,11 @@ export class Fretboard {
     ).render();
   }
 
+  /**
+   * Highlight the passed fretboard ares
+   * @param areas An array of `[FretboardPosition, FretboardPosition]` tuples
+   * @returns The current Fretboard instance.
+   */
   highlightAreas(
     ...areas: [FretboardPosition, FretboardPosition][]
   ): Fretboard {
@@ -490,6 +602,10 @@ export class Fretboard {
     return this;
   }
 
+  /**
+   * Clears all the current highlight areas.
+   * @returns The current Fretboard instance.
+   */
   clearHighlightAreas(): Fretboard {
     this.wrapper.select(`.${cssClasses.highlightAreas}`).remove();
     return this;
