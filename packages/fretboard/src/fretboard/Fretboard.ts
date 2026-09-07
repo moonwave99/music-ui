@@ -103,7 +103,7 @@ export type StyleParams = {
 export const DEFAULT_FRETBOARD_OPTIONS = {
   element: "#fretboard",
   tuning: GUITAR_TUNINGS.default,
-  stringCount: 6,
+  stringCount: GUITAR_TUNINGS.default.length,
   stringWidth: DEFAULT_DIMENSIONS.line,
   stringColor: DEFAULT_COLORS.line,
   fretCount: DEFAULT_FRET_COUNT,

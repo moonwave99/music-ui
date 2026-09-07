@@ -17,32 +17,17 @@ The `Fretboard` class renders highly configurable fretboard diagrams in SVG form
 
 <Installation packageName="@music-ui/fretboard" />
 
-## Constructor
+## Usage
 
-The `Fretboard` constructor accepts the following parameters:
-
-| Property  | Type                      | Default      | Description                                   |
-| --------- | ------------------------- | ------------ | --------------------------------------------- |
-| `element` | `string` \| `HTMLElement` | `#fretboard` | The container element or a valid CSS selector |
-
-Usage:
+Rendering a fretboard requires a target element:
 
 ```html
 <div id="fretboard"></div>
 ```
 
-Setup code:
+and the following setup code:
 
 ```ts
-import { Fretboard } from "@music-ui/fretboard";
-
-// with default options
-const fretboard = new Fretboard();
-```
-
-Creating a new `Fretboard` does not render anything on screen yet - fort that you to call `render()`:
-
-```ts {4}
 import { Fretboard } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard();
@@ -52,10 +37,6 @@ fretboard.render();
 Output:
 
 <Fretboard />
-
-### Constructor options
-
-WIP
 
 ## Displaying fretboard positions
 
@@ -259,3 +240,49 @@ Output:
 <Chord input="x32010" showName={false} />
 
 [See chord diagrams page for more details](/javascript/fretboard/chord-diagrams).
+
+## Constructor
+
+The `Fretboard` constructor accepts the following parameters:
+
+| Property              | Type                      | Default                                | Description                                                        |
+| --------------------- | ------------------------- | -------------------------------------- | ------------------------------------------------------------------ |
+| `element`             | `string` \| `HTMLElement` | `#fretboard`                           | The container element or a valid CSS selector                      |
+| `tuning`              | `string[]`                | `["E2", "A2", "D3", "G3", "B3", "E4"]` | The instrument tuning                                              |
+| `stringCount`         | `number`                  | 6                                      | The amount of strings to render                                    |
+| `stringWidth`         | `number` \| `number[]`    | 1                                      | The string thickness                                               |
+| `stringColor`         | `string`                  | `#666`                                 | The string color                                                   |
+| `fretCount`           | `number`                  | 15                                     | The amount of frets to render                                      |
+| `fretWidth`           | `number`                  | 1                                      | The fret width                                                     |
+| `fretColor`           | `string`                  | `#666`                                 | The fret color                                                     |
+| `nutWidth`            | `number`                  | 1                                      | The nut width                                                      |
+| `nutColor`            | `string`                  | `#666`                                 | The nut color                                                      |
+| `middleFretWidth`     | `number`                  | 3                                      | The middle fret width                                              |
+| `middleFretColor`     | `string`                  | `#ff636c`                              | The middle fret color                                              |
+| `paddingTop`          | `number`                  | 20                                     | The top padding around the svg element                             |
+| `paddingBottom`       | `number`                  | 15                                     | The bottom padding around the svg element                          |
+| `paddingLeft`         | `number`                  | 20                                     | The left padding around the svg element                            |
+| `paddingRight`        | `number`                  | 20                                     | The right padding around the svg element                           |
+| `width`               | `number`                  | 960                                    | The desired element width                                          |
+| `height`              | `number`                  | 150                                    | The desired element height                                         |
+| `positionSize`        | `number`                  | 20                                     | The fretboard position size                                        |
+| `positionStrokeColor` | `string`                  | `#555`                                 | The fretboard position stroke color                                |
+| `positionStrokeWidth` | `number`                  | 2                                      | The fretboard position stroke width                                |
+| `positionFillColor`   | `string`                  | `white`                                | The fretboard position fill color                                  |
+| `positionTextSize`    | `number`                  | 12                                     | The fretboard position text size                                   |
+| `positionText`        | `(position) => string`    | `() => ""`                             | The fretboard position text getter                                 |
+| `disabledOpacity`     | `number`                  | 0.9                                    | The opacity of the disabled frets                                  |
+| `crop`                | `boolean`                 | `false`                                | If true, renders just the frets with positions in them             |
+| `fretPaddingLeft`     | `number`                  | 0                                      | How many empty frets to display before the first rendered position |
+| `scaleFrets`          | `boolean`                 | `true`                                 | If true, the fret will be scales logarithmically                   |
+| `showFretNumbers`     | `boolean`                 | `true`                                 | If true, shows the fret numbers below the fretboard                |
+| `fretNumbersHeight`   | `number`                  | 40                                     | The fret numbers height                                            |
+| `fretNumbersMargin`   | `number`                  | 20                                     | The fret numbers top margin                                        |
+| `fretNumbersColor`    | `string`                  | `#666`                                 | The fret numbers color                                             |
+| `font`                | `string`                  | `Arial`                                | The fret numbers color                                             |
+| `barresColor`         | `string`                  | `#666`                                 | The barres color                                                   |
+| `highlightPadding`    | `number`                  | 10                                     | The highlight areas padding                                        |
+| `highlightRadius`     | `number`                  | 10                                     | The highlight areas border radius                                  |
+| `highlightStroke`     | `string`                  | `transparent`                          | The highlight areas stroke color                                   |
+| `highlightFill`       | `string`                  | `dodgerblue`                           | The highlight areas fill color                                     |
+| `highlightBlendMode`  | `string`                  | `color-burn`                           | The highlight areas blend mode                                     |
