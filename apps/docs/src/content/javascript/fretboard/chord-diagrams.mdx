@@ -96,6 +96,54 @@ Output:
 
 <Chord input="133111" showNoteNames showName={false} />
 
+Another example that includes both sharp and flat symbols, e.g. `D7b9`:
+
+```ts {8}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 5,
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderChord({ input: "x5454x", chordName = "D7b9" });
+```
+
+Output:
+
+<Chord
+  input="x5454x"
+  fretCount={5}
+  chordName="D7b9"
+  showNoteNames
+  showName={false}
+/>
+
+**Note**: the enharmonic equivalents are preferred in altered scenarios like the sharp 9, see:
+
+```ts {8}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  fretCount: 5,
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderChord({ input: "x5456x", chordName = "D7#9" });
+```
+
+Output:
+
+<Chord
+  input="x5456x"
+  fretCount={6}
+  chordName="D7#9"
+  showNoteNames
+  showName={false}
+/>
+
+So if you tell me _to accent the F double sharp on the Hendrix chord_, we cannot jam together dude.
+
 ## Include open strings
 
 You can display the open string positions by passing `showOpenStrings: true` to the `renderChord` method.  
