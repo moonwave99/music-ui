@@ -47,6 +47,13 @@ L: 1/1
 Q: 200
 C ^F | [C ^F] |`,
   },
+  {
+    options: {
+      showTempo: false,
+    },
+    content: `T: Vanilla 5
+C D (3EFG C D C D|`,
+  },
 ];
 
 export function VanillaABCScore() {
