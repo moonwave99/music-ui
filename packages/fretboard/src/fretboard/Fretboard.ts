@@ -316,6 +316,7 @@ export class Fretboard {
 
     this.element = ensureSelection(this.options.element).at(0)!;
     this.element.classList.add(cssClasses.htmlWrapper);
+    this.element.style.width = `min(${width}px, 100%)`;
 
     this.svg = select<BaseType, FretboardPosition>(element as string)
       .append("svg")

@@ -4,34 +4,43 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * Props expected by the `Chord` component.
  * @property id The chord unique identifier.
  * @property className The component class name.
+ * @property input The chord input (e.g. x32010).
+ * @property chordName The chord name (e.g. C major, A7b9).
  * @property showName Show the chord name or not.
+ * @property showOpenStrings Show the open string notes or not.
  */
-export type ChordProps = Omit<UseFretboardParams, "chord"> &
-  UseFretboardParams["chord"] & {
-    id?: string;
-    className?: string;
-    name?: string;
-    showName?: boolean;
-  };
+export type ChordProps = Omit<UseFretboardParams, "chord"> & {
+  id?: string;
+  className?: string;
+  input: string;
+  chordName?: string;
+  showName?: boolean;
+  showOpenStrings?: boolean;
+};
 
 /**
  * A component that renders a guitar chord diagram.
  */
 export function Chord({
   className = "chord",
+  input,
   chordName,
+  width = 300,
   fretCount = 3,
   showFretNumbers = false,
   showName = true,
+  showOpenStrings,
   ...params
 }: ChordProps) {
   const { ref } = useFretboard<HTMLDivElement>({
     ...params,
     fretCount,
     showFretNumbers,
+    width,
     chord: {
-      ...params,
+      input,
       chordName,
+      showOpenStrings,
     },
   });
   return (

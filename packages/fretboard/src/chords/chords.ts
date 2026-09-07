@@ -7,6 +7,13 @@ const CHORD_SYMBOLS = {
   splitter: "-",
 } as const;
 
+/**
+ * The parameters accepted by the parseChord function.
+ * @property input The chord input (e.g. x32010).
+ * @property chordName The chord name (e.g. C major, A7b9).
+ * @property showOpenStrings Show the open string notes or not.
+ * @property system The current fretboard system (needed to determine the note names).
+ */
 export type ParseChordParams = {
   input: string;
   chordName?: string;
@@ -19,6 +26,11 @@ type ParseChord = {
   mutedStrings: number[];
 };
 
+/**
+ * Parses the chord input in the given system context.
+ * @param __namedParameters The expected parameters.
+ * @returns { ParseChord } The parsed chord information.
+ */
 export function parseChord({
   input,
   chordName,

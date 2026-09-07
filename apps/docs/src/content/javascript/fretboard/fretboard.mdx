@@ -30,7 +30,7 @@ and the following setup code:
 ```ts
 import { Fretboard } from "@music-ui/fretboard";
 
-const fretboard = new Fretboard();
+const fretboard = new Fretboard({ fretCount: 5, width: 600 });
 fretboard.render();
 ```
 
@@ -45,7 +45,7 @@ An empty fretboard is not much useful. Let's see how to display some positions o
 ```ts {6-10}
 import { Fretboard } from "@music-ui/fretboard";
 
-const fretboard = new Fretboard();
+const fretboard = new Fretboard({ fretCount: 5, width: 600 });
 
 // a good ole open C cowboy chord
 fretboard.setPositions([
@@ -73,10 +73,10 @@ A [`FretboardPosition`](/api/types/_music-ui_fretboard.FretboardPosition.html) c
 
 Let's display the full C major arpeggio in first position:
 
-```ts
+```ts {6-13}
 import { Fretboard } from "@music-ui/fretboard";
 
-const fretboard = new Fretboard();
+const fretboard = new Fretboard({ fretCount: 5, width: 600 });
 
 fretboard.setPositions([
   { string: 6, fret: 0 },
@@ -103,7 +103,7 @@ Let's expand the position array with such information:
 ```ts {6-13}
 import { Fretboard } from "@music-ui/fretboard";
 
-const fretboard = new Fretboard();
+const fretboard = new Fretboard({ fretCount: 5, width: 600 });
 
 fretboard.setPositions([
   { string: 6, fret: 0, note: "E" },
@@ -125,10 +125,12 @@ Output:
 
 Exactly, that doesn't change anything automatically. The fretboard constructor accepts a `positionText` function that helps us to achieve our goal:
 
-```ts {4}
+```ts {6}
 import { Fretboard } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard({
+  fretCount: 5,
+  width: 600,
   positionText: (position) => position.note,
 });
 
@@ -160,10 +162,12 @@ That's brilliant! `positionText` is a callback that exposes every position and a
 
 Let's highlight the root notes of the arpeggio with the `Fretboard.style` function:
 
-```ts {20-22}
+```ts {22-24}
 import { Fretboard } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard({
+  fretCount: 5,
+  width: 600,
   positionText: (position) => position.note,
 });
 
@@ -193,10 +197,12 @@ The `Fretboard.style` functions accepts a key-value list of stylable properties 
 
 Another approach is to use the `filter` property:
 
-```ts {20-23}
+```ts {22-25}
 import { Fretboard } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard({
+  fretCount: 5,
+  width: 600,
   positionText: (position) => position.note,
 });
 
