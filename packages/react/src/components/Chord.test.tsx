@@ -53,4 +53,22 @@ describe("Chord", () => {
         expect(position).toBeInTheDocument();
       });
   });
+
+  it("displays the passed barres", () => {
+    const input = "131233";
+    const barres = [
+      { fret: 1, stringTo: 4 },
+      { fret: 3, stringFrom: 2 },
+    ];
+    const { container } = render(
+      <Chord input={input} chordName="F7#9" showName barres={barres} />,
+    );
+    expect(container.querySelector(".chord")).toBeInTheDocument();
+    expect(screen.getByText("F7#9")).toBeVisible();
+
+    [
+      ".barres .fret-1-string-from-6-string-to-4",
+      ".barres .fret-3-string-from-2-string-to-1",
+    ].forEach((x) => expect(container.querySelector(x)).toBeVisible());
+  });
 });

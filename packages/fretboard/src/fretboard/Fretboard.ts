@@ -688,7 +688,12 @@ export class Fretboard {
           strings[stringTo! - 1]! +
           1.5 * positionOffset,
       )
-      .attr("fill", barresColor);
+      .attr("fill", barresColor)
+      .attr(
+        "class",
+        ({ fret, stringFrom, stringTo }) =>
+          `fret-${fret}-string-from-${stringFrom}-string-to-${stringTo}`,
+      );
   }
 
   private baseRender(positionOffset: number): void {

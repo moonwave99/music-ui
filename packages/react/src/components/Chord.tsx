@@ -1,3 +1,8 @@
+import {
+  DEFAULT_CHORD_FRET_COUNT,
+  DEFAULT_DIMENSIONS,
+  type Barre,
+} from "@music-ui/fretboard";
 import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
 
 /**
@@ -8,6 +13,7 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * @property chordName The chord name (e.g. C major, A7b9).
  * @property showName Show the chord name or not.
  * @property showOpenStrings Show the open string notes or not.
+ * @property barres The chord barres.
  */
 export type ChordProps = Omit<UseFretboardParams, "chord"> & {
   id?: string;
@@ -16,6 +22,7 @@ export type ChordProps = Omit<UseFretboardParams, "chord"> & {
   chordName?: string;
   showName?: boolean;
   showOpenStrings?: boolean;
+  barres?: Barre | Barre[];
 };
 
 /**
@@ -25,11 +32,12 @@ export function Chord({
   className = "chord",
   input,
   chordName,
-  width = 300,
-  fretCount = 3,
+  width = DEFAULT_DIMENSIONS.chord,
+  fretCount = DEFAULT_CHORD_FRET_COUNT,
   showFretNumbers = false,
   showName = true,
   showOpenStrings,
+  barres,
   ...params
 }: ChordProps) {
   const { ref } = useFretboard<HTMLDivElement>({
@@ -41,6 +49,7 @@ export function Chord({
       input,
       chordName,
       showOpenStrings,
+      barres,
     },
   });
   return (

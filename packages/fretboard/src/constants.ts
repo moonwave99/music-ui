@@ -1,5 +1,6 @@
 export const MIDDLE_FRET = 11;
 export const DEFAULT_FRET_COUNT = 15;
+export const DEFAULT_CHORD_FRET_COUNT = 3;
 
 export const DEFAULT_COLORS = {
   line: "#666",
@@ -20,6 +21,7 @@ export const DEFAULT_DIMENSIONS = {
   unit: 20,
   line: 1,
   nut: 7,
+  chord: 300,
 };
 
 export const DEFAULT_FONT_FAMILY = "Arial";
