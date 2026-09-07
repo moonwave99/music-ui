@@ -269,14 +269,21 @@ test("Fretboard style() no filter", () => {
 
 test("Fretboard muteStrings()", () => {
   const fretboard = new Fretboard();
+  const strings = [6, 1];
   fretboard.render();
-  fretboard.muteStrings({
-    strings: [6, 1],
-  });
+  fretboard.muteStrings({ strings });
 
   const svg = document.querySelector("#fretboard svg")!;
 
-  expect(svg.querySelectorAll(".muted-strings .muted-string").length).toBe(2);
+  expect(svg.querySelectorAll(".muted-strings .muted-string").length).toBe(
+    strings.length,
+  );
+
+  strings.forEach((s) =>
+    expect(
+      svg.querySelectorAll(`.muted-strings .muted-string [data-string="${s}"]`),
+    ).not.toBeNull(),
+  );
 });
 
 test("Fretboard renderChord()", () => {

@@ -483,8 +483,8 @@ export class Fretboard {
       .data(strings)
       .enter()
       .append("path")
-      .attr("d", (d) => {
-        const { y } = this.getGridPositionAt(d - 1, 0)!;
+      .attr("d", (stringNumber) => {
+        const { y } = this.getGridPositionAt(stringNumber - 1, 0)!;
         return [
           `M 0 ${y}`,
           `L ${width} ${y + width}`,
@@ -494,7 +494,8 @@ export class Fretboard {
       })
       .attr("stroke", stroke)
       .attr("stroke-width", strokeWidth)
-      .attr("class", cssClasses.mutedString);
+      .attr("class", cssClasses.mutedString)
+      .attr("data-string", (stringNumber) => stringNumber);
 
     return this;
   }

@@ -6,4 +6,6 @@ export * from "./tools/tools";
 export * from "./fretboardSystem/FretboardSystem";
 export * from "./fretboardSystem/systems/systems";
 
+export * from "./initChords";
+
 export * from "./constants";
