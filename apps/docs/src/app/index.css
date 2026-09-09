@@ -31,22 +31,23 @@ main {
     display: flex;
     align-items: center;
   }
-  .controls {
-    grid-area: b;
-    display: flex;
-    gap: 0.5rem;
-    line-height: 1.5rem;
-    button {
-      font-size: 0.8rem;
-      border-radius: 0.25rem;
-      background-color: rgba(100, 100, 100, 0.5);
-      padding: 0 0.5rem;
-      &[disabled] {
-        opacity: 0.5;
-      }
-      &:hover {
-        background-color: rgba(100, 100, 100, 0.7);
-      }
+}
+
+.controls {
+  grid-area: b;
+  display: flex;
+  gap: 0.5rem;
+  line-height: 1.5rem;
+  button {
+    font-size: 0.8rem;
+    border-radius: 0.25rem;
+    background-color: rgba(100, 100, 100, 0.5);
+    padding: 0 0.5rem;
+    &[disabled] {
+      opacity: 0.5;
+    }
+    &:hover {
+      background-color: rgba(100, 100, 100, 0.7);
     }
   }
 }
@@ -59,4 +60,29 @@ main {
 
 .chord {
   text-align: center;
+}
+
+.chords {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.chord-with-player {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  column-gap: 0.5rem;
+  grid-template-areas:
+    "a a"
+    "b c";
+  width: 100%;
+  .fretboard {
+    grid-area: a;
+  }
+  figcaption {
+    grid-area: c;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+  }
 }

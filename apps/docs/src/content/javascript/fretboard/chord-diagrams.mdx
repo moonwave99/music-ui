@@ -146,7 +146,7 @@ So if you tell me _to accent the F double sharp on the Hendrix chord_, we cannot
 
 ## Include open strings
 
-You can display the open string positions by passing `showOpenStrings: true` to the `renderChord` method.  
+You can display the open string positions by passing `includeOpenStrings: true` to the `renderChord` method.  
 This is useful if you want to show all notes being played.
 
 ```ts {8}
@@ -157,12 +157,12 @@ const fretboard = new Fretboard({
   positionText: ({ name }) => name,
 });
 
-fretboard.renderChord({ input: "x32010", showOpenStrings: true });
+fretboard.renderChord({ input: "x32010", includeOpenStrings: true });
 ```
 
 Output:
 
-<Chord input="x32010" showNoteNames showOpenStrings showName={false} />
+<Chord input="x32010" showNoteNames includeOpenStrings showName={false} />
 
 ## Displaying barre indications
 

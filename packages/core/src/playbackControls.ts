@@ -1,23 +1,25 @@
-import { Player, getPlaybackScore, createControls } from "@music-ui/core";
+import { type Player } from "./player";
+import { type NoteInput } from "./types";
+import { getPlaybackScore, createControls } from "./utils";
 
-type InitControlsParams = {
+type InitPlaybackControlsParams = {
   id: string;
   element: HTMLElement;
-  notes: string;
+  notes: NoteInput;
   player: Player;
 };
 
-type InitControls = {
+type InitPlaybackControls = {
   resetButtons: () => void;
   disableButtons: () => void;
 };
 
-export function initControls({
+export function initPlaybackControls({
   id,
   element,
   notes,
   player,
-}: InitControlsParams): InitControls {
+}: InitPlaybackControlsParams): InitPlaybackControls {
   const blockScore = getPlaybackScore({
     id,
     input: notes,

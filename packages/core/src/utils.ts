@@ -43,13 +43,13 @@ export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
 export type PlaybackMode = "block" | "arpeggio";
 
 /**
- * The params expected by the `getPianoScore` function.
+ * The params expected by the `getPlaybackScore` function.
  * @property id The score id
  * @property bpm The score bpm
  * @property input The score input (in scientific pitch notation)
  * @property playbackMode The playback mode (block or arpeggio)
  */
-type GetPianoScoreParams = {
+type GetPlaybackScoreParams = {
   id: string;
   bpm?: number;
   input: NoteInput;
@@ -61,12 +61,12 @@ type GetPianoScoreParams = {
  * @param __namedParameters The parameters for generating a piano score
  * @returns a Score with the abc notation of the passed notes in the desired playback mode (arpeggio / block).
  */
-export function getPianoScore({
+export function getPlaybackScore({
   id,
   input,
   playbackMode = "block",
   bpm = 120,
-}: GetPianoScoreParams): Score {
+}: GetPlaybackScoreParams): Score {
   const content = [
     getAbcInfo({ Q: bpm }),
     withPlaybackMode(input, playbackMode),

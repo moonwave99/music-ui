@@ -9,6 +9,7 @@ import {
   Tuning,
 } from "../fretboard/Fretboard";
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
+import { parseNote } from "@music-ui/core";
 
 const MIN_FRET_COUNT = 12;
 
@@ -22,15 +23,9 @@ export type ScaleParams = {
   displayBoxOnly?: boolean;
 };
 
-type GetOctaveParams = {
-  fret: number;
-  string: number;
-  note: string;
-  chroma: number;
-};
-
 export type SystemPosition = BareFretboardPosition & {
   chroma: number;
+  octave: number;
 };
 
 export type FretboardSystemParams = {
@@ -101,15 +96,15 @@ export class FretboardSystem {
         ...rest,
       }))
       .map((x) => {
-        const octave = this.getOctave(x);
+        const octave = adjustEnharmonicsOctave(x);
         return {
-          octave,
-          octaveInScale: getOctaveInScale({ root, octave, baseOctave, ...x }),
+          octaveInScale: getOctaveInScale({ root, baseOctave, ...x, octave }),
           inBox: Boolean(
             boxPositions.length &&
             isPositionInBox(x as FretboardPosition, boxPositions),
           ),
           ...x,
+          octave,
         } as FretboardPosition;
       });
   }
@@ -129,31 +124,15 @@ export class FretboardSystem {
     const { tuning, fretCount } = this;
     this.positions = tuning.toReversed().reduce((memo, note, index) => {
       const string = index + 1;
-      const { chroma } = getNote(note);
+      const { chroma, oct } = getNote(note);
       const filledString = Array.from({ length: fretCount + 1 }, (_, fret) => ({
         string,
         fret,
         chroma: (chroma + fret) % 12,
+        octave: oct! + Math.floor((chroma + fret) / 12),
       }));
       return [...memo, ...filledString];
     }, [] as SystemPosition[]);
-  }
-  private getOctave({ fret, string, chroma, note }: GetOctaveParams): number {
-    const { tuning } = this;
-    const baseNoteWithOctave = tuning[tuning.length - string]!;
-    const { note: baseNote, octave: baseOctave } =
-      parseNote(baseNoteWithOctave);
-    const baseChroma = getChroma(baseNote);
-
-    let octaveIncrement = chroma < baseChroma ? 1 : 0;
-
-    if (note === "B#" && octaveIncrement > 0) {
-      octaveIncrement--;
-    } else if (note === "Cb" && octaveIncrement === 0) {
-      octaveIncrement++;
-    }
-    octaveIncrement += Math.floor(fret / 12);
-    return baseOctave + octaveIncrement;
   }
 }
 
@@ -162,20 +141,6 @@ export function isPositionInBox(
   systemPositions: FretboardPosition[],
 ) {
   return !!systemPositions.find((x) => x.fret === fret && x.string === string);
-}
-
-function parseNote(note: string) {
-  let octave = +note.slice(-1);
-  let parsedNote = note;
-  if (isNaN(octave)) {
-    octave = 2;
-  } else {
-    parsedNote = note.slice(0, -1);
-  }
-  return {
-    octave,
-    note: parsedNote,
-  };
 }
 
 type GetOctaveInScaleParams = {
@@ -197,4 +162,17 @@ function getOctaveInScale({
     return octave - 1 - baseOctave;
   }
   return octave - baseOctave;
+}
+
+function adjustEnharmonicsOctave({
+  note,
+  octave,
+}: Pick<FretboardPosition, "note" | "octave">) {
+  if (note === "B#") {
+    return octave! - 1;
+  }
+  if (note === "Cb") {
+    return octave! + 1;
+  }
+  return octave!;
 }

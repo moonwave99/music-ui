@@ -25,10 +25,10 @@ describe("initChords", () => {
     ).not.toBeNull();
   });
 
-  it("renders the open strings positions if showOpenStrings is true", () => {
+  it("renders the open strings positions if includeOpenStrings is true", () => {
     document.body.innerHTML = `
         <main>
-            <div data-chord data-input="x32010" data-show-open-strings></div>
+            <div data-chord data-input="x32010" data-include-open-strings></div>
         </main>`;
 
     initChords();
@@ -56,7 +56,7 @@ describe("initChords", () => {
               data-input="x32010"
               data-chord-name="C major"
               data-show-note-names
-              data-show-open-strings></div>
+              data-include-open-strings></div>
         </main>`;
 
     initChords();

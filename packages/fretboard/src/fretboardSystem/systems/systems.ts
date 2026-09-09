@@ -1,6 +1,6 @@
 import { chroma as getChroma } from "@tonaljs/note";
 import { get as getMode } from "@tonaljs/mode";
-import { FretboardPosition } from "../../fretboard/Fretboard";
+import { type FretboardPosition } from "../../fretboard/Fretboard";
 
 export type Systems = "pentatonic" | "CAGED" | "TNPS";
 
@@ -81,8 +81,7 @@ const TNPSDefinition: ScaleDefinition[] = [
 ];
 
 export function getModeFromScaleType(type: string): number {
-  const { modeNum } = getMode(type.replace("pentatonic", "").trim());
-  return modeNum;
+  return getMode(type.replace("pentatonic", "").trim()).modeNum;
 }
 
 function getModeOffset(mode: number): number {

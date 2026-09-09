@@ -48,11 +48,12 @@ export type BareFretboardPosition = {
 
 /**
  * Extends the {@link BareFretboardPosition} with musical attributes.
- * @property note The note name
- * @property octave The note octave
+ * @property note The note name (e.g. "C")
+ * @property octave The note octave (e.g. 3)
+ * @property noteWithOctave The note with octave (e.g. "C3")
  * @property octaveInScale The note octave inside the scale system
- * @property interval The note interval from the root
- * @property degree The note degree inside the scale
+ * @property interval The note interval from the root (e.g. "P5")
+ * @property degree The note degree inside the scale (e.g. 5)
  * @property chroma The note chroma (0-11)
  * @property inBox Tells if the note is inside the box system
  * @property disabled Need to display dimmed positions
@@ -60,6 +61,7 @@ export type BareFretboardPosition = {
 export type FretboardPosition = BareFretboardPosition & {
   note?: string;
   octave?: number;
+  noteWithOctave?: string;
   octaveInScale?: number;
   interval?: string;
   degree?: number;
@@ -150,6 +152,8 @@ export const defaultMuteStringsParams = {
 } as const;
 
 export const cssClasses = {
+  fretboard: "fretboard",
+  controls: "controls",
   htmlWrapper: "fretboard-html-wrapper",
   svgWrapper: "fretboard-wrapper",
   positions: "positions",
@@ -517,6 +521,20 @@ export class Fretboard {
     this.render();
     this.muteStrings({ strings });
     return this;
+  }
+
+  /**
+   * Returns the chord positions and corresponding note names in the given system context.
+   * @param params The expected parameters.
+   * @returns The positions for the passed input.
+   */
+  getChordPositions(params: Pick<RenderChordParams, "input" | "chordName">) {
+    const { positions } = parseChord({
+      ...params,
+      system: this.system,
+      includeOpenStrings: true,
+    });
+    return positions;
   }
 
   /**

@@ -321,44 +321,47 @@ export class Player {
     this.playedNotes = scoreData.map(() => []);
 
     this.parts = scoreData.map(({ notes, voice }) =>
-      this.getPart((time: number, event: PlaybackEvent) => {
-        const position = tonePositionToNormalizedPosition(
-          this.transport.position as TransportPosition,
-          this.timeSignature!,
-        );
-        if (event.notes.some((note) => note.name === END_NOTE)) {
+      this.getPart(
+        (time: number, { notes, duration, velocity }: PlaybackEvent) => {
+          const position = tonePositionToNormalizedPosition(
+            this.transport.position as TransportPosition,
+            this.timeSignature!,
+          );
+
+          if (notes.some((note) => note.name === END_NOTE)) {
+            this.draw.schedule(() => {
+              this.eventEmitter.emit("finished", {
+                playedNotes: this.playedNotes,
+                activeId: score.id,
+                position,
+                voice,
+              });
+              this.stop();
+            }, time);
+            return;
+          }
+
+          const playedNotes = notes.map(({ name }) => name);
+
+          this.sampler.triggerAttackRelease(
+            playedNotes,
+            duration,
+            time,
+            velocity,
+          );
+
           this.draw.schedule(() => {
-            this.eventEmitter.emit("finished", {
+            this.updatePlayedNotes(playedNotes, voice);
+            this.eventEmitter.emit("progress", {
               playedNotes: this.playedNotes,
               activeId: score.id,
               position,
               voice,
             });
-            this.stop();
           }, time);
-          return;
-        }
-
-        this.sampler.triggerAttackRelease(
-          event.notes.map(({ name }) => name),
-          event.duration,
-          time,
-          event.velocity,
-        );
-
-        this.draw.schedule(() => {
-          this.updatePlayedNotes(
-            event.notes.map(({ name }) => name),
-            voice,
-          );
-          this.eventEmitter.emit("progress", {
-            playedNotes: this.playedNotes,
-            activeId: score.id,
-            position,
-            voice,
-          });
-        }, time);
-      }, notes),
+        },
+        notes,
+      ),
     );
   }
 }

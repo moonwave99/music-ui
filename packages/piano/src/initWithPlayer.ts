@@ -3,6 +3,7 @@ import {
   extractElementOptions,
   Player,
   ensureElements,
+  initPlaybackControls,
 } from "@music-ui/core";
 import {
   DEFAULT_PIANO_OPTIONS,
@@ -11,7 +12,6 @@ import {
   type PianoOptions,
 } from "./Piano";
 import { DEFAULT_OPTIONS, type InitPianoParams } from "./init";
-import { initControls } from "./controls";
 
 /**
  * The params expected by the `initPianoWithPlayer` function.
@@ -59,7 +59,7 @@ export function initPianoWithPlayer<T extends HTMLElement>(
       return;
     }
 
-    const { disableButtons, resetButtons } = initControls({
+    const { disableButtons, resetButtons } = initPlaybackControls({
       element: controlsElement!,
       notes,
       player,

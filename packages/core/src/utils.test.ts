@@ -2,7 +2,7 @@
 import { describe, it, expect, test, assert, vi } from "vitest";
 import {
   getAbcScore,
-  getPianoScore,
+  getPlaybackScore,
   toAbcNotation,
   createControls,
   ensureSelection,
@@ -23,10 +23,10 @@ describe("toAbcNotation", () => {
   });
 });
 
-describe("getPianoScore", () => {
+describe("getPlaybackScore", () => {
   it("returns the score for the given notes - block", () => {
     const input = "C3 E3 G3 B3";
-    const score = getPianoScore({ id: "1", input, playbackMode: "block" });
+    const score = getPlaybackScore({ id: "1", input, playbackMode: "block" });
     expect(score).toEqual({
       id: "1",
       hash: "45da33dd1f4ee3b97bd1706c80aaba32",
@@ -34,7 +34,7 @@ describe("getPianoScore", () => {
       content: "%%printtempo 0\nQ:120\n[C, E, G, B,]6",
     });
 
-    const scoreWithDefaultPlaybackMode = getPianoScore({ id: "1", input });
+    const scoreWithDefaultPlaybackMode = getPlaybackScore({ id: "1", input });
     expect(scoreWithDefaultPlaybackMode).toEqual({
       id: "1",
       hash: "45da33dd1f4ee3b97bd1706c80aaba32",
@@ -45,7 +45,11 @@ describe("getPianoScore", () => {
 
   it("returns the score for the given notes - arpeggio", () => {
     const input = "C3 E3 G3 B3";
-    const score = getPianoScore({ id: "1", input, playbackMode: "arpeggio" });
+    const score = getPlaybackScore({
+      id: "1",
+      input,
+      playbackMode: "arpeggio",
+    });
     expect(score).toEqual({
       id: "1",
       hash: "2df5ea19f579b803d9efd1f62db18d9b",

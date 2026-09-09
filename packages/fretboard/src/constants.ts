@@ -1,6 +1,5 @@
 export const MIDDLE_FRET = 11;
 export const DEFAULT_FRET_COUNT = 15;
-export const DEFAULT_CHORD_FRET_COUNT = 3;
 
 export const DEFAULT_COLORS = {
   line: "#666",
@@ -17,7 +16,7 @@ export const DEFAULT_COLORS = {
 
 export const DEFAULT_DIMENSIONS = {
   width: 960,
-  height: 150,
+  height: 120,
   unit: 20,
   line: 1,
   nut: 7,

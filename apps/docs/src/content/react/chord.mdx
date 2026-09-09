@@ -32,15 +32,15 @@ Output:
 
 In addition to the [`Fretboard` component props](/react/fretboard#component-props), the component accepts the following props:
 
-| Name              | Type                  | Default Value | Description                     |
-| ----------------- | --------------------- | ------------- | ------------------------------- |
-| `input`           | `string`              |               | The chord input (e.g. `x32010`) |
-| `chordName`       | `string`              |               | The chord name (e.g. "C major") |
-| `barres`          | `Barre` \| `Barres[]` |               | One or more chord barres        |
-| `showName`        | `boolean`             | `true`        | Shows the chord name            |
-| `showOpenStrings` | `boolean`             | `false`       | Shows the open string positions |
-| `showNoteNames`   | `boolean`             | `false`       | Shows the note names            |
-| `className`       | `string`              | `chord`       | The component class name        |
+| Name                 | Type                  | Default Value | Description                     |
+| -------------------- | --------------------- | ------------- | ------------------------------- |
+| `input`              | `string`              |               | The chord input (e.g. `x32010`) |
+| `chordName`          | `string`              |               | The chord name (e.g. "C major") |
+| `barres`             | `Barre` \| `Barres[]` |               | One or more chord barres        |
+| `showName`           | `boolean`             | `true`        | Shows the chord name            |
+| `includeOpenStrings` | `boolean`             | `false`       | Shows the open string positions |
+| `showNoteNames`      | `boolean`             | `false`       | Shows the note names            |
+| `className`          | `string`              | `chord`       | The component class name        |
 
 ## Props showcase
 
@@ -53,7 +53,12 @@ function App() {
   return (
     <>
       <Chord input="x32010" chordName="C major" showName={false} />
-      <Chord input="x32010" chordName="C major" showNoteNames showOpenStrings />
+      <Chord
+        input="x32010"
+        chordName="C major"
+        showNoteNames
+        includeOpenStrings
+      />
       <Chord
         input="x355421"
         barres={{ fret: 3, stringFrom: 5 }}
@@ -70,9 +75,9 @@ function App() {
 
 <Chord input="x32010" chordName="C major" showName={false} />
 
-### `showNoteNames` and `showOpenStrings`
+### `showNoteNames` and `includeOpenStrings`
 
-<Chord input="x32010" chordName="C minor" showNoteNames showOpenStrings />
+<Chord input="x32010" chordName="C minor" showNoteNames includeOpenStrings />
 
 <Callout type="info">
   In order to display the right note name (e.g. `Eb` vs `D#`), the `chordName`
@@ -85,8 +90,13 @@ import { Chord } from "@music-ui/react";
 function App() {
   return (
     <>
-      <Chord input="133111" showNoteNames showOpenStrings />
-      <Chord input="133111" chordName="F minor" showNoteNames showOpenStrings />
+      <Chord input="133111" showNoteNames includeOpenStrings />
+      <Chord
+        input="133111"
+        chordName="F minor"
+        showNoteNames
+        includeOpenStrings
+      />
     </>
   );
 }
@@ -94,11 +104,11 @@ function App() {
 
 No `chordName`: displays `G#` on the third string, first fret:
 
-<Chord input="133111" showNoteNames showOpenStrings />
+<Chord input="133111" showNoteNames includeOpenStrings />
 
 Right `chordName`: displays `Ab` on the third string, first fret:
 
-<Chord input="133111" chordName="F minor" showNoteNames showOpenStrings />
+<Chord input="133111" chordName="F minor" showNoteNames includeOpenStrings />
 
 ### `barres` and `crop`
 

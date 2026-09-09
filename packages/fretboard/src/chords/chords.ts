@@ -1,8 +1,10 @@
 import { getNoteFromChroma } from "@music-ui/core";
-import { type FretboardPosition } from "../fretboard/Fretboard";
+import { Barre, type FretboardPosition } from "../fretboard/Fretboard";
 import { FretboardSystem } from "../fretboardSystem/FretboardSystem";
 
-const CHORD_SYMBOLS = {
+const MIN_CHORD_FRET_SPAN = 3;
+
+export const CHORD_SYMBOLS = {
   mute: "x",
   splitter: "-",
 } as const;
@@ -11,13 +13,13 @@ const CHORD_SYMBOLS = {
  * The parameters accepted by the parseChord function.
  * @property input The chord input (e.g. x32010).
  * @property chordName The chord name (e.g. C major, A7b9).
- * @property showOpenStrings Show the open string notes or not.
+ * @property includeOpenStrings Show the open string notes or not.
  * @property system The current fretboard system (needed to determine the note names).
  */
 export type ParseChordParams = {
   input: string;
   chordName?: string;
-  showOpenStrings?: boolean;
+  includeOpenStrings?: boolean;
   system: FretboardSystem;
 };
 
@@ -34,7 +36,7 @@ type ParseChord = {
 export function parseChord({
   input,
   chordName,
-  showOpenStrings,
+  includeOpenStrings,
   system,
 }: ParseChordParams): ParseChord {
   const splitter = input.includes(CHORD_SYMBOLS.splitter)
@@ -46,7 +48,7 @@ export function parseChord({
     .reverse()
     .reduce(
       (memo, fret, string) => {
-        if (fret === "0" && !showOpenStrings) {
+        if (fret === "0" && !includeOpenStrings) {
           return memo;
         }
         if (fret === CHORD_SYMBOLS.mute) {
@@ -72,7 +74,10 @@ export function parseChord({
 
         return {
           ...memo,
-          positions: [...memo.positions, { ...position, note }],
+          positions: [
+            ...memo.positions,
+            { ...position, note, noteWithOctave: `${note}${position.octave}` },
+          ],
         };
       },
       {
@@ -80,4 +85,46 @@ export function parseChord({
         mutedStrings: [] as number[],
       },
     );
+}
+
+/**
+ * Returns how many frets does the passed chord take.
+ * @example
+ * getChordFretSpan("x32010") // returns 3
+ * @example
+ * getChordFretSpan("x5454x") // returns 3
+ * @example
+ * getChordFretSpan("xx5432") // returns 4
+ * @param input The chord input
+ * @returns The chord fret span
+ */
+export function getChordFretSpan(input: string) {
+  const tokens = input
+    .split(input.includes(CHORD_SYMBOLS.splitter) ? CHORD_SYMBOLS.splitter : "")
+    .filter((x) => Number.isInteger(+x) && x !== "0")
+    .map(Number);
+
+  return Math.max(
+    MIN_CHORD_FRET_SPAN,
+    Math.max(...tokens) - Math.min(...tokens) + 1,
+  );
+}
+
+/**
+ * Parses the data attribute barres input.
+ * @param input The barres input
+ * @returns An array of the found barres
+ */
+export function parseBarres(input: string): Barre[] {
+  return input
+    .split(",")
+    .filter(Boolean)
+    .map((barre) => {
+      const tokens = barre.trim().split(":");
+      return {
+        fret: Number(tokens[0]),
+        stringFrom: tokens[1] ? Number(tokens[1]) : 6,
+        stringTo: tokens[2] ? Number(tokens[2]) : 1,
+      };
+    });
 }

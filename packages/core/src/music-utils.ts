@@ -1,4 +1,4 @@
-import { enharmonic } from "@tonaljs/note";
+import { enharmonic, chroma as getChroma } from "@tonaljs/note";
 import { get as getChord } from "@tonaljs/chord";
 
 export const ACCIDENTAL_MAP = [
@@ -83,6 +83,8 @@ export const CHROMATIC_SCALE = [
   },
 ] as const;
 
+const DEFAULT_OCTAVE = 2;
+
 type GetNoteFromChromaParams = {
   chroma: number;
   chordName?: string;
@@ -103,4 +105,24 @@ export function getNoteFromChroma({
     return enharmonic(note);
   }
   return note;
+}
+
+export function areNotesEquivalent(a: string, b: string) {
+  const pa = parseNote(a);
+  const pb = parseNote(b);
+  return getChroma(pa.note) === getChroma(pb.note) && pa.octave === pb.octave;
+}
+
+export function parseNote(note: string) {
+  let octave = Number(note.slice(-1));
+  let parsedNote = note;
+  if (isNaN(octave)) {
+    octave = DEFAULT_OCTAVE;
+  } else {
+    parsedNote = note.slice(0, -1);
+  }
+  return {
+    octave,
+    note: parsedNote,
+  };
 }

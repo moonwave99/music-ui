@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { Piano, type PianoProps } from "./Piano";
 import { usePlayer } from "../hooks/usePlayer";
-import { getPianoScore, joinVoices } from "@music-ui/core";
+import { getPlaybackScore, joinVoices } from "@music-ui/core";
 
 /**
  * Props expected by the `PianoWithPlayer` component.
@@ -41,7 +41,7 @@ export function PianoWithPlayer({
       <div className="controls">
         <button
           disabled={playerStatus === "playing"}
-          onClick={() => play(getPianoScore({ id, input: notes }))}
+          onClick={() => play(getPlaybackScore({ id, input: notes }))}
         >
           {playLabel}
         </button>
@@ -49,7 +49,7 @@ export function PianoWithPlayer({
           disabled={playerStatus === "playing"}
           onClick={() =>
             play(
-              getPianoScore({
+              getPlaybackScore({
                 id,
                 input: notes,
                 playbackMode: "arpeggio",

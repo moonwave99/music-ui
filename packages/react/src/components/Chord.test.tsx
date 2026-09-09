@@ -31,10 +31,10 @@ describe("Chord", () => {
     expect(screen.queryByText("C major")).not.toBeInTheDocument();
   });
 
-  it("displays the open strings positions if showOpenStrings is true", () => {
+  it("displays the open strings positions if includeOpenStrings is true", () => {
     const input = "x32010";
     const { container } = render(
-      <Chord input={input} chordName="C major" showOpenStrings />,
+      <Chord input={input} chordName="C major" includeOpenStrings />,
     );
     expect(container.querySelector(".chord")).toBeInTheDocument();
     expect(screen.getByText("C major")).toBeVisible();
