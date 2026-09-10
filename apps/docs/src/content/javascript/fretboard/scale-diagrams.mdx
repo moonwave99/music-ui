@@ -1,0 +1,88 @@
+# Scale diagrams
+
+Displaying scale information is a common use case for any fretboard library.
+
+Albeit passing all positions is always an option, calling `Fretboard.renderScale` can save you some time:
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+
+fretboard.renderScale({ root: "C", type: "major" });
+```
+
+Output:
+
+<Scale root="C" type="major" />
+
+<Callout type="info">
+  The available scale types come from the `@tonaljs/scale-type` package and [can
+  be found
+  here](https://github.com/tonaljs/tonal/blob/main/packages/scale-type/data.ts).
+</Callout>
+
+If you want to display the note names and to highlight all the root note occurrences:
+
+```ts
+import { Fretboard, DEFAULT_COLORS } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderScale({ root: "C", type: "major" });
+fretboard.style({
+  fill: ({ degree }) =>
+    degree !== 1
+      ? DEFAULT_COLORS.positionFillColor
+      : DEFAULT_COLORS.highlightFill,
+});
+```
+
+Output:
+
+<Scale showNoteNames highlightRoots root="C" type="major" />
+
+## Box systems
+
+If you want to display just a scale box:
+
+```ts
+import { Fretboard, DEFAULT_COLORS } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderScale({
+  root: "C",
+  type: "major",
+  box: {
+    system: "CAGED",
+    box: "G",
+  },
+  displayBoxOnly: true,
+});
+
+fretboard.style({
+  fill: ({ degree }) =>
+    degree !== 1
+      ? DEFAULT_COLORS.positionFillColor
+      : DEFAULT_COLORS.highlightFill,
+});
+```
+
+Output:
+
+<Scale
+  showNoteNames
+  highlightRoots
+  root="C"
+  type="major"
+  box={{
+    system: "CAGED",
+    box: "G",
+  }}
+  displayBoxOnly
+/>

@@ -15,7 +15,10 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * @property includeOpenStrings Show the open string notes or not.
  * @property barres The chord barres.
  */
-export type ChordProps = Omit<UseFretboardParams, "chord"> & {
+export type ChordProps = Omit<
+  UseFretboardParams,
+  "scale" | "chord" | "positions"
+> & {
   id?: string;
   className?: string;
   input: string;
@@ -51,6 +54,7 @@ export function Chord({
       barres,
     },
   });
+
   return (
     <figure className={className}>
       <div ref={ref}></div>

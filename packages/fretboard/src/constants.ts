@@ -21,6 +21,7 @@ export const DEFAULT_DIMENSIONS = {
   line: 1,
   nut: 7,
   chord: 300,
+  box: 360,
 };
 
 export const DEFAULT_FONT_FAMILY = "Arial";

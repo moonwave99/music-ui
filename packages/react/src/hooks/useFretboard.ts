@@ -5,18 +5,21 @@ import {
   type FretboardPosition,
   type StyleParams,
   type RenderChordParams,
+  type ScaleParams,
 } from "@music-ui/fretboard";
 
 /**
  * The params expected by the `useFretboard` function.
  * @property positions An array of {@link FretboardPosition}.
  * @property chord Params expected by the `Fretboard.renderChord` function.
+ * @property scale Params expected by the `Fretboard.renderScale` function.
  * @property style Params expected by the `Fretboard.style` function.
  * @property showNoteNames Display the note names or not.
  */
 export type UseFretboardParams = Partial<FretboardOptions> & {
   positions?: FretboardPosition[];
   chord?: RenderChordParams;
+  scale?: ScaleParams;
   style?: StyleParams;
   showNoteNames?: boolean;
 };
@@ -37,6 +40,7 @@ export type UseFretboard<T extends HTMLElement> = {
 export function useFretboard<T extends HTMLElement>({
   positions,
   chord,
+  scale,
   style,
   showNoteNames,
   ...params
@@ -62,6 +66,13 @@ export function useFretboard<T extends HTMLElement>({
   }, [params, showNoteNames]);
 
   useLayoutEffect(() => {
+    if (scale) {
+      fretboardRef.current?.renderScale(scale);
+      if (style) {
+        fretboardRef.current?.style(style);
+      }
+      return;
+    }
     if (chord) {
       fretboardRef.current?.renderChord(chord);
       if (style) {
@@ -77,7 +88,7 @@ export function useFretboard<T extends HTMLElement>({
     if (style) {
       fretboardRef.current?.style(style);
     }
-  }, [positions, chord, style]);
+  }, [positions, chord, scale, style]);
 
   return { ref };
 }

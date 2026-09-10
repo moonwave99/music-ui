@@ -10,6 +10,7 @@ main {
 
 .fretboard,
 .chord,
+.scale,
 .piano {
   margin-top: 1rem;
 }

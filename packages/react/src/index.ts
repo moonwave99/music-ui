@@ -1,6 +1,7 @@
 export * from "./components/ABCScore";
 export * from "./components/ABCScoreWithPlayer";
 export * from "./components/Chord";
+export * from "./components/Scale";
 export * from "./components/Fretboard";
 export * from "./components/Piano";
 export * from "./components/PianoWithPlayer";

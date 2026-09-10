@@ -4,7 +4,7 @@ import {
   ArpeggioWithTextAndRootNotes,
 } from "../../../app/examples/fretboard/FretboardWithText";
 
-# Fretboard
+# The `Fretboard` class
 
 The `Fretboard` class renders highly configurable fretboard diagrams in SVG format.
 
@@ -245,7 +245,25 @@ Output:
 
 <Chord input="x32010" showName={false} />
 
-[See chord diagrams page for more details](/javascript/fretboard/chord-diagrams).
+[See the chord diagrams page for more details](/javascript/fretboard/chord-diagrams).
+
+## Rendering scale diagrams
+
+The `Fretboard` class has also, guess what, a `renderScale` method:
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+
+fretboard.renderScale({ root: "C", type: "major" });
+```
+
+Output:
+
+<Scale root="C" type="major" />
+
+[See the scale diagrams page for more details](/javascript/fretboard/scale-diagrams).
 
 ## Constructor
 
