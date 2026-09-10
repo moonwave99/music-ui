@@ -23,7 +23,9 @@ export function ArpeggioWithText() {
       width={600}
       fretCount={5}
       positions={arpeggio}
-      positionText={({ note }) => note!}
+      style={{
+        text: ({ note }) => note!,
+      }}
     />
   );
 }
@@ -34,9 +36,9 @@ export function ArpeggioWithTextAndRootNotes() {
       width={600}
       fretCount={5}
       positions={arpeggio}
-      positionText={({ note }) => note!}
       style={{
         fill: ({ note }) => (note === "C" ? "orange" : "white"),
+        text: ({ note }) => note!,
       }}
     />
   );

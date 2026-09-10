@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useRef, type RefObject } from "react";
 import {
   Fretboard,
   type FretboardOptions,
@@ -41,7 +41,7 @@ export function useFretboard<T extends HTMLElement>({
   positions,
   chord,
   scale,
-  style,
+  style = {},
   showNoteNames,
   ...params
 }: UseFretboardParams): UseFretboard<T> {
@@ -53,31 +53,19 @@ export function useFretboard<T extends HTMLElement>({
     if (fretboardRef.current) {
       return;
     }
-
-    const defaultPositionText = ({ note }: FretboardPosition) =>
-      showNoteNames && note ? note : "";
-
-    const positionText = params.positionText || defaultPositionText;
     fretboardRef.current = new Fretboard({
       element: ref.current!,
       ...params,
-      positionText,
     });
-  }, [params, showNoteNames]);
+  }, [params]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (scale) {
       fretboardRef.current?.renderScale(scale);
-      if (style) {
-        fretboardRef.current?.style(style);
-      }
       return;
     }
     if (chord) {
       fretboardRef.current?.renderChord(chord);
-      if (style) {
-        fretboardRef.current?.style(style);
-      }
       return;
     }
     if (!positions || !positions.length) {
@@ -85,10 +73,15 @@ export function useFretboard<T extends HTMLElement>({
       return;
     }
     fretboardRef.current?.setPositions(positions).render();
-    if (style) {
-      fretboardRef.current?.style(style);
-    }
-  }, [positions, chord, scale, style]);
+  }, [positions, chord, scale]);
+
+  useEffect(() => {
+    fretboardRef.current?.style({
+      text: ({ note }: FretboardPosition) =>
+        showNoteNames && note ? note : "",
+      ...style,
+    });
+  }, [style, showNoteNames]);
 
   return { ref };
 }

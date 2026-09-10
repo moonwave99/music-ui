@@ -87,3 +87,23 @@ main {
     align-items: center;
   }
 }
+
+.scale-kitchen-sink {
+  margin-top: 1rem;
+  .controls {
+    height: 2rem;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      select {
+        border: 1px solid;
+        border-radius: 0.25rem;
+      }
+    }
+  }
+}

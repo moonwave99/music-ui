@@ -55,6 +55,15 @@ C ^F | [C ^F] |`,
     content: `T: Vanilla 5
 C D (3EFG C D C D|`,
   },
+  {
+    content: `
+T: Compound Test
+M: 6/8
+L: 1/16
+Q: 90
+cc ee gg cc ee gg|dd ff aa dd ff [L:1/32]aaaa|    
+    `,
+  },
 ];
 
 export function VanillaABCScore() {

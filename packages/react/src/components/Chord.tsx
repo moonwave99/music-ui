@@ -11,8 +11,8 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * @property className The component class name.
  * @property input The chord input (e.g. x32010).
  * @property chordName The chord name (e.g. C major, A7b9).
- * @property showName Show the chord name or not.
- * @property includeOpenStrings Show the open string notes or not.
+ * @property showName Shows the chord name.
+ * @property includeOpenStrings Shows the open string notes.
  * @property barres The chord barres.
  */
 export type ChordProps = Omit<

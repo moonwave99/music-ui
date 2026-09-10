@@ -9,8 +9,8 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * Props expected by the `Scale` component.
  * @property id The scale unique identifier.
  * @property className The component class name.
- * @property showName Show the scale name or not.
- * @property highlightRoots Highlight root notes or not.
+ * @property showName Shows the scale name.
+ * @property highlightRoots Highlights root notes.
  */
 export type ScaleProps = ScaleParams &
   Omit<UseFretboardParams, "scale" | "chord" | "positions"> & {

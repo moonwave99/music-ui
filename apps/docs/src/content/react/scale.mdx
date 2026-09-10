@@ -1,0 +1,47 @@
+# Scale
+
+The `<Scale>` React component renders guitar scale diagrams.
+
+## Installation
+
+<Installation packageName="@music-ui/react" />
+
+## Usage
+
+The following code renders the C major scale all over the fretboard:
+
+```tsx
+import { Scale } from "@music-ui/react";
+
+function App() {
+  return (
+    <main>
+      <h1>My App</h1>
+      {/* rest of your app */}
+      <Scale root="C" type="major" />
+    </main>
+  );
+}
+```
+
+Output:
+
+<Scale root="C" type="major" />
+
+## Component props
+
+In addition to the [`Fretboard` component props](/react/fretboard#component-props), the component accepts the following props:
+
+| Name             | Type      | Default Value | Description                    |
+| ---------------- | --------- | ------------- | ------------------------------ |
+| `root`           | `string`  |               | The scale root note (e.g. "C") |
+| `type`           | `string`  |               | The scale type (e.g. "major")  |
+| `showName`       | `boolean` | `false`       | Shows the scale name           |
+| `highlightRoots` | `boolean` | `false`       | Highlights root notes          |
+| `className`      | `string`  | `scale`       | The component class name       |
+
+## Props showcase
+
+A showcase of the component props:
+
+WIP

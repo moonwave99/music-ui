@@ -2,9 +2,11 @@
 title: Index
 ---
 
+import { ScaleKitchenSink } from "../app/examples/fretboard/ScaleKitchenSink";
+
 # Music UI
- 
-A collection of music visualization tools for the web.
+
+A collection of music visualization tools for the web, in [pure JavaScript](/javascript) or [for React](/react).
 
 ## Scores
 
@@ -26,15 +28,19 @@ G,DB,D G,DB,D A,DCD | G,DB,D G,DB,D G,DB,D | \
  G,ECE G,ECE G,^C^A,C | G,DB,D G,DB,D G,DB,D|
 </ABCScoreWithPlayer>
 
----
+[See JavaScript](/javascript/music-notation) - [See React](/react/abc-score)
 
-<ABCScoreWithPlayer showTempo={false} highlightBars>
-T: Compound Test
-M: 6/8
-L: 1/16
-Q: 90
-cc ee gg cc ee gg|dd ff aa dd ff [L:1/32]aaaa| 
-</ABCScoreWithPlayer>
+## Fretboard
+
+<ScaleKitchenSink />
+
+[See JavaScript](/javascript/fretboard) - [See React](/react/fretboard)
+
+## Chord diagrams
+
+<VanillaChordsWithPlayer />
+
+[See JavaScript](/javascript/fretboard/chord-diagrams) - [See React](/react/chord)
 
 ## Pianos
 
@@ -60,3 +66,5 @@ cc ee gg cc ee gg|dd ff aa dd ff [L:1/32]aaaa|
   description="I"
   notes="E3 B3, E4 G#4 B4 D#5"
 />
+
+[See JavaScript](/javascript/piano-keyboard) - [See React](/react/piano)

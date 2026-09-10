@@ -5,7 +5,7 @@ function toKebabCase(str: string) {
   );
 }
 
-export function getDataAttributes(input: Record<string, unknown>) {
+export function getDataAttributes(input: Record<string, unknown> = {}) {
   return Object.entries(input).reduce(
     (memo, [key, value]) => ({ ...memo, [`data-${toKebabCase(key)}`]: value }),
     {},
