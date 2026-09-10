@@ -60,6 +60,7 @@ export function initChordsWithPlayer<T extends HTMLElement>(
       notes: positions
         .toReversed()
         .map(({ noteWithOctave }) => noteWithOctave!),
+      instrument: element.dataset.instrument || "acoustic_guitar_nylon",
       player,
       id,
     });

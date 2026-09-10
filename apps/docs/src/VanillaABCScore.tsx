@@ -50,6 +50,7 @@ C ^F | [C ^F] |`,
   {
     options: {
       showTempo: false,
+      instrument: "acoustic_guitar_nylon",
     },
     content: `T: Vanilla 5
 C D (3EFG C D C D|`,

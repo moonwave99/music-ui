@@ -4,12 +4,14 @@
  * @property content The score content (in abc notation)
  * @property hash The score hash (computed for caching)
  * @property info The score meta info
+ * @property instrument The preferred playback instrument
  */
 export type Score = {
   id: string;
   content: string;
   hash: string;
   info: ScoreInfo;
+  instrument: string;
 };
 
 /**

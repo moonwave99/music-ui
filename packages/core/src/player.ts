@@ -41,6 +41,8 @@ export const DEFAULT_TIME_SIGNATURE = [4, 4] as TimeSignature;
 
 export const BPM_RANGE = [20, 200] as const;
 
+export const DEFAULT_PLAYBACK_INSTRUMENT = "acoustic_grand_piano";
+
 /**
  * The events triggered by the player.
  */
@@ -127,6 +129,11 @@ type GetPart = (
   events: PlaybackEvent[],
 ) => Part;
 
+type PlayNotesParams = Pick<PlaybackEvent, "duration" | "velocity"> & {
+  playedNotes: string[];
+  time: number;
+};
+
 /**
  * The parameters accepted by the Player constructor.
  * @property sampler The Sampler instance
@@ -137,7 +144,7 @@ type GetPart = (
  * @property options The Player options
  */
 type PlayerParams = {
-  sampler: Sampler;
+  instruments: Record<string, Sampler>;
   transport: Transport;
   draw: Draw;
   startAudio: () => Promise<void>;
@@ -145,8 +152,9 @@ type PlayerParams = {
   options?: PlayerOptions;
 };
 
+// #TODO pass an instruments records instead of a single sampler
 export class Player {
-  private sampler: Sampler;
+  private instruments: Record<string, Sampler>;
   private parts: Part[];
   private transport: Transport;
   private draw: Draw;
@@ -164,7 +172,7 @@ export class Player {
    * @param __namedParameters The accepted params
    */
   constructor({
-    sampler,
+    instruments,
     transport,
     draw,
     startAudio,
@@ -172,7 +180,7 @@ export class Player {
     options = DEFAULT_OPTIONS,
   }: PlayerParams) {
     this.options = options;
-    this.sampler = sampler;
+    this.instruments = instruments;
     this.transport = transport;
     this.draw = draw;
     this.startAudio = startAudio;
@@ -307,6 +315,23 @@ export class Player {
   private clearParts() {
     this.parts.forEach((part) => part.clear());
   }
+  private playNotes({
+    playedNotes,
+    duration,
+    time,
+    velocity,
+  }: PlayNotesParams) {
+    /* istanbul ignore if  */
+    if (!this.score) {
+      return;
+    }
+    const instrument = this.instruments[this.score.instrument!];
+    if (!instrument) {
+      console.warn(`Instrument ${this.score.instrument} not found`);
+      return;
+    }
+    instrument.triggerAttackRelease(playedNotes, duration, time, velocity);
+  }
   private createParts() {
     /* istanbul ignore if  */
     if (!this.score) {
@@ -343,12 +368,7 @@ export class Player {
 
           const playedNotes = notes.map(({ name }) => name);
 
-          this.sampler.triggerAttackRelease(
-            playedNotes,
-            duration,
-            time,
-            velocity,
-          );
+          this.playNotes({ playedNotes, duration, time, velocity });
 
           this.draw.schedule(() => {
             this.updatePlayedNotes(playedNotes, voice);

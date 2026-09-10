@@ -85,6 +85,11 @@ export const CHROMATIC_SCALE = [
 
 const DEFAULT_OCTAVE = 2;
 
+type NoteWithOctave = {
+  note: string;
+  octave: number;
+};
+
 type GetNoteFromChromaParams = {
   chroma: number;
   chordName?: string;
@@ -110,10 +115,13 @@ export function getNoteFromChroma({
 export function areNotesEquivalent(a: string, b: string) {
   const pa = parseNote(a);
   const pb = parseNote(b);
-  return getChroma(pa.note) === getChroma(pb.note) && pa.octave === pb.octave;
+  return (
+    getChroma(pa.note) === getChroma(pb.note) &&
+    getAdjustedEnharmonicsOctave(pa) === getAdjustedEnharmonicsOctave(pb)
+  );
 }
 
-export function parseNote(note: string) {
+export function parseNote(note: string): NoteWithOctave {
   let octave = Number(note.slice(-1));
   let parsedNote = note;
   if (isNaN(octave)) {
@@ -125,4 +133,14 @@ export function parseNote(note: string) {
     octave,
     note: parsedNote,
   };
+}
+
+function getAdjustedEnharmonicsOctave({ note, octave }: NoteWithOctave) {
+  if (note === "B#") {
+    return octave + 1;
+  }
+  if (note === "Cb") {
+    return octave - 1;
+  }
+  return octave!;
 }

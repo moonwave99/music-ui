@@ -1,6 +1,10 @@
 import { describe, it, expect, assert } from "vitest";
 
-import { getNoteFromChroma } from "./music-utils";
+import {
+  getNoteFromChroma,
+  areNotesEquivalent,
+  parseNote,
+} from "./music-utils";
 
 describe("getNoteFromChroma", () => {
   it("returns the note of the passed chroma", () => {
@@ -16,5 +20,31 @@ describe("getNoteFromChroma", () => {
         `Chroma must be between 0 and 11, received ${chroma} instead`,
       ),
     );
+  });
+});
+
+describe("areNotesEquivalent", () => {
+  it("checks the enharmonic equivalence relationship", () => {
+    // 1. reflexivity
+    expect(areNotesEquivalent("C3", "C3")).toBe(true);
+    // 2. symmetry
+    expect(areNotesEquivalent("D#3", "Eb3")).toBe(true);
+    expect(areNotesEquivalent("Eb3", "D#3")).toBe(true);
+    // 3. transitivity
+    expect(areNotesEquivalent("E3", "Fb3")).toBe(true);
+    expect(areNotesEquivalent("Fb3", "D##3")).toBe(true);
+    expect(areNotesEquivalent("E3", "D##3")).toBe(true);
+
+    expect(areNotesEquivalent("C3", "B#2")).toBe(true);
+    expect(areNotesEquivalent("B2", "Cb3")).toBe(true);
+  });
+});
+
+describe("parseNote", () => {
+  it("parses the given note literal", () => {
+    expect(parseNote("E")).toEqual({ note: "E", octave: 2 });
+    expect(parseNote("E4")).toEqual({ note: "E", octave: 4 });
+    expect(parseNote("Bb4")).toEqual({ note: "Bb", octave: 4 });
+    expect(parseNote("C#4")).toEqual({ note: "C#", octave: 4 });
   });
 });

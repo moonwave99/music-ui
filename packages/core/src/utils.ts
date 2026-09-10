@@ -9,7 +9,7 @@ import type {
   Score,
   NoteInput,
 } from "./types";
-import { DEFAULT_TIME_SIGNATURE } from "./player";
+import { DEFAULT_PLAYBACK_INSTRUMENT, DEFAULT_TIME_SIGNATURE } from "./player";
 
 /**
  * The params expected by the `getAbcScore` function.
@@ -19,6 +19,7 @@ import { DEFAULT_TIME_SIGNATURE } from "./player";
  */
 type GetAbcScoreParams = Pick<Score, "id"> & {
   input: string;
+  instrument?: string;
   options?: ParseAbcOptions;
 };
 
@@ -27,11 +28,17 @@ type GetAbcScoreParams = Pick<Score, "id"> & {
  * @param {GetAbcScoreParams} params The input for generating the score  
  * @returns A score object with the normalized meta info and content
  */
-export function getAbcScore({ id, input, options }: GetAbcScoreParams): Score {
+export function getAbcScore({
+  id,
+  input,
+  instrument = DEFAULT_PLAYBACK_INSTRUMENT,
+  options,
+}: GetAbcScoreParams): Score {
   const { info, content } = parseAbc(input, options);
   return {
     id,
     info,
+    instrument,
     content,
     hash: getScoreHash(id, content),
   };
@@ -47,12 +54,14 @@ export type PlaybackMode = "block" | "arpeggio";
  * @property id The score id
  * @property bpm The score bpm
  * @property input The score input (in scientific pitch notation)
+ * @property instrument The preferred playback instrument
  * @property playbackMode The playback mode (block or arpeggio)
  */
 type GetPlaybackScoreParams = {
   id: string;
   bpm?: number;
   input: NoteInput;
+  instrument?: string;
   playbackMode?: PlaybackMode;
 };
 
@@ -64,6 +73,7 @@ type GetPlaybackScoreParams = {
 export function getPlaybackScore({
   id,
   input,
+  instrument = DEFAULT_PLAYBACK_INSTRUMENT,
   playbackMode = "block",
   bpm = 120,
 }: GetPlaybackScoreParams): Score {
@@ -75,6 +85,7 @@ export function getPlaybackScore({
   return {
     id,
     content,
+    instrument,
     info: { bpm, timeSignature: [4, 4] },
     hash: getScoreHash(id, content),
   };

@@ -63,7 +63,12 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         element,
         DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS,
       );
-      const score = getAbcScore({ id, options, input: content });
+      const score = getAbcScore({
+        id,
+        options,
+        input: content,
+        instrument: element.dataset.instrument,
+      });
       const { updateButtonState } = initControls({
         score,
         player,

@@ -1,6 +1,10 @@
 import * as Tone from "tone";
 import { Player, type PlayerOptions } from "./player";
-import { createSampler, type CreateSamplerParams } from "./lib";
+import {
+  createSampler,
+  DEFAULT_SAMPLER_OPTIONS,
+  type CreateSamplerParams,
+} from "./lib";
 
 /**
  * The options needed by the various dependencies.
@@ -9,7 +13,9 @@ import { createSampler, type CreateSamplerParams } from "./lib";
  */
 export type PlayerFactoryParams = {
   playerOptions: PlayerOptions;
-  samplerOptions: CreateSamplerParams;
+  samplerOptions: Omit<CreateSamplerParams, "instrument"> & {
+    instruments: string[];
+  };
 };
 
 /**
@@ -17,14 +23,27 @@ export type PlayerFactoryParams = {
  * @param __namedParameters The options needed by the various dependencies.
  * @returns A `Player` instance.
  */
-export function playerFactory({
-  playerOptions,
-  samplerOptions,
-}: Partial<PlayerFactoryParams> = {}): Player {
+export function playerFactory(
+  { playerOptions, samplerOptions }: Partial<PlayerFactoryParams> = {
+    samplerOptions: {
+      ...DEFAULT_SAMPLER_OPTIONS,
+      instruments: ["acoustic_grand_piano", "acoustic_guitar_nylon"],
+    },
+  },
+): Player {
   const player = new Player({
     draw: Tone.getDraw(),
     transport: Tone.getTransport(),
-    sampler: createSampler(samplerOptions),
+    instruments: samplerOptions!.instruments.reduce(
+      (memo, instrument) => ({
+        ...memo,
+        [instrument]: createSampler({
+          ...samplerOptions,
+          instrument,
+        }),
+      }),
+      {},
+    ),
     startAudio: () => Tone.start(),
     getPart: (callback, info) => new Tone.Part(callback, info),
     options: playerOptions,

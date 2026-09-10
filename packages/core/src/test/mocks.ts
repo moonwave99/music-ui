@@ -97,8 +97,13 @@ export function getMockedPlayerParams() {
     },
     transport,
     startAudio: async () => {},
-    sampler: {
-      triggerAttackRelease: () => {},
+    instruments: {
+      acoustic_grand_piano: {
+        triggerAttackRelease: () => {},
+      },
+      acoustic_guitar_nylon: {
+        triggerAttackRelease: () => {},
+      },
     },
     getPart: (
       callback: ToneEventCallback<PlaybackEvent>,

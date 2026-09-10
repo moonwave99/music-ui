@@ -62,6 +62,7 @@ export function initPianoWithPlayer<T extends HTMLElement>(
     const { disableButtons, resetButtons } = initPlaybackControls({
       element: controlsElement!,
       notes,
+      instrument: element.dataset.instrument,
       player,
       id,
     });
