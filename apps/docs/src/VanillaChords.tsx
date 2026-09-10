@@ -15,11 +15,11 @@ const chords = [
     showFretNumbers: true,
   },
   {
-    input: "131233",
+    input: "131244",
     chordName: "F7#9",
     showNoteNames: true,
     showFretNumbers: true,
-    barres: "1:6:4,3:2",
+    barres: "1:6:4,4:2",
   },
 ] as const;
 

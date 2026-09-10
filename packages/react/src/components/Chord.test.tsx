@@ -55,10 +55,10 @@ describe("Chord", () => {
   });
 
   it("displays the passed barres", () => {
-    const input = "131233";
+    const input = "131244";
     const barres = [
       { fret: 1, stringTo: 4 },
-      { fret: 3, stringFrom: 2 },
+      { fret: 4, stringFrom: 2 },
     ];
     const { container } = render(
       <Chord input={input} chordName="F7#9" showName barres={barres} />,
@@ -68,7 +68,7 @@ describe("Chord", () => {
 
     [
       ".barres .fret-1-string-from-6-string-to-4",
-      ".barres .fret-3-string-from-2-string-to-1",
+      ".barres .fret-4-string-from-2-string-to-1",
     ].forEach((x) => expect(container.querySelector(x)).toBeVisible());
   });
 });
