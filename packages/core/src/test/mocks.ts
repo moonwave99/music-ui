@@ -1,6 +1,7 @@
 import { type ToneEventCallback } from "tone";
 import { PlaybackEvent } from "../player";
 import { TransportPosition } from "../types";
+import { DEFAULT_INSTRUMENTS } from "../lib";
 
 export class MockedTransport {
   private handlers: Record<string, (() => void)[]>;
@@ -97,14 +98,15 @@ export function getMockedPlayerParams() {
     },
     transport,
     startAudio: async () => {},
-    instruments: {
-      acoustic_grand_piano: {
-        triggerAttackRelease: () => {},
-      },
-      acoustic_guitar_nylon: {
-        triggerAttackRelease: () => {},
-      },
-    },
+    instruments: DEFAULT_INSTRUMENTS.reduce(
+      (memo, instrument) => ({
+        ...memo,
+        [instrument]: {
+          triggerAttackRelease: () => {},
+        },
+      }),
+      {},
+    ),
     getPart: (
       callback: ToneEventCallback<PlaybackEvent>,
       events: PlaybackEvent[],

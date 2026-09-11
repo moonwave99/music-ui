@@ -3,7 +3,6 @@ import { describe, it, expect, assert } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { initPianoWithPlayer } from "./initWithPlayer";
 import { getMockedPlayerParams } from "@music-ui/core";
-
 import { Player } from "@music-ui/core";
 
 describe("initPianoWithPlayer", () => {
