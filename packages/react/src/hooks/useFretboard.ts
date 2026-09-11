@@ -16,7 +16,7 @@ import {
  * @property style Params expected by the `Fretboard.style` function.
  * @property showNoteNames Display the note names.
  */
-export type UseFretboardParams = Partial<FretboardOptions> & {
+export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
   positions?: FretboardPosition[];
   chord?: RenderChordParams;
   scale?: ScaleParams;
