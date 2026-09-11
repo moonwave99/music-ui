@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { describe, it, expect, vi, assert } from "vitest";
 import { Player, BPM_RANGE } from "./player";
-import { getAbcScore } from "./utils";
+import { getAbcScore } from "./utils/common";
 import { getMockedPlayerParams } from "./test/mocks";
 
 describe("Player - constructor", () => {

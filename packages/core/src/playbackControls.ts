@@ -1,6 +1,7 @@
 import { DEFAULT_PLAYBACK_INSTRUMENT, type Player } from "./player";
 import { type NoteInput } from "./types";
-import { getPlaybackScore, createControls } from "./utils";
+import { getPlaybackScore } from "./utils/common";
+import { createControls } from "./utils/dom";
 
 type InitPlaybackControlsParams = {
   id: string;

@@ -1,10 +1,6 @@
 import { describe, it, expect, assert } from "vitest";
 
-import {
-  getNoteFromChroma,
-  areNotesEquivalent,
-  parseNote,
-} from "./music-utils";
+import { getNoteFromChroma, areNotesEquivalent, parseNote } from "./music";
 
 describe("getNoteFromChroma", () => {
   it("returns the note of the passed chroma", () => {

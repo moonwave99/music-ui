@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getAbcScore } from "./utils";
+import { getAbcScore } from "./utils/common";
 import { ScoreManager } from "./scoreManager";
 
 describe("ScoreManager - getScoreContent", () => {

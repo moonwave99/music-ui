@@ -5,7 +5,7 @@ import type { TransportPosition, TimeSignature, Score } from "./types";
 import {
   normalizedPositionToTonePosition,
   tonePositionToNormalizedPosition,
-} from "./utils";
+} from "./utils/common";
 import { END_NOTE } from "./lib";
 import { ScoreManager } from "./scoreManager";
 
