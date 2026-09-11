@@ -35,6 +35,7 @@ describe("areNotesEquivalent", () => {
     expect(areNotesEquivalent("Fb3", "D##3")).toBe(true);
     expect(areNotesEquivalent("E3", "D##3")).toBe(true);
 
+    expect(areNotesEquivalent("C3", "C4")).toBe(false);
     expect(areNotesEquivalent("C3", "B#2")).toBe(true);
     expect(areNotesEquivalent("B2", "Cb3")).toBe(true);
   });
