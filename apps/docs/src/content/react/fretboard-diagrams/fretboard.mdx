@@ -1,3 +1,9 @@
+import {
+  Arpeggio,
+  ArpeggioWithText,
+  ArpeggioWithTextAndRootNotes,
+} from "../../../app/examples/fretboard/FretboardWithText";
+
 # Fretboard
 
 The `<Fretboard>` React component is a wrapper around the [`Fretboard` class](/javascript/fretboard-diagrams/fretboard).
@@ -35,17 +41,64 @@ Output:
 
 ## Component props
 
-The component accepts the following props:
+In addition to the [`Fretboard` class constructor options](/javascript/fretboard-diagrams/fretboard#constructor), the component accepts the following props:
 
-| Name        | Type     | Default Value | Description                     |
-| ----------- | -------- | ------------- | ------------------------------- |
-| `id`        | `string` |               | The fretboard unique identifier |
-| `className` | `string` |               | The component class name        |
-
-WIP
+| Name            | Type      | Default Value | Description                     |
+| --------------- | --------- | ------------- | ------------------------------- |
+| `id`            | `string`  |               | The fretboard unique identifier |
+| `className`     | `string`  |               | The component class name        |
+| `showNoteNames` | `boolean` | `false`       | Display the note names          |
 
 ## Props showcase
 
 A showcase of the component props:
 
-WIP
+```tsx
+import { Fretboard } from "@music-ui/react";
+
+const cMajorArpeggio = [
+  { string: 6, fret: 0, note: "E" },
+  { string: 6, fret: 3, note: "G" },
+  { string: 5, fret: 3, note: "C" },
+  { string: 4, fret: 2, note: "E" },
+  { string: 3, fret: 0, note: "G" },
+  { string: 2, fret: 1, note: "C" },
+  { string: 1, fret: 0, note: "E" },
+  { string: 1, fret: 3, note: "G" },
+];
+
+function App() {
+  return (
+    <>
+      <Fretboard positions={cMajorArpeggio} fretCount={3} width={300} />
+      <Fretboard
+        positions={cMajorArpeggio}
+        width={600}
+        fretCount={5}
+        showNoteNames
+      />
+      <Fretboard
+        positions={cMajorArpeggio}
+        width={600}
+        fretCount={5}
+        style={{
+          text: ({ note }) => note!,
+          fill: ({ note }) => (note === "C" ? "orange" : "white"),
+        }}
+      />
+    </>
+  );
+}
+```
+
+### `positions`, `fretCount` and `width`
+
+<Arpeggio />
+
+### `showNoteNames`
+
+<ArpeggioWithText />
+
+### `style` for displaying note names and highlighting root notes
+
+<ArpeggioWithTextAndRootNotes />
