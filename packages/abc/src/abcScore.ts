@@ -92,8 +92,8 @@ type GroupedBarsEntry = {
  *
  * @property content The abc notation content
  * @property element The element where the score will be rendered
- * @property showCursor Display the cursor or not
- * @property showTimeSignature Display the time signature or not
+ * @property showCursor Shows the cursor
+ * @property showTimeSignature Shows the time signature
  * @property abcOptions The options passed to the abcjs renderer
  * @property onClick The function called when clicking on a note
  */

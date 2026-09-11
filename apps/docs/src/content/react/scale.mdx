@@ -37,6 +37,7 @@ In addition to the [`Fretboard` component props](/react/fretboard#component-prop
 | `root`           | `string`  |               | The scale root note (e.g. "C") |
 | `type`           | `string`  |               | The scale type (e.g. "major")  |
 | `showName`       | `boolean` | `false`       | Shows the scale name           |
+| `showNoteNames`  | `boolean` | `false`       | Shows the note names           |
 | `highlightRoots` | `boolean` | `false`       | Highlights root notes          |
 | `className`      | `string`  | `scale`       | The component class name       |
 
@@ -44,4 +45,40 @@ In addition to the [`Fretboard` component props](/react/fretboard#component-prop
 
 A showcase of the component props:
 
-WIP
+```tsx
+import { Scale } from "@music-ui/react";
+
+function App() {
+  return (
+    <>
+      <Scale root="G" type="dorian" showName />
+      <Scale root="E" type="blues" showNoteNames highlightRoots />
+      <Scale
+        root="C"
+        type="major"
+        box={{ system: "CAGED", box: "G" }}
+        displayBoxOnly
+        highlightRoots
+      />
+    </>
+  );
+}
+```
+
+### `showName` = `true`
+
+<Scale root="G" type="dorian" showName />
+
+### `showNoteNames` and `highlightRoots`
+
+<Scale root="E" type="blues" showNoteNames highlightRoots />
+
+### `box` and `displayBoxOnly` and `highlightRoots`
+
+<Scale
+  root="C"
+  type="major"
+  box={{ system: "CAGED", box: "G" }}
+  displayBoxOnly
+  highlightRoots
+/>

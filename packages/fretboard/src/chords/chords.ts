@@ -13,7 +13,7 @@ export const CHORD_SYMBOLS = {
  * The parameters accepted by the parseChord function.
  * @property input The chord input (e.g. x32010).
  * @property chordName The chord name (e.g. C major, A7b9).
- * @property includeOpenStrings Show the open string notes or not.
+ * @property includeOpenStrings Shows the open string notes.
  * @property system The current fretboard system (needed to determine the note names).
  */
 export type ParseChordParams = {

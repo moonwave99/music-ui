@@ -14,7 +14,7 @@ import {
  * @property chord Params expected by the `Fretboard.renderChord` function.
  * @property scale Params expected by the `Fretboard.renderScale` function.
  * @property style Params expected by the `Fretboard.style` function.
- * @property showNoteNames Display the note names or not.
+ * @property showNoteNames Display the note names.
  */
 export type UseFretboardParams = Partial<FretboardOptions> & {
   positions?: FretboardPosition[];
