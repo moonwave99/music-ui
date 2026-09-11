@@ -1,9 +1,10 @@
 import {
+  useEffect,
   useLayoutEffect,
   useRef,
   useImperativeHandle,
   type Ref,
-  RefObject,
+  type RefObject,
 } from "react";
 import { Piano, type PianoOptions } from "@music-ui/piano";
 import type { NoteInput } from "@music-ui/core";
@@ -68,7 +69,7 @@ export function usePiano<T extends HTMLElement>({
     pianoRef.current.render();
   }, [rest]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (notes) {
       pianoRef.current?.setNotes(notes, noteLabels);
     }
@@ -77,7 +78,7 @@ export function usePiano<T extends HTMLElement>({
     };
   }, [notes, noteLabels]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!playedNotes) {
       return;
     }

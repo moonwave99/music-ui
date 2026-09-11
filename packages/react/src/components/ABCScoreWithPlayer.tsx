@@ -1,4 +1,4 @@
-import { useState, useLayoutEffect, useCallback, useId } from "react";
+import { useState, useEffect, useCallback, useId } from "react";
 import type { ABCScoreProps } from "./ABCScore";
 import { OnABCClickParams, useABCScore } from "../hooks/useABCScore";
 import { usePlayer } from "../hooks/usePlayer";
@@ -84,7 +84,7 @@ export function ABCScoreWithPlayer({
     ...params,
   });
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     abcRef.current?.updatePosition(position);
     if (!params.highlightBars) {
       return;
