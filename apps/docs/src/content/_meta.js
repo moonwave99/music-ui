@@ -7,4 +7,9 @@ export default {
   vanilla: {
     display: "hidden",
   },
+  index: {
+    theme: {
+      toc: false,
+    },
+  },
 };

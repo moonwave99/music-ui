@@ -1,9 +1,8 @@
 export default {
   index: {
-    title: "Index",
     theme: {
       toc: false,
+      layout: "full",
     },
   },
-  fretboard: "The Fretboard class",
 };
