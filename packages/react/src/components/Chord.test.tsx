@@ -6,7 +6,6 @@ describe("Chord", () => {
     const input = "x32010";
     const { container } = render(<Chord input={input} chordName="C major" />);
     expect(container.querySelector(".chord")).toBeInTheDocument();
-    expect(screen.getByText("C major")).toBeVisible();
 
     input
       .split("")
@@ -23,12 +22,12 @@ describe("Chord", () => {
       });
   });
 
-  it("does not display the label if showName is false", () => {
+  it("displays the chord name if showName true", () => {
     const { container } = render(
-      <Chord input="x32010" chordName="C major" showName={false} />,
+      <Chord input="x32010" chordName="C major" showName />,
     );
     expect(container.querySelector(".chord")).toBeInTheDocument();
-    expect(screen.queryByText("C major")).not.toBeInTheDocument();
+    expect(screen.getByText("C major")).toBeVisible();
   });
 
   it("displays the open strings positions if includeOpenStrings is true", () => {
@@ -37,7 +36,6 @@ describe("Chord", () => {
       <Chord input={input} chordName="C major" includeOpenStrings />,
     );
     expect(container.querySelector(".chord")).toBeInTheDocument();
-    expect(screen.getByText("C major")).toBeVisible();
 
     input
       .split("")

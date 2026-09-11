@@ -781,7 +781,7 @@ export class Fretboard {
       .attr("stroke-width", (_d, i) => {
         switch (i) {
           case 0:
-            return nutWidth;
+            return positionOffset === 0 ? nutWidth : fretWidth;
           case MIDDLE_FRET + 1:
             return middleFretWidth;
           default:

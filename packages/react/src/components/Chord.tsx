@@ -37,7 +37,7 @@ export function Chord({
   chordName,
   width = DEFAULT_DIMENSIONS.chord,
   showFretNumbers = false,
-  showName = true,
+  showName = false,
   includeOpenStrings,
   barres,
   ...params
