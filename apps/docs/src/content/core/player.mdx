@@ -8,4 +8,40 @@ The `Player` class provides playback support to the `@music-ui` visualizations.
 
 ## Usage
 
-WIP
+<Callout type="info">
+
+Since the `Player` class has various dependencies, it's recommended to instantiate it via the [`playerFactory` function](/api/functions/_music-ui_core.playerFactory.html).
+
+</Callout>
+
+Let's assume we want to initialize multiple widget with playback support:
+
+```html
+<!-- some pianos -->
+<div data-piano data-notes="C4 E4 G4 B4"></div>
+<div data-piano data-notes="C4 Eb4 G4 Bb4"></div>
+<!-- some guitar chords -->
+<div data-chord data-input="x32010" data-chord-name="C major"></div>
+<div data-chord data-input="x02210" data-chord-name="A minor"></div>
+```
+
+We'll create one single `Player` at top level, and pass it down to the initializers like:
+
+```ts
+import { playerFactory } from "@music-ui/core";
+import { initPianoWithPlayer } from "@music-ui/piano";
+import { initChordsWithPlayer } from "@music-ui/fretboard";
+import "@music-ui/piano/styles.css";
+
+const player = playerFactory();
+
+initPianoWithPlayer({ player });
+initChordsWithPlayer({ player });
+```
+
+Output:
+
+<PianoWithPlayer notes="C4 E4 G4 B4" octaves={3} />
+<PianoWithPlayer notes="C4 Eb4 G4 Bb4" octaves={3} />
+<Chord input="x32010" chordName="C major" />
+<Chord input="x02210" chordName="A minor" />
