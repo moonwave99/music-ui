@@ -2,6 +2,7 @@ import * as Tone from "tone";
 import { Player, type PlayerOptions } from "./player";
 import {
   createSampler,
+  DEFAULT_INSTRUMENTS,
   DEFAULT_SAMPLER_OPTIONS,
   type CreateSamplerParams,
 } from "./lib";
@@ -27,7 +28,7 @@ export function playerFactory(
   { playerOptions, samplerOptions }: Partial<PlayerFactoryParams> = {
     samplerOptions: {
       ...DEFAULT_SAMPLER_OPTIONS,
-      instruments: ["acoustic_grand_piano", "acoustic_guitar_nylon"],
+      instruments: DEFAULT_INSTRUMENTS,
     },
   },
 ): Player {

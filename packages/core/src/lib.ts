@@ -8,9 +8,14 @@ export type CreateSamplerParams = {
   reverbDuration: number;
 };
 
+export const DEFAULT_INSTRUMENTS = [
+  "acoustic_grand_piano",
+  "acoustic_guitar_nylon",
+];
+
 export const DEFAULT_SAMPLER_OPTIONS = {
   reverbDuration: 2,
-  instrument: "acoustic_grand_piano",
+  instrument: DEFAULT_INSTRUMENTS[0],
   baseUrl:
     "https://cdn.jsdelivr.net/gh/gleitz/midi-js-soundfonts@master/FluidR3_GM",
 } as const;
