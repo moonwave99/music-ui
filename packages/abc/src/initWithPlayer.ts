@@ -87,6 +87,7 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
         abcScore.highlightBar("0:0:0");
       }
 
+      player.on("stop", reset);
       player.on("finished", reset);
       player.on("progress", ({ activeId, position, playedNotes }) => {
         if (activeId !== id) {

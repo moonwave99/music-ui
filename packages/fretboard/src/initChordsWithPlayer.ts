@@ -65,12 +65,15 @@ export function initChordsWithPlayer<T extends HTMLElement>(
       id,
     });
 
-    player.on("finished", () => {
+    function reset() {
       resetButtons();
       fretboard.style({
         fill: DEFAULT_COLORS.positionFillColor,
       });
-    });
+    }
+
+    player.on("stop", reset);
+    player.on("finished", reset);
     player.on("progress", ({ activeId, playedNotes }) => {
       disableButtons();
       if (activeId !== id || !playedNotes.length) {
