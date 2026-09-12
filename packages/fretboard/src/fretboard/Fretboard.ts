@@ -12,7 +12,11 @@ import {
   getBounds,
 } from "./utils";
 
-import { parseChord, type ParseChordParams } from "../chords/chords";
+import {
+  parseBarres,
+  parseChord,
+  type ParseChordParams,
+} from "../chords/chords";
 
 import {
   MIDDLE_FRET,
@@ -82,8 +86,10 @@ export type Barre = {
   stringTo?: number;
 };
 
+export type BarreInput = string | Barre | Barre[];
+
 export type RenderChordParams = Omit<ParseChordParams, "system"> & {
-  barres?: Barre | Barre[];
+  barres?: BarreInput;
 };
 
 type MuteStringsParams = {
@@ -516,7 +522,7 @@ export class Fretboard {
     });
     this.setPositions(positions);
     if (barres) {
-      this.renderBarres(Array.isArray(barres) ? barres : [barres]);
+      this.renderBarres(barres);
     }
     this.render();
     this.muteStrings({ strings });
@@ -660,8 +666,16 @@ export class Fretboard {
     return offset;
   }
 
-  private renderBarres(barres: Barre[]): void {
+  private renderBarres(input: BarreInput): void {
     const { wrapper, strings, options } = this;
+
+    let barres;
+
+    if (typeof input === "string") {
+      barres = parseBarres(input);
+    } else {
+      barres = Array.isArray(input) ? input : [input];
+    }
 
     const normalizedBarres = barres.map(
       ({ fret, stringFrom, stringTo }: Barre) => ({

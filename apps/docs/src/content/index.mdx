@@ -38,11 +38,36 @@ G,DB,D G,DB,D A,DCD | G,DB,D G,DB,D G,DB,D | \
 
 ## Chord diagrams
 
-<VanillaChordsWithPlayer />
+<div className="chords">
+  <ChordWithPlayer
+    input="x32010"
+    chordName="C major"
+    showName
+    showFretNumbers
+    includeOpenStrings
+  />
+  <ChordWithPlayer
+    input="x5454x"
+    chordName="D7b9"
+    showName
+    crop
+    showFretNumbers
+    showNoteNames
+  />
+  <ChordWithPlayer
+    input="131244"
+    chordName="F7#9"
+    showName
+    crop
+    showFretNumbers
+    showNoteNames
+    barres="1:6:4,4:2"
+  />
+</div>
 
-[See JavaScript](/javascript/fretboard-diagrams/chord-diagrams) - [See React](/react/fretboard-diagrams/chord)
+[See JavaScript](/javascript/fretboard-diagrams/chord-diagrams) - [See React](/react/fretboard-diagrams/chord-with-player)
 
-## Pianos
+## Piano keyboards
 
 <PianoWithPlayer
   showOctaves

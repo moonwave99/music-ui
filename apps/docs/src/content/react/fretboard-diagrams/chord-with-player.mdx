@@ -1,0 +1,90 @@
+# ChordWithPlayer
+
+The `<ChordWithPlayer>` React component adds playback functionality to the [`<Chord>` component](/react/fretboard-diagrams/chord).
+
+## Installation
+
+<Installation packageName="@music-ui/core @music-ui/react" />
+
+## Usage
+
+The following code renders a chord with the passed input and the playback buttons:
+
+<Callout type="warning">
+Wrap your app in a `<PlayerProvider>` if you want to use playback features.  
+See the [`Player` page](/core/player) to know about the setup.
+</Callout>
+
+```tsx
+import { playerFactory } from "@music-ui/core";
+import { ChordWithPlayer, PlayerProvider } from "@music-ui/react";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <main>
+        <h1>My App</h1>
+        {/* rest of your app */}
+        <ChordWithPlayer input="x32010" includeOpenStrings />
+      </main>
+    </PlayerProvider>
+  );
+}
+```
+
+Output:
+
+<ChordWithPlayer input="x32010" includeOpenStrings />
+
+You can render multiple chords, each with independent playback feature:
+
+```tsx
+import { playerFactory } from "@music-ui/core";
+import { ChordWithPlayer, PlayerProvider } from "@music-ui/react";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <ChordWithPlayer input="x32010" showNoteNames includeOpenStrings />
+      <ChordWithPlayer
+        input="133111"
+        chordName="F minor"
+        showNoteNames
+        barres="1"
+      />
+    </PlayerProvider>
+  );
+}
+```
+
+<div className="chords">
+  <ChordWithPlayer input="x32010" includeOpenStrings />
+  <ChordWithPlayer
+    input="133111"
+    chordName="F minor"
+    showNoteNames
+    barres="1"
+  />
+</div>
+
+## Component props
+
+In addition to the [`Chord` component props](/react/fretboard-diagrams/chord#component-props), the component accepts the following props:
+
+| Name              | Type     | Default Value           | Description                        |
+| ----------------- | -------- | ----------------------- | ---------------------------------- |
+| `playedNoteColor` | `string` | `#ff636c`               | The played note color              |
+| `instrument`      | `string` | `acoustic_guitar_nylon` | The playback instrument            |
+| `playLabel`       | `string` | Play                    | The playback button label          |
+| `arpeggioLabel`   | `string` | Arpeggio                | The arpeggio playback button label |
+| `arpeggioSpeed`   | `number` | 120                     | The arpeggio playback tempo        |
+
+<Callout type="info">
+  Check [the complete `ChordWithPlayer` component
+  reference](/api/functions/_music-ui_react.ChordWithPlayer.html) for more
+  details.
+</Callout>

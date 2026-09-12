@@ -315,6 +315,15 @@ test("Fretboard renderChord() - barres", () => {
   expect(svg.querySelectorAll(".barres rect").length).toBe(1);
 });
 
+test("Fretboard renderChord() - barres shorthand", () => {
+  const fretboard = new Fretboard();
+  fretboard.renderChord({ input: "131244", barres: "1:6:4,4:2" });
+
+  const svg = document.querySelector("#fretboard svg")!;
+
+  expect(svg.querySelectorAll(".barres rect").length).toBe(2);
+});
+
 test("Fretboard renderChord() - multiple barres", () => {
   const fretboard = new Fretboard();
   fretboard.renderChord({

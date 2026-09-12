@@ -7,6 +7,7 @@ export { VanillaChordsWithPlayer } from "./VanillaChordsWithPlayer";
 
 export {
   Chord,
+  ChordWithPlayer,
   Scale,
   Fretboard,
   Piano,

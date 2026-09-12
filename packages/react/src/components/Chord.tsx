@@ -1,7 +1,7 @@
 import {
   DEFAULT_DIMENSIONS,
   getChordFretSpan,
-  type Barre,
+  type BarreInput,
 } from "@music-ui/fretboard";
 import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
 
@@ -25,7 +25,7 @@ export type ChordProps = Omit<
   chordName?: string;
   showName?: boolean;
   includeOpenStrings?: boolean;
-  barres?: Barre | Barre[];
+  barres?: BarreInput;
 };
 
 /**

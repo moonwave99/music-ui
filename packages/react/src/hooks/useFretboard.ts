@@ -27,9 +27,11 @@ export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
 /**
  * Properties exposed by the `useFretboard` hook.
  * @property ref Reference to the `HTMLElement` where the fretboard will be rendered.
+ * @property fretboardRef Reference to the `Fretboard` instance.
  */
 export type UseFretboard<T extends HTMLElement> = {
   ref: RefObject<T | null>;
+  fretboardRef: RefObject<Fretboard | null>;
 };
 
 /**
@@ -83,5 +85,5 @@ export function useFretboard<T extends HTMLElement>({
     });
   }, [style, showNoteNames]);
 
-  return { ref };
+  return { ref, fretboardRef };
 }
