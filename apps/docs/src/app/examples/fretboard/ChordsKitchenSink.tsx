@@ -18,7 +18,6 @@ const chords = [
     showName: true,
     crop: true,
     showFretNumbers: true,
-    includeOpenStrings: true,
     showNoteNames: true,
   },
   {
@@ -27,7 +26,6 @@ const chords = [
     showName: true,
     crop: true,
     showFretNumbers: true,
-    includeOpenStrings: true,
     showNoteNames: true,
     barres: "1:6:4,4:2",
   },

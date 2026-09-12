@@ -1,0 +1,83 @@
+import { ChordsKitchenSink } from "../../../app/examples/fretboard/ChordsKitchenSink";
+
+# Usage with Player
+
+Here you can find the instructions to add playback support to your rendered fretboard diagrams.
+
+## Installation
+
+<Installation packageName="@music-ui/core @music-ui/fretboard" />
+
+<Callout type="info">
+  See the [`Player` page](/core/player) to know about the setup.
+</Callout>
+
+## Chords playback
+
+The `@music-ui/fretboard` package exports an `initChordsWithPlayer` function.
+
+By default it selects all the `[data-chord]` elements, and expects them to have the following children:
+
+- an element where **the fretboard** will be rendered, with the `.fretboard` class;
+- an element where **the playback controls** will be rendered, with the `.controls` class.
+
+```html
+<div data-chord>
+  <div
+    class="fretboard"
+    data-input="x32010"
+    data-chord-name="C major"
+    data-include-open-strings
+    data-show-note-names
+  ></div>
+  <div class="controls"></div>
+</div>
+<div data-chord>
+  <div
+    class="fretboard"
+    data-input="x5454x"
+    data-chord-name="D7b9"
+    data-crop
+    data-show-fret-numbers
+    data-show-note-names
+  ></div>
+  <div class="controls"></div>
+</div>
+<div data-chord>
+  <div
+    class="fretboard"
+    data-input="131244"
+    data-chord-name="F7#9"
+    data-barres="1:6:4,4:2"
+    data-show-fret-numbers
+    data-show-note-names
+  ></div>
+  <div class="controls"></div>
+</div>
+```
+
+<Callout type="warning">
+  As opposed to the [`initChords`
+  function](/javascript/fretboard-diagrams/chord-diagrams#the-initchords-function),
+  the data attributes are read from the `.fretboard` inner element **and not**
+  from the parent (`[data-chord]` in this case).
+</Callout>
+
+Setup code:
+
+```ts
+import { playerFactory } from "@music-ui/core";
+import { initChordsWithPlayer } from "@music-ui/fretboard";
+
+const player = playerFactory();
+
+initChordsWithPlayer({ player });
+```
+
+Output:
+
+<ChordsKitchenSink withPlayer />
+
+### Render options
+
+For a list of supported data attributes, [see the `initWithChord` docs](/javascript/fretboard-diagrams/chord-diagrams#the-initchords-function).
