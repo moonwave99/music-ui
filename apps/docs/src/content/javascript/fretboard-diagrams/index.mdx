@@ -1,9 +1,40 @@
-# Fretboard
+import { ScaleKitchenSink } from "../../../app/examples/fretboard/ScaleKitchenSink";
+import { ChordsKitchenSink } from "../../../app/examples/fretboard/ChordsKitchenSink";
 
-The `@music-ui/fretboard` package provide various ways to render fretboard diagrams:
+# Fretboard Diagrams
 
-- [the `Fretboard` class](/javascript/fretboard/fretboard): full control, more configuration needed.
+The `@music-ui/fretboard` package provide various ways to render fretboard diagrams.
 
 ## Installation
 
 <Installation packageName="@music-ui/fretboard" />
+
+## Render Scale diagrams
+
+<ScaleKitchenSink />
+
+The `Fretboard` class provides a handy `renderScale` method for that.
+
+[See Scale diagrams docs](/javascript/fretboard-diagrams/scale-diagrams)
+
+## Render Chord diagrams
+
+<ChordsKitchenSink />
+
+The `Fretboard` class has a `renderChord` method as well.
+
+[See Chord diagrams docs](/javascript/fretboard-diagrams/chord-diagrams)
+
+## Free positions
+
+<Fretboard
+  positions={[
+    { string: 5, fret: 3 },
+    { string: 4, fret: 5 },
+    { string: 3, fret: 7 },
+  ]}
+/>
+
+Want to have full control on what to render?
+
+[See the `Fretboard` class docs](/javascript/fretboard-diagrams/fretboard)

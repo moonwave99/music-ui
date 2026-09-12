@@ -3,6 +3,7 @@ title: Index
 ---
 
 import { ScaleKitchenSink } from "../app/examples/fretboard/ScaleKitchenSink";
+import { ChordsKitchenSink } from "../app/examples/fretboard/ChordsKitchenSink";
 
 # Music UI
 
@@ -30,7 +31,7 @@ G,DB,D G,DB,D A,DCD | G,DB,D G,DB,D G,DB,D | \
 
 [See JavaScript](/javascript/music-notation) - [See React](/react/music-notation/abc-score)
 
-## Fretboard
+## Fretboard diagrams
 
 <ScaleKitchenSink />
 
@@ -38,32 +39,7 @@ G,DB,D G,DB,D A,DCD | G,DB,D G,DB,D G,DB,D | \
 
 ## Chord diagrams
 
-<div className="chords">
-  <ChordWithPlayer
-    input="x32010"
-    chordName="C major"
-    showName
-    showFretNumbers
-    includeOpenStrings
-  />
-  <ChordWithPlayer
-    input="x5454x"
-    chordName="D7b9"
-    showName
-    crop
-    showFretNumbers
-    showNoteNames
-  />
-  <ChordWithPlayer
-    input="131244"
-    chordName="F7#9"
-    showName
-    crop
-    showFretNumbers
-    showNoteNames
-    barres="1:6:4,4:2"
-  />
-</div>
+<ChordsKitchenSink withPlayer/>
 
 [See JavaScript](/javascript/fretboard-diagrams/chord-diagrams) - [See React](/react/fretboard-diagrams/chord-with-player)
 

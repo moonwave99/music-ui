@@ -2,6 +2,43 @@
 title: Index
 ---
 
+import { ScaleKitchenSink } from "../../app/examples/fretboard/ScaleKitchenSink";
+
 # Music UI - JavaScript
 
 A collection of music visualization tools.
+
+## Music notation
+
+<ABCScoreWithPlayer highlightBars>{`CDEF GABc|cBAGFEDC|`}</ABCScoreWithPlayer>
+
+### Installation
+
+<Installation packageName="@music-ui/abc" />
+
+[See Music notation documentation](/javascript/music-notation)
+
+## Fretboard diagrams
+
+<ScaleKitchenSink />
+
+### Installation
+
+<Installation packageName="@music-ui/fretboard" />
+
+[See Fretboard diagrams documentation](/javascript/fretboard-diagrams)
+
+## Piano keyboard
+
+<PianoWithPlayer
+  notes="C4 E4 G4 B4"
+  octaves={3}
+  description="Cmaj7"
+  showOctaves
+/>
+
+### Installation
+
+<Installation packageName="@music-ui/piano" />
+
+[See Piano keyboard documentation](/javascript/piano-keyboard)
