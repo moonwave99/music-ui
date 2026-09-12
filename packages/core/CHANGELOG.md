@@ -1,5 +1,11 @@
 # @music-ui/core
 
+## 0.15.0
+
+### Minor Changes
+
+- 79b9fc4: Add fretboard components
+
 ## 0.14.0
 
 ### Minor Changes

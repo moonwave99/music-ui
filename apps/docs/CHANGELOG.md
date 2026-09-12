@@ -1,5 +1,16 @@
 # docs
 
+## 0.1.16
+
+### Patch Changes
+
+- Updated dependencies [79b9fc4]
+  - @music-ui/abc@0.15.0
+  - @music-ui/core@0.15.0
+  - @music-ui/fretboard@0.15.0
+  - @music-ui/piano@0.15.0
+  - @music-ui/react@0.15.0
+
 ## 0.1.15
 
 ### Patch Changes

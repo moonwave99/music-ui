@@ -1,5 +1,19 @@
 # @music-ui/react
 
+## 0.15.0
+
+### Minor Changes
+
+- 79b9fc4: Add fretboard components
+
+### Patch Changes
+
+- Updated dependencies [79b9fc4]
+  - @music-ui/abc@0.15.0
+  - @music-ui/core@0.15.0
+  - @music-ui/fretboard@0.15.0
+  - @music-ui/piano@0.15.0
+
 ## 0.14.1
 
 ### Patch Changes
