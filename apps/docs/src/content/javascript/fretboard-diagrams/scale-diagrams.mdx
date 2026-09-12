@@ -2,6 +2,8 @@
 
 Displaying scale information is a common use case for any fretboard library.
 
+## Rendering scale positions with `Fretboard.renderScale`
+
 Albeit passing all positions is always an option, calling `Fretboard.renderScale` can save you some time:
 
 ```ts
@@ -34,9 +36,7 @@ const fretboard = new Fretboard({
 fretboard.renderScale({ root: "C", type: "major" });
 fretboard.style({
   fill: ({ degree }) =>
-    degree !== 1
-      ? DEFAULT_COLORS.positionFillColor
-      : DEFAULT_COLORS.highlightFill,
+    degree !== 1 ? DEFAULT_COLORS.positionFill : DEFAULT_COLORS.highlightFill,
 });
 ```
 
@@ -67,9 +67,7 @@ fretboard.renderScale({
 
 fretboard.style({
   fill: ({ degree }) =>
-    degree !== 1
-      ? DEFAULT_COLORS.positionFillColor
-      : DEFAULT_COLORS.highlightFill,
+    degree !== 1 ? DEFAULT_COLORS.positionFill : DEFAULT_COLORS.highlightFill,
 });
 ```
 

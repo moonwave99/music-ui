@@ -68,7 +68,7 @@ export function initChordsWithPlayer<T extends HTMLElement>(
     function reset() {
       resetButtons();
       fretboard.style({
-        fill: DEFAULT_COLORS.positionFillColor,
+        fill: DEFAULT_COLORS.positionFill,
       });
     }
 
@@ -85,7 +85,7 @@ export function initChordsWithPlayer<T extends HTMLElement>(
             ? playedNoteColor
             : areNotesEquivalent(noteWithOctave!, playedNotes.at(0)!.at(0)!)
               ? playedNoteColor
-              : DEFAULT_COLORS.positionFillColor,
+              : DEFAULT_COLORS.positionFill,
       });
     });
   });

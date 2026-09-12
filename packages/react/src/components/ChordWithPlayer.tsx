@@ -68,7 +68,7 @@ export function ChordWithPlayer({
       fill: ({ noteWithOctave }) =>
         notes.some((x) => areNotesEquivalent(x, noteWithOctave!))
           ? playedNoteColor
-          : DEFAULT_COLORS.positionFillColor,
+          : DEFAULT_COLORS.positionFill,
     });
   }, [playedNotes, playedNoteColor, fretboardRef]);
 

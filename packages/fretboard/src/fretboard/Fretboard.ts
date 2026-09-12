@@ -134,7 +134,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   positionStrokeColor: DEFAULT_COLORS.positionStroke,
   positionStrokeWidth: 2 * DEFAULT_DIMENSIONS.line,
   positionTextSize: DEFAULT_FONT_SIZE,
-  positionFillColor: DEFAULT_COLORS.positionFillColor,
+  positionFill: DEFAULT_COLORS.positionFill,
   positionText: () => "",
   disabledOpacity: 0.9,
   showFretNumbers: true,
@@ -206,7 +206,7 @@ export type Point = {
  * @property positionSize The fretboard position size
  * @property positionStrokeColor The fretboard position stroke color
  * @property positionStrokeWidth The fretboard position stroke width
- * @property positionFillColor The fretboard position fill color
+ * @property positionFill The fretboard position fill color
  * @property positionTextSize The fretboard position text size
  * @property positionText The fretboard position text getter
  * @property disabledOpacity The opacity (0-1) of the disabled frets
@@ -248,7 +248,7 @@ export type FretboardOptions = {
   positionSize: number;
   positionStrokeColor: string;
   positionStrokeWidth: number;
-  positionFillColor: string;
+  positionFill: string;
   positionTextSize: number;
   positionText: ValueFn<BaseType, FretboardPosition, string>;
   disabledOpacity: number;
@@ -351,7 +351,7 @@ export class Fretboard {
       font,
       positionStrokeColor,
       positionStrokeWidth,
-      positionFillColor,
+      positionFill,
       positionSize,
       positionText,
       positionTextSize,
@@ -402,7 +402,7 @@ export class Fretboard {
       .attr("r", positionSize * 0.5)
       .attr("stroke", positionStrokeColor)
       .attr("stroke-width", positionStrokeWidth)
-      .attr("fill", positionFillColor);
+      .attr("fill", positionFill);
 
     positionNodes
       .append("text")

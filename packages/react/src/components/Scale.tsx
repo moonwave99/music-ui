@@ -36,7 +36,7 @@ export function Scale({
 }: ScaleProps) {
   function fill({ degree }: FretboardPosition) {
     if (!highlightRoots || degree !== 1) {
-      return DEFAULT_COLORS.positionFillColor;
+      return DEFAULT_COLORS.positionFill;
     }
     return DEFAULT_COLORS.highlightFill;
   }
