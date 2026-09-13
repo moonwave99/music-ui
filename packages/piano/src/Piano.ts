@@ -1,8 +1,8 @@
-import { kebabCase } from "change-case";
 import {
   ensureSelection,
   parseNote,
   getChromaticScaleAtOctave,
+  getHTMLClass,
   type NoteInput,
   type ElementOrSelector,
   type Note,
@@ -203,7 +203,7 @@ export class Piano {
         noteWithOctave,
       }).forEach(([key, value]) => {
         span.dataset[key] = `${value}`;
-        span.classList.add(`${kebabCase(key)}-${value}`);
+        span.classList.add(getHTMLClass({ key, value }));
       });
 
       overFlowWrapper.append(span);

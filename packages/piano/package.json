@@ -49,7 +49,6 @@
     "vitest": "^4.1.10"
   },
   "dependencies": {
-    "@music-ui/core": "workspace:*",
-    "change-case": "^5.4.4"
+    "@music-ui/core": "workspace:*"
   }
 }

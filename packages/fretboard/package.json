@@ -56,7 +56,6 @@
     "@tonaljs/mode": "^4.9.2",
     "@tonaljs/note": "^4.12.1",
     "@tonaljs/scale": "^4.13.4",
-    "change-case": "^5.4.4",
     "d3-selection": "^3.0.0"
   }
 }

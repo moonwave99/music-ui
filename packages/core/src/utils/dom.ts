@@ -1,4 +1,6 @@
 import { ElementOrSelector } from "../types";
+import { ACCIDENTAL_MAP } from "./music";
+import { kebabCase } from "change-case";
 
 /**
  * Normalizes a selection (string, Element, NodeList) to a fixed state (jQuery <3).
@@ -111,4 +113,32 @@ export function ensureElements({
     output[key] = element;
   });
   return output;
+}
+
+type GetHTMLClassParams = {
+  prefix?: string;
+  key: string;
+  value: string | number | boolean;
+};
+
+export function getHTMLClass({ prefix, key, value }: GetHTMLClassParams) {
+  return [prefix, kebabCase(key), valueRenderer(key, value)]
+    .filter(Boolean)
+    .join("-");
+}
+
+function valueRenderer(key: string, value: string | number | boolean): string {
+  if (typeof value === "boolean") {
+    return !value ? "false" : "";
+  }
+  if (key === "note") {
+    for (let i = 0; i < ACCIDENTAL_MAP.length; i++) {
+      const { symbol, replacement } = ACCIDENTAL_MAP[i]!;
+      if (`${value}`.endsWith(symbol)) {
+        return `${`${value}`[0]}-${replacement}`;
+      }
+    }
+    return `${value}`;
+  }
+  return `${value}`;
 }

@@ -376,7 +376,7 @@ export class Fretboard {
       .filter(({ fret }) => fret >= 0)
       .append("g")
       .attr("class", (position) =>
-        [cssClasses.position, getPositionClasses(position, "")].join(" "),
+        [cssClasses.position, getPositionClasses(position)].join(" "),
       )
       .attr("opacity", ({ disabled }) => (disabled ? disabledOpacity : 1));
 

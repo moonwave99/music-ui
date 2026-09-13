@@ -1,5 +1,4 @@
-import { kebabCase } from "change-case";
-import { ACCIDENTAL_MAP } from "@music-ui/core";
+import { getHTMLClass } from "@music-ui/core";
 import type {
   BareFretboardPosition,
   FretboardOptions,
@@ -72,45 +71,19 @@ export function generateFrets({
   return frets.map((x) => (x / frets[frets.length - 1]!) * 100);
 }
 
-function valueRenderer(key: string, value: string | number | boolean): string {
-  if (typeof value === "boolean") {
-    return !value ? "false" : "";
-  }
-  if (key === "note") {
-    for (let i = 0; i < ACCIDENTAL_MAP.length; i++) {
-      const { symbol, replacement } = ACCIDENTAL_MAP[i]!;
-      if (`${value}`.endsWith(symbol)) {
-        return `${`${value}`[0]}-${replacement}`;
-      }
-    }
-    return `${value}`;
-  }
-  return `${value}`;
-}
-
-function classRenderer(
-  prefix: string,
-  key: string,
-  value: string | number | boolean,
-) {
-  return ["position", prefix, kebabCase(key), valueRenderer(key, value)]
-    .filter(Boolean)
-    .join("-");
-}
-
-export function getPositionClasses(position: FretboardPosition, prefix = "") {
+export function getPositionClasses(position: FretboardPosition) {
   return [
-    prefix ? `position-${prefix}` : null,
     `position-id-s${position.string}-f${position.fret}`,
     ...Object.entries(position).map(([key, value]) => {
-      let valArray;
-      if (!(value instanceof Array)) {
-        valArray = [value];
-      } else {
-        valArray = value;
-      }
+      const valArray = !(value instanceof Array) ? [value] : value;
       return valArray
-        .map((value) => classRenderer(prefix, key, value))
+        .map((value) =>
+          getHTMLClass({
+            prefix: "position",
+            key,
+            value,
+          }),
+        )
         .join(" ");
     }),
   ]
