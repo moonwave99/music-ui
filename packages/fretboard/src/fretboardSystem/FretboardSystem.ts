@@ -1,6 +1,7 @@
 import { get as getNote, chroma as getChroma } from "@tonaljs/note";
 import { distance, semitones } from "@tonaljs/interval";
 import { get as getScale } from "@tonaljs/scale";
+import { parseNote } from "@music-ui/core";
 
 import { Systems, getBox, getModeFromScaleType } from "./systems/systems";
 import {
@@ -9,7 +10,6 @@ import {
   Tuning,
 } from "../fretboard/Fretboard";
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
-import { parseNote } from "@music-ui/core";
 
 const MIN_FRET_COUNT = 12;
 
@@ -41,9 +41,7 @@ export class FretboardSystem {
   private baseOctave: number;
   constructor(params?: FretboardSystemParams) {
     Object.assign(this, params);
-    if (this.fretCount < MIN_FRET_COUNT) {
-      this.fretCount = MIN_FRET_COUNT;
-    }
+    this.fretCount = Math.max(this.fretCount, MIN_FRET_COUNT);
     this.positions = [];
     const { octave: baseOctave } = parseNote(this.tuning[0]!);
     this.baseOctave = baseOctave;
@@ -73,13 +71,12 @@ export class FretboardSystem {
     const { note: root } = parseNote(paramsRoot);
     const scaleName = `${root} ${type}`;
     const { notes, empty, intervals } = getScale(scaleName);
-
     if (empty) {
       throw new Error(`Cannot find scale: ${scaleName}`);
     }
 
     const mode = getModeFromScaleType(type);
-    const boxPositions: FretboardPosition[] = box
+    const boxPositions: BareFretboardPosition[] = box
       ? this.adjustOctave(getBox({ root, mode, ...box }), paramsRoot)
       : [];
 
@@ -110,7 +107,7 @@ export class FretboardSystem {
       });
   }
   private adjustOctave(
-    positions: FretboardPosition[],
+    positions: BareFretboardPosition[],
     root: string,
   ): BareFretboardPosition[] {
     const { tuning } = this;
@@ -139,7 +136,7 @@ export class FretboardSystem {
 
 export function isPositionInBox(
   { fret, string }: BareFretboardPosition,
-  systemPositions: FretboardPosition[],
+  systemPositions: BareFretboardPosition[],
 ) {
   return !!systemPositions.find((x) => x.fret === fret && x.string === string);
 }

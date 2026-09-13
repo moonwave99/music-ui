@@ -34,7 +34,6 @@ export function PianoWithPlayer({
   const id = props.id || componentId;
   const { notes = [], ...rest } = props;
   const { play, playerStatus, playedNotes } = usePlayer({ id });
-
   return (
     <figure className={className}>
       <Piano playedNotes={joinVoices(playedNotes)} notes={notes} {...rest} />

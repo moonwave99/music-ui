@@ -1,7 +1,11 @@
 // @vitest-environment jsdom
 
 import { test, expect, assert } from "vitest";
-import { Fretboard, DEFAULT_FRETBOARD_OPTIONS } from "./Fretboard";
+import {
+  Fretboard,
+  DEFAULT_FRETBOARD_OPTIONS,
+  FretboardPosition,
+} from "./Fretboard";
 import { FretboardSystem } from "../fretboardSystem/FretboardSystem";
 import { GUITAR_TUNINGS } from "../constants";
 
@@ -176,7 +180,9 @@ test("Fretboard render twice", () => {
 
 test("Fretboard render position less than fret count", () => {
   const fretboard = new Fretboard({ fretCount: 12 });
-  fretboard.setPositions([{ fret: 11, string: 1 }]).render();
+  fretboard
+    .setPositions([{ fret: 11, string: 1 }] as FretboardPosition[])
+    .render();
 
   const svg = document.querySelector("#fretboard svg")!;
 
@@ -185,7 +191,9 @@ test("Fretboard render position less than fret count", () => {
 
 test("Fretboard render position equal to fret count", () => {
   const fretboard = new Fretboard({ fretCount: 12 });
-  fretboard.setPositions([{ fret: 12, string: 1 }]).render();
+  fretboard
+    .setPositions([{ fret: 12, string: 1 }] as FretboardPosition[])
+    .render();
 
   const svg = document.querySelector("#fretboard svg")!;
 
@@ -194,7 +202,9 @@ test("Fretboard render position equal to fret count", () => {
 
 test("Fretboard render position greater than fret count", () => {
   const fretboard = new Fretboard({ fretCount: 12 });
-  fretboard.setPositions([{ fret: 13, string: 1 }]).render();
+  fretboard
+    .setPositions([{ fret: 13, string: 1 }] as FretboardPosition[])
+    .render();
 
   const svg = document.querySelector("#fretboard svg")!;
 

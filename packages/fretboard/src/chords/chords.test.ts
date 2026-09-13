@@ -20,6 +20,7 @@ describe("parseChord", () => {
           note: "C",
           octave: 4,
           noteWithOctave: "C4",
+          midi: 60,
         },
         {
           string: 4,
@@ -28,6 +29,7 @@ describe("parseChord", () => {
           note: "E",
           octave: 3,
           noteWithOctave: "E3",
+          midi: 52,
         },
         {
           string: 5,
@@ -36,6 +38,7 @@ describe("parseChord", () => {
           note: "C",
           octave: 3,
           noteWithOctave: "C3",
+          midi: 48,
         },
       ],
       mutedStrings: [6],
@@ -59,6 +62,7 @@ describe("parseChord", () => {
           note: "E",
           octave: 4,
           noteWithOctave: "E4",
+          midi: 64,
         },
         {
           string: 2,
@@ -67,6 +71,7 @@ describe("parseChord", () => {
           note: "C",
           octave: 4,
           noteWithOctave: "C4",
+          midi: 60,
         },
         {
           string: 3,
@@ -75,6 +80,7 @@ describe("parseChord", () => {
           note: "G",
           octave: 3,
           noteWithOctave: "G3",
+          midi: 55,
         },
         {
           string: 4,
@@ -83,6 +89,7 @@ describe("parseChord", () => {
           note: "E",
           octave: 3,
           noteWithOctave: "E3",
+          midi: 52,
         },
         {
           string: 5,
@@ -91,6 +98,7 @@ describe("parseChord", () => {
           note: "C",
           octave: 3,
           noteWithOctave: "C3",
+          midi: 48,
         },
       ],
       mutedStrings: [6],
@@ -114,6 +122,7 @@ describe("parseChord", () => {
           note: "D",
           octave: 5,
           noteWithOctave: "D5",
+          midi: 74,
         },
         {
           string: 2,
@@ -122,6 +131,7 @@ describe("parseChord", () => {
           note: "Bb",
           octave: 4,
           noteWithOctave: "Bb4",
+          midi: 70,
         },
         {
           string: 3,
@@ -130,6 +140,7 @@ describe("parseChord", () => {
           note: "G",
           octave: 4,
           noteWithOctave: "G4",
+          midi: 67,
         },
         {
           string: 4,
@@ -138,6 +149,7 @@ describe("parseChord", () => {
           note: "D",
           octave: 4,
           noteWithOctave: "D4",
+          midi: 62,
         },
         {
           string: 5,
@@ -146,6 +158,7 @@ describe("parseChord", () => {
           note: "G",
           octave: 3,
           noteWithOctave: "G3",
+          midi: 55,
         },
       ],
       mutedStrings: [6],
@@ -169,6 +182,7 @@ describe("parseChord", () => {
           note: "Bb",
           octave: 4,
           noteWithOctave: "Bb4",
+          midi: 70,
         },
         {
           string: 3,
@@ -177,6 +191,7 @@ describe("parseChord", () => {
           note: "G",
           octave: 4,
           noteWithOctave: "G4",
+          midi: 67,
         },
         {
           string: 4,
@@ -185,6 +200,7 @@ describe("parseChord", () => {
           note: "D",
           octave: 4,
           noteWithOctave: "D4",
+          midi: 62,
         },
         {
           string: 5,
@@ -193,6 +209,7 @@ describe("parseChord", () => {
           note: "G",
           octave: 3,
           noteWithOctave: "G3",
+          midi: 55,
         },
       ],
       mutedStrings: [6],

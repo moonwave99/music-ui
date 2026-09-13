@@ -64,3 +64,18 @@ export type NoteInput = string | string[];
  */
 export type ElementOrSelector<T extends HTMLElement> =
   NodeListOf<T> | T | string;
+
+/**
+ * @property note The note name
+ * @property octave The note octave
+ * @property noteWithOctave The note name with the octave
+ * @property chroma The note chroma
+ * @property midi The note midi code
+ */
+export type Note = {
+  note: string;
+  octave: number;
+  noteWithOctave: string;
+  chroma: number;
+  midi: number;
+};

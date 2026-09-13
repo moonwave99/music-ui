@@ -1,6 +1,5 @@
-import { get as getNote } from "@tonaljs/note";
 import type { NoteInput } from "@music-ui/core";
-import { type ScaleNote, GroupedInput } from "./Piano";
+import { type GroupedInput } from "./Piano";
 
 /**
  * Parses the note input and groups it by voice.
@@ -59,31 +58,4 @@ export function normalizeInput(input: NoteInput) {
   return Array.isArray(input)
     ? input
     : input.replaceAll(",", "").split(" ").filter(Boolean);
-}
-
-type ParsedNote = Pick<ScaleNote, "chroma" | "note"> & {
-  octave: number;
-  midi: number;
-};
-
-/**
- * Parses an input string and returns the corresponding note information.
- * @param input The string to be parsed
- * @param defaultOctave The default octave in case the input is missing the information
- * @returns
- */
-export function parseNote(input: string, defaultOctave: number): ParsedNote {
-  let octave = defaultOctave;
-  const maybeOctave = input.slice(-1);
-  if (Number.isInteger(+maybeOctave)) {
-    octave = +maybeOctave;
-    input = input.slice(0, -1);
-  }
-  const { chroma, pc: note, oct, midi } = getNote(`${input}${octave}`);
-  return {
-    chroma,
-    note,
-    octave: oct || 0,
-    midi: midi || 0,
-  };
 }

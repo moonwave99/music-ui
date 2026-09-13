@@ -1,5 +1,5 @@
 import { select, Selection, ValueFn, BaseType } from "d3-selection";
-import { ensureSelection, type ElementOrSelector } from "@music-ui/core";
+import { ensureSelection, type ElementOrSelector, Note } from "@music-ui/core";
 
 import {
   generateStrings,
@@ -52,27 +52,21 @@ export type BareFretboardPosition = {
 
 /**
  * Extends the {@link BareFretboardPosition} with musical attributes.
- * @property note The note name (e.g. "C")
- * @property octave The note octave (e.g. 3)
  * @property noteWithOctave The note with octave (e.g. "C3")
  * @property octaveInScale The note octave inside the scale system
  * @property interval The note interval from the root (e.g. "P5")
  * @property degree The note degree inside the scale (e.g. 5)
- * @property chroma The note chroma (0-11)
  * @property inBox Tells if the note is inside the box system
  * @property disabled Need to display dimmed positions
  */
-export type FretboardPosition = BareFretboardPosition & {
-  note?: string;
-  octave?: number;
-  noteWithOctave?: string;
-  octaveInScale?: number;
-  interval?: string;
-  degree?: number;
-  chroma?: number;
-  inBox?: boolean;
-  disabled?: boolean;
-} & Record<string, string | number | boolean | string[] | number[]>;
+export type FretboardPosition = Partial<Note> &
+  BareFretboardPosition & {
+    octaveInScale?: number;
+    interval?: string;
+    degree?: number;
+    inBox?: boolean;
+    disabled?: boolean;
+  } & Record<string, string | number | boolean | string[] | number[]>;
 
 /**
  * Defines a guitar barre position (i.e. a finger holding multiple strings at once).
@@ -573,7 +567,7 @@ export class Fretboard {
    * @returns The current Fretboard instance.
    */
   highlightAreas(
-    ...areas: [FretboardPosition, FretboardPosition][]
+    ...areas: [BareFretboardPosition, BareFretboardPosition][]
   ): Fretboard {
     const { wrapper, options } = this;
     const {

@@ -15,6 +15,8 @@ describe("toAbcNotation", () => {
   it("converts the input from scientific to abc notation", () => {
     expect(toAbcNotation(["C3", "E3", "G3"])).toBe("C, E, G,");
     expect(toAbcNotation("C3 E3 G3")).toBe("C, E, G,");
+    expect(toAbcNotation("C3, E3 G3")).toBe("C, E, G,");
+    expect(toAbcNotation("C3 E3, G3")).toBe("C, E, G,");
   });
 });
 

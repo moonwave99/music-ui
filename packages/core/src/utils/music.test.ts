@@ -1,14 +1,55 @@
 import { describe, it, expect, assert } from "vitest";
 
-import { getNoteFromChroma, areNotesEquivalent, parseNote } from "./music";
+import {
+  getNoteFromChroma,
+  areNotesEquivalent,
+  parseNote,
+  getChromaticScaleAtOctave,
+} from "./music";
+
+describe("getChromaticScaleAtOctave", () => {
+  it("returns the chromatic scale with all information for the given octave", () => {
+    expect(getChromaticScaleAtOctave(4)).toMatchSnapshot();
+  });
+});
 
 describe("getNoteFromChroma", () => {
   it("returns the note of the passed chroma", () => {
-    expect(getNoteFromChroma({ chroma: 0 })).toBe("C");
-    expect(getNoteFromChroma({ chroma: 3 })).toBe("D#");
-    expect(getNoteFromChroma({ chroma: 3, chordName: "C minor" })).toBe("Eb");
-    expect(getNoteFromChroma({ chroma: 1, chordName: "A7b9" })).toBe("C#");
-    expect(getNoteFromChroma({ chroma: 10, chordName: "A7b9" })).toBe("Bb");
+    expect(getNoteFromChroma({ chroma: 0 })).toEqual({
+      chroma: 0,
+      midi: 36,
+      note: "C",
+      noteWithOctave: "C2",
+      octave: 2,
+    });
+    expect(getNoteFromChroma({ chroma: 3 })).toEqual({
+      chroma: 3,
+      midi: 39,
+      note: "D#",
+      noteWithOctave: "D#2",
+      octave: 2,
+    });
+    expect(getNoteFromChroma({ chroma: 3, chordName: "C minor" })).toEqual({
+      chroma: 3,
+      midi: 39,
+      note: "Eb",
+      noteWithOctave: "Eb2",
+      octave: 2,
+    });
+    expect(getNoteFromChroma({ chroma: 1, chordName: "A7b9" })).toEqual({
+      chroma: 1,
+      midi: 37,
+      note: "C#",
+      noteWithOctave: "C#2",
+      octave: 2,
+    });
+    expect(getNoteFromChroma({ chroma: 10, chordName: "A7b9" })).toEqual({
+      chroma: 10,
+      midi: 46,
+      note: "Bb",
+      noteWithOctave: "Bb2",
+      octave: 2,
+    });
 
     [-1, 12].forEach((chroma) =>
       assert.throws(
@@ -39,9 +80,33 @@ describe("areNotesEquivalent", () => {
 
 describe("parseNote", () => {
   it("parses the given note literal", () => {
-    expect(parseNote("E")).toEqual({ note: "E", octave: 2 });
-    expect(parseNote("E4")).toEqual({ note: "E", octave: 4 });
-    expect(parseNote("Bb4")).toEqual({ note: "Bb", octave: 4 });
-    expect(parseNote("C#4")).toEqual({ note: "C#", octave: 4 });
+    expect(parseNote("E")).toEqual({
+      note: "E",
+      octave: 2,
+      noteWithOctave: "E2",
+      chroma: 4,
+      midi: 40,
+    });
+    expect(parseNote("E4")).toEqual({
+      note: "E",
+      octave: 4,
+      noteWithOctave: "E4",
+      chroma: 4,
+      midi: 64,
+    });
+    expect(parseNote("Bb4")).toEqual({
+      note: "Bb",
+      octave: 4,
+      noteWithOctave: "Bb4",
+      chroma: 10,
+      midi: 70,
+    });
+    expect(parseNote("C#4")).toEqual({
+      note: "C#",
+      octave: 4,
+      noteWithOctave: "C#4",
+      chroma: 1,
+      midi: 61,
+    });
   });
 });

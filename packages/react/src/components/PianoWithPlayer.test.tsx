@@ -40,7 +40,7 @@ describe("PianoWithPlayer", () => {
 
     notes.forEach((note) =>
       expect(
-        container.querySelector(`.note-with-octave-${note}`)?.classList,
+        container.querySelector(`[data-note-with-octave="${note}"]`)?.classList,
       ).toContain("key-played"),
     );
   });
@@ -65,7 +65,7 @@ describe("PianoWithPlayer", () => {
 
     notes.forEach((note) => {
       expect(
-        container.querySelector(`.note-with-octave-${note}`)?.classList,
+        container.querySelector(`[data-note-with-octave="${note}"]`)?.classList,
       ).toContain("key-played");
       act(() => playerParams.transport.playNext());
     });

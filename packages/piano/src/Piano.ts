@@ -1,31 +1,21 @@
-import { toMidi } from "@tonaljs/midi";
 import { kebabCase } from "change-case";
 import {
-  CHROMATIC_SCALE,
   ensureSelection,
+  parseNote,
+  getChromaticScaleAtOctave,
   type NoteInput,
   type ElementOrSelector,
+  type Note,
 } from "@music-ui/core";
-import { parseNote, normalizeInput, parseNoteInput } from "./lib";
+import { normalizeInput, parseNoteInput } from "./lib";
 
 /**
  * @property chroma The scientific pitch notation value of the pitch class (e.g. 0-11)
  * @property color The key color
  * @property note The pitch class of the note
  */
-export type ScaleNote = {
-  chroma: number;
+export type PianoNote = Note & {
   color: "black" | "white";
-  note: string;
-};
-
-/**
- * Extends the ScaleNote type with the octave number.
- *
- * @property octave The octave of the note
- */
-export type ScaleNoteWithOctave = ScaleNote & {
-  octave: number;
 };
 
 /**
@@ -176,7 +166,7 @@ export class Piano {
     this.clearPlayedNotes();
     normalizeInput(notes).forEach((note) =>
       this.element
-        ?.querySelector(`.midi-${toMidi(note)}`)
+        ?.querySelector(`[data-note-with-octave="${note}"]`)
         ?.classList.add(cssClasses.keyPlayed),
     );
     return this;
@@ -203,7 +193,7 @@ export class Piano {
     overFlowWrapper.classList.add(cssClasses.pianoWrapper);
     this.element.append(overFlowWrapper);
 
-    const createKey = (note: ScaleNoteWithOctave): void => {
+    const createKey = (note: Note): void => {
       const span = document.createElement("span");
       span.classList.add(cssClasses.key);
       const noteWithOctave = `${note.note}${note.octave}`;
@@ -211,7 +201,6 @@ export class Piano {
       Object.entries({
         ...note,
         noteWithOctave,
-        midi: toMidi(noteWithOctave),
       }).forEach(([key, value]) => {
         span.dataset[key] = `${value}`;
         span.classList.add(`${kebabCase(key)}-${value}`);
@@ -221,19 +210,10 @@ export class Piano {
     };
 
     Array.from({ length: octaves }, (_, octave) =>
-      CHROMATIC_SCALE.forEach((x) =>
-        createKey({
-          ...x,
-          octave: startOctave + octave,
-        }),
-      ),
+      getChromaticScaleAtOctave(startOctave + octave).forEach(createKey),
     );
-
     if (withFinalC) {
-      createKey({
-        ...(CHROMATIC_SCALE[0] as ScaleNote),
-        octave: startOctave + octaves,
-      });
+      createKey(getChromaticScaleAtOctave(startOctave + octaves).at(0)!);
     }
     this.rendered = true;
   }

@@ -67,16 +67,17 @@ export function parseChord({
           return memo;
         }
 
-        const note = getNoteFromChroma({
-          chroma: position.chroma,
-          chordName,
-        });
-
         return {
           ...memo,
           positions: [
             ...memo.positions,
-            { ...position, note, noteWithOctave: `${note}${position.octave}` },
+            {
+              ...position,
+              ...getNoteFromChroma({
+                ...position,
+                chordName,
+              }),
+            },
           ],
         };
       },

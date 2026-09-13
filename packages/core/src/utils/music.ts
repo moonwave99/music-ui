@@ -1,5 +1,7 @@
-import { enharmonic, chroma as getChroma } from "@tonaljs/note";
+import { enharmonic, chroma as getChroma, get as getNote } from "@tonaljs/note";
 import { get as getChord } from "@tonaljs/chord";
+import { toMidi } from "@tonaljs/midi";
+import type { Note } from "../types";
 
 export const ACCIDENTAL_MAP = [
   {
@@ -85,13 +87,18 @@ export const CHROMATIC_SCALE = [
 
 const DEFAULT_OCTAVE = 2;
 
-type NoteWithOctave = {
-  note: string;
-  octave: number;
-};
+export function getChromaticScaleAtOctave(octave: number) {
+  return CHROMATIC_SCALE.map((x) => ({
+    ...x,
+    octave,
+    noteWithOctave: `${x.note}${octave}`,
+    midi: toMidi(`${x.note}${octave}`)!,
+  }));
+}
 
 type GetNoteFromChromaParams = {
   chroma: number;
+  octave?: number;
   chordName?: string;
 };
 
@@ -107,6 +114,7 @@ type GetNoteFromChromaParams = {
 export function getNoteFromChroma({
   chroma,
   chordName = "",
+  octave = DEFAULT_OCTAVE,
 }: GetNoteFromChromaParams) {
   if (chroma < 0 || chroma > 11) {
     throw new Error(
@@ -115,10 +123,11 @@ export function getNoteFromChroma({
   }
   const { note } = CHROMATIC_SCALE[chroma]!;
   const chord = getChord(chordName);
+  let noteName: string = note;
   if (!chord.empty && !chord.notes.includes(note)) {
-    return enharmonic(note);
+    noteName = enharmonic(note);
   }
-  return note;
+  return parseNote(`${noteName}${octave}`);
 }
 
 /**
@@ -143,24 +152,30 @@ export function areNotesEquivalent(a: string, b: string) {
 
 /**
  * Extracts the note name and octave from a note literal.
- * @param note The note literal (e.g. "E3")
- * @returns The parsed information (e.g. `{ note: "E", octave: 3 }`)
+ * @param note The note literal (e.g. "E4")
+ * @example
+ * parseNote("E4") // returns { note: "E", octave: 4, chroma: 4, midi: 64 }
+ * @returns The parsed Note
  */
-export function parseNote(note: string): NoteWithOctave {
-  let octave = Number(note.slice(-1));
-  let parsedNote = note;
+export function parseNote(input: string, defaultOctave = DEFAULT_OCTAVE): Note {
+  let octave = Number(input.slice(-1));
+  let parsedNote = input;
   if (isNaN(octave)) {
-    octave = DEFAULT_OCTAVE;
+    octave = defaultOctave;
   } else {
-    parsedNote = note.slice(0, -1);
+    parsedNote = input.slice(0, -1);
   }
+  const { chroma, oct, midi } = getNote(`${parsedNote}${octave}`);
   return {
-    octave,
     note: parsedNote,
+    noteWithOctave: `${parsedNote}${oct!}`,
+    chroma,
+    octave: oct!,
+    midi: midi!,
   };
 }
 
-function getAdjustedEnharmonicsOctave({ note, octave }: NoteWithOctave) {
+function getAdjustedEnharmonicsOctave({ note, octave }: Note) {
   if (note === "B#") {
     return octave + 1;
   }

@@ -80,7 +80,6 @@ export function getPlaybackScore({
     getAbcInfo({ Q: bpm }),
     withPlaybackMode(input, playbackMode),
   ].join("\n");
-
   return {
     id,
     content,
@@ -101,7 +100,13 @@ export function getPlaybackScore({
  * @param input The note input in scientific pitch notation
  * @returns The corresponding abc notation output
  */
-export function toAbcNotation(input: NoteInput) {
+export function toAbcNotation(input: NoteInput): string {
+  if (typeof input === "string" && input.includes(",")) {
+    return input
+      .split(",")
+      .map((x) => toAbcNotation(x.trim()))
+      .join(" ");
+  }
   return (Array.isArray(input) ? input : input.split(" "))
     .map(scientificToAbcNotation)
     .join(" ");

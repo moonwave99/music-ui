@@ -50,8 +50,6 @@
   },
   "dependencies": {
     "@music-ui/core": "workspace:*",
-    "@tonaljs/midi": "^4.10.2",
-    "@tonaljs/note": "^4.12.1",
     "change-case": "^5.4.4"
   }
 }

@@ -1,6 +1,6 @@
 import { chroma as getChroma } from "@tonaljs/note";
 import { get as getMode } from "@tonaljs/mode";
-import { type FretboardPosition } from "../../fretboard/Fretboard";
+import { BareFretboardPosition } from "../../fretboard/Fretboard";
 
 export type Systems = "pentatonic" | "CAGED" | "TNPS";
 
@@ -107,7 +107,7 @@ function getBoxPositions({
   box,
   modeOffset = 0,
   baseChroma,
-}: GetBoxPositionsParams): FretboardPosition[] {
+}: GetBoxPositionsParams): BareFretboardPosition[] {
   let delta = getChroma(root) - baseChroma - modeOffset;
   while (delta < -1) {
     delta += 12;
@@ -122,7 +122,7 @@ function getBoxPositions({
         )
         .filter((x) => !!x),
     ],
-    [] as FretboardPosition[],
+    [] as BareFretboardPosition[],
   );
 }
 
@@ -138,7 +138,7 @@ export function getBox({
   mode = -1,
   system,
   box,
-}: GetBoxParams): FretboardPosition[] {
+}: GetBoxParams): BareFretboardPosition[] {
   let foundBox;
   let modeNumber =
     system === "pentatonic" ? DEFAULT_PENTATONIC_MODE : DEFAULT_MODE;
