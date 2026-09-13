@@ -1,5 +1,16 @@
 # @music-ui/fretboard
 
+## 0.16.0
+
+### Minor Changes
+
+- 3fec87b: Refactor package dependencies
+
+### Patch Changes
+
+- Updated dependencies [3fec87b]
+  - @music-ui/core@0.16.0
+
 ## 0.15.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @music-ui/core
 
+## 0.16.0
+
+### Minor Changes
+
+- 3fec87b: Refactor package dependencies
+
 ## 0.15.0
 
 ### Minor Changes
