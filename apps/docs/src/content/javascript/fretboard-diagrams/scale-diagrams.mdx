@@ -1,8 +1,10 @@
+import { FretboardSystemExample } from "../../../app/examples/fretboard/FretboardSystemExample";
+
 # Scale diagrams
 
 Displaying scale information is a common use case for any fretboard library.
 
-## Rendering scale positions with `Fretboard.renderScale`
+## The `renderScale` function
 
 Albeit passing all positions is always an option, calling `Fretboard.renderScale` can save you some time:
 
@@ -18,11 +20,21 @@ Output:
 
 <Scale root="C" type="major" />
 
-<Callout type="info">
-  The available scale types come from the `@tonaljs/scale-type` package and [can
-  be found
-  here](https://github.com/tonaljs/tonal/blob/main/packages/scale-type/data.ts).
-</Callout>
+### Scale types
+
+The available scale types come from the `@tonaljs/scale-type` package and [can
+be found
+here](https://github.com/tonaljs/tonal/blob/main/packages/scale-type/data.ts).
+
+This includes:
+
+- **harmonic** and **melodic minor**;
+- **scale modes** (e.g. dorian, mixolydian, phrygian...);
+- **minor** and **major pentatonic**;
+- **minor** and **major blues**;
+- exotic names that became popular in some circle jerk subreddit.
+
+### Note highlight example
 
 If you want to display the note names and to highlight all the root note occurrences:
 
@@ -46,7 +58,74 @@ Output:
 
 ## Box systems
 
-If you want to display just a scale box:
+Guitar scales are often represented and studied in **boxes**, i.e. in vertical oriented fret groups.
+
+### Supported box systems
+
+The `@music-ui/fretboard` package supports the following box systems:
+
+#### CAGED
+
+The CAGED system takes the open chord shapes and moves them across the fretboard. It is in fact named after some of the _cowboy chords_ (C, A, G, E, D).
+
+<FretboardSystemExample system="CAGED" />
+
+#### Pentatonic
+
+The pentatonic boxes are perhaps the most common example of box system, and can be seen as a subset of the CAGED system omitting the 4th and 7th degree of the corresponding major or minor scale:
+
+<FretboardSystemExample system="pentatonic" />
+
+#### Three Note Per String (TNPS)
+
+The TNPS system is less chord shape friendly perhaps, but its even note distribution across strings makes any picking strategy consistent.
+
+<FretboardSystemExample system="TNPS" />
+
+### Focusing on a single box
+
+If you want to display just a single box like in the examples above, use either the `disableOtherBoxes` or the `displayBoxOnly` option.
+
+Example with `disableOtherBoxes`:
+
+```ts
+import { Fretboard, DEFAULT_COLORS } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderScale({
+  root: "C",
+  type: "major",
+  box: {
+    system: "CAGED",
+    box: "G",
+  },
+  disableOtherBoxes: true,
+});
+
+fretboard.style({
+  fill: ({ degree }) =>
+    degree !== 1 ? DEFAULT_COLORS.positionFill : DEFAULT_COLORS.highlightFill,
+});
+```
+
+Output:
+
+<Scale
+  showNoteNames
+  highlightRoots
+  root="C"
+  type="major"
+  box={{
+    system: "CAGED",
+    box: "G",
+  }}
+  disableOtherBoxes
+/>
+
+Example with `displayBoxOnly`:
 
 ```ts
 import { Fretboard, DEFAULT_COLORS } from "@music-ui/fretboard";

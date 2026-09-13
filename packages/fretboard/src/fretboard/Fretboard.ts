@@ -136,7 +136,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   positionTextSize: DEFAULT_FONT_SIZE,
   positionFill: DEFAULT_COLORS.positionFill,
   positionText: () => "",
-  disabledOpacity: 0.9,
+  disabledOpacity: 0.2,
   showFretNumbers: true,
   fretNumbersHeight: 2 * DEFAULT_DIMENSIONS.unit,
   fretNumbersMargin: DEFAULT_DIMENSIONS.unit,
@@ -548,11 +548,21 @@ export class Fretboard {
    * @param __namedParameters The expected parameters.
    * @returns The current Fretboard instance.
    */
-  renderScale({ type, root, box, displayBoxOnly }: ScaleParams): Fretboard {
+  renderScale({
+    type,
+    root,
+    box,
+    displayBoxOnly,
+    disableOtherBoxes,
+  }: ScaleParams): Fretboard {
     this.checkTuning();
     return this.setPositions(
       this.system
         .getScale({ type, root, box })
+        .map((x) => ({
+          ...x,
+          disabled: Boolean(disableOtherBoxes && !x.inBox),
+        }))
         .filter(({ inBox }) => (displayBoxOnly ? inBox : true)),
     ).render();
   }

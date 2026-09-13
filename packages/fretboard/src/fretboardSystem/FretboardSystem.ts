@@ -20,6 +20,7 @@ export type ScaleParams = {
     system: Systems;
     box: string | number;
   };
+  disableOtherBoxes?: boolean;
   displayBoxOnly?: boolean;
 };
 

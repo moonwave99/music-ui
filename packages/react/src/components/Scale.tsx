@@ -30,6 +30,7 @@ export function Scale({
   type,
   box,
   displayBoxOnly = false,
+  disableOtherBoxes = false,
   highlightRoots = false,
   style = {},
   ...params
@@ -48,6 +49,7 @@ export function Scale({
       type,
       box,
       displayBoxOnly,
+      disableOtherBoxes,
     },
     style: {
       ...style,
