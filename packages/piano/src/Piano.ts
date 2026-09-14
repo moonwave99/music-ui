@@ -10,9 +10,9 @@ import {
 import { normalizeInput, parseNoteInput } from "./lib";
 
 /**
- * @property chroma The scientific pitch notation value of the pitch class (e.g. 0-11)
+ * Extends the Note type with the key color.
+ *
  * @property color The key color
- * @property note The pitch class of the note
  */
 export type PianoNote = Note & {
   color: "black" | "white";
@@ -196,12 +196,8 @@ export class Piano {
     const createKey = (note: Note): void => {
       const span = document.createElement("span");
       span.classList.add(cssClasses.key);
-      const noteWithOctave = `${note.note}${note.octave}`;
 
-      Object.entries({
-        ...note,
-        noteWithOctave,
-      }).forEach(([key, value]) => {
+      Object.entries(note).forEach(([key, value]) => {
         span.dataset[key] = `${value}`;
         span.classList.add(getHTMLClass({ key, value }));
       });

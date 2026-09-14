@@ -66,6 +66,7 @@ export type ElementOrSelector<T extends HTMLElement> =
   NodeListOf<T> | T | string;
 
 /**
+ * The base Note type used by all libraries.
  * @property note The note name
  * @property octave The note octave
  * @property noteWithOctave The note name with the octave

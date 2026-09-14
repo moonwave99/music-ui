@@ -51,8 +51,7 @@ export type BareFretboardPosition = {
 };
 
 /**
- * Extends the {@link BareFretboardPosition} with musical attributes.
- * @property noteWithOctave The note with octave (e.g. "C3")
+ * Extends the {@link BareFretboardPosition} and {@link Note} types with musical attributes.
  * @property octaveInScale The note octave inside the scale system
  * @property interval The note interval from the root (e.g. "P5")
  * @property degree The note degree inside the scale (e.g. 5)

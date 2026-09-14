@@ -87,6 +87,11 @@ export const CHROMATIC_SCALE = [
 
 const DEFAULT_OCTAVE = 2;
 
+/**
+ * Returns a chromatic scale with the octave and midi information for the given octave.
+ * @param octave The desired octave
+ * @returns The enhanced chromatic scale
+ */
 export function getChromaticScaleAtOctave(octave: number) {
   return CHROMATIC_SCALE.map((x) => ({
     ...x,
