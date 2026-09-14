@@ -20,6 +20,7 @@ export function FretboardSystemExample({
 }: FretboardSystemExampleProps) {
   const [root, setRoot] = useState("C");
   const [box, setBox] = useState(boxesMap[system].at(0)!);
+  const [displayMode, setDisplayMode] = useState("disableOtherBoxes");
 
   return (
     <div className="scale-kitchen-sink">
@@ -49,13 +50,29 @@ export function FretboardSystemExample({
             ))}
           </select>
         </label>
+        <label>
+          Display box only
+          <input
+            name="showNoteNames"
+            type="checkbox"
+            checked={displayMode === "displayBoxOnly"}
+            onChange={() =>
+              setDisplayMode((prev) =>
+                prev === "displayBoxOnly"
+                  ? "disableOtherBoxes"
+                  : "displayBoxOnly",
+              )
+            }
+          />
+        </label>
       </div>
       <Scale
         root={root}
         type="major"
         highlightRoots
         showNoteNames
-        displayBoxOnly
+        displayBoxOnly={displayMode === "displayBoxOnly"}
+        disableOtherBoxes={displayMode === "disableOtherBoxes"}
         box={{ system, box }}
       />
     </div>
