@@ -2,6 +2,9 @@ export default {
   about: {
     title: "About",
     type: "page",
+    theme: {
+      toc: false,
+    },
   },
   api: {
     title: "Complete API Reference",
