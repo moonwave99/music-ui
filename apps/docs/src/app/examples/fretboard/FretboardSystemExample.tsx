@@ -69,7 +69,7 @@ export function FretboardSystemExample({
       <Scale
         root={root}
         type="major"
-        highlightRoots
+        highlightDegree={1}
         showNoteNames
         displayBoxOnly={displayMode === "displayBoxOnly"}
         disableOtherBoxes={displayMode === "disableOtherBoxes"}

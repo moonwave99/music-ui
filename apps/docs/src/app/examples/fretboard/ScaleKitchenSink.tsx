@@ -74,7 +74,7 @@ export function ScaleKitchenSink() {
       <Scale
         root={root}
         type={type}
-        highlightRoots={highlightRoots}
+        highlightDegree={highlightRoots ? 1 : undefined}
         showNoteNames={showNoteNames}
       />
     </div>

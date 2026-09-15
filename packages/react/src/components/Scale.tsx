@@ -1,6 +1,6 @@
 import {
   DEFAULT_COLORS,
-  type FretboardPosition,
+  highlightDegreeFill,
   type ScaleParams,
 } from "@music-ui/fretboard";
 import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
@@ -10,14 +10,14 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * @property id The scale unique identifier.
  * @property className The component class name.
  * @property showName Shows the scale name.
- * @property highlightRoots Highlights root notes.
+ * @property highlightDegree Highlights the passed degree.
  */
 export type ScaleProps = ScaleParams &
   Omit<UseFretboardParams, "scale" | "chord" | "positions"> & {
     id?: string;
     className?: string;
     showName?: boolean;
-    highlightRoots?: boolean;
+    highlightDegree?: number;
   };
 
 /**
@@ -31,17 +31,10 @@ export function Scale({
   box,
   displayBoxOnly = false,
   disableOtherBoxes = false,
-  highlightRoots = false,
+  highlightDegree = undefined,
   style = {},
   ...params
 }: ScaleProps) {
-  function fill({ degree }: FretboardPosition) {
-    if (!highlightRoots || degree !== 1) {
-      return DEFAULT_COLORS.positionFill;
-    }
-    return DEFAULT_COLORS.highlightFill;
-  }
-
   const { ref } = useFretboard<HTMLDivElement>({
     ...params,
     scale: {
@@ -53,7 +46,9 @@ export function Scale({
     },
     style: {
       ...style,
-      fill,
+      fill: highlightDegree
+        ? highlightDegreeFill({ degree: highlightDegree })
+        : DEFAULT_COLORS.positionFill,
     },
   });
 

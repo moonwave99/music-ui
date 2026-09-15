@@ -54,7 +54,41 @@ fretboard.style({
 
 Output:
 
-<Scale showNoteNames highlightRoots root="C" type="major" />
+<Scale showNoteNames highlightDegree={1} root="C" type="major" />
+
+You can use the `highlightDegreeFill` utility function to avoid writing the degree comparison yourself:
+
+```ts {9}
+import { Fretboard, highlightDegreeFill } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderScale({ root: "C", type: "major" });
+fretboard.style({
+  fill: highlightDegreeFill({ degree: 1 }),
+});
+```
+
+Pass the base and highlight colors if you need ones different from the default:
+
+```ts {11-12}
+import { Fretboard, highlightDegreeFill } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderScale({ root: "C", type: "major" });
+fretboard.style({
+  fill: highlightDegreeFill({
+    degree: 1
+    fill: "gray",
+    highlightFill: "orange"
+  }),
+});
+```
 
 ## Box systems
 
@@ -88,8 +122,8 @@ If you want to display just a single box like in the examples above, use either 
 
 Example with `disableOtherBoxes`:
 
-```ts
-import { Fretboard, DEFAULT_COLORS } from "@music-ui/fretboard";
+```ts {14}
+import { Fretboard, highlightDegreeFill } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard({
   positionText: ({ name }) => name,
@@ -106,8 +140,7 @@ fretboard.renderScale({
 });
 
 fretboard.style({
-  fill: ({ degree }) =>
-    degree !== 1 ? DEFAULT_COLORS.positionFill : DEFAULT_COLORS.highlightFill,
+  fill: highlightDegreeFill({ degree: 1 }),
 });
 ```
 
@@ -115,7 +148,7 @@ Output:
 
 <Scale
   showNoteNames
-  highlightRoots
+  highlightDegree={1}
   root="C"
   type="major"
   box={{
@@ -127,8 +160,8 @@ Output:
 
 Example with `displayBoxOnly`:
 
-```ts
-import { Fretboard, DEFAULT_COLORS } from "@music-ui/fretboard";
+```ts {14}
+import { Fretboard, highlightDegreeFill } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard({
   positionText: ({ name }) => name,
@@ -145,8 +178,7 @@ fretboard.renderScale({
 });
 
 fretboard.style({
-  fill: ({ degree }) =>
-    degree !== 1 ? DEFAULT_COLORS.positionFill : DEFAULT_COLORS.highlightFill,
+  fill: highlightDegreeFill({ degree: 1 }),
 });
 ```
 
@@ -154,7 +186,7 @@ Output:
 
 <Scale
   showNoteNames
-  highlightRoots
+  highlightDegree={1}
   root="C"
   type="major"
   box={{

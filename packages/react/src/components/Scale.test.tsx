@@ -14,9 +14,9 @@ describe("Scale", () => {
     expect(screen.queryByText("C major")).toBeInTheDocument();
   });
 
-  it("highlights the roots if highlightRoots is true", () => {
+  it("highlights the roots if highlightDegree is 1", () => {
     const { container } = render(
-      <Scale root="C" type="major" highlightRoots />,
+      <Scale root="C" type="major" highlightDegree={1} />,
     );
     expect(container.querySelector(".scale")).toBeInTheDocument();
     container
