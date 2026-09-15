@@ -10,7 +10,10 @@ export const generateStaticParams = generateStaticParamsFor("mdxPath");
 export async function generateMetadata({ params }: Props) {
   const { mdxPath } = await params;
   const { metadata } = await importPage(mdxPath);
-  return metadata;
+  return {
+    ...metadata,
+    title: `Music UI | ${metadata.title}`,
+  };
 }
 
 const Wrapper = getMDXComponents().wrapper;
