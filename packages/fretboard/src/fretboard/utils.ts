@@ -120,7 +120,6 @@ export function getDimensions({
 }: GetDimensionsParams): FretboardDimensions {
   const totalWidth = width + paddingLeft + paddingRight;
   let totalHeight = height + paddingTop + paddingBottom;
-
   if (showFretNumbers) {
     totalHeight += fretNumbersHeight;
   }
@@ -160,15 +159,11 @@ export function generateGrid({
   frets,
   strings,
 }: GenerateGridParams): Point[][] {
-  const positions = [];
-  for (let string = 1; string <= stringCount; string++) {
-    const currentString = [];
-    for (let fret = 0; fret <= fretCount; fret++) {
-      currentString.push(getPositionCoords({ fret, string, frets, strings }));
-    }
-    positions.push(currentString);
-  }
-  return positions;
+  return Array.from({ length: stringCount }, (_, i) =>
+    Array.from({ length: fretCount + 1 }, (_, fret) =>
+      getPositionCoords({ fret, string: i + 1, frets, strings }),
+    ),
+  );
 }
 
 export function validateOptions(options: FretboardOptions): void {
