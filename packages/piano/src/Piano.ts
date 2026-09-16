@@ -2,7 +2,7 @@ import {
   ensureSelection,
   parseNote,
   getChromaticScaleAtOctave,
-  getHTMLClass,
+  getClassName,
   type NoteInput,
   type ElementOrSelector,
   type Note,
@@ -199,7 +199,7 @@ export class Piano {
 
       Object.entries(note).forEach(([key, value]) => {
         span.dataset[key] = `${value}`;
-        span.classList.add(getHTMLClass({ key, value }));
+        span.classList.add(getClassName({ key, value }));
       });
 
       overFlowWrapper.append(span);

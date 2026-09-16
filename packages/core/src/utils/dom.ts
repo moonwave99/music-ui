@@ -118,13 +118,18 @@ export function ensureElements({
   return output;
 }
 
-type GetHTMLClassParams = {
+type GetClassNameParams = {
   prefix?: string;
   key: string;
   value: string | number | boolean;
 };
 
-export function getHTMLClass({ prefix, key, value }: GetHTMLClassParams) {
+/**
+ * Returns the HTML class for the given input
+ * @param __namedParameters The expected parameters
+ * @returns The generated class name
+ */
+export function getClassName({ prefix, key, value }: GetClassNameParams) {
   return [prefix, kebabCase(key), valueRenderer(key, value)]
     .filter(Boolean)
     .join("-");

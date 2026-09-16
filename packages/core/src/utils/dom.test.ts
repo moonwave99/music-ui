@@ -5,6 +5,7 @@ import {
   ensureSelection,
   ensureElements,
   extractElementOptions,
+  getClassName,
 } from "./dom";
 
 describe("createControls", () => {
@@ -146,5 +147,25 @@ describe("extractElementOptions", () => {
       g: true,
       j: "hello",
     });
+  });
+});
+
+describe("getClassName", () => {
+  it("returns the HTML class for the given input", () => {
+    expect(getClassName({ key: "foo", value: "bar", prefix: "baz" })).toBe(
+      "baz-foo-bar",
+    );
+    expect(getClassName({ key: "foo", value: "bar" })).toBe("foo-bar");
+    expect(getClassName({ key: "foo", value: true })).toBe("foo");
+    expect(getClassName({ key: "foo", value: false })).toBe("foo-false");
+    expect(getClassName({ key: "note", value: "C" })).toBe("note-C");
+    expect(getClassName({ key: "note", value: "C#" })).toBe("note-C-sharp");
+    expect(getClassName({ key: "note", value: "C##" })).toBe(
+      "note-C-double-sharp",
+    );
+    expect(getClassName({ key: "note", value: "Bb" })).toBe("note-B-flat");
+    expect(getClassName({ key: "note", value: "Bbb" })).toBe(
+      "note-B-double-flat",
+    );
   });
 });

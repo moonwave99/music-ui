@@ -1,4 +1,4 @@
-import { getHTMLClass } from "@music-ui/core";
+import { getClassName } from "@music-ui/core";
 import type {
   BareFretboardPosition,
   FretboardOptions,
@@ -78,7 +78,7 @@ export function getPositionClasses(position: FretboardPosition) {
       const valArray = !(value instanceof Array) ? [value] : value;
       return valArray
         .map((value) =>
-          getHTMLClass({
+          getClassName({
             prefix: "position",
             key,
             value,
