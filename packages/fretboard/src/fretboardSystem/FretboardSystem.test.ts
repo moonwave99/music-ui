@@ -1,6 +1,6 @@
 import { test, expect, assert } from "vitest";
 
-import { FretboardSystem, isPositionInBox } from "./FretboardSystem";
+import { FretboardSystem, findPositionInArray } from "./FretboardSystem";
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
 
 test("FretboardSystem - constructor with default options", () => {
@@ -82,7 +82,7 @@ test("FretboardSystem - getScale() with system - upper octave", () => {
       box: 1,
     },
   });
-  expect(isPositionInBox({ string: 6, fret: 12 }, scale)).toBe(true);
+  expect(findPositionInArray({ string: 6, fret: 12 }, scale)).toBeTruthy();
 });
 
 test("FretboardSystem - getScale() - B#", () => {

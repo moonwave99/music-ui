@@ -1,7 +1,7 @@
 import { test, expect, assert } from "vitest";
 
 import { getBox } from "./systems";
-import { isPositionInBox } from "../FretboardSystem";
+import { findPositionInArray } from "../FretboardSystem";
 
 test("pentatonic system", () => {
   const positions = getBox({
@@ -9,8 +9,8 @@ test("pentatonic system", () => {
     root: "E",
     box: 1,
   });
-  expect(isPositionInBox({ string: 6, fret: 3 }, positions)).toBe(true);
-  expect(isPositionInBox({ string: 6, fret: 4 }, positions)).toBe(false);
+  expect(findPositionInArray({ string: 6, fret: 3 }, positions)).toBeTruthy();
+  expect(findPositionInArray({ string: 6, fret: 4 }, positions)).toBeFalsy();
 });
 
 test("pentatonic system - major pentatonic", () => {
@@ -20,8 +20,8 @@ test("pentatonic system - major pentatonic", () => {
     box: 1,
     mode: "major",
   });
-  expect(isPositionInBox({ string: 6, fret: 3 }, positions)).toBe(true);
-  expect(isPositionInBox({ string: 6, fret: 5 }, positions)).toBe(true);
+  expect(findPositionInArray({ string: 6, fret: 3 }, positions)).toBeTruthy();
+  expect(findPositionInArray({ string: 6, fret: 5 }, positions)).toBeTruthy();
 });
 
 test("CAGED system", () => {
@@ -30,8 +30,8 @@ test("CAGED system", () => {
     root: "C",
     box: "A",
   });
-  expect(isPositionInBox({ string: 6, fret: 3 }, positions)).toBe(true);
-  expect(isPositionInBox({ string: 2, fret: 1 }, positions)).toBe(false);
+  expect(findPositionInArray({ string: 6, fret: 3 }, positions)).toBeTruthy();
+  expect(findPositionInArray({ string: 2, fret: 1 }, positions)).toBeFalsy();
 });
 
 test("CAGED system - box not found", () => {

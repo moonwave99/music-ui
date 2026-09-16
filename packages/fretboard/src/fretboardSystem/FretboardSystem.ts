@@ -29,6 +29,11 @@ export type SystemPosition = BareFretboardPosition & {
   octave: number;
 };
 
+/**
+ * Options accepted by the Fretboard constructor.
+ * @property tuning The instrument tuning
+ * @property fretCount The instrument fret count
+ */
 export type FretboardSystemParams = {
   tuning?: Tuning;
   fretCount?: number;
@@ -39,6 +44,11 @@ export class FretboardSystem {
   private fretCount: number = DEFAULT_FRET_COUNT;
   private positions: SystemPosition[];
   private baseOctave: number;
+  /**
+   * Creates a `FretboardSystem` instance.
+   *
+   * @param params The accepted params
+   */
   constructor(params?: FretboardSystemParams) {
     Object.assign(this, params);
     this.fretCount = Math.max(this.fretCount, MIN_FRET_COUNT);
@@ -47,21 +57,39 @@ export class FretboardSystem {
     this.baseOctave = baseOctave;
     this.populate();
   }
+  /**
+   * Returns the instance tuning
+   *
+   * @returns The instance tuning
+   */
   getTuning(): Tuning {
     return this.tuning;
   }
+  /**
+   * Returns the instance fret count
+   *
+   * @returns The instance fret count
+   */
   getFretCount(): number {
     return this.fretCount;
   }
-  getPositionAt({
-    string,
-    fret,
-  }: BareFretboardPosition): SystemPosition | null {
-    const foundPosition = this.positions.find(
-      (x) => x.string === string && x.fret === fret,
+  /**
+   * Returns the position information at the given string and fret
+   *
+   * @param __namedParameters The expected parameters
+   * @returns The found position
+   */
+  getPositionAt(position: BareFretboardPosition): SystemPosition | null {
+    return (
+      findPositionInArray<SystemPosition>(position, this.positions) || null
     );
-    return foundPosition || null;
   }
+  /**
+   * Returns the position information for the passed scale parameters.
+   *
+   * @param __namedParameters The expected parameters
+   * @returns The scale positions
+   */
   getScale({
     type = "major",
     root: paramsRoot = "C",
@@ -98,8 +126,7 @@ export class FretboardSystem {
         return {
           octaveInScale: getOctaveInScale({ root, baseOctave, ...x, octave }),
           inBox: Boolean(
-            boxPositions.length &&
-            isPositionInBox(x as FretboardPosition, boxPositions),
+            boxPositions.length && !!findPositionInArray(x, boxPositions),
           ),
           ...x,
           octave,
@@ -134,11 +161,18 @@ export class FretboardSystem {
   }
 }
 
-export function isPositionInBox(
+/**
+ * Finds a position in a list of positions by the passed coordinates.
+ *
+ * @param param0 The lookup coordinates
+ * @param array The haystack array
+ * @returns The found position
+ */
+export function findPositionInArray<T extends BareFretboardPosition>(
   { fret, string }: BareFretboardPosition,
-  systemPositions: BareFretboardPosition[],
+  array: T[],
 ) {
-  return !!systemPositions.find((x) => x.fret === fret && x.string === string);
+  return array.find((x) => x.fret === fret && x.string === string);
 }
 
 type GetOctaveInScaleParams = {
