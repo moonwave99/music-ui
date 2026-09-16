@@ -6,16 +6,16 @@ Manually passing an array of positions to a `Fretboard` can be tedious.
 
 The `Fretboard.renderChord` method accepts a shorthand input, in the format found in chord/tab websites.
 
-<Callout type="info">
+## The shorthand format
 
 The convention are the following:
 
 - the input must have 6 entries (one per string) if all the frets are single digits;
 - for double digits frets, the entries must be hyphen separated.
-- the entries start from the 6th string;
+- the entries are read from the 6th string up to the 1st;
 - every entry stands for the fret at the corresponding string;
-- a `0` stands for an open string;
-- a `x` stands for a muted string.
+- a `0` stands for the corresponding open string;
+- a `x` mutes the corresponding string.
 
 Some examples:
 
@@ -23,7 +23,7 @@ Some examples:
 - `133211` is an **F chord in first position**;
 - `x-10-12-12-11-10` is a **G minor in tenth position**.
 
-</Callout>
+## Rendering a C major open chord
 
 Setup code:
 
@@ -59,6 +59,12 @@ fretboard.renderChord({ input: "x32010" });
 Output:
 
 <Chord input="x32010" displayProperty="note" showName={false} />
+
+<Callout type="info">
+  When the [`initChords`](#the-initchords-function) function is used, you can
+  directly set `data-display-property="note"` on the element to display the note
+  name.
+</Callout>
 
 ### Render the right note names (sharps vs. flats)
 
