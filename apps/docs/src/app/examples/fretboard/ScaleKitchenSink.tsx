@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CHROMATIC_SCALE } from "@music-ui/core";
-import { Scale } from "@music-ui/react";
+import { Scale, ScaleProps } from "@music-ui/react";
 
 const SCALE_TYPES = [
   "major",
@@ -20,11 +20,32 @@ const SCALE_TYPES = [
   "major blues",
 ];
 
+const DISPLAY_TYPES: { label: string; value: ScaleProps["displayProperty"] }[] =
+  [
+    {
+      label: "Note name",
+      value: "note",
+    },
+    {
+      label: "Scale degree",
+      value: "degree",
+    },
+    {
+      label: "Interval from root",
+      value: "interval",
+    },
+    {
+      label: "Nothing",
+      value: undefined,
+    },
+  ] as const;
+
 export function ScaleKitchenSink() {
   const [root, setRoot] = useState("C");
   const [type, setType] = useState("major");
   const [highlightRoots, setHighlightRoots] = useState(true);
-  const [showNoteNames, setShowNoteNames] = useState(true);
+  const [displayPropertyIndex, setDisplayPropertyIndex] = useState(0);
+
   return (
     <div className="scale-kitchen-sink">
       <div className="controls">
@@ -53,6 +74,22 @@ export function ScaleKitchenSink() {
           </select>
         </label>
         <label>
+          Show
+          <select
+            name="type"
+            value={displayPropertyIndex}
+            onChange={(event) =>
+              setDisplayPropertyIndex(Number(event.target.value))
+            }
+          >
+            {DISPLAY_TYPES.map(({ label }, index) => (
+              <option key={index} value={index}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
           Highlight roots{" "}
           <input
             name="highlightRoots"
@@ -61,21 +98,12 @@ export function ScaleKitchenSink() {
             onChange={() => setHighlightRoots((prev) => !prev)}
           />
         </label>
-        <label>
-          Show note names
-          <input
-            name="showNoteNames"
-            type="checkbox"
-            checked={showNoteNames}
-            onChange={() => setShowNoteNames((prev) => !prev)}
-          />
-        </label>
       </div>
       <Scale
         root={root}
         type={type}
         highlightDegree={highlightRoots ? 1 : undefined}
-        showNoteNames={showNoteNames}
+        displayProperty={DISPLAY_TYPES[displayPropertyIndex]!.value}
       />
     </div>
   );

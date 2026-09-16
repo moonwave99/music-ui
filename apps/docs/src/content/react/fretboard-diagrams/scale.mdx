@@ -32,14 +32,14 @@ Output:
 
 In addition to the [`Fretboard` component props](/react/fretboard-diagrams/fretboard#component-props), the component accepts the following props:
 
-| Name              | Type      | Default Value | Description                    |
-| ----------------- | --------- | ------------- | ------------------------------ |
-| `root`            | `string`  |               | The scale root note (e.g. "C") |
-| `type`            | `string`  |               | The scale type (e.g. "major")  |
-| `showName`        | `boolean` | `false`       | Shows the scale name           |
-| `showNoteNames`   | `boolean` | `false`       | Shows the note names           |
-| `highlightDegree` | `number`  | `undefined`   | Highlights the passed degree   |
-| `className`       | `string`  | `scale`       | The component class name       |
+| Name              | Type                                   | Default Value | Description                      |
+| ----------------- | -------------------------------------- | ------------- | -------------------------------- |
+| `root`            | `string`                               |               | The scale root note (e.g. "C")   |
+| `type`            | `string`                               |               | The scale type (e.g. "major")    |
+| `showName`        | `boolean`                              | `false`       | Shows the scale name             |
+| `displayProperty` | `"note"` \| `"degree"` \| `"interval"` |               | The position property to display |
+| `highlightDegree` | `number`                               | `undefined`   | Highlights the passed degree     |
+| `className`       | `string`                               | `scale`       | The component class name         |
 
 ## Props showcase
 
@@ -52,7 +52,7 @@ function App() {
   return (
     <>
       <Scale root="G" type="dorian" showName />
-      <Scale root="E" type="blues" showNoteNames highlightDegree={1} />
+      <Scale root="E" type="blues" displayProperty="note" highlightDegree={1} />
       <Scale
         root="C"
         type="major"
@@ -69,9 +69,9 @@ function App() {
 
 <Scale root="G" type="dorian" showName />
 
-### `showNoteNames` and `highlightDegree`
+### `displayProperty` and `highlightDegree`
 
-<Scale root="E" type="blues" showNoteNames highlightDegree={1} />
+<Scale root="E" type="blues" displayProperty="note" highlightDegree={1} />
 
 ### `box` and `displayBoxOnly` and `highlightDegree`
 

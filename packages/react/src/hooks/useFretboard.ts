@@ -14,14 +14,17 @@ import {
  * @property chord Params expected by the `Fretboard.renderChord` function.
  * @property scale Params expected by the `Fretboard.renderScale` function.
  * @property style Params expected by the `Fretboard.style` function.
- * @property showNoteNames Display the note names.
+ * @property displayProperty The position property to display.
  */
 export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
   positions?: FretboardPosition[];
   chord?: RenderChordParams;
   scale?: ScaleParams;
   style?: StyleParams;
-  showNoteNames?: boolean;
+  displayProperty?: keyof Pick<
+    FretboardPosition,
+    "note" | "degree" | "interval"
+  >;
 };
 
 /**
@@ -44,7 +47,7 @@ export function useFretboard<T extends HTMLElement>({
   chord,
   scale,
   style = {},
-  showNoteNames,
+  displayProperty,
   ...params
 }: UseFretboardParams): UseFretboard<T> {
   const ref = useRef<T>(null);
@@ -79,11 +82,13 @@ export function useFretboard<T extends HTMLElement>({
 
   useEffect(() => {
     fretboardRef.current?.style({
-      text: ({ note }: FretboardPosition) =>
-        showNoteNames && note ? note : "",
+      text: (position: FretboardPosition) =>
+        displayProperty && position[displayProperty]
+          ? `${position[displayProperty]}`
+          : "",
       ...style,
     });
-  }, [style, showNoteNames]);
+  }, [style, displayProperty]);
 
   return { ref, fretboardRef };
 }

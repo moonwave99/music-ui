@@ -53,8 +53,8 @@ function App() {
       <Chord input="x32010" chordName="C major" showName />
       <Chord
         input="x32010"
-        chordName="C major"
-        showNoteNames
+        chordName="C minor"
+        displayProperty="note"
         includeOpenStrings
       />
       <Chord
@@ -73,9 +73,14 @@ function App() {
 
 <Chord input="x32010" chordName="C major" showName />
 
-### `showNoteNames` and `includeOpenStrings`
+### `displayProperty` and `includeOpenStrings`
 
-<Chord input="x32010" chordName="C minor" showNoteNames includeOpenStrings />
+<Chord
+  input="x32010"
+  chordName="C minor"
+  displayProperty="note"
+  includeOpenStrings
+/>
 
 <Callout type="info">
   In order to display the right note name (e.g. `Eb` vs `D#`), the `chordName`
@@ -88,11 +93,11 @@ import { Chord } from "@music-ui/react";
 function App() {
   return (
     <>
-      <Chord input="133111" showNoteNames includeOpenStrings />
+      <Chord input="133111" displayProperty="note" includeOpenStrings />
       <Chord
         input="133111"
         chordName="F minor"
-        showNoteNames
+        displayProperty="note"
         includeOpenStrings
       />
     </>
@@ -102,11 +107,16 @@ function App() {
 
 No `chordName`: displays `G#` on the third string, first fret:
 
-<Chord input="133111" showNoteNames includeOpenStrings />
+<Chord input="133111" displayProperty="note" includeOpenStrings />
 
 Right `chordName`: displays `Ab` on the third string, first fret:
 
-<Chord input="133111" chordName="F minor" showNoteNames includeOpenStrings />
+<Chord
+  input="133111"
+  chordName="F minor"
+  displayProperty="note"
+  includeOpenStrings
+/>
 
 ### `barres` and `crop`
 

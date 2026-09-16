@@ -49,13 +49,13 @@ describe("initChords", () => {
     ).not.toBeNull();
   });
 
-  it("shows the note names is showNoteNames is true", () => {
+  it("shows the note names is displayProperty is note", () => {
     document.body.innerHTML = `
         <main>
             <div data-chord
               data-input="x32010"
               data-chord-name="C major"
-              data-show-note-names
+              data-display-property="note"
               data-include-open-strings></div>
         </main>`;
 

@@ -124,7 +124,8 @@ describe("extractElementOptions", () => {
         data-d
         data-e="false"
         data-f="true"
-        data-g></div>
+        data-g
+        data-j="hello"></div>
     `;
     const options = extractElementOptions(document.querySelector("div")!, {
       a: "",
@@ -135,7 +136,15 @@ describe("extractElementOptions", () => {
       f: true,
       g: true,
       h: true,
+      j: undefined,
     });
-    expect(options).toEqual({ a: "abc", c: 123, e: false, f: true, g: true });
+    expect(options).toEqual({
+      a: "abc",
+      c: 123,
+      e: false,
+      f: true,
+      g: true,
+      j: "hello",
+    });
   });
 });

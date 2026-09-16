@@ -10,7 +10,7 @@ const chords = [
     showName: true,
     showFretNumbers: true,
     includeOpenStrings: true,
-    showNoteNames: true,
+    displayProperty: "note",
   },
   {
     input: "x5454x",
@@ -18,7 +18,7 @@ const chords = [
     showName: true,
     crop: true,
     showFretNumbers: true,
-    showNoteNames: true,
+    displayProperty: "note",
   },
   {
     input: "131244",
@@ -26,10 +26,10 @@ const chords = [
     showName: true,
     crop: true,
     showFretNumbers: true,
-    showNoteNames: true,
+    displayProperty: "note",
     barres: "1:6:4,4:2",
   },
-];
+] as const;
 
 type ChordsKitchenSinkProps = {
   withPlayer?: boolean;

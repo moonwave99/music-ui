@@ -53,7 +53,7 @@ export function FretboardSystemExample({
         <label>
           Display box only
           <input
-            name="showNoteNames"
+            name="displayMode"
             type="checkbox"
             checked={displayMode === "displayBoxOnly"}
             onChange={() =>
@@ -70,7 +70,7 @@ export function FretboardSystemExample({
         root={root}
         type="major"
         highlightDegree={1}
-        showNoteNames
+        displayProperty="note"
         displayBoxOnly={displayMode === "displayBoxOnly"}
         disableOtherBoxes={displayMode === "disableOtherBoxes"}
         box={{ system, box }}

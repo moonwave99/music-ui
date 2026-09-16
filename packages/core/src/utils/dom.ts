@@ -26,9 +26,9 @@ export function ensureSelection<T extends HTMLElement>(
  * @returns An object of the available attributes and their values
  */
 export function extractElementOptions<
-  T extends Record<string, string | number | boolean>,
+  T extends Record<string, string | number | boolean | undefined>,
 >(el: HTMLElement, baseOptions: T): T {
-  const options = {} as Record<string, string | number | boolean>;
+  const options = {} as Record<string, string | number | boolean | undefined>;
   Object.entries(baseOptions).forEach(([key, sample]) => {
     const value = el.dataset[key];
     switch (typeof sample) {
@@ -46,6 +46,9 @@ export function extractElementOptions<
         if (typeof value !== "undefined") {
           options[key] = value !== "false";
         }
+        break;
+      default:
+        options[key] = value;
     }
   });
   return options as T;

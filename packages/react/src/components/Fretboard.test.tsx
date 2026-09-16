@@ -21,10 +21,10 @@ describe("Fretboard", () => {
     expect(container.querySelector(".position-id-s4-f2")).toBeInTheDocument();
   });
 
-  it("shows the note names if showNoteNames is true", () => {
+  it("shows the note names if displayProperty is note", () => {
     const { container } = render(
       <Fretboard
-        showNoteNames
+        displayProperty="note"
         positions={[
           { string: 5, fret: 3, note: "C" },
           { string: 4, fret: 2, note: "E" },

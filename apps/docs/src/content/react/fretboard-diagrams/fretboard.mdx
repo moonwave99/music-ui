@@ -43,11 +43,11 @@ Output:
 
 In addition to the [`Fretboard` class constructor options](/javascript/fretboard-diagrams/fretboard#constructor), the component accepts the following props:
 
-| Name            | Type      | Default Value | Description                     |
-| --------------- | --------- | ------------- | ------------------------------- |
-| `id`            | `string`  |               | The fretboard unique identifier |
-| `className`     | `string`  |               | The component class name        |
-| `showNoteNames` | `boolean` | `false`       | Display the note names          |
+| Name              | Type                                   | Default Value | Description                      |
+| ----------------- | -------------------------------------- | ------------- | -------------------------------- |
+| `id`              | `string`                               |               | The fretboard unique identifier  |
+| `className`       | `string`                               |               | The component class name         |
+| `displayProperty` | `"note"` \| `"degree"` \| `"interval"` |               | The position property to display |
 
 ## Props showcase
 
@@ -75,14 +75,14 @@ function App() {
         positions={cMajorArpeggio}
         width={600}
         fretCount={5}
-        showNoteNames
+        displayProperty="note"
       />
       <Fretboard
         positions={cMajorArpeggio}
         width={600}
         fretCount={5}
+        displayProperty="note"
         style={{
-          text: ({ note }) => note!,
           fill: ({ note }) => (note === "C" ? "orange" : "white"),
         }}
       />
@@ -95,10 +95,10 @@ function App() {
 
 <Arpeggio />
 
-### `showNoteNames`
+### `displayProperty`
 
 <ArpeggioWithText />
 
-### `style` for displaying note names and highlighting root notes
+### `displayProperty` and `style` for highlighting root notes
 
 <ArpeggioWithTextAndRootNotes />
