@@ -118,18 +118,24 @@ export function ensureElements({
   return output;
 }
 
+/**
+ * The params expected by the `getClassName` function.
+ * @property key The property key
+ * @property value The property value
+ * @property prefix The optional class name prefix
+ */
 type GetClassNameParams = {
-  prefix?: string;
   key: string;
   value: string | number | boolean;
+  prefix?: string;
 };
 
 /**
- * Returns the HTML class for the given input
+ * Returns the class name for the given input
  * @param __namedParameters The expected parameters
  * @returns The generated class name
  */
-export function getClassName({ prefix, key, value }: GetClassNameParams) {
+export function getClassName({ key, value, prefix }: GetClassNameParams) {
   return [prefix, kebabCase(key), valueRenderer(key, value)]
     .filter(Boolean)
     .join("-");
