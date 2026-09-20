@@ -50,9 +50,30 @@ test("Fretboard with default options", () => {
   expect(svg.getAttribute("viewBox")).toBe(
     `0 0 ${defaultWidth} ${defaultHeight}`,
   );
+  expect(svg.getAttribute("width")).toBe("min(100%, 1150px)");
   expect(svg.querySelectorAll(".strings line").length).toBe(stringCount);
   expect(svg.querySelectorAll(".frets line").length).toBe(fretCount + 1);
   expect(svg.querySelectorAll(".fret-numbers text").length).toBe(fretCount);
+});
+
+test("Fretboard - display: overflow", () => {
+  const fretboard = new Fretboard({
+    width: 666,
+    display: "overflow",
+  });
+  fretboard.render();
+  const svg = document.querySelector<SVGElement>("#fretboard svg")!;
+  expect(svg.getAttribute("width")).toBe("666");
+});
+
+test("Fretboard - display: stretch", () => {
+  const fretboard = new Fretboard({
+    width: 666,
+    display: "stretch",
+  });
+  fretboard.render();
+  const svg = document.querySelector<SVGElement>("#fretboard svg")!;
+  expect(svg.getAttribute("width")).toBe("100%");
 });
 
 test("Fretboard with custom tuning - string count mismatch", () => {

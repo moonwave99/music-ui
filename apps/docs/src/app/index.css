@@ -8,9 +8,11 @@ main {
   container-type: inline-size;
 }
 
+.fretboard {
+  overflow-x: auto;
+}
+
 .fretboard,
-.chord,
-.scale,
 .piano {
   margin-top: 1rem;
 }
@@ -59,14 +61,16 @@ main {
   }
 }
 
-.chord {
+.chord,
+.chord-with-player {
   text-align: center;
 }
 
 .chords {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 2rem;
+  overflow-x: auto;
   @media screen and (max-width: 600px) {
     grid-template-columns: 1fr;
   }

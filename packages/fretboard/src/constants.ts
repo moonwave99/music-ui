@@ -15,9 +15,9 @@ export const DEFAULT_COLORS = {
 };
 
 export const DEFAULT_DIMENSIONS = {
-  width: 960,
-  height: 120,
-  unit: 20,
+  width: 1150,
+  height: 160,
+  unit: 24,
   line: 1,
   nut: 7,
   chord: 300,

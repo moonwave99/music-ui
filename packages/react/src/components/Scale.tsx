@@ -33,10 +33,12 @@ export function Scale({
   disableOtherBoxes = false,
   highlightDegree = undefined,
   style = {},
+  display = "overflow",
   ...params
 }: ScaleProps) {
   const { ref } = useFretboard<HTMLDivElement>({
     ...params,
+    display,
     scale: {
       root,
       type,
@@ -54,7 +56,7 @@ export function Scale({
 
   return (
     <figure className={className}>
-      <div ref={ref}></div>
+      <div className="fretboard" ref={ref}></div>
       {showName ? <figcaption>{`${root} ${type}`}</figcaption> : null}
     </figure>
   );

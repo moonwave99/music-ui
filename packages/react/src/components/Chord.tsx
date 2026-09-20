@@ -57,7 +57,7 @@ export function Chord({
 
   return (
     <figure className={className}>
-      <div ref={ref}></div>
+      <div className="fretboard" ref={ref}></div>
       {showName && chordName ? <figcaption>{chordName}</figcaption> : null}
     </figure>
   );

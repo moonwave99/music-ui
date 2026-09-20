@@ -15,8 +15,9 @@ export type FretboardProps = UseFretboardParams & {
  */
 export function Fretboard({
   className = "fretboard",
+  display = "overflow",
   ...params
 }: FretboardProps) {
-  const { ref } = useFretboard<HTMLDivElement>(params);
+  const { ref } = useFretboard<HTMLDivElement>({ ...params, display });
   return <div className={className} ref={ref}></div>;
 }

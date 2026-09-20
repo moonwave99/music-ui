@@ -103,6 +103,7 @@ export type StyleParams = {
 
 export const DEFAULT_FRETBOARD_OPTIONS = {
   element: "#fretboard",
+  display: "default" as const,
   tuning: GUITAR_TUNINGS.default,
   stringCount: GUITAR_TUNINGS.default.length,
   stringWidth: DEFAULT_DIMENSIONS.line,
@@ -117,10 +118,10 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   scaleFrets: true,
   crop: false,
   fretPaddingLeft: 0,
-  paddingTop: DEFAULT_DIMENSIONS.unit,
+  paddingTop: DEFAULT_DIMENSIONS.unit / 2,
   paddingBottom: DEFAULT_DIMENSIONS.unit * 0.75,
-  paddingLeft: DEFAULT_DIMENSIONS.unit,
-  paddingRight: DEFAULT_DIMENSIONS.unit,
+  paddingLeft: DEFAULT_DIMENSIONS.unit / 2,
+  paddingRight: DEFAULT_DIMENSIONS.unit / 2,
   height: DEFAULT_DIMENSIONS.height,
   width: DEFAULT_DIMENSIONS.width,
   positionSize: DEFAULT_DIMENSIONS.unit,
@@ -132,7 +133,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   disabledOpacity: 0.2,
   showFretNumbers: true,
   fretNumbersHeight: 2 * DEFAULT_DIMENSIONS.unit,
-  fretNumbersMargin: DEFAULT_DIMENSIONS.unit,
+  fretNumbersMargin: DEFAULT_DIMENSIONS.unit * 1.5,
   fretNumbersColor: DEFAULT_COLORS.line,
   font: DEFAULT_FONT_FAMILY,
   barresColor: DEFAULT_COLORS.barres,
@@ -153,7 +154,6 @@ export const defaultMuteStringsParams = {
 export const cssClasses = {
   fretboard: "fretboard",
   controls: "controls",
-  htmlWrapper: "fretboard-html-wrapper",
   svgWrapper: "fretboard-wrapper",
   positions: "positions",
   position: "position",
@@ -179,6 +179,7 @@ export type Point = {
 /**
  * Options accepted by the Fretboard constructor.
  * @property element The element where the fretboard will be rendered
+ * @property display The width behavior ("stretch" or "overflow")
  * @property tuning The instrument tuning
  * @property stringCount The amount of strings to render
  * @property stringWidth The string thickness
@@ -221,6 +222,7 @@ export type Point = {
  */
 export type FretboardOptions = {
   element: ElementOrSelector<HTMLElement>;
+  display: "default" | "stretch" | "overflow";
   tuning: Tuning;
   stringCount: number;
   stringWidth: number | number[];
@@ -301,6 +303,7 @@ export class Fretboard {
       fretCount,
       scaleFrets,
       tuning,
+      display,
     } = this.options;
 
     this.strings = generateStrings({ stringCount, height, stringWidth });
@@ -318,12 +321,22 @@ export class Fretboard {
     });
 
     this.element = ensureSelection(this.options.element).at(0)!;
-    this.element.classList.add(cssClasses.htmlWrapper);
-    this.element.style.width = `min(${width}px, 100%)`;
+    this.element.classList.add(cssClasses.fretboard);
 
     this.svg = select<BaseType, FretboardPosition>(element as string)
       .append("svg")
       .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`);
+
+    switch (display) {
+      case "overflow":
+        this.svg.attr("width", width);
+        break;
+      case "stretch":
+        this.svg.attr("width", "100%");
+        break;
+      default:
+        this.svg.attr("width", `min(100%, ${width}px)`);
+    }
 
     this.wrapper = this.svg
       .append("g")
@@ -813,7 +826,7 @@ export class Fretboard {
         .attr("font-family", font)
         .attr(
           "transform",
-          `translate(0 ${fretNumbersMargin + paddingTop + strings[strings.length - 1]!})`,
+          `translate(0 ${fretNumbersMargin + paddingTop + strings.at(-1)!})`,
         );
 
       fretNumbersGroup

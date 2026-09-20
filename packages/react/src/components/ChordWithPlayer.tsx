@@ -81,9 +81,7 @@ export function ChordWithPlayer({
 
   return (
     <figure className={className}>
-      <div className="fretboard">
-        <div ref={ref}></div>
-      </div>
+      <div className="fretboard" ref={ref}></div>
       <div className="controls">
         <button
           disabled={playerStatus === "playing"}
