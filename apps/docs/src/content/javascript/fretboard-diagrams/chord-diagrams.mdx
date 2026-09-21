@@ -58,11 +58,11 @@ fretboard.renderChord({ input: "x32010" });
 
 Output:
 
-<Chord input="x32010" displayProperty="note" showName={false} />
+<Chord input="x32010" textProperty="note" showName={false} />
 
 <Callout type="info">
   When the [`initChords`](#the-initchords-function) function is used, you can
-  directly set `data-display-property="note"` on the element to display the note
+  directly set `data-text-property="note"` on the element to display the note
   name.
 </Callout>
 
@@ -88,7 +88,7 @@ Output:
 <Chord
   input="133111"
   chordName="F minor"
-  displayProperty="note"
+  textProperty="note"
   showName={false}
 />
 
@@ -107,7 +107,7 @@ fretboard.renderChord({ input: "133111" });
 
 Output:
 
-<Chord input="133111" displayProperty="note" showName={false} />
+<Chord input="133111" textProperty="note" showName={false} />
 
 Another example that includes both sharp and flat symbols, e.g. `D7b9`:
 
@@ -128,7 +128,7 @@ Output:
   input="x5454x"
   fretCount={5}
   chordName="D7b9"
-  displayProperty="note"
+  textProperty="note"
   showName={false}
   width={500}
 />
@@ -152,7 +152,7 @@ Output:
   input="x5456x"
   fretCount={6}
   chordName="D7#9"
-  displayProperty="note"
+  textProperty="note"
   showName={false}
   width={550}
 />
@@ -178,12 +178,7 @@ fretboard.renderChord({ input: "x32010", includeOpenStrings: true });
 
 Output:
 
-<Chord
-  input="x32010"
-  displayProperty="note"
-  includeOpenStrings
-  showName={false}
-/>
+<Chord input="x32010" textProperty="note" includeOpenStrings showName={false} />
 
 ## Displaying barre indications
 
@@ -314,14 +309,14 @@ By default, it selects all `[data-chord]` elements on the page, and extracts the
   data-chord
   data-input="x32010"
   data-chord-name="C major"
-  data-display-property="note"
+  data-text-property="note"
   data-include-open-strings
 />
 <div
   data-chord
   data-input="x5454x"
   data-chord-name="D7b9"
-  data-display-property="note"
+  data-text-property="note"
   data-crop
   data-show-fret-numbers
 />
@@ -330,7 +325,7 @@ By default, it selects all `[data-chord]` elements on the page, and extracts the
   data-input="131244"
   data-chord-name="F7#9"
   data-barres="1:6:4,4:2"
-  data-display-property="note"
+  data-text-property="note"
   data-show-fret-numbers
 />
 ```
@@ -356,7 +351,7 @@ You can pass a custom selector or collection of elements via the `selection` opt
   class="chord"
   data-input="x32010"
   data-chord-name="C major"
-  data-display-property="note"
+  data-text-property="note"
   data-include-open-strings
 />
 ```
@@ -383,6 +378,6 @@ The following data attributes are supported:
 | `data-chord-name`           | `string`                               | The chord name (e.g. C major, A7b9).           |
 | `data-crop`                 | `boolean`                              | Crops the fretboard to the used positions only |
 | `data-include-open-strings` | `boolean`                              | Shows the open string notes.                   |
-| `data-display-property`     | `"note"` \| `"degree"` \| `"interval"` | The position property to display               |
+| `data-text-property`        | `"note"` \| `"degree"` \| `"interval"` | The position property to display               |
 | `data-show-fret-numbers`    | `boolean`                              | Shows the fret numbers.                        |
 | `data-barres`               | `string`                               | The chord barres.                              |

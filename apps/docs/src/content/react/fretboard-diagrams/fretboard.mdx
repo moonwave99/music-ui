@@ -43,11 +43,11 @@ Output:
 
 In addition to the [`Fretboard` class constructor options](/javascript/fretboard-diagrams/fretboard#constructor), the component accepts the following props:
 
-| Name              | Type                                   | Default Value | Description                      |
-| ----------------- | -------------------------------------- | ------------- | -------------------------------- |
-| `id`              | `string`                               |               | The fretboard unique identifier  |
-| `className`       | `string`                               |               | The component class name         |
-| `displayProperty` | `"note"` \| `"degree"` \| `"interval"` |               | The position property to display |
+| Name           | Type                                   | Default Value | Description                      |
+| -------------- | -------------------------------------- | ------------- | -------------------------------- |
+| `id`           | `string`                               |               | The fretboard unique identifier  |
+| `className`    | `string`                               |               | The component class name         |
+| `textProperty` | `"note"` \| `"degree"` \| `"interval"` |               | The position property to display |
 
 ## Props showcase
 
@@ -75,13 +75,13 @@ function App() {
         positions={cMajorArpeggio}
         width={600}
         fretCount={5}
-        displayProperty="note"
+        textProperty="note"
       />
       <Fretboard
         positions={cMajorArpeggio}
         width={600}
         fretCount={5}
-        displayProperty="note"
+        textProperty="note"
         style={{
           fill: ({ note }) => (note === "C" ? "orange" : "white"),
         }}
@@ -95,10 +95,10 @@ function App() {
 
 <Arpeggio />
 
-### `displayProperty`
+### `textProperty`
 
 <ArpeggioWithText />
 
-### `displayProperty` and `style` for highlighting root notes
+### `textProperty` and `style` for highlighting root notes
 
 <ArpeggioWithTextAndRootNotes />

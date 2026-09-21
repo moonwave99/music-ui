@@ -50,7 +50,7 @@ test("Fretboard with default options", () => {
   expect(svg.getAttribute("viewBox")).toBe(
     `0 0 ${defaultWidth} ${defaultHeight}`,
   );
-  expect(svg.getAttribute("width")).toBe("min(100%, 1150px)");
+  expect(svg.getAttribute("width")).toBe(null);
   expect(svg.querySelectorAll(".strings line").length).toBe(stringCount);
   expect(svg.querySelectorAll(".frets line").length).toBe(fretCount + 1);
   expect(svg.querySelectorAll(".fret-numbers text").length).toBe(fretCount);
@@ -66,10 +66,20 @@ test("Fretboard - display: overflow", () => {
   expect(svg.getAttribute("width")).toBe("666");
 });
 
-test("Fretboard - display: stretch", () => {
+test("Fretboard - display: contain", () => {
   const fretboard = new Fretboard({
     width: 666,
-    display: "stretch",
+    display: "contain",
+  });
+  fretboard.render();
+  const svg = document.querySelector<SVGElement>("#fretboard svg")!;
+  expect(svg.getAttribute("width")).toBe("min(100%, 666px)");
+});
+
+test("Fretboard - display: cover", () => {
+  const fretboard = new Fretboard({
+    width: 666,
+    display: "cover",
   });
   fretboard.render();
   const svg = document.querySelector<SVGElement>("#fretboard svg")!;

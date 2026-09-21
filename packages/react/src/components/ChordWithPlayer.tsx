@@ -53,6 +53,7 @@ export function ChordWithPlayer({
     ...params,
     fretCount: params.fretCount || getChordFretSpan(input),
     showFretNumbers,
+    display: "contain",
     width,
     chord: {
       input,

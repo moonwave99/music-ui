@@ -37,7 +37,7 @@ In addition to the [`Fretboard` component props](/react/fretboard-diagrams/fretb
 | `root`            | `string`                               |               | The scale root note (e.g. "C")   |
 | `type`            | `string`                               |               | The scale type (e.g. "major")    |
 | `showName`        | `boolean`                              | `false`       | Shows the scale name             |
-| `displayProperty` | `"note"` \| `"degree"` \| `"interval"` |               | The position property to display |
+| `textProperty`    | `"note"` \| `"degree"` \| `"interval"` |               | The position property to display |
 | `highlightDegree` | `number`                               | `undefined`   | Highlights the passed degree     |
 | `className`       | `string`                               | `scale`       | The component class name         |
 
@@ -52,7 +52,7 @@ function App() {
   return (
     <>
       <Scale root="G" type="dorian" showName />
-      <Scale root="E" type="blues" displayProperty="note" highlightDegree={1} />
+      <Scale root="E" type="blues" textProperty="note" highlightDegree={1} />
       <Scale
         root="C"
         type="major"
@@ -69,9 +69,9 @@ function App() {
 
 <Scale root="G" type="dorian" showName />
 
-### `displayProperty` and `highlightDegree`
+### `textProperty` and `highlightDegree`
 
-<Scale root="E" type="blues" displayProperty="note" highlightDegree={1} />
+<Scale root="E" type="blues" textProperty="note" highlightDegree={1} />
 
 ### `box` and `displayBoxOnly` and `highlightDegree`
 

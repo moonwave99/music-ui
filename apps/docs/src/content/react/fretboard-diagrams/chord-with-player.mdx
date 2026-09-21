@@ -54,15 +54,11 @@ const player = playerFactory();
 function App() {
   return (
     <PlayerProvider player={player}>
-      <ChordWithPlayer
-        input="x32010"
-        displayProperty="note"
-        includeOpenStrings
-      />
+      <ChordWithPlayer input="x32010" textProperty="note" includeOpenStrings />
       <ChordWithPlayer
         input="133111"
         chordName="F minor"
-        displayProperty="note"
+        textProperty="note"
         barres="1"
       />
     </PlayerProvider>
@@ -71,11 +67,11 @@ function App() {
 ```
 
 <div className="chords">
-  <ChordWithPlayer input="x32010" displayProperty="note" includeOpenStrings />
+  <ChordWithPlayer input="x32010" textProperty="note" includeOpenStrings />
   <ChordWithPlayer
     input="133111"
     chordName="F minor"
-    displayProperty="note"
+    textProperty="note"
     barres="1"
   />
 </div>

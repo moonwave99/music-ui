@@ -13,13 +13,13 @@ const chords = [
   {
     input: "x5454x",
     chordName: "D7b9",
-    displayProperty: "note",
+    textProperty: "note",
     showFretNumbers: true,
   },
   {
     input: "131244",
     chordName: "F7#9",
-    displayProperty: "note",
+    textProperty: "note",
     showFretNumbers: true,
     barres: "1:6:4,4:2",
   },

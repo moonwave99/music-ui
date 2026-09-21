@@ -103,7 +103,6 @@ export type StyleParams = {
 
 export const DEFAULT_FRETBOARD_OPTIONS = {
   element: "#fretboard",
-  display: "default" as const,
   tuning: GUITAR_TUNINGS.default,
   stringCount: GUITAR_TUNINGS.default.length,
   stringWidth: DEFAULT_DIMENSIONS.line,
@@ -179,7 +178,7 @@ export type Point = {
 /**
  * Options accepted by the Fretboard constructor.
  * @property element The element where the fretboard will be rendered
- * @property display The width behavior ("stretch" or "overflow")
+ * @property display The width behavior
  * @property tuning The instrument tuning
  * @property stringCount The amount of strings to render
  * @property stringWidth The string thickness
@@ -222,7 +221,7 @@ export type Point = {
  */
 export type FretboardOptions = {
   element: ElementOrSelector<HTMLElement>;
-  display: "default" | "stretch" | "overflow";
+  display?: "cover" | "overflow" | "contain";
   tuning: Tuning;
   stringCount: number;
   stringWidth: number | number[];
@@ -328,14 +327,14 @@ export class Fretboard {
       .attr("viewBox", `0 0 ${totalWidth} ${totalHeight}`);
 
     switch (display) {
-      case "overflow":
-        this.svg.attr("width", width);
-        break;
-      case "stretch":
+      case "cover":
         this.svg.attr("width", "100%");
         break;
-      default:
+      case "contain":
         this.svg.attr("width", `min(100%, ${width}px)`);
+        break;
+      case "overflow":
+        this.svg.attr("width", width);
     }
 
     this.wrapper = this.svg

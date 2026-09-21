@@ -70,7 +70,7 @@ export function FretboardSystemExample({
         root={root}
         type="major"
         highlightDegree={1}
-        displayProperty="note"
+        textProperty="note"
         displayBoxOnly={displayMode === "displayBoxOnly"}
         disableOtherBoxes={displayMode === "disableOtherBoxes"}
         box={{ system, box }}

@@ -10,7 +10,7 @@ const chords = [
     showName: true,
     showFretNumbers: true,
     includeOpenStrings: true,
-    displayProperty: "note",
+    textProperty: "note",
   },
   {
     input: "x5454x",
@@ -18,7 +18,7 @@ const chords = [
     showName: true,
     crop: true,
     showFretNumbers: true,
-    displayProperty: "note",
+    textProperty: "note",
   },
   {
     input: "131244",
@@ -26,7 +26,7 @@ const chords = [
     showName: true,
     crop: true,
     showFretNumbers: true,
-    displayProperty: "note",
+    textProperty: "note",
     barres: "1:6:4,4:2",
   },
 ] as const;

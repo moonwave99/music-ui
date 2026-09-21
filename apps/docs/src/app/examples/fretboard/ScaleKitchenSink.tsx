@@ -20,31 +20,30 @@ const SCALE_TYPES = [
   "major blues",
 ];
 
-const DISPLAY_TYPES: { label: string; value: ScaleProps["displayProperty"] }[] =
-  [
-    {
-      label: "Note name",
-      value: "note",
-    },
-    {
-      label: "Scale degree",
-      value: "degree",
-    },
-    {
-      label: "Interval from root",
-      value: "interval",
-    },
-    {
-      label: "Nothing",
-      value: undefined,
-    },
-  ] as const;
+const DISPLAY_TYPES: { label: string; value: ScaleProps["textProperty"] }[] = [
+  {
+    label: "Note name",
+    value: "note",
+  },
+  {
+    label: "Scale degree",
+    value: "degree",
+  },
+  {
+    label: "Interval from root",
+    value: "interval",
+  },
+  {
+    label: "Nothing",
+    value: undefined,
+  },
+] as const;
 
 export function ScaleKitchenSink() {
   const [root, setRoot] = useState("C");
   const [type, setType] = useState("major");
   const [highlightRoots, setHighlightRoots] = useState(true);
-  const [displayPropertyIndex, setDisplayPropertyIndex] = useState(0);
+  const [textPropertyIndex, setTextPropertyIndex] = useState(0);
 
   return (
     <div className="scale-kitchen-sink">
@@ -77,9 +76,9 @@ export function ScaleKitchenSink() {
           Show
           <select
             name="type"
-            value={displayPropertyIndex}
+            value={textPropertyIndex}
             onChange={(event) =>
-              setDisplayPropertyIndex(Number(event.target.value))
+              setTextPropertyIndex(Number(event.target.value))
             }
           >
             {DISPLAY_TYPES.map(({ label }, index) => (
@@ -103,7 +102,7 @@ export function ScaleKitchenSink() {
         root={root}
         type={type}
         highlightDegree={highlightRoots ? 1 : undefined}
-        displayProperty={DISPLAY_TYPES[displayPropertyIndex]!.value}
+        textProperty={DISPLAY_TYPES[textPropertyIndex]!.value}
       />
     </div>
   );

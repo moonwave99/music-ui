@@ -59,7 +59,7 @@ function App() {
       <Chord
         input="x32010"
         chordName="C minor"
-        displayProperty="note"
+        textProperty="note"
         includeOpenStrings
       />
       <Chord
@@ -78,12 +78,12 @@ function App() {
 
 <Chord input="x32010" chordName="C major" showName />
 
-### `displayProperty` and `includeOpenStrings`
+### `textProperty` and `includeOpenStrings`
 
 <Chord
   input="x32010"
   chordName="C minor"
-  displayProperty="note"
+  textProperty="note"
   includeOpenStrings
 />
 
@@ -98,11 +98,11 @@ import { Chord } from "@music-ui/react";
 function App() {
   return (
     <>
-      <Chord input="133111" displayProperty="note" includeOpenStrings />
+      <Chord input="133111" textProperty="note" includeOpenStrings />
       <Chord
         input="133111"
         chordName="F minor"
-        displayProperty="note"
+        textProperty="note"
         includeOpenStrings
       />
     </>
@@ -112,14 +112,14 @@ function App() {
 
 No `chordName`: displays `G#` on the third string, first fret:
 
-<Chord input="133111" displayProperty="note" includeOpenStrings />
+<Chord input="133111" textProperty="note" includeOpenStrings />
 
 Right `chordName`: displays `Ab` on the third string, first fret:
 
 <Chord
   input="133111"
   chordName="F minor"
-  displayProperty="note"
+  textProperty="note"
   includeOpenStrings
 />
 

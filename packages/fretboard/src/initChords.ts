@@ -19,7 +19,7 @@ export const DEFAULT_CHORD_OPTIONS = {
   barres: "",
   crop: true,
   showFretNumbers: false,
-  displayProperty: undefined,
+  textProperty: undefined,
   width: DEFAULT_DIMENSIONS.chord,
 } as const;
 
@@ -71,9 +71,9 @@ export function initChord(element: HTMLElement): InitChord {
     ...options,
     barres: parseBarres(options.barres),
   });
-  if (options.displayProperty && options.chordName) {
+  if (options.textProperty && options.chordName) {
     fretboard.style({
-      text: (position) => `${position[options.displayProperty!]}` || "",
+      text: (position) => `${position[options.textProperty!]}` || "",
     });
   }
   return {
