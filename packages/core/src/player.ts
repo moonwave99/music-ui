@@ -152,7 +152,6 @@ type PlayerParams = {
   options?: PlayerOptions;
 };
 
-// #TODO pass an instruments records instead of a single sampler
 export class Player {
   private instruments: Record<string, Sampler>;
   private parts: Part[];

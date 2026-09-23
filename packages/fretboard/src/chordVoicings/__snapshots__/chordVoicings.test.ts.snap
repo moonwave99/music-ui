@@ -1,0 +1,154 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getChordVoicing 1`] = `
+{
+  "mutedStrings": [
+    1,
+    5,
+  ],
+  "positions": [
+    {
+      "chroma": 7,
+      "degree": 5,
+      "fret": 8,
+      "midi": 67,
+      "note": "G",
+      "noteWithOctave": "G4",
+      "octave": 4,
+      "string": 2,
+    },
+    {
+      "chroma": 4,
+      "degree": 3,
+      "fret": 9,
+      "midi": 64,
+      "note": "E",
+      "noteWithOctave": "E4",
+      "octave": 4,
+      "string": 3,
+    },
+    {
+      "chroma": 11,
+      "degree": 7,
+      "fret": 9,
+      "midi": 59,
+      "note": "B",
+      "noteWithOctave": "B3",
+      "octave": 3,
+      "string": 4,
+    },
+    {
+      "chroma": 0,
+      "degree": 1,
+      "fret": 8,
+      "midi": 48,
+      "note": "C",
+      "noteWithOctave": "C3",
+      "octave": 3,
+      "string": 6,
+    },
+  ],
+}
+`;
+
+exports[`getChordVoicing 2`] = `
+{
+  "mutedStrings": [
+    1,
+    5,
+  ],
+  "positions": [
+    {
+      "chroma": 4,
+      "degree": 7,
+      "fret": 5,
+      "midi": 64,
+      "note": "E",
+      "noteWithOctave": "E4",
+      "octave": 4,
+      "string": 2,
+    },
+    {
+      "chroma": 0,
+      "degree": 5,
+      "fret": 5,
+      "midi": 60,
+      "note": "C",
+      "noteWithOctave": "C4",
+      "octave": 4,
+      "string": 3,
+    },
+    {
+      "chroma": 5,
+      "degree": 1,
+      "fret": 3,
+      "midi": 53,
+      "note": "F",
+      "noteWithOctave": "F3",
+      "octave": 3,
+      "string": 4,
+    },
+    {
+      "chroma": 9,
+      "degree": 3,
+      "fret": 5,
+      "midi": 45,
+      "note": "A",
+      "noteWithOctave": "A2",
+      "octave": 2,
+      "string": 6,
+    },
+  ],
+}
+`;
+
+exports[`getChordVoicing 3`] = `
+{
+  "mutedStrings": [
+    1,
+    2,
+  ],
+  "positions": [
+    {
+      "chroma": 6,
+      "degree": 7,
+      "fret": 11,
+      "midi": 66,
+      "note": "F#",
+      "noteWithOctave": "F#4",
+      "octave": 4,
+      "string": 3,
+    },
+    {
+      "chroma": 11,
+      "degree": 3,
+      "fret": 9,
+      "midi": 59,
+      "note": "B",
+      "noteWithOctave": "B3",
+      "octave": 3,
+      "string": 4,
+    },
+    {
+      "chroma": 7,
+      "degree": 1,
+      "fret": 10,
+      "midi": 55,
+      "note": "G",
+      "noteWithOctave": "G3",
+      "octave": 3,
+      "string": 5,
+    },
+    {
+      "chroma": 2,
+      "degree": 5,
+      "fret": 10,
+      "midi": 50,
+      "note": "D",
+      "noteWithOctave": "D3",
+      "octave": 3,
+      "string": 6,
+    },
+  ],
+}
+`;

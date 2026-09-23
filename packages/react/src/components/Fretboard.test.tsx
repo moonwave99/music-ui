@@ -35,4 +35,24 @@ describe("Fretboard", () => {
     expect(screen.queryByText("C")).toBeVisible();
     expect(screen.queryByText("E")).toBeVisible();
   });
+
+  it("shows the positions of the passed chordVoicing", () => {
+    const { container } = render(
+      <Fretboard
+        textProperty="note"
+        chordVoicing={{
+          root: "C",
+          type: "drop3",
+          string: 6,
+          quality: "maj7",
+          inversion: 0,
+        }}
+      />,
+    );
+    expect(container.querySelector(".fretboard")).toBeInTheDocument();
+    expect(screen.queryByText("C")).toBeVisible();
+    expect(screen.queryByText("E")).toBeVisible();
+    expect(screen.queryByText("G")).toBeVisible();
+    expect(screen.queryByText("B")).toBeVisible();
+  });
 });

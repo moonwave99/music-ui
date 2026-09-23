@@ -5,6 +5,7 @@ import {
   type FretboardPosition,
   type StyleParams,
   type RenderChordParams,
+  type RenderChordVoicingParams,
   type ScaleParams,
 } from "@music-ui/fretboard";
 
@@ -19,6 +20,7 @@ import {
 export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
   positions?: FretboardPosition[];
   chord?: RenderChordParams;
+  chordVoicing?: RenderChordVoicingParams;
   scale?: ScaleParams;
   style?: StyleParams;
   textProperty?: keyof Pick<FretboardPosition, "note" | "degree" | "interval">;
@@ -42,6 +44,7 @@ export type UseFretboard<T extends HTMLElement> = {
 export function useFretboard<T extends HTMLElement>({
   positions,
   chord,
+  chordVoicing,
   scale,
   style = {},
   textProperty,
@@ -70,12 +73,16 @@ export function useFretboard<T extends HTMLElement>({
       fretboardRef.current?.renderChord(chord);
       return;
     }
+    if (chordVoicing) {
+      fretboardRef.current?.renderChordVoicing(chordVoicing);
+      return;
+    }
     if (!positions || !positions.length) {
       fretboardRef.current?.clear().render();
       return;
     }
     fretboardRef.current?.setPositions(positions).render();
-  }, [positions, chord, scale]);
+  }, [positions, chord, chordVoicing, scale]);
 
   useEffect(() => {
     fretboardRef.current?.style({

@@ -139,7 +139,7 @@ export class FretboardSystem {
   ): BareFretboardPosition[] {
     const { tuning } = this;
     const rootOffset = semitones(distance(tuning[0]!, root)) >= 12;
-    const negativeFrets = positions.filter((x) => x.fret < 0).length > 0;
+    const negativeFrets = positions.some((x) => x.fret < 0);
     return positions.map(({ string, fret }) => ({
       string,
       fret: rootOffset || negativeFrets ? fret + 12 : fret,

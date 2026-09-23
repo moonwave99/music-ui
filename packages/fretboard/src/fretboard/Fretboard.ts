@@ -19,6 +19,11 @@ import {
 } from "../chords/chords";
 
 import {
+  getChordVoicing,
+  type GetChordVoicingParams,
+} from "../chordVoicings/chordVoicings";
+
+import {
   MIDDLE_FRET,
   GUITAR_TUNINGS,
   DEFAULT_COLORS,
@@ -82,6 +87,10 @@ export type Barre = {
 export type BarreInput = string | Barre | Barre[];
 
 export type RenderChordParams = Omit<ParseChordParams, "system"> & {
+  barres?: BarreInput;
+};
+
+export type RenderChordVoicingParams = Omit<GetChordVoicingParams, "system"> & {
   barres?: BarreInput;
 };
 
@@ -489,7 +498,7 @@ export class Fretboard {
       ...defaultMuteStringsParams,
       ...params,
     };
-
+    this.wrapper.select(`.${cssClasses.mutedStrings}`).remove();
     this.wrapper
       .append("g")
       .attr("class", cssClasses.mutedStrings)
@@ -520,18 +529,14 @@ export class Fretboard {
    * @param __namedParameters The expected parameters.
    * @returns The current Fretboard instance.
    */
-  renderChord({ barres, ...rest }: RenderChordParams): Fretboard {
-    const { positions, mutedStrings: strings } = parseChord({
-      ...rest,
-      system: this.system,
+  renderChord({ barres, ...params }: RenderChordParams): Fretboard {
+    return this._renderChord({
+      ...parseChord({
+        ...params,
+        system: this.system,
+      }),
+      barres,
     });
-    this.setPositions(positions);
-    if (barres) {
-      this.renderBarres(barres);
-    }
-    this.render();
-    this.muteStrings({ strings });
-    return this;
   }
 
   /**
@@ -546,6 +551,25 @@ export class Fretboard {
       includeOpenStrings: true,
     });
     return positions;
+  }
+
+  /**
+   * Renders a chord voicing
+   * @param __namedParameters The expected parameters.
+   * @returns The current Fretboard instance.
+   */
+  renderChordVoicing({
+    barres,
+    ...params
+  }: RenderChordVoicingParams): Fretboard {
+    const voicing = getChordVoicing({
+      ...params,
+      system: this.system,
+    });
+    if (!voicing) {
+      return this;
+    }
+    return this._renderChord({ ...voicing, barres });
   }
 
   /**
@@ -649,6 +673,24 @@ export class Fretboard {
    */
   clearHighlightAreas(): Fretboard {
     this.wrapper.select(`.${cssClasses.highlightAreas}`).remove();
+    return this;
+  }
+
+  private _renderChord({
+    mutedStrings,
+    positions,
+    barres,
+  }: {
+    mutedStrings: number[];
+    barres?: BarreInput;
+    positions: FretboardPosition[];
+  }) {
+    this.setPositions(positions);
+    if (barres) {
+      this.renderBarres(barres);
+    }
+    this.render();
+    this.muteStrings({ strings: mutedStrings });
     return this;
   }
 

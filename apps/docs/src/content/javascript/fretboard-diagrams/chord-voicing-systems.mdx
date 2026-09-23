@@ -1,0 +1,55 @@
+import { ChordVoicingsKitchenSink } from "../../../app/examples/fretboard/ChordVoicingsKitchenSink";
+
+# Chord voicing systems
+
+**Four-voice chords** are versatile and ubiquitous across all music genres. The `@music-ui/fretboard` library contains various voicing systems organized by **inversion** and **bottom string**.
+
+<Callout type="warning">
+  The provided chord voicing systems work just for **6-string guitar** in
+  **standard tuning**.
+</Callout>
+
+## Rendering a chord voicing
+
+The [`Fretboard.renderChordVoicing` function](/api/classes/_music-ui_fretboard.Fretboard.html#renderchordvoicing) accepts the following parameters:
+
+| Name        | Type                                      | Description         |
+| ----------- | ----------------------------------------- | ------------------- |
+| `type`      | `drop2` \| `drop3`                        | The voicing type    |
+| `string`    | `4` \| `5` \| `6`                         | The base string     |
+| `root`      | `string`                                  | The root note       |
+| `quality`   | `maj7` \| `7` \| `m7` \| `m7b5` \| `dim7` | The chord quality   |
+| `inversion` | `0` \| `1` \| `2` \| `3`                  | The chord inversion |
+
+```ts
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard();
+
+fretboard.renderChordVoicing({
+  type: "drop3",
+  string: 6,
+  root: "G",
+  quality: "maj7",
+  inversion: 0,
+});
+```
+
+Output:
+
+<Fretboard
+  display="contain"
+  chordVoicing={{
+    type: "drop3",
+    string: 6,
+    root: "G",
+    quality: "maj7",
+    inversion: 0,
+  }}
+/>
+
+## Explore systems
+
+At the moment **drop2** and **drop3** voicings are included. You can explore them in the widget below:
+
+<ChordVoicingsKitchenSink />

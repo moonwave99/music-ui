@@ -604,3 +604,29 @@ test("Fretboard - clearHighlightAreas", () => {
   expect(svg).toBeTruthy();
   expect(svg.querySelectorAll(".highlight-areas .area").length).toBe(0);
 });
+
+test("Fretboard - renderChordVoicing", () => {
+  const fretboard = new Fretboard();
+  fretboard.renderChordVoicing({
+    type: "drop2",
+    root: "G",
+    string: 6,
+    inversion: 0,
+  });
+
+  const svg = document.querySelector("#fretboard svg")!;
+  expect(svg.querySelectorAll(".positions .position").length).toBe(4);
+});
+
+test("Fretboard - renderChordVoicing - not existing", () => {
+  const fretboard = new Fretboard();
+  fretboard.renderChordVoicing({
+    type: "drop3",
+    root: "G",
+    string: 4,
+    inversion: 0,
+  });
+
+  const svg = document.querySelector("#fretboard svg")!;
+  expect(svg.querySelectorAll(".positions .position").length).toBe(0);
+});
