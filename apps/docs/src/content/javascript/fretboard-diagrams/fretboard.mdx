@@ -19,7 +19,7 @@ The `Fretboard` class renders highly configurable fretboard diagrams in SVG form
 
 ## Usage
 
-Rendering a fretboard requires a target element:
+Rendering a fretboard requires a `#fretboard` target element:
 
 ```html
 <div id="fretboard"></div>
@@ -30,7 +30,7 @@ and the following setup code:
 ```ts
 import { Fretboard } from "@music-ui/fretboard";
 
-const fretboard = new Fretboard({ fretCount: 5, width: 600 });
+const fretboard = new Fretboard();
 fretboard.render();
 ```
 
@@ -51,11 +51,14 @@ import { Fretboard } from "@music-ui/fretboard";
 
 const fretboard = new Fretboard({
   element: ".my-fretboard",
-  fretCount: 5,
-  width: 600,
 });
 fretboard.render();
 ```
+
+<Callout type="info">
+  All the examples of this page assume a default `#fretboard` element present
+  inside the document.
+</Callout>
 
 ## Width behavior
 
