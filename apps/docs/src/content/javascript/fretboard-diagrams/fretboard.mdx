@@ -38,6 +38,25 @@ Output:
 
 <Fretboard />
 
+You can select a different element via the `element` option:
+
+```html
+<div class="my-fretboard"></div>
+```
+
+Setup code:
+
+```ts {4}
+import { Fretboard } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  element: ".my-fretboard",
+  fretCount: 5,
+  width: 600,
+});
+fretboard.render();
+```
+
 ## Width behavior
 
 The `display` option controls the `<svg>` element width behavior.
