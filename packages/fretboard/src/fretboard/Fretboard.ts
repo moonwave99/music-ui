@@ -128,7 +128,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   fretPaddingLeft: 0,
   paddingTop: DEFAULT_DIMENSIONS.unit / 2,
   paddingBottom: DEFAULT_DIMENSIONS.unit * 0.75,
-  paddingLeft: DEFAULT_DIMENSIONS.unit / 2,
+  paddingLeft: DEFAULT_DIMENSIONS.unit * 0.6,
   paddingRight: DEFAULT_DIMENSIONS.unit / 2,
   height: DEFAULT_DIMENSIONS.height,
   width: DEFAULT_DIMENSIONS.width,
