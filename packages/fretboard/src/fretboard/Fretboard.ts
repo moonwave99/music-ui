@@ -271,16 +271,16 @@ export type FretboardOptions = {
 };
 
 export class Fretboard {
-  strings: number[];
-  frets: number[];
-  grid: Point[][];
-  svg: Selection<
+  private strings: number[];
+  private frets: number[];
+  private grid: Point[][];
+  private svg: Selection<
     SVGSVGElement,
     FretboardPosition,
     HTMLElement,
     FretboardPosition
   >;
-  wrapper: Selection<
+  private wrapper: Selection<
     SVGGElement,
     FretboardPosition,
     HTMLElement,
