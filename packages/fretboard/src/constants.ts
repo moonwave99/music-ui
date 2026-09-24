@@ -10,8 +10,8 @@ export const DEFAULT_COLORS = {
   mutedString: "#333",
   positionText: "#111",
   barres: "#666",
-  highlightAreasStroke: "transparent",
-  highlightAreasFill: "#ff636c44",
+  highlightAreasStroke: "#ff636c77",
+  highlightAreasFill: "#ff636c33",
 };
 
 export const DEFAULT_DIMENSIONS = {

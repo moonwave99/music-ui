@@ -121,7 +121,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   nutWidth: DEFAULT_DIMENSIONS.nut,
   nutColor: DEFAULT_COLORS.line,
   middleFretColor: DEFAULT_COLORS.highlightFill,
-  middleFretWidth: 3 * DEFAULT_DIMENSIONS.line,
+  middleFretWidth: DEFAULT_DIMENSIONS.line * 3,
   scaleFrets: true,
   crop: false,
   fretPaddingLeft: 0,
@@ -133,13 +133,13 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   width: DEFAULT_DIMENSIONS.width,
   positionSize: DEFAULT_DIMENSIONS.unit,
   positionStrokeColor: DEFAULT_COLORS.positionStroke,
-  positionStrokeWidth: 2 * DEFAULT_DIMENSIONS.line,
+  positionStrokeWidth: DEFAULT_DIMENSIONS.line * 2,
   positionTextSize: DEFAULT_FONT_SIZE,
   positionFill: DEFAULT_COLORS.positionFill,
   positionText: () => "",
   disabledOpacity: 0.2,
   showFretNumbers: true,
-  fretNumbersHeight: 2 * DEFAULT_DIMENSIONS.unit,
+  fretNumbersHeight: DEFAULT_DIMENSIONS.unit * 2,
   fretNumbersMargin: DEFAULT_DIMENSIONS.unit * 1.5,
   fretNumbersColor: DEFAULT_COLORS.line,
   font: DEFAULT_FONT_FAMILY,
@@ -148,6 +148,7 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   highlightAreasRadius: DEFAULT_DIMENSIONS.unit * 0.5,
   highlightAreasStroke: DEFAULT_COLORS.highlightAreasStroke,
   highlightAreasFill: DEFAULT_COLORS.highlightAreasFill,
+  highlightAreasStrokeWidth: DEFAULT_DIMENSIONS.line * 2,
 };
 
 export const defaultMuteStringsParams = {
@@ -220,10 +221,11 @@ export type Point = {
  * @property fretNumbersColor The fret numbers color
  * @property font The used font
  * @property barresColor The barres color
- * @property highlightPadding The highlight areas padding
- * @property highlightRadius The highlight areas border radius
- * @property highlightStroke The highlight areas stroke color
- * @property highlightFill The highlight areas fill color
+ * @property highlightAreasPadding The highlight areas padding
+ * @property highlightAreasRadius The highlight areas border radius
+ * @property highlightAreasStroke The highlight areas stroke color
+ * @property highlightAreasFill The highlight areas fill color
+ * @property highlightAreasStrokeWidth The highlight areas stroke width
  */
 export type FretboardOptions = {
   element: ElementOrSelector<HTMLElement>;
@@ -265,6 +267,7 @@ export type FretboardOptions = {
   highlightAreasRadius: number;
   highlightAreasStroke: string;
   highlightAreasFill: string;
+  highlightAreasStrokeWidth: number;
 };
 
 export class Fretboard {
@@ -615,6 +618,7 @@ export class Fretboard {
       highlightAreasFill,
       highlightAreasStroke,
       highlightAreasRadius,
+      highlightAreasStrokeWidth,
     } = options;
 
     this.clearHighlightedAreas();
@@ -666,7 +670,8 @@ export class Fretboard {
         return to!.y - from!.y + positionSize + 2 * highlightAreasPadding;
       })
       .attr("stroke", highlightAreasStroke)
-      .attr("fill", highlightAreasFill);
+      .attr("fill", highlightAreasFill)
+      .attr("stroke-width", highlightAreasStrokeWidth);
 
     return this;
   }
