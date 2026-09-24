@@ -2,6 +2,7 @@
   --piano-height: 6rem;
   --piano-white-key-width: 1.75rem;
   --piano-black-key-width: 1.2rem;
+  --showcase-width: 825px;
 }
 
 main {
@@ -56,6 +57,7 @@ main {
 }
 
 .abc-score {
+  width: min(100%, var(--showcase-width));
   .piano {
     width: 100%;
   }
@@ -67,9 +69,10 @@ main {
 }
 
 .chords {
+  width: min(100%, var(--showcase-width));
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 1.5rem;
   overflow-x: auto;
   @media screen and (max-width: 600px) {
     grid-template-columns: 1fr;

@@ -36,7 +36,7 @@ import {
 
 import {
   FretboardSystem,
-  type ScaleParams,
+  type GetScaleParams,
 } from "../fretboardSystem/FretboardSystem";
 
 /**
@@ -578,16 +578,14 @@ export class Fretboard {
    * @returns The current Fretboard instance.
    */
   renderScale({
-    type,
-    root,
-    box,
     displayBoxOnly,
     disableOtherBoxes,
-  }: ScaleParams): Fretboard {
+    ...params
+  }: GetScaleParams): Fretboard {
     this.checkTuning();
     return this.setPositions(
       this.system
-        .getScale({ type, root, box })
+        .getScale(params)
         .map((x) => ({
           ...x,
           disabled: Boolean(disableOtherBoxes && !x.inBox),

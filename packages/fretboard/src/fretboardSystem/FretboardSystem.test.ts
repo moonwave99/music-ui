@@ -1,6 +1,6 @@
 import { test, expect, assert } from "vitest";
 
-import { FretboardSystem, findPositionInArray } from "./FretboardSystem";
+import { FretboardSystem } from "./FretboardSystem";
 import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
 
 test("FretboardSystem - constructor with default options", () => {
@@ -36,17 +36,17 @@ test("FretboardSystem - getScale()", () => {
     type: "minor pentatonic",
     root: "E",
   });
-  expect(scale[0]).toEqual({
-    octave: 4,
-    octaveInScale: 2,
-    chroma: 4,
-    note: "E",
-    interval: "1P",
-    degree: 1,
-    string: 1,
-    fret: 0,
-    inBox: false,
+  expect(scale).toMatchSnapshot();
+});
+
+test("FretboardSystem - getScale() - pickDegrees", () => {
+  const system = new FretboardSystem();
+  const scale = system.getScale({
+    type: "major",
+    root: "C",
+    pickDegrees: [1, 3, 5],
   });
+  expect(scale).toMatchSnapshot();
 });
 
 test("FretboardSystem - getScale() - scale not found", () => {
@@ -69,7 +69,7 @@ test("FretboardSystem - getScale() with system", () => {
       box: 1,
     },
   });
-  expect(scale.filter(({ inBox }) => inBox).length).toBe(12);
+  expect(scale).toMatchSnapshot();
 });
 
 test("FretboardSystem - getScale() with system - upper octave", () => {
@@ -82,7 +82,7 @@ test("FretboardSystem - getScale() with system - upper octave", () => {
       box: 1,
     },
   });
-  expect(findPositionInArray({ string: 6, fret: 12 }, scale)).toBeTruthy();
+  expect(scale).toMatchSnapshot();
 });
 
 test("FretboardSystem - getScale() - B#", () => {

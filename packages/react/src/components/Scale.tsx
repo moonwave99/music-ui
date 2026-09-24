@@ -1,7 +1,7 @@
 import {
   DEFAULT_COLORS,
   highlightDegreeFill,
-  type ScaleParams,
+  type GetScaleParams,
 } from "@music-ui/fretboard";
 import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
 
@@ -12,7 +12,7 @@ import { useFretboard, type UseFretboardParams } from "../hooks/useFretboard";
  * @property showName Shows the scale name.
  * @property highlightDegree Highlights the passed degree.
  */
-export type ScaleProps = ScaleParams &
+export type ScaleProps = GetScaleParams &
   Omit<UseFretboardParams, "scale" | "chord" | "positions"> & {
     id?: string;
     className?: string;
@@ -29,6 +29,7 @@ export function Scale({
   root,
   type,
   box,
+  pickDegrees,
   displayBoxOnly = false,
   disableOtherBoxes = false,
   highlightDegree = undefined,
@@ -43,6 +44,7 @@ export function Scale({
       root,
       type,
       box,
+      pickDegrees,
       displayBoxOnly,
       disableOtherBoxes,
     },

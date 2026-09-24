@@ -6,7 +6,7 @@ import {
   type StyleParams,
   type RenderChordParams,
   type RenderChordVoicingParams,
-  type ScaleParams,
+  type GetScaleParams,
 } from "@music-ui/fretboard";
 
 /**
@@ -21,7 +21,7 @@ export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
   positions?: FretboardPosition[];
   chord?: RenderChordParams;
   chordVoicing?: RenderChordVoicingParams;
-  scale?: ScaleParams;
+  scale?: GetScaleParams;
   style?: StyleParams;
   textProperty?: keyof Pick<FretboardPosition, "note" | "degree" | "interval">;
 };

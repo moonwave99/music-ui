@@ -39,10 +39,13 @@ const DISPLAY_TYPES: { label: string; value: ScaleProps["textProperty"] }[] = [
   },
 ] as const;
 
-export function ScaleKitchenSink() {
+type ScaleKitchenSinkProps = Pick<ScaleProps, "display">;
+
+export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
   const [root, setRoot] = useState("C");
   const [type, setType] = useState("major");
   const [highlightRoots, setHighlightRoots] = useState(true);
+  const [showArpeggio, setShowArpeggio] = useState(false);
   const [textPropertyIndex, setTextPropertyIndex] = useState(0);
 
   return (
@@ -97,11 +100,22 @@ export function ScaleKitchenSink() {
             onChange={() => setHighlightRoots((prev) => !prev)}
           />
         </label>
+        <label>
+          Show seventh arpeggio only
+          <input
+            name="showArpeggio"
+            type="checkbox"
+            checked={showArpeggio}
+            onChange={() => setShowArpeggio((prev) => !prev)}
+          />
+        </label>
       </div>
       <Scale
+        {...props}
         root={root}
         type={type}
         highlightDegree={highlightRoots ? 1 : undefined}
+        pickDegrees={showArpeggio ? [1, 3, 5, 7] : undefined}
         textProperty={DISPLAY_TYPES[textPropertyIndex]!.value}
       />
     </div>

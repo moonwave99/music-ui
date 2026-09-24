@@ -13,7 +13,7 @@ import { GUITAR_TUNINGS, DEFAULT_FRET_COUNT } from "../constants";
 
 const MIN_FRET_COUNT = 12;
 
-export type ScaleParams = {
+export type GetScaleParams = {
   type: string;
   root: string;
   box?: {
@@ -22,6 +22,7 @@ export type ScaleParams = {
   };
   disableOtherBoxes?: boolean;
   displayBoxOnly?: boolean;
+  pickDegrees?: number[];
 };
 
 export type SystemPosition = BareFretboardPosition & {
@@ -94,7 +95,8 @@ export class FretboardSystem {
     type = "major",
     root: paramsRoot = "C",
     box,
-  }: ScaleParams): FretboardPosition[] {
+    pickDegrees,
+  }: GetScaleParams): FretboardPosition[] {
     const { baseOctave } = this;
     const { note: root } = parseNote(paramsRoot);
     const scaleName = `${root} ${type}`;
@@ -131,7 +133,10 @@ export class FretboardSystem {
           ...x,
           octave,
         } as FretboardPosition;
-      });
+      })
+      .filter(({ degree }) =>
+        !pickDegrees ? true : pickDegrees.includes(degree!),
+      );
   }
   private adjustOctave(
     positions: BareFretboardPosition[],
