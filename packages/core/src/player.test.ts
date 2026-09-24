@@ -184,3 +184,28 @@ describe("Player - seek", () => {
     });
   });
 });
+
+describe("Player - non existing instrument", () => {
+  it("Emits the playback events even without triggering any sampler playback", async () => {
+    const player = new Player(getMockedPlayerParams());
+
+    const onProgress = vi.fn();
+    player.on("progress", onProgress);
+
+    const score = getAbcScore({
+      id: "1",
+      input: "CDEF",
+      instrument: "kalimba",
+    });
+    player.setScore(score);
+    player.seekTo("0:1:0");
+    await player.play();
+
+    expect(onProgress).toHaveBeenCalledWith({
+      activeId: "1",
+      playedNotes: [["D4"]],
+      position: "0:1:0",
+      voice: 0,
+    });
+  });
+});

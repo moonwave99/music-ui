@@ -55,4 +55,20 @@ describe("Fretboard", () => {
     expect(screen.queryByText("G")).toBeVisible();
     expect(screen.queryByText("B")).toBeVisible();
   });
+
+  it("highlights the passed areas", () => {
+    const { container } = render(
+      <Fretboard
+        highlightAreas={[
+          [
+            { string: 6, fret: 1 },
+            { string: 1, fret: 3 },
+          ],
+        ]}
+      />,
+    );
+    expect(container.querySelectorAll(".highlight-areas .area")).toHaveLength(
+      1,
+    );
+  });
 });
