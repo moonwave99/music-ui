@@ -168,7 +168,10 @@ function deriveVoicing({ degrees, original, quality }: DeriveVoicingParams) {
   });
 }
 
-function getDeriveDelta(degrees: readonly number[], quality: VoicingQuality) {
+function getDeriveDelta(
+  degrees: readonly VoicingDegree[],
+  quality: VoicingQuality,
+) {
   const delta = deltaToObject(deriveMap[quality]);
   return degrees.map((x) => delta[x]!);
 }
@@ -179,7 +182,7 @@ function deltaToObject(delta: readonly number[]) {
     3: delta[1],
     5: delta[2],
     7: delta[3],
-  } as Record<number, number>;
+  };
 }
 
 function computeVoicings(input: VoicingSystem) {
