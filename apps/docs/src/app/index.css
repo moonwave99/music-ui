@@ -116,9 +116,20 @@ main {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      select {
+      @media screen and (max-width: 900px) {
+        flex-direction: column;
+        gap: 0;
+        align-items: start;
+      }
+      select,
+      input[type="number"] {
         border: 1px solid;
         border-radius: 0.25rem;
+        padding: 0 0.25rem;
+      }
+      select,
+      input {
+        height: 1.5rem;
       }
     }
   }

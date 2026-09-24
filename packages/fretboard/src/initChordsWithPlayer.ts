@@ -35,7 +35,7 @@ export function initChordsWithPlayer<T extends HTMLElement>(
 ) {
   const { selection, player, playedNoteColor } = {
     ...DEFAULT_OPTIONS,
-    playedNoteColor: DEFAULT_COLORS.highlight,
+    playedNoteColor: DEFAULT_COLORS.highlightFill,
     ...params,
   };
   if (!(player instanceof Player)) {

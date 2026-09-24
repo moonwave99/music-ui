@@ -33,7 +33,7 @@ export type ChordWithPlayerProps = ChordProps & {
 export function ChordWithPlayer({
   className = "chord-with-player",
   instrument = "acoustic_guitar_nylon",
-  playedNoteColor = DEFAULT_COLORS.highlight,
+  playedNoteColor = DEFAULT_COLORS.highlightFill,
   playLabel = "Play",
   arpeggioLabel = "Arpeggio",
   arpeggioSpeed = 120,

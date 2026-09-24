@@ -3,15 +3,15 @@ export const DEFAULT_FRET_COUNT = 15;
 
 export const DEFAULT_COLORS = {
   line: "#666",
-  highlight: "#ff636c",
+  highlightFill: "#ff636c",
   positionStroke: "#555",
   positionFill: "white",
   fretNumber: "#00000099",
   mutedString: "#333",
   positionText: "#111",
   barres: "#666",
-  highlightStroke: "transparent",
-  highlightFill: "dodgerblue",
+  highlightAreasStroke: "transparent",
+  highlightAreasFill: "#ff636c44",
 };
 
 export const DEFAULT_DIMENSIONS = {
@@ -34,5 +34,3 @@ export const GUITAR_TUNINGS = {
   openG: ["D2", "G2", "D3", "G3", "B3", "D4"],
   DADGAD: ["D2", "A2", "D3", "G3", "A3", "D4"],
 };
-
-export const DEFAULT_HIGHLIGHT_BLEND_MODE = "color-burn";

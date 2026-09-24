@@ -31,7 +31,6 @@ import {
   DEFAULT_FRET_COUNT,
   DEFAULT_FONT_FAMILY,
   DEFAULT_FONT_SIZE,
-  DEFAULT_HIGHLIGHT_BLEND_MODE,
 } from "../constants";
 
 import {
@@ -121,12 +120,12 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   fretColor: DEFAULT_COLORS.line,
   nutWidth: DEFAULT_DIMENSIONS.nut,
   nutColor: DEFAULT_COLORS.line,
-  middleFretColor: DEFAULT_COLORS.highlight,
+  middleFretColor: DEFAULT_COLORS.highlightFill,
   middleFretWidth: 3 * DEFAULT_DIMENSIONS.line,
   scaleFrets: true,
   crop: false,
   fretPaddingLeft: 0,
-  paddingTop: DEFAULT_DIMENSIONS.unit / 2,
+  paddingTop: DEFAULT_DIMENSIONS.unit,
   paddingBottom: DEFAULT_DIMENSIONS.unit * 0.75,
   paddingLeft: DEFAULT_DIMENSIONS.unit * 0.6,
   paddingRight: DEFAULT_DIMENSIONS.unit / 2,
@@ -145,11 +144,10 @@ export const DEFAULT_FRETBOARD_OPTIONS = {
   fretNumbersColor: DEFAULT_COLORS.line,
   font: DEFAULT_FONT_FAMILY,
   barresColor: DEFAULT_COLORS.barres,
-  highlightPadding: DEFAULT_DIMENSIONS.unit * 0.5,
-  highlightRadius: DEFAULT_DIMENSIONS.unit * 0.5,
-  highlightStroke: DEFAULT_COLORS.highlightStroke,
-  highlightFill: DEFAULT_COLORS.highlightFill,
-  highlightBlendMode: DEFAULT_HIGHLIGHT_BLEND_MODE,
+  highlightAreasPadding: DEFAULT_DIMENSIONS.unit * 0.5,
+  highlightAreasRadius: DEFAULT_DIMENSIONS.unit * 0.5,
+  highlightAreasStroke: DEFAULT_COLORS.highlightAreasStroke,
+  highlightAreasFill: DEFAULT_COLORS.highlightAreasFill,
 };
 
 export const defaultMuteStringsParams = {
@@ -226,7 +224,6 @@ export type Point = {
  * @property highlightRadius The highlight areas border radius
  * @property highlightStroke The highlight areas stroke color
  * @property highlightFill The highlight areas fill color
- * @property highlightBlendMode The highlight areas blend mode
  */
 export type FretboardOptions = {
   element: ElementOrSelector<HTMLElement>;
@@ -264,11 +261,10 @@ export type FretboardOptions = {
   fretNumbersColor: string;
   font: string;
   barresColor: string;
-  highlightPadding: number;
-  highlightRadius: number;
-  highlightStroke: string;
-  highlightFill: string;
-  highlightBlendMode: string;
+  highlightAreasPadding: number;
+  highlightAreasRadius: number;
+  highlightAreasStroke: string;
+  highlightAreasFill: string;
 };
 
 export class Fretboard {
@@ -498,7 +494,7 @@ export class Fretboard {
       ...defaultMuteStringsParams,
       ...params,
     };
-    this.wrapper.select(`.${cssClasses.mutedStrings}`).remove();
+    this.clearMutedStrings();
     this.wrapper
       .append("g")
       .attr("class", cssClasses.mutedStrings)
@@ -521,6 +517,15 @@ export class Fretboard {
       .attr("class", cssClasses.mutedString)
       .attr("data-string", (stringNumber) => stringNumber);
 
+    return this;
+  }
+
+  /**
+   * Clears all the currently muted strings.
+   * @returns The current Fretboard instance.
+   */
+  clearMutedStrings() {
+    this.wrapper.select(`.${cssClasses.mutedStrings}`).remove();
     return this;
   }
 
@@ -606,19 +611,21 @@ export class Fretboard {
     const {
       width,
       positionSize,
-      highlightPadding,
-      highlightFill,
-      highlightStroke,
-      highlightBlendMode,
-      highlightRadius,
+      highlightAreasPadding,
+      highlightAreasFill,
+      highlightAreasStroke,
+      highlightAreasRadius,
     } = options;
+
+    this.clearHighlightedAreas();
 
     const highlightGroup = wrapper
       .append("g")
+      .lower()
       .attr("class", cssClasses.highlightAreas);
 
     const positionPercentSize = (positionSize / width) * 100;
-    const highlightPaddingPercentSize = (highlightPadding / width) * 100;
+    const highlightPaddingPercentSize = (highlightAreasPadding / width) * 100;
     const positionOffset = this.getPositionOffset();
 
     const bounds = areas.map(getBounds);
@@ -637,14 +644,14 @@ export class Fretboard {
             topLeft.fret - positionOffset,
           )!.y -
           positionSize * 0.5 -
-          highlightPadding,
+          highlightAreasPadding,
       )
       .attr(
         "x",
         ({ topLeft }) =>
           `${this.getGridPositionAt(topLeft.string - 1, topLeft.fret - positionOffset)!.x - positionPercentSize / 2 - highlightPaddingPercentSize}%`,
       )
-      .attr("rx", highlightRadius)
+      .attr("rx", highlightAreasRadius)
       .attr("width", ({ topLeft, topRight }) => {
         const from = this.getGridPositionAt(topLeft.string - 1, topLeft.fret);
         const to = this.getGridPositionAt(topRight.string - 1, topRight.fret);
@@ -656,20 +663,19 @@ export class Fretboard {
           bottomLeft.string - 1,
           bottomLeft.fret,
         );
-        return to!.y - from!.y + positionSize + 2 * highlightPadding;
+        return to!.y - from!.y + positionSize + 2 * highlightAreasPadding;
       })
-      .attr("stroke", highlightStroke)
-      .attr("fill", highlightFill)
-      .attr("style", `mix-blend-mode: ${highlightBlendMode}`);
+      .attr("stroke", highlightAreasStroke)
+      .attr("fill", highlightAreasFill);
 
     return this;
   }
 
   /**
-   * Clears all the current highlight areas.
+   * Clears all the current highlighted areas.
    * @returns The current Fretboard instance.
    */
-  clearHighlightAreas(): Fretboard {
+  clearHighlightedAreas(): Fretboard {
     this.wrapper.select(`.${cssClasses.highlightAreas}`).remove();
     return this;
   }

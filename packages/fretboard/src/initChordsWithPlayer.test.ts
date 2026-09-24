@@ -53,7 +53,7 @@ describe("initChordsWithPlayer", () => {
         activeElement
           .querySelector(`.position-note-with-octave-${note} circle`)
           ?.getAttribute("fill"),
-      ).toBe(DEFAULT_COLORS.highlight);
+      ).toBe(DEFAULT_COLORS.highlightFill);
     });
 
     mockedParams.transport.playUntilEnd();
@@ -73,7 +73,7 @@ describe("initChordsWithPlayer", () => {
         activeElement
           .querySelector(`.position-note-with-octave-${note} circle`)
           ?.getAttribute("fill"),
-      ).toBe(DEFAULT_COLORS.highlight);
+      ).toBe(DEFAULT_COLORS.highlightFill);
       mockedParams.transport.playNext();
     });
 

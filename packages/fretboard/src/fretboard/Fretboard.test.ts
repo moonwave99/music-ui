@@ -581,7 +581,7 @@ test("Fretboard - highlightAreas", () => {
   expect(svg.querySelectorAll(".highlight-areas .area").length).toBe(2);
 });
 
-test("Fretboard - clearHighlightAreas", () => {
+test("Fretboard - clearHighlightedAreas", () => {
   const fretboard = new Fretboard();
   fretboard
     .renderScale({
@@ -598,7 +598,7 @@ test("Fretboard - clearHighlightAreas", () => {
         { string: 6, fret: 9 },
       ],
     )
-    .clearHighlightAreas();
+    .clearHighlightedAreas();
   const svg = document.querySelector("#fretboard svg")!;
 
   expect(svg).toBeTruthy();

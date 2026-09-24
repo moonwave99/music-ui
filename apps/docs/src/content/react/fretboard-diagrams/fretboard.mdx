@@ -1,6 +1,7 @@
 import {
   Arpeggio,
   ArpeggioWithText,
+  ArpeggioWithHighlightAreas,
   ArpeggioWithTextAndRootNotes,
 } from "../../../app/examples/fretboard/FretboardWithText";
 
@@ -86,6 +87,17 @@ function App() {
           fill: ({ note }) => (note === "C" ? "orange" : "white"),
         }}
       />
+      <Fretboard
+        width={600}
+        fretCount={5}
+        positions={arpeggio}
+        highlightAreas={[
+          [
+            { string: 6, fret: 1 },
+            { string: 1, fret: 3 },
+          ],
+        ]}
+      />
     </>
   );
 }
@@ -102,3 +114,7 @@ function App() {
 ### `textProperty` and `style` for highlighting root notes
 
 <ArpeggioWithTextAndRootNotes />
+
+### `highlightAreas`
+
+<ArpeggioWithHighlightAreas />

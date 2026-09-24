@@ -7,6 +7,7 @@ import {
   type RenderChordParams,
   type RenderChordVoicingParams,
   type GetScaleParams,
+  type BareFretboardPosition,
 } from "@music-ui/fretboard";
 
 /**
@@ -16,6 +17,7 @@ import {
  * @property scale Params expected by the `Fretboard.renderScale` function.
  * @property style Params expected by the `Fretboard.style` function.
  * @property textProperty The position property to display.
+ * @property highlightAreas The fretboard areas to highlight.
  */
 export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
   positions?: FretboardPosition[];
@@ -24,6 +26,7 @@ export type UseFretboardParams = Partial<Omit<FretboardOptions, "element">> & {
   scale?: GetScaleParams;
   style?: StyleParams;
   textProperty?: keyof Pick<FretboardPosition, "note" | "degree" | "interval">;
+  highlightAreas?: [BareFretboardPosition, BareFretboardPosition][];
 };
 
 /**
@@ -48,6 +51,7 @@ export function useFretboard<T extends HTMLElement>({
   scale,
   style = {},
   textProperty,
+  highlightAreas,
   ...params
 }: UseFretboardParams): UseFretboard<T> {
   const ref = useRef<T>(null);
@@ -93,6 +97,14 @@ export function useFretboard<T extends HTMLElement>({
       ...style,
     });
   }, [style, textProperty]);
+
+  useEffect(() => {
+    if (!highlightAreas) {
+      fretboardRef.current?.clearHighlightedAreas();
+      return;
+    }
+    fretboardRef.current?.highlightAreas(...highlightAreas);
+  }, [highlightAreas]);
 
   return { ref, fretboardRef };
 }

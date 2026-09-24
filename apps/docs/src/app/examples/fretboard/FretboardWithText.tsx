@@ -17,6 +17,22 @@ export function Arpeggio() {
   return <Fretboard width={600} fretCount={5} positions={arpeggio} />;
 }
 
+export function ArpeggioWithHighlightAreas() {
+  return (
+    <Fretboard
+      width={600}
+      fretCount={5}
+      positions={arpeggio}
+      highlightAreas={[
+        [
+          { string: 6, fret: 1 },
+          { string: 1, fret: 3 },
+        ],
+      ]}
+    />
+  );
+}
+
 export function ArpeggioWithText() {
   return (
     <Fretboard

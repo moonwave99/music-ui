@@ -44,7 +44,7 @@ describe("ChordWithPlayer", () => {
         container
           .querySelector(`.position-note-with-octave-${note} circle`)
           ?.getAttribute("fill"),
-      ).toBe(DEFAULT_COLORS.highlight),
+      ).toBe(DEFAULT_COLORS.highlightFill),
     );
   });
 
@@ -71,7 +71,7 @@ describe("ChordWithPlayer", () => {
         container
           .querySelector(`.position-note-with-octave-${note} circle`)
           ?.getAttribute("fill"),
-      ).toBe(DEFAULT_COLORS.highlight);
+      ).toBe(DEFAULT_COLORS.highlightFill);
       act(() => playerParams.transport.playNext());
     });
   });
