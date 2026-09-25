@@ -56,6 +56,21 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
     { string: 1, fret: 3 },
   ]);
 
+  function updateHighlightArea(
+    index: 0 | 1,
+    field: "fret" | "string",
+    value: number,
+  ) {
+    if (!value) {
+      return;
+    }
+    setHighlightArea((prev) =>
+      index === 0
+        ? [{ ...prev[0], [field]: value }, prev[1]]
+        : [prev[0], { ...prev[1], [field]: value }],
+    );
+  }
+
   return (
     <div className="scale-kitchen-sink">
       <div className="controls">
@@ -141,14 +156,11 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
           From string
           <input
             type="number"
-            value={highlightArea[0].string}
+            defaultValue={highlightArea[0].string}
             min={1}
             max={6}
             onChange={(event) =>
-              setHighlightArea((prev) => [
-                { ...prev[0], string: Number(event.target.value) },
-                prev[1],
-              ])
+              updateHighlightArea(0, "string", Number(event.target.value))
             }
           />
         </label>
@@ -158,12 +170,9 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
             type="number"
             min={1}
             max={6}
-            value={highlightArea[1].string}
+            defaultValue={highlightArea[1].string}
             onChange={(event) =>
-              setHighlightArea((prev) => [
-                prev[0],
-                { ...prev[1], string: Number(event.target.value) },
-              ])
+              updateHighlightArea(1, "string", Number(event.target.value))
             }
           />
         </label>
@@ -173,12 +182,9 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
             type="number"
             min={1}
             max={15}
-            value={highlightArea[0].fret}
+            defaultValue={highlightArea[0].fret}
             onChange={(event) =>
-              setHighlightArea((prev) => [
-                { ...prev[0], fret: Number(event.target.value) },
-                prev[1],
-              ])
+              updateHighlightArea(0, "fret", Number(event.target.value))
             }
           />
         </label>
@@ -188,12 +194,9 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
             type="number"
             min={1}
             max={15}
-            value={highlightArea[1].fret}
+            defaultValue={highlightArea[1].fret}
             onChange={(event) =>
-              setHighlightArea((prev) => [
-                prev[0],
-                { ...prev[1], fret: Number(event.target.value) },
-              ])
+              updateHighlightArea(1, "fret", Number(event.target.value))
             }
           />
         </label>
