@@ -155,6 +155,7 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
         <label>
           From string
           <input
+            name="fromString"
             type="number"
             defaultValue={highlightArea[0].string}
             min={1}
@@ -167,6 +168,7 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
         <label>
           To string
           <input
+            name="toString"
             type="number"
             min={1}
             max={6}
@@ -179,6 +181,7 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
         <label>
           From fret
           <input
+            name="fromFret"
             type="number"
             min={1}
             max={15}
@@ -191,6 +194,7 @@ export function ScaleKitchenSink(props: ScaleKitchenSinkProps) {
         <label>
           To fret
           <input
+            name="toFret"
             type="number"
             min={1}
             max={15}

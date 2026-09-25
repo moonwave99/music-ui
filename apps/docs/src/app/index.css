@@ -106,8 +106,8 @@ main {
     display: flex;
     align-items: center;
     gap: 1rem;
+    flex-wrap: wrap;
     @media screen and (max-width: 600px) {
-      flex-direction: column;
       line-height: 1.5rem;
       gap: 0.5rem;
       align-items: start;
@@ -121,11 +121,17 @@ main {
         gap: 0;
         align-items: start;
       }
+      @media screen and (max-width: 600px) {
+        gap: 0.25rem;
+      }
       select,
       input[type="number"] {
         border: 1px solid;
         border-radius: 0.25rem;
         padding: 0 0.25rem;
+        @media screen and (max-width: 600px) {
+          width: 100%;
+        }
       }
       select,
       input {
