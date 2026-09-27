@@ -74,6 +74,7 @@ export function FretboardSystemExample({
         displayBoxOnly={displayMode === "displayBoxOnly"}
         disableOtherBoxes={displayMode === "disableOtherBoxes"}
         box={{ system, box }}
+        highlightBox
       />
     </div>
   );

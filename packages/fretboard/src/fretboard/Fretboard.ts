@@ -10,6 +10,7 @@ import {
   validateOptions,
   generateGrid,
   getBounds,
+  getBoundsTuple,
 } from "./utils";
 
 import {
@@ -108,6 +109,8 @@ export type StyleParams = {
 } & {
   filter?: (position: FretboardPosition) => boolean;
 };
+
+export type RenderScaleParams = GetScaleParams & { highlightBox?: boolean };
 
 export const DEFAULT_FRETBOARD_OPTIONS = {
   element: "#fretboard",
@@ -588,18 +591,24 @@ export class Fretboard {
   renderScale({
     displayBoxOnly,
     disableOtherBoxes,
+    highlightBox,
     ...params
-  }: GetScaleParams): Fretboard {
+  }: RenderScaleParams): Fretboard {
     this.checkTuning();
-    return this.setPositions(
-      this.system
-        .getScale(params)
-        .map((x) => ({
-          ...x,
-          disabled: Boolean(disableOtherBoxes && !x.inBox),
-        }))
-        .filter(({ inBox }) => (displayBoxOnly ? inBox : true)),
+    const scalePositions = this.system.getScale(params).map((x) => ({
+      ...x,
+      disabled: Boolean(disableOtherBoxes && !x.inBox),
+    }));
+
+    this.setPositions(
+      scalePositions.filter(({ inBox }) => (displayBoxOnly ? inBox : true)),
     ).render();
+
+    if (highlightBox) {
+      const boxPositions = scalePositions.filter(({ inBox }) => inBox);
+      this.highlightAreas(getBoundsTuple(boxPositions));
+    }
+    return this;
   }
 
   /**

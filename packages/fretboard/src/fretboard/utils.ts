@@ -198,3 +198,20 @@ export function getBounds(area: BareFretboardPosition[]): FretboardBounds {
     topLeft: { string: minString, fret: minFret },
   };
 }
+
+export function getBoundsTuple(
+  area: BareFretboardPosition[],
+): [BareFretboardPosition, BareFretboardPosition] {
+  const getMinMax = (what: "string" | "fret"): [number, number] => [
+    Math.min(...area.map((x) => x[what])),
+    Math.max(...area.map((x) => x[what])),
+  ];
+
+  const [minString, maxString] = getMinMax("string");
+  const [minFret, maxFret] = getMinMax("fret");
+
+  return [
+    { string: minString, fret: minFret },
+    { string: maxString, fret: maxFret },
+  ];
+}

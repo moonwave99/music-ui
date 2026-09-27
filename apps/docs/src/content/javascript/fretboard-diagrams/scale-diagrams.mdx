@@ -118,7 +118,11 @@ The TNPS system is less chord shape friendly perhaps, but its even note distribu
 
 ### Focusing on a single box
 
-If you want to display just a single box like in the examples above, use either the `disableOtherBoxes` or the `displayBoxOnly` option.
+If you want to focus just on a single box, you can use one or more of following options:
+
+- `disableOtherBoxes`: dims the positions that do not belong to the box;
+- `displayBoxOnly`: displays the box positions only;
+- `highlightBox`: highlights the box fretboard area.
 
 Example with `disableOtherBoxes`:
 
@@ -194,4 +198,42 @@ Output:
     box: "G",
   }}
   displayBoxOnly
+/>
+
+Example with `highlightBox`:
+
+```ts {14}
+import { Fretboard, highlightDegreeFill } from "@music-ui/fretboard";
+
+const fretboard = new Fretboard({
+  positionText: ({ name }) => name,
+});
+
+fretboard.renderScale({
+  root: "C",
+  type: "major",
+  box: {
+    system: "CAGED",
+    box: "G",
+  },
+  highlightBox: true,
+});
+
+fretboard.style({
+  fill: highlightDegreeFill({ degree: 1 }),
+});
+```
+
+Output:
+
+<Scale
+  textProperty="note"
+  highlightDegree={1}
+  root="C"
+  type="major"
+  box={{
+    system: "CAGED",
+    box: "G",
+  }}
+  highlightBox
 />
