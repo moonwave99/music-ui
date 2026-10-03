@@ -68,7 +68,7 @@ export function createControls(
 
   Object.entries(handlers).forEach(([name, handler]) => {
     const button = document.createElement("button");
-    button.classList.add(`${name}-button`);
+    button.classList.add(`${kebabCase(name)}-button`);
     button.addEventListener("click", handler);
     button.textContent = name;
     element.append(button);

@@ -42,9 +42,9 @@ describe("initPianoWithPlayer", () => {
     const otherElement = elements[1]!;
 
     const playBlockButton =
-      activeElement.querySelector<HTMLButtonElement>(".playBlock-button")!;
+      activeElement.querySelector<HTMLButtonElement>(".play-block-button")!;
     const playArpeggioButton = activeElement.querySelector<HTMLButtonElement>(
-      ".playArpeggio-button",
+      ".play-arpeggio-button",
     )!;
 
     expect(playBlockButton.disabled).toBe(false);
