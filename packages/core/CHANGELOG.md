@@ -1,5 +1,11 @@
 # @music-ui/core
 
+## 0.17.0
+
+### Minor Changes
+
+- 612c8fd: Improve docs and API
+
 ## 0.16.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @music-ui/fretboard
 
+## 0.17.0
+
+### Minor Changes
+
+- 612c8fd: Improve docs and API
+
+### Patch Changes
+
+- Updated dependencies [612c8fd]
+  - @music-ui/core@0.17.0
+
 ## 0.16.0
 
 ### Minor Changes
