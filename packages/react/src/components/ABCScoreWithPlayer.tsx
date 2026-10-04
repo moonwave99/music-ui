@@ -1,9 +1,9 @@
-import { useState, useEffect, useCallback, useId } from "react";
+import { useState, useEffect, useCallback, useId, type ReactNode } from "react";
 import type { ABCScoreProps } from "./ABCScore";
 import { OnABCClickParams, useABCScore } from "../hooks/useABCScore";
 import { usePlayer } from "../hooks/usePlayer";
 import { Piano, type PianoProps } from "./Piano";
-import { TempoControl } from "./TempoControl";
+import { TempoControl, type TempoControlProps } from "./TempoControl";
 import { getNodeText } from "../utils";
 import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
 
@@ -12,18 +12,25 @@ import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
  * @property showPiano Displays or hides the piano view.
  * @property pianoOptions Props expected by the `Piano` renderer.
  * @property showTempoControls Displays or hides the tempo controls.
- * @property playButtonLabel The play button label.
- * @property stopButtonLabel The stop button label.
- * @property pauseButtonLabel The pause button label.
+ * @property playButtonLabel The play button aria label.
+ * @property stopButtonLabel The stop button aria label.
+ * @property pauseButtonLabel The pause button aria label.
+ * @property playButtonContent The play button content.
+ * @property stopButtonContent The stop button content.
+ * @property pauseButtonContent The pause button content.
  */
-export type ABCScoreWithPlayerProps = ABCScoreProps & {
-  showPiano?: boolean;
-  pianoOptions?: PianoProps;
-  showTempoControls?: boolean;
-  playButtonLabel?: string;
-  stopButtonLabel?: string;
-  pauseButtonLabel?: string;
-};
+export type ABCScoreWithPlayerProps = ABCScoreProps &
+  Pick<TempoControlProps, "resetButtonContent"> & {
+    showPiano?: boolean;
+    pianoOptions?: PianoProps;
+    showTempoControls?: boolean;
+    playButtonLabel?: string;
+    stopButtonLabel?: string;
+    pauseButtonLabel?: string;
+    playButtonContent?: ReactNode;
+    stopButtonContent?: ReactNode;
+    pauseButtonContent?: ReactNode;
+  };
 
 /**
  * A component that adds playback to a {@link ABCScore}.
@@ -35,6 +42,9 @@ export function ABCScoreWithPlayer({
   playButtonLabel = "Play",
   pauseButtonLabel = "Pause",
   stopButtonLabel = "Stop",
+  playButtonContent = "Play",
+  stopButtonContent = "Pause",
+  pauseButtonContent = "Stop",
   showTempoControls = true,
   showTempo = true,
   showPiano = false,
@@ -131,7 +141,7 @@ export function ABCScoreWithPlayer({
           aria-label={getButtonLabel(playButtonLabel)}
           disabled={playerStatus === "playing"}
         >
-          {playButtonLabel}
+          {playButtonContent}
         </button>
         <button
           className="pause-button"
@@ -139,7 +149,7 @@ export function ABCScoreWithPlayer({
           aria-label={getButtonLabel(pauseButtonLabel)}
           disabled={playerStatus !== "playing"}
         >
-          {pauseButtonLabel}
+          {pauseButtonContent}
         </button>
         <button
           className="stop-button"
@@ -147,7 +157,7 @@ export function ABCScoreWithPlayer({
           aria-label={getButtonLabel(stopButtonLabel)}
           disabled={playerStatus === "stopped"}
         >
-          {stopButtonLabel}
+          {stopButtonContent}
         </button>
         {showTempoControls ? (
           <TempoControl
@@ -155,6 +165,7 @@ export function ABCScoreWithPlayer({
             value={scoreBpm}
             onChange={onTempoChange}
             onReset={onTempoReset}
+            resetButtonContent={params.resetButtonContent}
           />
         ) : null}
       </div>

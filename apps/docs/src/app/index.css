@@ -53,6 +53,12 @@ main {
     &:hover {
       background-color: rgba(100, 100, 100, 0.7);
     }
+    &:has(svg) {
+      display: flex;
+      gap: 0.25rem;
+      align-items: center;
+      padding-left: 0.25rem;
+    }
   }
 }
 

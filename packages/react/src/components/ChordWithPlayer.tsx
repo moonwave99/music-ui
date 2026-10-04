@@ -1,4 +1,4 @@
-import { useId, useEffect } from "react";
+import { useId, useEffect, type ReactNode } from "react";
 import { type ChordProps } from "./Chord";
 import { usePlayer } from "../hooks/usePlayer";
 import { getPlaybackScore, areNotesEquivalent } from "@music-ui/core";
@@ -14,16 +14,16 @@ import { useFretboard } from "../hooks/useFretboard";
  * @property id The chord unique identifier.
  * @property instrument The playback instrument.
  * @property playedNoteColor The played note color.
- * @property playLabel The playback label.
- * @property arpeggioLabel The playback arpeggio label.
+ * @property playButtonContent The playback button content.
+ * @property arpeggioButtonContent The arpeggio button content
  * @property arpeggioSpeed The arpeggio playback speed.
  */
 export type ChordWithPlayerProps = ChordProps & {
   id?: string;
   instrument?: string;
   playedNoteColor?: string;
-  playLabel?: string;
-  arpeggioLabel?: string;
+  playButtonContent?: ReactNode;
+  arpeggioButtonContent?: ReactNode;
   arpeggioSpeed?: number;
 };
 
@@ -34,8 +34,8 @@ export function ChordWithPlayer({
   className = "chord-with-player",
   instrument = "acoustic_guitar_nylon",
   playedNoteColor = DEFAULT_COLORS.highlightFill,
-  playLabel = "Play",
-  arpeggioLabel = "Arpeggio",
+  playButtonContent = "Play",
+  arpeggioButtonContent = "Arpeggio",
   arpeggioSpeed = 120,
   input,
   chordName,
@@ -85,14 +85,16 @@ export function ChordWithPlayer({
       <div className="fretboard" ref={ref}></div>
       <div className="controls">
         <button
+          className="play-block-button"
           disabled={playerStatus === "playing"}
           onClick={() =>
             play(getPlaybackScore({ id, instrument, input: getChordNotes() }))
           }
         >
-          {playLabel}
+          {playButtonContent}
         </button>
         <button
+          className="play-arpeggio-button"
           disabled={playerStatus === "playing"}
           onClick={() =>
             play(
@@ -106,7 +108,7 @@ export function ChordWithPlayer({
             )
           }
         >
-          {arpeggioLabel}
+          {arpeggioButtonContent}
         </button>
       </div>
       {showName && chordName ? <figcaption>{chordName}</figcaption> : null}

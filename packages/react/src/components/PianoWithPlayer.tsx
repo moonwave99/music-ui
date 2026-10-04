@@ -1,4 +1,4 @@
-import { useId } from "react";
+import { useId, type ReactNode } from "react";
 import { Piano, type PianoProps } from "./Piano";
 import { usePlayer } from "../hooks/usePlayer";
 import { getPlaybackScore, joinVoices } from "@music-ui/core";
@@ -7,15 +7,15 @@ import { getPlaybackScore, joinVoices } from "@music-ui/core";
  * Props expected by the `PianoWithPlayer` component.
  * @property id The piano unique identifier.
  * @property description The piano description.
- * @property playLabel The playback label.
- * @property arpeggioLabel The playback arpeggio label.
+ * @property playButtonContent The playback button content.
+ * @property arpeggioButtonContent The arpeggio button content
  * @property arpeggioSpeed The arpeggio playback speed.
  */
 export type PianoWithPlayerProps = PianoProps & {
   id: string;
   description?: string;
-  playLabel?: string;
-  arpeggioLabel?: string;
+  playButtonContent?: ReactNode;
+  arpeggioButtonContent?: ReactNode;
   arpeggioSpeed?: number;
 };
 
@@ -24,8 +24,8 @@ export type PianoWithPlayerProps = PianoProps & {
  */
 export function PianoWithPlayer({
   description = "",
-  playLabel = "Play",
-  arpeggioLabel = "Arpeggio",
+  playButtonContent = "Play",
+  arpeggioButtonContent = "Arpeggio",
   arpeggioSpeed = 120,
   className = "piano-with-player",
   ...props
@@ -39,12 +39,14 @@ export function PianoWithPlayer({
       <Piano playedNotes={joinVoices(playedNotes)} notes={notes} {...rest} />
       <div className="controls">
         <button
+          className="play-block-button"
           disabled={playerStatus === "playing"}
           onClick={() => play(getPlaybackScore({ id, input: notes }))}
         >
-          {playLabel}
+          {playButtonContent}
         </button>
         <button
+          className="play-arpeggio-button"
           disabled={playerStatus === "playing"}
           onClick={() =>
             play(
@@ -57,7 +59,7 @@ export function PianoWithPlayer({
             )
           }
         >
-          {arpeggioLabel}
+          {arpeggioButtonContent}
         </button>
       </div>
       <figcaption>{description}</figcaption>

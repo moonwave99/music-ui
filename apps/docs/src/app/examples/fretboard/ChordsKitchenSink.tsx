@@ -1,7 +1,6 @@
 "use client";
 
-import { Chord } from "@music-ui/react";
-import { ChordWithPlayer } from "@music-ui/react";
+import { Chord, ChordWithPlayer } from "../../../client-components";
 
 const chords = [
   {
