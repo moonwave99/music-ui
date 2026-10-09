@@ -20,7 +20,10 @@ import { extractIndentedInput, getAbcScore, joinVoices } from "@music-ui/core";
  * @property pauseButtonContent The pause button content.
  */
 export type ABCScoreWithPlayerProps = ABCScoreProps &
-  Pick<TempoControlProps, "resetButtonContent"> & {
+  Pick<
+    TempoControlProps,
+    "resetTempoButtonContent" | "resetTempoButtonLabel"
+  > & {
     showPiano?: boolean;
     pianoOptions?: PianoProps;
     showTempoControls?: boolean;
@@ -131,6 +134,10 @@ export function ABCScoreWithPlayer({
     return `${label} ${score.info.title || `score ${id}`}`;
   }
 
+  const resetTempoButtonLabel = params.resetTempoButtonLabel
+    ? getButtonLabel(params.resetTempoButtonLabel)
+    : "";
+
   return (
     <div className={className}>
       <div className="staff" ref={ref}></div>
@@ -165,7 +172,8 @@ export function ABCScoreWithPlayer({
             value={scoreBpm}
             onChange={onTempoChange}
             onReset={onTempoReset}
-            resetButtonContent={params.resetButtonContent}
+            resetTempoButtonContent={params.resetTempoButtonContent}
+            resetTempoButtonLabel={resetTempoButtonLabel}
           />
         ) : null}
       </div>

@@ -85,15 +85,49 @@ function App() {
 
 In addition to the [`Piano` component props](/react/piano-keyboard/piano#component-props), the component accepts the following props:
 
-| Name            | Type     | Default Value | Description                        |
-| --------------- | -------- | ------------- | ---------------------------------- |
-| `description`   | `string` |               | A description label                |
-| `playLabel`     | `string` | Play          | The playback button label          |
-| `arpeggioLabel` | `string` | Arpeggio      | The arpeggio playback button label |
-| `arpeggioSpeed` | `number` | 120           | The arpeggio playback tempo        |
+| Name                    | Type        | Default Value | Description                          |
+| ----------------------- | ----------- | ------------- | ------------------------------------ |
+| `description`           | `string`    |               | The piano description                |
+| `playButtonContent`     | `ReactNode` | Play          | The playback button content          |
+| `arpeggioButtonContent` | `ReactNode` | Arpeggio      | The arpeggio playback button content |
+| `arpeggioSpeed`         | `number`    | 120           | The arpeggio playback tempo          |
 
 <Callout type="info">
   Check [the complete `PianoWithPlayer` component
   reference](/api/functions/_music-ui_react.PianoWithPlayer.html) for more
   details.
 </Callout>
+
+## Customize buttons
+
+The buttons contain plain text labels by default. You can pass custom JSX as in the documentation examples:
+
+```tsx {6, 14-23}
+import { playerFactory } from "@music-ui/core";
+import { PianoWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/piano/styles.css";
+
+// you can use any icon source
+import { IoPlay, IoMusicalNotes } from "react-icons/io5";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <PianoWithPlayer
+        playButtonContent={
+          <>
+            <IoPlay /> Play
+          </>
+        }
+        arpeggioButtonContent={
+          <>
+            <IoMusicalNotes /> Arpeggio
+          </>
+        }
+      />
+    </PlayerProvider>
+  );
+}
+```

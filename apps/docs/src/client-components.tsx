@@ -58,7 +58,6 @@ export function withPlayButtons<T>(props: T) {
         Stop
       </>
     ),
-
     resetButtonContent: (
       <>
         <VscDebugRestart />

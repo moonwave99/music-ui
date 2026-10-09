@@ -27,9 +27,7 @@ function App() {
       <main>
         <h1>My App</h1>
         {/* rest of your app */}
-        <ABCScoreWithPlayer>
-          CDEF GABc|
-        </ABCScoreWithPlayer>
+        <ABCScoreWithPlayer>CDEF GABc|</ABCScoreWithPlayer>
       </main>
     </PlayerProvider>
   );
@@ -38,9 +36,7 @@ function App() {
 
 Output:
 
-<ABCScoreWithPlayer>
-CDEF GABc|
-</ABCScoreWithPlayer>
+<ABCScoreWithPlayer>CDEF GABc|</ABCScoreWithPlayer>
 
 With free tempo:
 
@@ -58,10 +54,7 @@ function App() {
         <h1>My App</h1>
         {/* rest of your app */}
         <ABCScoreWithPlayer>
-          M: 1/1
-          L: 1/1
-          Q: 200
-          C D E F G A B c || c d e f g a b c' |
+          M: 1/1 L: 1/1 Q: 200 C D E F G A B c || c d e f g a b c' |
         </ABCScoreWithPlayer>
       </main>
     </PlayerProvider>
@@ -70,22 +63,27 @@ function App() {
 ```
 
 <ABCScoreWithPlayer showTempo={false}>
-M: 1/1
-L: 1/1
-Q: 200
-C D E F G A B c || c d e f g a b c' |
+  M: 1/1 L: 1/1 Q: 200 C D E F G A B c || c d e f g a b c' |
 </ABCScoreWithPlayer>
 
 ## Component props
 
 In addition to the [`ABCScore` component props](/react/music-notation/abc-score#component-props), the component accepts the following props:
 
-| Name                | Type      | Default Value                                                                        | Description                              |
-| ------------------- | --------- | ------------------------------------------------------------------------------------ | ---------------------------------------- |
-| `showPiano`         | `boolean` | `false`                                                                              | Displays or hides the piano view         |
-| `pianoOptions`      | `object`  | [`DEFAULT_PIANO_OPTIONS`](/api/variables/_music-ui_piano.DEFAULT_PIANO_OPTIONS.html) | Props expected by the `Piano` renderer   |
-| `showTempoControls` | `boolean` | `true`                                                                               | Displays or hides the tempo controls     |
-| `highlightBars`     | `boolean` | `false`                                                                              | Highlights the current played bar        |
+| Name                      | Type        | Default Value                                                                        | Description                            |
+| ------------------------- | ----------- | ------------------------------------------------------------------------------------ | -------------------------------------- |
+| `showPiano`               | `boolean`   | `false`                                                                              | Displays or hides the piano view       |
+| `pianoOptions`            | `object`    | [`DEFAULT_PIANO_OPTIONS`](/api/variables/_music-ui_piano.DEFAULT_PIANO_OPTIONS.html) | Props expected by the `Piano` renderer |
+| `showTempoControls`       | `boolean`   | `true`                                                                               | Displays or hides the tempo controls   |
+| `highlightBars`           | `boolean`   | `false`                                                                              | Highlights the current played bar      |
+| `playButtonLabel`         | `string`    | `Play`                                                                               | The play button aria label             |
+| `stopButtonLabel`         | `string`    | `Pause`                                                                              | The stop button aria label             |
+| `pauseButtonLabel`        | `string`    | `Stop`                                                                               | The pause button aria label            |
+| `resetTempoButtonLabel`   | `string`    | `Reset Tempo`                                                                        | The reset tempo button aria label      |
+| `playButtonContent`       | `ReactNode` | `Play`                                                                               | The play button content                |
+| `stopButtonContent`       | `ReactNode` | `Pause`                                                                              | The stop button content                |
+| `pauseButtonContent`      | `ReactNode` | `Stop`                                                                               | The pause button content               |
+| `resetTempoButtonContent` | `ReactNode` | `Reset`                                                                              | The reset tempo button content         |
 
 ## Props showcase
 
@@ -102,13 +100,14 @@ const player = playerFactory();
 function App() {
   return (
     <PlayerProvider player={player}>
-      <ABCScoreWithPlayer highlightBars>
-        CDEF GABc|cBAGFEDC|
-      </ABCScoreWithPlayer>
+      <ABCScoreWithPlayer highlightBars>CDEF GABc|cBAGFEDC|</ABCScoreWithPlayer>
       <ABCScoreWithPlayer showTempoControls={false}>
         CDEF GABc|
       </ABCScoreWithPlayer>
-      <ABCScoreWithPlayer showPiano pianoOptions={{ showOctaves: true, octaves: 3 }}>
+      <ABCScoreWithPlayer
+        showPiano
+        pianoOptions={{ showOctaves: true, octaves: 3 }}
+      >
         CDEF GABc|
       </ABCScoreWithPlayer>
     </PlayerProvider>
@@ -118,29 +117,56 @@ function App() {
 
 ### `highlightBars`
 
-<ABCScoreWithPlayer highlightBars>
-{`CDEF GABc|cBAGFEDC|`}
-</ABCScoreWithPlayer>
+<ABCScoreWithPlayer highlightBars>{`CDEF GABc|cBAGFEDC|`}</ABCScoreWithPlayer>
 
 ### `showTempoControls`
 
 <ABCScoreWithPlayer showTempoControls={false}>
-{`CDEF GABc|`}
+  {`CDEF GABc|`}
 </ABCScoreWithPlayer>
 
 ### `showPiano`
 
-<ABCScoreWithPlayer showTempo={false} showPiano pianoOptions={{ octaves: 3 }} highlightBars>
-T: You Are My Sunshine
-C: Traditional
-L: 1/4
-Q: 180
-z G, C D|E2 E2-| E E D E| C2 C2-|
-w:You are my sun-shine,_ my on-ly sun-shine.
-C C D E|F2 A2-| A A G F|E4-|
-w:_You make me hap-py_ when skies are gray,
-E C D E|F2 A2-| A A G F|E2 C2-|
-w:_You'll ne-ver know, dear,_ how much I love you,
-C z C D| E3 F| D D2 E|C4|]
-w:_Please don't take my sun-shine a-way.
+<ABCScoreWithPlayer
+  showTempo={false}
+  showPiano
+  pianoOptions={{ octaves: 3 }}
+  highlightBars
+>
+  T: You Are My Sunshine C: Traditional L: 1/4 Q: 180 z G, C D|E2 E2-| E E D E|
+  C2 C2-| w:You are my sun-shine,_ my on-ly sun-shine. C C D E|F2 A2-| A A G
+  F|E4-| w:_You make me hap-py_ when skies are gray, E C D E|F2 A2-| A A G F|E2
+  C2-| w:_You'll ne-ver know, dear,_ how much I love you, C z C D| E3 F| D D2
+  E|C4|] w:_Please don't take my sun-shine a-way.
 </ABCScoreWithPlayer>
+
+## Customize buttons
+
+The buttons contain plain text labels by default. You can pass custom JSX as in the documentation examples:
+
+```tsx {6, 14-18}
+import { playerFactory } from "@music-ui/core";
+import { PianoWithPlayer, PlayerProvider } from "@music-ui/react";
+import "@music-ui/piano/styles.css";
+
+// you can use any icon source
+import { IoPlay, IoMusicalNotes } from "react-icons/io5";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <ABCScoreWithPlayer
+        playButtonContent={
+          <>
+            <IoPlay /> Play
+          </>
+        }
+      >
+        CDEF GABc|cBAGFEDC|
+      </ABCScoreWithPlayer>
+    </PlayerProvider>
+  );
+}
+```

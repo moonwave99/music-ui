@@ -8,7 +8,8 @@ import { type ReactNode } from "react";
  * @property className The component class name.
  * @property inputLabel The input element label.
  * @property valueLabel The output element label.
- * @property resetButtonContent The reset button content.
+ * @property resetTempoButtonContent The reset button content.
+ * @property resetTempoButtonLabel The reset button label.
  * @property value The current tempo value.
  * @property onChange Function called when the tempo value changes.
  * @property onReset Function called when the tempo is reset.
@@ -18,7 +19,8 @@ export type TempoControlProps = {
   className?: string;
   inputLabel?: string;
   valueLabel?: string;
-  resetButtonContent?: ReactNode;
+  resetTempoButtonContent?: ReactNode;
+  resetTempoButtonLabel?: string;
   value: number;
   onChange: (value: number) => void;
   onReset: () => void;
@@ -32,7 +34,8 @@ export function TempoControl({
   className = cssClasses.tempoControl,
   inputLabel = "Tempo",
   valueLabel = "Current Tempo in BPM",
-  resetButtonContent = "Reset",
+  resetTempoButtonContent = "Reset",
+  resetTempoButtonLabel = "Reset Tempo",
   value,
   onChange,
   onReset,
@@ -52,7 +55,9 @@ export function TempoControl({
       <output htmlFor={_id} aria-label={valueLabel}>
         {value}
       </output>
-      <button onClick={onReset}>{resetButtonContent}</button>
+      <button onClick={onReset} aria-label={resetTempoButtonLabel}>
+        {resetTempoButtonContent}
+      </button>
     </div>
   );
 }

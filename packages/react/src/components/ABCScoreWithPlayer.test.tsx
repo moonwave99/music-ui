@@ -28,6 +28,7 @@ describe("ABCScoreWithPlayer", () => {
           playButtonLabel="Play!"
           pauseButtonLabel="Pause!"
           stopButtonLabel="Stop!"
+          resetTempoButtonLabel="Reset Tempo!"
         >
           {`
           T: Test Score
@@ -39,14 +40,14 @@ describe("ABCScoreWithPlayer", () => {
     expect(screen.getByLabelText("Play! Test Score")).toBeTruthy();
     expect(screen.getByLabelText("Pause! Test Score")).toBeTruthy();
     expect(screen.getByLabelText("Stop! Test Score")).toBeTruthy();
+    expect(screen.getByLabelText("Reset Tempo! Test Score")).toBeTruthy();
   });
 
   it("Doesn't show the time signature when showTimeSignature is false", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
         <ABCScoreWithPlayer showTimeSignature={false}>
-          T: TestScore
-          CGEB
+          T: TestScore CGEB
         </ABCScoreWithPlayer>
       </PlayerProvider>,
     );
@@ -57,8 +58,7 @@ describe("ABCScoreWithPlayer", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
         <ABCScoreWithPlayer showTempo={false}>
-          T: Test Score
-          CGEB
+          T: Test Score CGEB
         </ABCScoreWithPlayer>
       </PlayerProvider>,
     );
@@ -68,10 +68,7 @@ describe("ABCScoreWithPlayer", () => {
   it("Shows the piano if showPiano is true", () => {
     const { container } = render(
       <PlayerProvider player={new Player(getMockedPlayerParams())}>
-        <ABCScoreWithPlayer showPiano>
-          T: Test Score
-          CGEB
-        </ABCScoreWithPlayer>
+        <ABCScoreWithPlayer showPiano>T: Test Score CGEB</ABCScoreWithPlayer>
       </PlayerProvider>,
     );
     expect(container.querySelector(".piano")).toBeTruthy();

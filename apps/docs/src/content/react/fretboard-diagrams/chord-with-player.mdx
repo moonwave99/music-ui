@@ -80,16 +80,51 @@ function App() {
 
 In addition to the [`Chord` component props](/react/fretboard-diagrams/chord#component-props), the component accepts the following props:
 
-| Name              | Type     | Default Value           | Description                        |
-| ----------------- | -------- | ----------------------- | ---------------------------------- |
-| `playedNoteColor` | `string` | `#ff636c`               | The played note color              |
-| `instrument`      | `string` | `acoustic_guitar_nylon` | The playback instrument            |
-| `playLabel`       | `string` | Play                    | The playback button label          |
-| `arpeggioLabel`   | `string` | Arpeggio                | The arpeggio playback button label |
-| `arpeggioSpeed`   | `number` | 120                     | The arpeggio playback tempo        |
+| Name                    | Type        | Default Value           | Description                          |
+| ----------------------- | ----------- | ----------------------- | ------------------------------------ |
+| `playedNoteColor`       | `string`    | `#ff636c`               | The played note color                |
+| `instrument`            | `string`    | `acoustic_guitar_nylon` | The playback instrument              |
+| `playButtonContent`     | `ReactNode` | Play                    | The playback button content          |
+| `arpeggioButtonContent` | `ReactNode` | Arpeggio                | The arpeggio playback button content |
+| `arpeggioSpeed`         | `number`    | 120                     | The arpeggio playback tempo          |
 
 <Callout type="info">
   Check [the complete `ChordWithPlayer` component
   reference](/api/functions/_music-ui_react.ChordWithPlayer.html) for more
   details.
 </Callout>
+
+## Customize buttons
+
+The buttons contain plain text labels by default. You can pass custom JSX as in the documentation examples:
+
+```tsx {5, 15-24}
+import { playerFactory } from "@music-ui/core";
+import { ChordWithPlayer, PlayerProvider } from "@music-ui/react";
+
+// you can use any icon source
+import { IoPlay, IoMusicalNotes } from "react-icons/io5";
+
+const player = playerFactory();
+
+function App() {
+  return (
+    <PlayerProvider player={player}>
+      <ChordWithPlayer
+        input="x32010"
+        includeOpenStrings
+        playButtonContent={
+          <>
+            <IoPlay /> Play
+          </>
+        }
+        arpeggioButtonContent={
+          <>
+            <IoMusicalNotes /> Arpeggio
+          </>
+        }
+      />
+    </PlayerProvider>
+  );
+}
+```
