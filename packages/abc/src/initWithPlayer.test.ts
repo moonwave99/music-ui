@@ -66,7 +66,7 @@ describe("initABCScoreWithPlayer", () => {
   it("renders an abc score with player and piano on selection", () => {
     document.body.innerHTML = `
       <main>
-        <div data-abc-score data-show-piano>
+        <div data-abc-score data-show-piano data-start-octave="2" data-show-octaves>
           <div class="content">
             T:Test Song
             C E G B        
@@ -86,6 +86,9 @@ describe("initABCScoreWithPlayer", () => {
     });
 
     expect(element.querySelector(".piano")).not.toBe(null);
+    expect(
+      element.querySelector<HTMLElement>(".octave-label")?.dataset.octave,
+    ).toBe("2");
   });
 
   it("Throws error if no player is passed", () => {

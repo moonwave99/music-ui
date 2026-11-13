@@ -77,7 +77,7 @@ export class FretboardSystem {
   /**
    * Returns the position information at the given string and fret
    *
-   * @param __namedParameters The expected parameters
+   * @param position The fretboard coordinates
    * @returns The found position
    */
   getPositionAt(position: BareFretboardPosition): SystemPosition | null {

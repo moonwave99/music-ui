@@ -8,12 +8,15 @@ import {
   ensureElements,
   isTimeSignatureUnary,
 } from "@music-ui/core";
-import { Piano } from "@music-ui/piano";
+import { DEFAULT_PIANO_OPTIONS, Piano, PianoOptions } from "@music-ui/piano";
 import { ABCScore, cssClasses, DEFAULT_ABC_SCORE_OPTIONS } from "./abcScore";
 import { DEFAULT_OPTIONS, type InitABCScoreParams } from "./init";
 import { initControls } from "./controls";
 
-const DEFAULT_PIANO_OCTAVES = 5;
+const DEFAULT_PIANO_WITH_SCORE_OPTIONS = {
+  octaves: 5,
+  startOctave: 3,
+};
 
 const DEFAULT_ABC_SCORE_WITH_PLAYER_OPTIONS = {
   ...DEFAULT_ABC_SCORE_OPTIONS,
@@ -121,12 +124,14 @@ export function initABCScoreWithPlayer<T extends HTMLElement>(
 
       if (options.showPiano) {
         const pianoElement = document.createElement("div");
-        const { pianoOctaves } = element.dataset;
-        const octaves = pianoOctaves
-          ? Number(pianoOctaves)
-          : DEFAULT_PIANO_OCTAVES;
-
-        piano = new Piano({ element: pianoElement, octaves });
+        piano = new Piano({
+          element: pianoElement,
+          ...DEFAULT_PIANO_WITH_SCORE_OPTIONS,
+          ...extractElementOptions(
+            element,
+            DEFAULT_PIANO_OPTIONS as Omit<PianoOptions, "element">,
+          ),
+        });
         element.append(pianoElement);
         piano.render();
       }

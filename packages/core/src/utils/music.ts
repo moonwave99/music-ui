@@ -157,7 +157,8 @@ export function areNotesEquivalent(a: string, b: string) {
 
 /**
  * Extracts the note name and octave from a note literal.
- * @param note The note literal (e.g. "E4")
+ * @param input The note literal (e.g. "E4")
+ * @param defaultOctave The default octave (if missing from the input)
  * @example
  * parseNote("E4") // returns { note: "E", octave: 4, chroma: 4, midi: 64 }
  * @returns The parsed Note

@@ -64,6 +64,18 @@ Q: 90
 cc ee gg cc ee gg|dd ff aa dd ff [L:1/32]aaaa|    
     `,
   },
+  {
+    content: `
+M:1/1
+Q:200
+L:1/1
+%%staves {V1 V2}
+V:V1 clef=treble
+V:V2 clef=bass
+[V:V1] [EGc]
+[V:V2] [C,,C,]
+    `,
+  },
 ];
 
 export function VanillaABCScore() {
