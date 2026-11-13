@@ -1,5 +1,12 @@
 # @music-ui/react
 
+## 0.17.1
+
+### Patch Changes
+
+- Updated dependencies [15c3ade]
+  - @music-ui/abc@0.17.1
+
 ## 0.17.0
 
 ### Minor Changes

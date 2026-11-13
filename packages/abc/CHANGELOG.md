@@ -1,5 +1,11 @@
 # @music-ui/abc
 
+## 0.17.1
+
+### Patch Changes
+
+- 15c3ade: Fix staff bug
+
 ## 0.17.0
 
 ### Minor Changes

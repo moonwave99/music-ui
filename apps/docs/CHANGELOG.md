@@ -1,5 +1,13 @@
 # docs
 
+## 0.1.19
+
+### Patch Changes
+
+- Updated dependencies [15c3ade]
+  - @music-ui/abc@0.17.1
+  - @music-ui/react@0.17.1
+
 ## 0.1.18
 
 ### Patch Changes
