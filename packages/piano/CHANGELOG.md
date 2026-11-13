@@ -1,5 +1,13 @@
 # @music-ui/piano
 
+## 0.17.1
+
+### Patch Changes
+
+- 30c25d6: Pass piano parameters to abc score initializer
+- Updated dependencies [30c25d6]
+  - @music-ui/core@0.17.1
+
 ## 0.17.0
 
 ### Minor Changes
