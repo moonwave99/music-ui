@@ -388,12 +388,9 @@ export class ABCScore {
     }
 
     if (!this.showTimeSignature || this.hasFreeTempo()) {
-      const timeSignature = this.element!.querySelector<HTMLElement>(
+      this.element!.querySelectorAll<HTMLElement>(
         `.${cssClasses.timeSignature}`,
-      );
-      if (timeSignature) {
-        timeSignature.style.display = "none";
-      }
+      ).forEach((el) => (el.style.display = "none"));
     }
     this.rendered = true;
   }
