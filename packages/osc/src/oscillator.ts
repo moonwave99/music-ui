@@ -15,7 +15,7 @@ export const cssClasses = {
 
 export const DEFAULT_OSCILLATOR_PARAMS = {
   frequency: 440,
-  volume: -6,
+  volume: 0.5,
   duration: 1,
   label: "",
   playbackLabel: "Play",
