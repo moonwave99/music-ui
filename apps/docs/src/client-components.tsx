@@ -7,6 +7,7 @@ export { VanillaABCScore } from "./VanillaABCScore";
 export { VanillaPianoWithPlayer } from "./VanillaPianoWithPlayer";
 export { VanillaChords } from "./VanillaChords";
 export { VanillaChordsWithPlayer } from "./VanillaChordsWithPlayer";
+export { VanillaOscillator } from "./VanillaOscillator";
 
 import {
   PianoWithPlayer as OriginalPianoWithPlayer,

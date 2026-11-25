@@ -5,6 +5,7 @@ import { getPageMap } from "nextra/page-map";
 import { ProviderWrapper } from "./ProviderWrapper";
 import "nextra-theme-docs/style.css";
 import "@music-ui/piano/styles.css";
+import "@music-ui/osc/styles.css";
 import "@music-ui/abc/styles.css";
 import "./index.css";
 import pkg from "../../../../package.json";

@@ -3,6 +3,7 @@
     "packages/core",
     "packages/abc",
     "packages/fretboard",
+    "packages/osc",
     "packages/piano",
     "packages/react"
   ],

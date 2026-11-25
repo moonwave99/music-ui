@@ -15,6 +15,7 @@
     "@music-ui/abc": "workspace:*",
     "@music-ui/core": "workspace:*",
     "@music-ui/fretboard": "workspace:*",
+    "@music-ui/osc": "workspace:*",
     "@music-ui/piano": "workspace:*",
     "@music-ui/react": "workspace:*",
     "next": "16.2.0",
