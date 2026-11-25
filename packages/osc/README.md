@@ -1,6 +1,6 @@
-# Music UI - ABC
+# Music UI - Osc
 
-Abc notation rendering utilities.
+Oscillator utilities.
 
 ## Installation and usage
 
