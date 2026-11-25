@@ -1,5 +1,12 @@
 # docs
 
+## 0.1.21
+
+### Patch Changes
+
+- Updated dependencies [f6764e6]
+  - @music-ui/osc@0.17.3
+
 ## 0.1.20
 
 ### Patch Changes
