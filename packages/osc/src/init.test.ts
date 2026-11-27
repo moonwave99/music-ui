@@ -1,16 +1,8 @@
 // @vitest-environment jsdom
-import { assert, describe, it, vi } from "vitest";
+import { expect, assert, describe, it } from "vitest";
 import { initOscillator } from "./init";
 import { OscPlayer } from "./OscPlayer";
-
-const mockedContext = {
-  createOscillator: () => ({
-    connect: () => vi.fn(),
-  }),
-  createGain: () => ({
-    connect: () => vi.fn(),
-  }),
-} as unknown as AudioContext;
+import { getOscPlayerDependencies } from "./test/mocks";
 
 describe("initOscillator", () => {
   it("renders an oscillator on selection", async () => {
@@ -23,8 +15,11 @@ describe("initOscillator", () => {
 
     initOscillator({
       selection: element,
-      player: new OscPlayer({ context: mockedContext }),
+      player: new OscPlayer(getOscPlayerDependencies()),
     });
+
+    expect(element.querySelector(".value")?.textContent).toBe("440");
+    expect(element.querySelector("button")?.textContent).toBe("Play");
   });
 
   it("Throws error if no player is passed", () => {

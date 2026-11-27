@@ -3,7 +3,6 @@ import {
   extractElementOptions,
   type ElementOrSelector,
 } from "@music-ui/core";
-
 import { Oscillator, DEFAULT_OSCILLATOR_PARAMS } from "./oscillator";
 import { OscPlayer } from "./OscPlayer";
 
@@ -17,7 +16,7 @@ export type InitOscillatorParams<T extends HTMLElement> = {
 };
 
 export const DEFAULT_OPTIONS = {
-  selection: "[data-oscillator]",
+  selection: ".oscillator",
 } as const;
 
 /**

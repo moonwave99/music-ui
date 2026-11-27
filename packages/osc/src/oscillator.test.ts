@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { screen } from "@testing-library/dom";
 import { Oscillator } from "./oscillator";
 import { OscPlayer } from "./OscPlayer";
+import { getOscPlayerDependencies } from "./test/mocks";
 
 test.beforeEach(() => {
   document.body.innerHTML = `
@@ -15,31 +16,12 @@ test.afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function getMockPlayer() {
-  const context = {
-    createOscillator: () => ({
-      connect: () => vi.fn(),
-      frequency: {
-        value: 0,
-      },
-      start: vi.fn(),
-    }),
-    createGain: () => ({
-      connect: () => vi.fn(),
-      gain: {
-        setValueAtTime: vi.fn(),
-      },
-    }),
-  } as unknown as AudioContext;
-  return new OscPlayer({ context });
-}
-
 describe("Oscillator - constructor", () => {
   it("Does not render until render() is called", () => {
     new Oscillator({
       id: "osc-1",
       element: document.querySelector(".oscillator")!,
-      player: getMockPlayer(),
+      player: new OscPlayer(getOscPlayerDependencies()),
     });
     expect(document.querySelector(".value")).toBeNull();
   });
@@ -48,7 +30,7 @@ describe("Oscillator - constructor", () => {
       new Oscillator({
         id: "osc-1",
         element: document.querySelector<HTMLElement>("#does-not-exist")!,
-        player: getMockPlayer(),
+        player: new OscPlayer(getOscPlayerDependencies()),
       });
     }, "Element not found");
   });
@@ -59,7 +41,7 @@ describe("Oscillator - render", () => {
     const oscillator = new Oscillator({
       id: "osc-1",
       element: document.querySelector(".oscillator")!,
-      player: getMockPlayer(),
+      player: new OscPlayer(getOscPlayerDependencies()),
       frequency: 220,
     });
     oscillator.render();
@@ -70,7 +52,7 @@ describe("Oscillator - render", () => {
     const oscillator = new Oscillator({
       id: "osc-1",
       element: document.querySelector(".oscillator")!,
-      player: getMockPlayer(),
+      player: new OscPlayer(getOscPlayerDependencies()),
       frequency: 660,
       label: "E5",
       playbackLabel: "Play!",
@@ -88,7 +70,7 @@ describe("Oscillator - setFrequency", () => {
     const oscillator = new Oscillator({
       id: "osc-1",
       element: document.querySelector(".oscillator")!,
-      player: getMockPlayer(),
+      player: new OscPlayer(getOscPlayerDependencies()),
     });
     expect(oscillator.getFrequency()).toBe(440);
     expect(oscillator.setFrequency(660));
@@ -99,7 +81,7 @@ describe("Oscillator - setFrequency", () => {
     const oscillator = new Oscillator({
       id: "osc-1",
       element: document.querySelector(".oscillator")!,
-      player: getMockPlayer(),
+      player: new OscPlayer(getOscPlayerDependencies()),
     });
     expect(oscillator.getFrequency()).toBe(440);
     expect(oscillator.setFrequency(0));
@@ -112,7 +94,7 @@ describe("Oscillator - setFrequency", () => {
 describe("Oscillator - play", () => {
   it("it updates the UI", async () => {
     const user = userEvent.setup();
-    const player = getMockPlayer();
+    const player = new OscPlayer(getOscPlayerDependencies());
     const element = document.querySelector<HTMLElement>(".oscillator")!;
     const oscillator = new Oscillator({
       id: "osc-1",

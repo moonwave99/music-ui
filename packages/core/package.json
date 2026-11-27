@@ -39,12 +39,12 @@
     "@types/events": "^3.0.3",
     "@types/md5": "^2.3.6",
     "@types/node": "^22.15.3",
-    "@vitest/coverage-istanbul": "4.1.10",
+    "@vitest/coverage-istanbul": "5.1.2",
     "eslint": "^9.39.1",
     "jsdom": "^30.0.1",
     "tsup": "^8.5.1",
     "typescript": "5.9.2",
-    "vitest": "^4.1.10"
+    "vitest": "^5.1.2"
   },
   "dependencies": {
     "@tonaljs/abc-notation": "^4.9.1",

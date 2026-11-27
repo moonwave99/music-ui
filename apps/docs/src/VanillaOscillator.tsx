@@ -1,19 +1,25 @@
 import { useLayoutEffect, useRef } from "react";
-import { initOscillator, OscPlayer } from "@music-ui/osc";
+import { initOscillatorWithOscilloscope, OscPlayer } from "@music-ui/osc";
 import { getDataAttributes } from "./utils";
 
 const oscillators = [
   {
     frequency: 440,
     label: "A4",
-    volume: 0.5,
+    volume: 0.6,
     duration: 2,
   },
   {
     frequency: 880,
     label: "A5",
-    volume: 0.1,
-    duration: 5,
+    volume: 0.6,
+    duration: 3,
+  },
+  {
+    frequency: 1760,
+    label: "A6",
+    volume: 0.6,
+    duration: 3,
   },
 ] as const;
 
@@ -25,11 +31,15 @@ export function VanillaOscillator() {
     if (playerRef.current) {
       return;
     }
-    playerRef.current = new OscPlayer({ context: new AudioContext() });
-    initOscillator({
+    const context = new AudioContext();
+    const analyzer = new AnalyserNode(context, {
+      smoothingTimeConstant: 1,
+      fftSize: 2048,
+    });
+    playerRef.current = new OscPlayer({ context, analyzer });
+    initOscillatorWithOscilloscope({
       player: playerRef.current,
-      selection:
-        ref.current!.querySelectorAll<HTMLElement>("[data-oscillator]"),
+      selection: ref.current!,
     });
     return () => {
       playerRef.current?.destroy();
@@ -37,15 +47,17 @@ export function VanillaOscillator() {
   }, []);
 
   return (
-    <div ref={ref} className="oscillators">
-      {oscillators.map((oscillator, index) => (
-        <div
-          key={index}
-          data-oscillator
-          className="oscillator"
-          {...getDataAttributes(oscillator)}
-        ></div>
-      ))}
+    <div className="oscillators-wrapper" ref={ref}>
+      <div className="oscillators">
+        {oscillators.map((oscillator, index) => (
+          <div
+            key={index}
+            className="oscillator"
+            {...getDataAttributes(oscillator)}
+          ></div>
+        ))}
+      </div>
+      <div className="oscilloscope"></div>
     </div>
   );
 }

@@ -21,6 +21,17 @@ export const DEFAULT_OSCILLATOR_PARAMS = {
   playbackLabel: "Play",
 } as const;
 
+/**
+ * The parameters accepted by the Oscillator constructor.
+ *
+ * @property player The OscPlayer instance
+ * @property element The element where the oscillator will be rendered
+ * @property id The oscillator unique identifier
+ * @property frequency The oscillator frequency
+ * @property volume The oscillator volume
+ * @property label The oscillator label
+ * @property playbackLabel The oscillator playback button label
+ */
 export type OscillatorParams = {
   player: OscPlayer;
   element: HTMLElement;
@@ -43,6 +54,11 @@ export class Oscillator {
   private playbackLabel: string;
   private rendered: boolean;
   private playbackButton: HTMLButtonElement | null;
+  /**
+   * Creates an `Oscillator` instance.
+   *
+   * @param __namedParameters The accepted params
+   */
   constructor({
     player,
     element,
@@ -85,6 +101,11 @@ export class Oscillator {
       this.playbackButton!.disabled = false;
     });
   }
+  /**
+   * Sets the new frequency value, clamped to the audible frequency bounds.
+   * @param frequency The new frequency value
+   * @returns The current Oscillator instance
+   */
   setFrequency(frequency: number): Oscillator {
     const [lowFreq, highFreq] = FREQUENCY_BOUNDS;
     if (frequency < lowFreq) {
@@ -100,6 +121,9 @@ export class Oscillator {
     this.frequency = frequency;
     return this;
   }
+  /**
+   * @returns the oscillator frequency
+   */
   getFrequency() {
     return this.frequency;
   }

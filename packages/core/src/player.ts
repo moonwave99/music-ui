@@ -212,6 +212,12 @@ export class Player {
   getScore() {
     return this.score;
   }
+  /**
+   * Listens to the passed Player event
+   * @param eventName The event name
+   * @param callback The event callback
+   * @returns The corresponding unsubscribe function
+   */
   on(eventName: PlayerEvents, callback: PlayerCallback) {
     this.eventEmitter.addListener(eventName, callback);
     return () => this.eventEmitter.removeListener(eventName, callback);
