@@ -1,5 +1,14 @@
 # @music-ui/abc
 
+## 0.17.3
+
+### Patch Changes
+
+- dbf0f55: Update osc stuff
+- Updated dependencies [dbf0f55]
+  - @music-ui/piano@0.17.2
+  - @music-ui/core@0.17.2
+
 ## 0.17.2
 
 ### Patch Changes

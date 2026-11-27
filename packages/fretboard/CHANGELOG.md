@@ -1,5 +1,12 @@
 # @music-ui/fretboard
 
+## 0.17.2
+
+### Patch Changes
+
+- Updated dependencies [dbf0f55]
+  - @music-ui/core@0.17.2
+
 ## 0.17.1
 
 ### Patch Changes

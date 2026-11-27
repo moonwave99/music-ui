@@ -1,5 +1,11 @@
 # @music-ui/core
 
+## 0.17.2
+
+### Patch Changes
+
+- dbf0f55: Update osc stuff
+
 ## 0.17.1
 
 ### Patch Changes
